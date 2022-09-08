@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <CodeAnalysisRuleSet>../settings.ruleset</CodeAnalysisRuleSet>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>disable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Remove="StyleCop.Analyzers" />
+    </ItemGroup>
+</Project>

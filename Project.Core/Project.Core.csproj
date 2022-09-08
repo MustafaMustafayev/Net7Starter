@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <CodeAnalysisRuleSet>../settings.ruleset</CodeAnalysisRuleSet>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>disable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Remove="Newtonsoft.Json"/>
+        <None Remove="Microsoft.AspNetCore.Cryptography.KeyDerivation"/>
+        <None Remove="Microsoft.AspNetCore.Authentication.JwtBearer"/>
+        <None Remove="StyleCop.Analyzers"/>
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.1"/>
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.5"/>
+        <PackageReference Include="NLog.Web.AspNetCore" Version="5.0.0"/>
+        <PackageReference Include="Sentry" Version="3.18.0"/>
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\Project.DTO\Project.DTO.csproj"/>
+    </ItemGroup>
+</Project>

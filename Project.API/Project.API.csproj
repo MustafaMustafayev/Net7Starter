@@ -1,0 +1,50 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <CodeAnalysisRuleSet>../settings.ruleset</CodeAnalysisRuleSet>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <DockerComposeProjectPath>../docker-compose.dcproj</DockerComposeProjectPath>
+        <UserSecretsId>013ba4ca-2abe-4967-a3e4-d951a0a82573</UserSecretsId>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Sentry.AspNetCore" Version="3.18.0" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.5">
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.3.1" />
+        <PackageReference Include="MiniProfiler.AspNetCore.Mvc" Version="4.2.22" />
+        <PackageReference Include="FluentValidation.AspNetCore" Version="11.2.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Remove="Microsoft.EntityFrameworkCore.Design" />
+        <None Remove="StyleCop.Analyzers" />
+        <None Remove="Swashbuckle.AspNetCore.Annotations" />
+        <None Remove="Controllers\" />
+        <None Remove="MiniProfiler.AspNetCore.Mvc" />
+        <None Remove="FluentValidation.AspNetCore" />
+    </ItemGroup>
+    <ItemGroup>
+        <Folder Include="Controllers\" />
+        <Folder Include="wwwroot\files\" />
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\Project.BLL\Project.BLL.csproj">
+            <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+        </ProjectReference>
+        <ProjectReference Include="..\Project.Core\Project.Core.csproj">
+            <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+        </ProjectReference>
+        <ProjectReference Include="..\Project.DTO\Project.DTO.csproj">
+            <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+        </ProjectReference>
+    </ItemGroup>
+    <ItemGroup>
+        <Content Remove="wwwroot\files\" />
+    </ItemGroup>
+</Project>
