@@ -1,13 +1,12 @@
 ﻿using FluentValidation;
 
-namespace Project.DTO.DTOs.OrganizationDTOs.OrganizationValidators
+namespace Project.DTO.DTOs.OrganizationDTOs.OrganizationValidators;
+
+public class OrganizationToAddOrUpdateDtoValidator : AbstractValidator<OrganizationToAddOrUpdateDto>
 {
-	public class OrganizationToAddOrUpdateDTOValidator : AbstractValidator<OrganizationToAddOrUpdateDTO>
-	{
-		public OrganizationToAddOrUpdateDTOValidator()
-		{
-			RuleFor(p => p.FullName).NotNull();
-			RuleFor(p => p.TIN).NotNull().Length(10);
-		}
-	}
+    public OrganizationToAddOrUpdateDtoValidator()
+    {
+        RuleFor(p => p.FullName).NotNull();
+        RuleFor(p => p.Tin).NotNull().Length(10);
+    }
 }

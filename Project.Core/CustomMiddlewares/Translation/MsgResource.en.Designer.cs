@@ -8,10 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Core.CustomMiddlewares.Translation {
-    using System;
-    
-    
+namespace Project.Core.CustomMiddlewares.Translation {
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>

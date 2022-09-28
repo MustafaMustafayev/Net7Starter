@@ -3,10 +3,11 @@
 public interface IUtilService
 {
     HttpContent GetHttpContentObject(object obj);
-
-    public int? GetUserIdFromToken(string tokenString);
-
     public bool IsValidToken(string tokenString);
 
-    public IEnumerable<string> GetFilterKeys();
+    public int? GetUserIdFromToken(string? tokenString);
+    public int? GetCompanyIdFromToken(string? tokenString);
+
+    public void AddTokenToCache(string token, DateTime expireDate);
+    public bool IsTokenExistsInCache(string? token);
 }

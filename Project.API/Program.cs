@@ -8,10 +8,12 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using NLog;
 using Project.API.ActionFilters;
+using Project.API.BackgroundServices;
 using Project.API.Hubs;
 using Project.BLL.Abstract;
 using Project.BLL.Concrete;
 using Project.BLL.Mappers;
+using Project.BLL.Mappers.GenericMapping;
 using Project.Core.Abstract;
 using Project.Core.Concrete;
 using Project.Core.CustomMiddlewares.ExceptionHandler;
@@ -23,7 +25,7 @@ using Project.DAL.Concrete;
 using Project.DAL.DatabaseContext;
 using Project.DAL.UnitOfWorks.Abstract;
 using Project.DAL.UnitOfWorks.Concrete;
-using Project.DTO.DTOs.AuthDTOs.AuthValidators;
+using Project.DTO.DTOs.AuthDto.AuthValidators;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,20 +41,28 @@ builder.Services.AddSingleton(configSettings);
 
 builder.Services.AddSingleton<ILoggerManager, LoggerManager>();
 
-builder.Services.AddControllers(opt =>
-{
-    opt.Filters.Add(typeof(ValidatorActionFilter));
-});
+builder.Services.AddControllers(opt => { opt.Filters.Add(typeof(ValidatorActionFilter)); });
 
-builder.Services.AddFluentValidationAutoValidation().AddValidatorsFromAssemblyContaining<LoginDTOValidator>();
+builder.Services.AddFluentValidationAutoValidation().AddValidatorsFromAssemblyContaining<LoginDtoValidator>();
 
 builder.WebHost.UseSentry();
 
-builder.Services.AddAutoMapper(Automapper.GetAutoMapperProfilesFromAllAssemblies().ToArray());
+//AutoMapper
+builder.Services.AddScoped<IGenericMapper, AutoMapperGenericMapping<AutomapperProfile>>();
+
+//Mapster
+//builder.Services.AddScoped<IGenericMapper, MapsterGenericMapping>();
+
+//TinyMapper
+//builder.Services.AddScoped<IGenericMapper, TinyGenericMapperMapping>();
 
 builder.Services.AddDbContext<DataContext>(options => { options.UseNpgsql(configSettings.ConnectionStrings.AppDb); });
 
 builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddMemoryCache();
+
+builder.Services.AddHostedService<TokenKeeperHostedService>();
 
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 
@@ -146,7 +156,7 @@ builder.Services.AddSwaggerGen(c =>
     {
         Name = "Authorization",
         Type = SecuritySchemeType.ApiKey,
-        Scheme = "Bearer",
+        Scheme = configSettings.AuthSettings.TokenPrefix,
         BearerFormat = "JWT",
         In = ParameterLocation.Header,
         Description = "JWT Authorization header using the Bearer scheme."
@@ -160,7 +170,7 @@ builder.Services.AddSwaggerGen(c =>
                 Reference = new OpenApiReference
                 {
                     Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer"
+                    Id = configSettings.AuthSettings.TokenPrefix
                 }
             },
             Array.Empty<string>()

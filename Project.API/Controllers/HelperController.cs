@@ -24,7 +24,7 @@ public class HelperController : Controller
     [HttpGet("searchFilterKeys")]
     public IActionResult GetFilterKeys()
     {
-        IEnumerable<string> filterKeys = _utilService.GetFilterKeys();
-        return Ok(filterKeys);
+        //IEnumerable<string> filterKeys = _utilService.GetFilterKeys();
+        return Ok(null);
     }
 }

@@ -16,22 +16,16 @@ public class UserRepository : GenericRepository<User>, IUserRepository
         _dataContext = dataContext;
     }
 
-    public async Task<string> GetUserSaltAsync(string pin)
+    public async Task<string?> GetUserSaltAsync(string userEmail)
     {
-        User user = await _dataContext.Users.SingleOrDefaultAsync(m => m.PIN.ToLower() == pin.ToLower());
+        var user = await _dataContext.Users.SingleOrDefaultAsync(m => m.Email == userEmail);
 
         return user == null ? null : user.Salt;
     }
 
-    public async Task<bool> IsUserExistAsync(string pin, int? userId)
+    public async Task<bool> IsUserExistAsync(string userName, int? userId)
     {
-        return await _dataContext.Users.AnyAsync(m => m.PIN.ToLower() == pin.ToLower() && m.UserId != userId);
-    }
-
-    public async Task ResetPasswordAsync(int userId, string password)
-    {
-        User user = await _dataContext.Users.FindAsync(userId);
-        if (user is not null) user.Password = password;
+        return await _dataContext.Users.AnyAsync(m => m.Username == userName && m.Id != userId);
     }
 
     public Task UpdateUserAsync(User user)

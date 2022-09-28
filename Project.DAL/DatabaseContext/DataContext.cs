@@ -20,11 +20,6 @@ public class DataContext : DbContext
         _utilService = utilService;
     }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        optionsBuilder.UseLazyLoadingProxies();
-    }
-
     public DbSet<User> Users { get; set; }
 
     public DbSet<Organization> Organizations { get; set; }
@@ -36,6 +31,11 @@ public class DataContext : DbContext
     public DbSet<ResponseLog> ResponseLogs { get; set; }
 
     public DbSet<Entity.Entities.NLog> NLogs { get; set; }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder.UseLazyLoadingProxies();
+    }
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {

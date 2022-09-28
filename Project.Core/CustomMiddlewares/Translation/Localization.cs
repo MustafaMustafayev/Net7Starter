@@ -1,6 +1,4 @@
-﻿using Core.CustomMiddlewares.Translation;
-
-namespace Project.Core.CustomMiddlewares.Translation;
+﻿namespace Project.Core.CustomMiddlewares.Translation;
 
 public static class Localization
 {

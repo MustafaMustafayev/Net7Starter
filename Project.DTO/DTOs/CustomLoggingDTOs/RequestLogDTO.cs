@@ -1,12 +1,12 @@
 ﻿namespace Project.DTO.DTOs.CustomLoggingDTOs;
 
-public record RequestLogDTO
+public record RequestLogDto
 {
     public string TraceIdentifier { get; set; }
 
-    public string ClientIP { get; set; }
+    public string ClientIp { get; set; }
 
-    public string URI { get; set; }
+    public string Uri { get; set; }
 
     public DateTimeOffset RequestDate { get; set; }
 
@@ -18,5 +18,5 @@ public record RequestLogDTO
 
     public int? UserId { get; set; }
 
-    public ResponseLogDTO ResponseLog { get; set; }
+    public ResponseLogDto ResponseLog { get; set; }
 }

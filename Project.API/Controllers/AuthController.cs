@@ -1,83 +1,106 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 using Project.API.ActionFilters;
 using Project.BLL.Abstract;
-using Project.Core.Constants;
+using Project.Core.Abstract;
+using Project.Core.CustomMiddlewares.Translation;
 using Project.Core.Helper;
-using Project.DTO.DTOs.AuthDTOs;
+using Project.DTO.DTOs.AuthDto;
 using Project.DTO.DTOs.Responses;
-using Project.DTO.DTOs.UserDTOs;
 using Swashbuckle.AspNetCore.Annotations;
+using IResult = Project.DTO.DTOs.Responses.IResult;
 
 namespace Project.API.Controllers;
 
 [Route("api/[controller]")]
 [ServiceFilter(typeof(LogActionFilter))]
+[Authorize]
 public class AuthController : Controller
 {
     private readonly IAuthService _authService;
     private readonly ConfigSettings _configSettings;
-    private IUserService _userService;
+    private readonly IUtilService _utilService;
 
-    public AuthController(IAuthService authService, IUserService userService, ConfigSettings configSettings)
+    public AuthController(IAuthService authService, ConfigSettings configSettings, IUtilService utilService)
     {
         _authService = authService;
-        _userService = userService;
         _configSettings = configSettings;
+        _utilService = utilService;
     }
 
     [SwaggerOperation(Summary = "login")]
-    [SwaggerResponse(StatusCodes.Status200OK, type: typeof(LoginResponseDTO))]
+    [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IDataResult<LoginResponseDto>))]
     [HttpPost("login")]
-    public async Task<IActionResult> Login([FromBody] LoginDTO loginDto)
+    [AllowAnonymous]
+    public async Task<IActionResult> Login([FromBody] LoginDto request)
     {
-        string userSalt = await _authService.GetUserSaltAsync(loginDto.PIN);
-        if (string.IsNullOrEmpty(userSalt)) return Ok(new ErrorDataResult<Result>(Messages.InvalidModel));
+        var userSalt = await _authService.GetUserSaltAsync(request.Email);
 
-        loginDto.Password = SecurityHelper.HashPassword(loginDto.Password, userSalt);
-        IDataResult<UserToListDTO> userDto = await _authService.LoginAsync(loginDto);
+        if (string.IsNullOrEmpty(userSalt))
+            return Ok(new ErrorDataResult<Result>(Localization.Translate(Messages.InvalidUserCredentials)));
+
+        request.Password = SecurityHelper.HashPassword(request.Password, userSalt);
+
+        var userDto = await _authService.LoginAsync(request);
         if (!userDto.Success) return Ok(userDto);
 
-        DateTime expirationDate = DateTime.Now.AddDays(1);
+        var securityHelper = new SecurityHelper(_configSettings);
 
-        List<Claim> claims = new List<Claim>();
-        claims.Add(new Claim(ClaimTypes.NameIdentifier, userDto.Data.UserId.ToString()));
-        claims.Add(new Claim(ClaimTypes.Name, userDto.Data.PIN));
-        claims.Add(new Claim(ClaimTypes.Expiration, expirationDate.ToString()));
+        var expireDate = DateTime.Now.AddHours(_configSettings.AuthSettings.TokenExpirationTimeInHours);
 
-        //TODO add organization field to token body
-        claims.Add(new Claim(_configSettings.AuthSettings.TokenCompanyIdKey, userDto.Data.OrganizationId.ToString()));
-
-        SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_configSettings.AuthSettings.SecretKey));
-        SigningCredentials creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
-        SecurityTokenDescriptor tokenDescriptor = new SecurityTokenDescriptor
+        var loginResponseDto = new LoginResponseDto
         {
-            Subject = new ClaimsIdentity(claims),
-            Expires = expirationDate,
-            SigningCredentials = creds
-        };
-        JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
-        SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
-        string tokenValue = tokenHandler.WriteToken(token);
-
-        LoginResponseDTO loginResponseDto = new LoginResponseDTO
-        {
-            Token = tokenValue,
-            User = userDto.Data
+            Token = securityHelper.CreateTokenForUser(userDto.Data, expireDate),
+            User = userDto.Data,
+            TokenExpireDate = expireDate
         };
 
-        return Ok(new SuccessDataResult<LoginResponseDTO>(loginResponseDto));
+        _utilService.AddTokenToCache(loginResponseDto.Token, expireDate);
+
+        return Ok(new SuccessDataResult<LoginResponseDto>(loginResponseDto));
     }
 
-    [SwaggerOperation(Summary = "logout")]
-    [SwaggerResponse(StatusCodes.Status200OK, type: typeof(void))]
-    [HttpPost("logout")]
-    public async Task<IActionResult> Logout()
+    [SwaggerOperation(Summary = "send email for reset password")]
+    [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
+    [HttpPost("sendVerificationCode")]
+    [AllowAnonymous]
+    public IActionResult SendVerificationCode([FromQuery] string email)
     {
-        // implement logout logic due requirements
-        return Ok();
+        return Ok(_authService.SendVerificationCodeToEmailAsync(email));
+    }
+
+    [SwaggerOperation(Summary = "reset password")]
+    [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
+    [HttpPost("resetPassword")]
+    public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDto request)
+    {
+        return Ok(await _authService.ResetPasswordAsync(request));
+    }
+
+    [SwaggerOperation(Summary = "login by token")]
+    [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IDataResult<LoginResponseDto>))]
+    [HttpGet("LoginByToken")]
+    [AllowAnonymous]
+    public async Task<IActionResult> LoginByToken()
+    {
+        if (string.IsNullOrEmpty(HttpContext.Request.Headers.Authorization))
+            return Unauthorized(new ErrorResult(Localization.Translate(Messages.CanNotFoundUserIdInYourAccessToken)));
+        var userDto = await _authService.LoginByTokenAsync(HttpContext.Request.Headers.Authorization!);
+        if (!userDto.Success) return BadRequest(userDto);
+
+        var securityHelper = new SecurityHelper(_configSettings);
+
+        var expireDate = DateTime.Now.AddHours(_configSettings.AuthSettings.TokenExpirationTimeInHours);
+
+        var loginResponseDto = new LoginResponseDto
+        {
+            Token = securityHelper.CreateTokenForUser(userDto.Data, expireDate),
+            User = userDto.Data,
+            TokenExpireDate = expireDate
+        };
+
+        _utilService.AddTokenToCache(loginResponseDto.Token, expireDate);
+
+        return Ok(new SuccessDataResult<LoginResponseDto>(loginResponseDto));
     }
 }

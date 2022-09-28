@@ -4,22 +4,22 @@
         <TargetFramework>net6.0</TargetFramework>
         <CodeAnalysisRuleSet>../settings.ruleset</CodeAnalysisRuleSet>
         <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>disable</Nullable>
+        <Nullable>warnings</Nullable>
     </PropertyGroup>
 
     <ItemGroup>
-        <None Remove="Npgsql.EntityFrameworkCore.PostgreSQL" />
-        <None Remove="StyleCop.Analyzers" />
-        <None Remove="Microsoft.EntityFrameworkCore.Proxies" />
-        <None Remove="Microsoft.AspNetCore.Http" />
-        <None Remove="stylecop.json" />
+        <None Remove="Npgsql.EntityFrameworkCore.PostgreSQL"/>
+        <None Remove="StyleCop.Analyzers"/>
+        <None Remove="Microsoft.EntityFrameworkCore.Proxies"/>
+        <None Remove="Microsoft.AspNetCore.Http"/>
+        <None Remove="stylecop.json"/>
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.4" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="6.0.5" />
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.4"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="6.0.5"/>
     </ItemGroup>
     <ItemGroup>
-        <ProjectReference Include="..\Project.Core\Project.Core.csproj" />
-        <ProjectReference Include="..\Project.Entity\Project.Entity.csproj" />
+        <ProjectReference Include="..\Project.Core\Project.Core.csproj"/>
+        <ProjectReference Include="..\Project.Entity\Project.Entity.csproj"/>
     </ItemGroup>
 </Project>

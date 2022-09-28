@@ -4,30 +4,31 @@
         <TargetFramework>net6.0</TargetFramework>
         <CodeAnalysisRuleSet>../settings.ruleset</CodeAnalysisRuleSet>
         <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>disable</Nullable>
+        <Nullable>warnings</Nullable>
     </PropertyGroup>
 
     <ItemGroup>
-        <None Remove="StyleCop.Analyzers" />
-        <None Remove="DTOs\CustomLoggingDTOs\" />
-        <None Remove="DTOs\RoleDTOs\" />
-        <None Remove="DTOs\OrganizationDTOs\" />
-        <None Remove="DTOs\AuthDTOs\AuthValidators\" />
-        <None Remove="FluentValidation.AspNetCore" />
-        <None Remove="DTOs\OrganizationDTOs\OrganizationValidators\" />
-        <None Remove="DTOs\RoleDTOs\RoleValidators\" />
-        <None Remove="DTOs\UserDTOs\UserValidators\" />
+        <None Remove="StyleCop.Analyzers"/>
+        <None Remove="DTOs\CustomLoggingDTOs\"/>
+        <None Remove="DTOs\RoleDTOs\"/>
+        <None Remove="DTOs\OrganizationDTOs\"/>
+        <None Remove="DTOs\AuthDTOs\AuthValidators\"/>
+        <None Remove="FluentValidation.AspNetCore"/>
+        <None Remove="DTOs\OrganizationDTOs\OrganizationValidators\"/>
+        <None Remove="DTOs\RoleDTOs\RoleValidators\"/>
+        <None Remove="DTOs\UserDTOs\UserValidators\"/>
     </ItemGroup>
     <ItemGroup>
-        <Folder Include="DTOs\CustomLoggingDTOs\" />
-        <Folder Include="DTOs\RoleDTOs\" />
-        <Folder Include="DTOs\OrganizationDTOs\" />
-        <Folder Include="DTOs\AuthDTOs\AuthValidators\" />
-        <Folder Include="DTOs\OrganizationDTOs\OrganizationValidators\" />
-        <Folder Include="DTOs\RoleDTOs\RoleValidators\" />
-        <Folder Include="DTOs\UserDTOs\UserValidators\" />
+        <Folder Include="DTOs\CustomLoggingDTOs\"/>
+        <Folder Include="DTOs\RoleDTOs\"/>
+        <Folder Include="DTOs\OrganizationDTOs\"/>
+        <Folder Include="DTOs\OrganizationDTOs\OrganizationValidators\"/>
+        <Folder Include="DTOs\RoleDTOs\RoleValidators\"/>
     </ItemGroup>
     <ItemGroup>
-      <PackageReference Include="FluentValidation.AspNetCore" Version="11.2.1" />
+        <PackageReference Include="FluentValidation.AspNetCore" Version="11.2.1"/>
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\Project.Entity\Project.Entity.csproj"/>
     </ItemGroup>
 </Project>

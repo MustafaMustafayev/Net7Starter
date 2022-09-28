@@ -3,7 +3,7 @@
 public enum EBookSearchFilterKey
 {
     Name,
-    ISBN,
+    Isbn,
     CategoryId,
     AuthorId
 }
