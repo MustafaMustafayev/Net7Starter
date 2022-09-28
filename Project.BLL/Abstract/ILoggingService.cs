@@ -4,5 +4,5 @@ namespace Project.BLL.Abstract;
 
 public interface ILoggingService
 {
-    Task AddLogAsync(RequestLogDTO requestLogDto);
+    Task AddLogAsync(RequestLogDto requestLogDto);
 }

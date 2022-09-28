@@ -1,12 +1,11 @@
 ﻿using FluentValidation;
 
-namespace Project.DTO.DTOs.RoleDTOs.RoleValidators
+namespace Project.DTO.DTOs.RoleDTOs.RoleValidators;
+
+public class RoleToAddOrUpdateDtoValidator : AbstractValidator<RoleToAddOrUpdateDto>
 {
-	public class RoleToAddOrUpdateDTOValidator : AbstractValidator<RoleToAddOrUpdateDTO>
-	{
-		public RoleToAddOrUpdateDTOValidator()
-		{
-			RuleFor(p => p.Name).NotNull();
-		}
-	}
+    public RoleToAddOrUpdateDtoValidator()
+    {
+        RuleFor(p => p.Name).NotNull();
+    }
 }

@@ -1,18 +1,17 @@
 ﻿using Project.DTO.DTOs.OrganizationDTOs;
 using Project.DTO.DTOs.Responses;
 
-namespace Project.BLL.Abstract
+namespace Project.BLL.Abstract;
+
+public interface IOrganizationService
 {
-	public interface IOrganizationService
-    {
-        Task<IDataResult<List<OrganizationToListDTO>>> GetAsync();
+    Task<IDataResult<List<OrganizationToListDto>>> GetAsync();
 
-        Task<IDataResult<OrganizationToListDTO>> GetAsync(int id);
+    Task<IDataResult<OrganizationToListDto>> GetAsync(int id);
 
-        Task<IDataResult<Result>> AddAsync(OrganizationToAddOrUpdateDTO dto);
+    Task<IResult> AddAsync(OrganizationToAddOrUpdateDto dto);
 
-        Task<IDataResult<Result>> UpdateAsync(int id, OrganizationToAddOrUpdateDTO dto);
+    Task<IResult> UpdateAsync(OrganizationToAddOrUpdateDto dto);
 
-        Task DeleteAsync(int id);
-    }
+    Task<IResult> DeleteAsync(int id);
 }

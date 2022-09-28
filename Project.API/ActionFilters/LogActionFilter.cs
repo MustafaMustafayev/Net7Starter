@@ -25,7 +25,7 @@ public class LogActionFilter : IAsyncActionFilter
         var httpContext = context.HttpContext;
 
         var traceIdentitier = httpContext?.TraceIdentifier;
-        var clientIP = httpContext.Features.Get<IHttpConnectionFeature>()?.RemoteIpAddress?.ToString();
+        var clientIp = httpContext.Features.Get<IHttpConnectionFeature>()?.RemoteIpAddress?.ToString();
         var uri = httpContext.Request.Host + httpContext.Request.Path;
 
         var token = string.Empty;
@@ -46,11 +46,11 @@ public class LogActionFilter : IAsyncActionFilter
         var bodyContent = await streamReader.ReadToEndAsync();
         context.HttpContext.Request.Body.Position = 0;
 
-        var requestLog = new RequestLogDTO
+        var requestLog = new RequestLogDto
         {
             TraceIdentifier = traceIdentitier,
-            ClientIP = clientIP,
-            URI = uri,
+            ClientIp = clientIp,
+            Uri = uri,
             Payload = bodyContent,
             Method = httpContext.Request.Method,
             Token = token,
@@ -61,7 +61,7 @@ public class LogActionFilter : IAsyncActionFilter
         await next();
 
         var responseStatusCode = httpContext.Response.StatusCode;
-        var responseLog = new ResponseLogDTO
+        var responseLog = new ResponseLogDto
         {
             TraceIdentifier = traceIdentitier,
             ResponseDate = DateTime.Now,

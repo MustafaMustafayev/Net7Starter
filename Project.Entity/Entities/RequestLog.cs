@@ -9,9 +9,9 @@ public class RequestLog
 
     public string TraceIdentifier { get; set; }
 
-    public string ClientIP { get; set; }
+    public string ClientIp { get; set; }
 
-    public string URI { get; set; }
+    public string Uri { get; set; }
 
     public DateTimeOffset RequestDate { get; set; }
 

@@ -1,74 +1,81 @@
-﻿using AutoMapper;
-using Project.BLL.Abstract;
-using Project.Core.Constants;
+﻿using Project.BLL.Abstract;
+using Project.BLL.Mappers.GenericMapping;
+using Project.Core.CustomMiddlewares.Translation;
 using Project.Core.Helper;
 using Project.DAL.UnitOfWorks.Abstract;
-using Project.DTO.DTOs.AuthDTOs;
+using Project.DAL.Utility;
 using Project.DTO.DTOs.Responses;
-using Project.DTO.DTOs.UserDTOs;
+using Project.DTO.DTOs.UserDto;
 using Project.Entity.Entities;
 
 namespace Project.BLL.Concrete;
 
 public class UserService : IUserService
 {
-    private readonly IMapper _mapper;
+    private readonly IGenericMapper _mapper;
     private readonly IUnitOfWork _unitOfWork;
 
-    public UserService(IUnitOfWork unitOfWork, IMapper mapper)
+    public UserService(IUnitOfWork unitOfWork, IGenericMapper mapper)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
     }
 
-    public async Task<IDataResult<Result>> AddAsync(UserToAddDTO dto)
+    public async Task<IResult> AddAsync(UserToAddDto userToAddDto)
     {
-        User entity = _mapper.Map<User>(dto);
-        entity.Salt = SecurityHelper.GenerateSalt();
-        entity.Password = SecurityHelper.HashPassword(entity.Password, entity.Salt);
-        await _unitOfWork.UserRepository.AddAsync(entity);
+        if (await _unitOfWork.UserRepository.IsUserExistAsync(userToAddDto.Username, null))
+            return new ErrorResult(Localization.Translate(Messages.UserIsExist));
+
+        var user = _mapper.Map<UserToAddDto, User>(userToAddDto);
+        user.Salt = SecurityHelper.GenerateSalt();
+        user.Password = SecurityHelper.HashPassword(user.Password, user.Salt);
+        var added = await _unitOfWork.UserRepository.AddAsync(user);
         await _unitOfWork.CommitAsync();
-        return new SuccessDataResult<Result>(null, Messages.Success);
+
+        //return new SuccessDataResult<UserToListDto>(_mapper.Map<UserToListDto>(added), Localization.Translate(Messages.Success));
+        return new SuccessResult(Localization.Translate(Messages.Success));
     }
 
-    public async Task DeleteAsync(int id)
+    public async Task<IResult> DeleteAsync(int userId)
     {
-        User entity = await _unitOfWork.UserRepository.GetAsync(m => m.UserId == id);
-        entity.IsDeleted = true;
-        _unitOfWork.UserRepository.Update(entity);
+        var user = await _unitOfWork.UserRepository.GetAsync(m => m.Id == userId);
+        user.IsDeleted = true;
+        _unitOfWork.UserRepository.Update(user);
         await _unitOfWork.CommitAsync();
+
+        return new SuccessResult();
     }
 
-    public async Task<IDataResult<List<UserToListDTO>>> GetAsync()
+    public async Task<IDataResult<List<UserToListDto>>> GetAsync()
     {
-        List<UserToListDTO> datas = _mapper.Map<List<UserToListDTO>>(await _unitOfWork.UserRepository.GetListAsync());
-        return new SuccessDataResult<List<UserToListDTO>>(datas);
+        var users = _unitOfWork.UserRepository.GetAsNoTrackingList().ToList();
+        return new SuccessDataResult<List<UserToListDto>>(_mapper.Map<List<User>, List<UserToListDto>>(users));
     }
 
-    public async Task<IDataResult<UserToListDTO>> GetAsync(int id)
+    public async Task<IDataResult<UserToListDto>> GetAsync(int userId)
     {
-        UserToListDTO data = _mapper.Map<UserToListDTO>(await _unitOfWork.UserRepository.GetAsNoTrackingAsync(m => m.UserId == id));
-        return new SuccessDataResult<UserToListDTO>(data);
+        var user = _mapper.Map<User, UserToListDto>(
+            await _unitOfWork.UserRepository.GetAsNoTrackingAsync(m => m.Id == userId));
+        return new SuccessDataResult<UserToListDto>(user);
     }
 
-    public async Task ResetPasswordAsync(ResetPasswordDTO resetPasswordDto)
+    public async Task<IResult> UpdateAsync(UserToUpdateDto userToUpdateDto)
     {
-        User entity = await _unitOfWork.UserRepository.GetAsync(m => m.UserId == resetPasswordDto.UserId);
-        entity.Salt = SecurityHelper.GenerateSalt();
-        entity.Password = SecurityHelper.HashPassword(resetPasswordDto.Password, entity.Salt);
-        await _unitOfWork.CommitAsync();
-    }
+        if (await _unitOfWork.UserRepository.IsUserExistAsync(userToUpdateDto.Username, userToUpdateDto.Id))
+            return new ErrorResult(Localization.Translate(Messages.UserIsExist));
 
-    public async Task<IDataResult<Result>> UpdateAsync(int id, UserToUpdateDTO dto)
-    {
-        if (await _unitOfWork.UserRepository.IsUserExistAsync(dto.PIN, id))
-            return new ErrorDataResult<Result>(Messages.UserIsExist);
-
-        User data = _mapper.Map<User>(dto);
-
-        await _unitOfWork.UserRepository.UpdateUserAsync(data);
+        await _unitOfWork.UserRepository.UpdateUserAsync(_mapper.Map<UserToUpdateDto, User>(userToUpdateDto));
 
         await _unitOfWork.CommitAsync();
-        return new SuccessDataResult<Result>(Messages.Success);
+        return new SuccessResult(Localization.Translate(Messages.Success));
+    }
+
+    public async Task<IDataResult<PaginatedList<UserToListDto>>> GetAsPaginatedListAsync(int pageIndex, int pageSize)
+    {
+        var users = _unitOfWork.UserRepository.GetAsNoTrackingList();
+        var response = await PaginatedList<User>.CreateAsync(users.OrderBy(m => m.Id), pageIndex, pageSize);
+        var responseDto = new PaginatedList<UserToListDto>(_mapper.Map<List<User>, List<UserToListDto>>(response.Datas),
+            response.TotalRecordCount, response.PageIndex, response.TotalPageCount);
+        return new SuccessDataResult<PaginatedList<UserToListDto>>(responseDto);
     }
 }

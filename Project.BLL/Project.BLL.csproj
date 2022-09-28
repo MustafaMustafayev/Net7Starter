@@ -4,20 +4,22 @@
         <TargetFramework>net6.0</TargetFramework>
         <CodeAnalysisRuleSet>../settings.ruleset</CodeAnalysisRuleSet>
         <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>disable</Nullable>
+        <Nullable>warnings</Nullable>
     </PropertyGroup>
 
     <ItemGroup>
-        <None Remove="AutoMapper.Extensions.Microsoft.DependencyInjection" />
-        <None Remove="StyleCop.Analyzers" />
+        <None Remove="AutoMapper.Extensions.Microsoft.DependencyInjection"/>
+        <None Remove="StyleCop.Analyzers"/>
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
+        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0"/>
+        <PackageReference Include="Mapster" Version="7.4.0-pre03"/>
+        <PackageReference Include="TinyMapper" Version="3.0.3"/>
     </ItemGroup>
     <ItemGroup>
-        <ProjectReference Include="..\Project.Core\Project.Core.csproj" />
-        <ProjectReference Include="..\Project.DAL\Project.DAL.csproj" />
-        <ProjectReference Include="..\Project.DTO\Project.DTO.csproj" />
-        <ProjectReference Include="..\Project.Entity\Project.Entity.csproj" />
+        <ProjectReference Include="..\Project.Core\Project.Core.csproj"/>
+        <ProjectReference Include="..\Project.DAL\Project.DAL.csproj"/>
+        <ProjectReference Include="..\Project.DTO\Project.DTO.csproj"/>
+        <ProjectReference Include="..\Project.Entity\Project.Entity.csproj"/>
     </ItemGroup>
 </Project>

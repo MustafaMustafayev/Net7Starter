@@ -1,20 +1,19 @@
-﻿using Project.DTO.DTOs.AuthDTOs;
+﻿using Project.DAL.Utility;
 using Project.DTO.DTOs.Responses;
-using Project.DTO.DTOs.UserDTOs;
+using Project.DTO.DTOs.UserDto;
 
 namespace Project.BLL.Abstract;
 
 public interface IUserService
 {
-    Task<IDataResult<List<UserToListDTO>>> GetAsync();
+    Task<IDataResult<List<UserToListDto>>> GetAsync();
+    Task<IDataResult<PaginatedList<UserToListDto>>> GetAsPaginatedListAsync(int pageIndex, int pageSize);
 
-    Task<IDataResult<UserToListDTO>> GetAsync(int id);
+    Task<IDataResult<UserToListDto>> GetAsync(int userId);
 
-    Task<IDataResult<Result>> AddAsync(UserToAddDTO dto);
+    Task<IResult> AddAsync(UserToAddDto userToAddDto);
 
-    Task<IDataResult<Result>> UpdateAsync(int id, UserToUpdateDTO dto);
+    Task<IResult> UpdateAsync(UserToUpdateDto userToUpdateDto);
 
-    Task DeleteAsync(int id);
-
-    Task ResetPasswordAsync(ResetPasswordDTO resetPasswordDto);
+    Task<IResult> DeleteAsync(int userId);
 }

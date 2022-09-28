@@ -1,19 +1,17 @@
 ﻿using Project.DTO.DTOs.Responses;
 using Project.DTO.DTOs.RoleDTOs;
 
-namespace Project.BLL.Abstract
+namespace Project.BLL.Abstract;
+
+public interface IRoleService
 {
-	public interface IRoleService
-    {
-        Task<IDataResult<List<RoleToListDTO>>> GetAsync();
+    Task<IDataResult<List<RoleToListDto>>> GetAsync();
 
-        Task<IDataResult<RoleToListDTO>> GetAsync(int id);
+    Task<IDataResult<RoleToListDto>> GetAsync(int id);
 
-        Task<IDataResult<Result>> AddAsync(RoleToAddOrUpdateDTO dto);
+    Task<IDataResult<Result>> AddAsync(RoleToAddOrUpdateDto dto);
 
-        Task<IDataResult<Result>> UpdateAsync(int id, RoleToAddOrUpdateDTO dto);
+    Task<IDataResult<Result>> UpdateAsync(RoleToAddOrUpdateDto dto);
 
-        Task DeleteAsync(int id);
-    }
+    Task<IResult> DeleteAsync(int id);
 }
-

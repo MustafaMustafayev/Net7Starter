@@ -1,61 +1,59 @@
-﻿using AutoMapper;
-using Project.BLL.Abstract;
-using Project.Core.Constants;
+﻿using Project.BLL.Abstract;
+using Project.BLL.Mappers.GenericMapping;
+using Project.Core.CustomMiddlewares.Translation;
 using Project.DAL.UnitOfWorks.Abstract;
 using Project.DTO.DTOs.OrganizationDTOs;
 using Project.DTO.DTOs.Responses;
 using Project.Entity.Entities;
 
-namespace Project.BLL.Concrete
+namespace Project.BLL.Concrete;
+
+public class OrganizationService : IOrganizationService
 {
-	public class OrganizationService : IOrganizationService
-	{
+    private readonly IGenericMapper _mapper;
+    private readonly IUnitOfWork _unitOfWork;
 
-        private readonly IMapper _mapper;
-        private readonly IUnitOfWork _unitOfWork;
+    public OrganizationService(IUnitOfWork unitOfWork, IGenericMapper mapper)
+    {
+        _unitOfWork = unitOfWork;
+        _mapper = mapper;
+    }
 
-        public OrganizationService(IUnitOfWork unitOfWork, IMapper mapper)
-        {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
-        }
+    public async Task<IResult> AddAsync(OrganizationToAddOrUpdateDto dto)
+    {
+        var entity = _mapper.Map<OrganizationToAddOrUpdateDto, Organization>(dto);
+        await _unitOfWork.OrganizationRepository.AddAsync(entity);
+        await _unitOfWork.CommitAsync();
+        return new SuccessResult(Localization.Translate(Messages.Success));
+    }
 
-        public async Task<IDataResult<Result>> AddAsync(OrganizationToAddOrUpdateDTO dto)
-        {
-            Organization entity = _mapper.Map<Organization>(dto);
-            await _unitOfWork.OrganizationRepository.AddAsync(entity);
-            await _unitOfWork.CommitAsync();
-            return new SuccessDataResult<Result>(null, Messages.Success);
-        }
+    public async Task<IResult> DeleteAsync(int id)
+    {
+        var entity = await _unitOfWork.OrganizationRepository.GetAsync(m => m.OrganizationId == id);
+        entity.IsDeleted = true;
+        _unitOfWork.OrganizationRepository.Update(entity);
+        await _unitOfWork.CommitAsync();
+        return new SuccessResult(Localization.Translate(Messages.Success));
+    }
 
-        public async Task DeleteAsync(int id)
-        {
-            Organization entity = await _unitOfWork.OrganizationRepository.GetAsync(m => m.OrganizationId == id);
-            entity.IsDeleted = true;
-            _unitOfWork.OrganizationRepository.Update(entity);
-            await _unitOfWork.CommitAsync();
-        }
+    public async Task<IDataResult<List<OrganizationToListDto>>> GetAsync()
+    {
+        var datas = _mapper.Map<List<Organization>, List<OrganizationToListDto>>(await _unitOfWork.OrganizationRepository.GetListAsync());
+        return new SuccessDataResult<List<OrganizationToListDto>>(datas);
+    }
 
-        public async Task<IDataResult<List<OrganizationToListDTO>>> GetAsync()
-        {
-            List<OrganizationToListDTO> datas = _mapper.Map<List<OrganizationToListDTO>>(await _unitOfWork.OrganizationRepository.GetListAsync());
-            return new SuccessDataResult<List<OrganizationToListDTO>>(datas);
-        }
+    public async Task<IDataResult<OrganizationToListDto>> GetAsync(int id)
+    {
+        var data = _mapper.Map<Organization, OrganizationToListDto>(
+            await _unitOfWork.OrganizationRepository.GetAsNoTrackingAsync(m => m.OrganizationId == id));
+        return new SuccessDataResult<OrganizationToListDto>(data);
+    }
 
-        public async Task<IDataResult<OrganizationToListDTO>> GetAsync(int id)
-        {
-            OrganizationToListDTO data = _mapper.Map<OrganizationToListDTO>(await _unitOfWork.OrganizationRepository.GetAsNoTrackingAsync(m => m.OrganizationId == id));
-            return new SuccessDataResult<OrganizationToListDTO>(data);
-        }
-
-        public async Task<IDataResult<Result>> UpdateAsync(int id, OrganizationToAddOrUpdateDTO dto)
-        {
-            Organization entity = _mapper.Map<Organization>(dto);
-            entity.OrganizationId = id;
-            _unitOfWork.OrganizationRepository.Update(entity);
-            await _unitOfWork.CommitAsync();
-            return new SuccessDataResult<Result>(null, Messages.Success);
-        }
+    public async Task<IResult> UpdateAsync(OrganizationToAddOrUpdateDto dto)
+    {
+        var entity = _mapper.Map<OrganizationToAddOrUpdateDto, Organization>(dto);
+        _unitOfWork.OrganizationRepository.Update(entity);
+        await _unitOfWork.CommitAsync();
+        return new SuccessResult(Localization.Translate(Messages.Success));
     }
 }
-

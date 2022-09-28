@@ -2,15 +2,13 @@
 using Project.DTO.DTOs.RoleDTOs;
 using Project.Entity.Entities;
 
-namespace Project.BLL.Mappers
-{
-	public class RoleMapper : Profile
-	{
-		public RoleMapper()
-		{
-			CreateMap<Role, RoleToListDTO>();
-			CreateMap<RoleToAddOrUpdateDTO, Role>();
-		}
-	}
-}
+namespace Project.BLL.Mappers;
 
+public class RoleMapper : Profile
+{
+    public RoleMapper()
+    {
+        CreateMap<Role, RoleToListDto>();
+        CreateMap<RoleToAddOrUpdateDto, Role>();
+    }
+}

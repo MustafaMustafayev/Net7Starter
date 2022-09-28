@@ -1,6 +1,6 @@
 ﻿namespace Project.DTO.DTOs.CustomLoggingDTOs;
 
-public record ResponseLogDTO
+public record ResponseLogDto
 {
     public string TraceIdentifier { get; set; }
 

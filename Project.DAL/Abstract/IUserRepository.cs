@@ -5,11 +5,9 @@ namespace Project.DAL.Abstract;
 
 public interface IUserRepository : IGenericRepository<User>
 {
-    Task<bool> IsUserExistAsync(string pin, int? userId);
+    Task<bool> IsUserExistAsync(string userName, int? userId);
 
-    Task<string> GetUserSaltAsync(string pin);
+    Task<string?> GetUserSaltAsync(string userEmail);
 
     Task UpdateUserAsync(User user);
-
-    Task ResetPasswordAsync(int userId, string password);
 }
