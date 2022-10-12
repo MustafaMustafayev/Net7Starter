@@ -3,10 +3,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Project.BLL.Abstract;
 using Project.Core.Helper;
-using Project.DTO.DTOs.Responses;
-using Project.DTO.DTOs.UserDto;
+using Project.DTO.Responses;
+using Project.DTO.User;
 using Swashbuckle.AspNetCore.Annotations;
-using IResult = Project.DTO.DTOs.Responses.IResult;
+using IResult = Project.DTO.Responses.IResult;
 
 namespace Project.API.Controllers;
 

@@ -84,7 +84,8 @@ public class UtilService : IUtilService
 
         tokens.Add($"{_configSettings.AuthSettings.TokenPrefix} {token}", expireDate);
 
-        _memoryCache.Set(Constants.Constants.CacheTokensKey, tokens, TimeSpan.FromHours(_configSettings.AuthSettings.TokenExpirationTimeInHours));
+        _memoryCache.Set(Constants.Constants.CacheTokensKey, tokens,
+            TimeSpan.FromHours(_configSettings.AuthSettings.TokenExpirationTimeInHours));
     }
 
     public bool IsTokenExistsInCache(string? token)

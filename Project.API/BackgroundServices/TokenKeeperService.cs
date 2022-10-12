@@ -52,7 +52,8 @@ public class TokenKeeperHostedService : IHostedService, IDisposable
 
         foreach (var token in tokens.Where(token => DateTime.Now > token.Value)) tokens.Remove(token.Key);
 
-        _memoryCache.Set(Constants.CacheTokensKey, tokens, TimeSpan.FromHours(_configSettings.AuthSettings.TokenExpirationTimeInHours));
+        _memoryCache.Set(Constants.CacheTokensKey, tokens,
+            TimeSpan.FromHours(_configSettings.AuthSettings.TokenExpirationTimeInHours));
         _logger.LogInfo($"TokenKeeperHostedService is working. Count: {_executionCounter}.");
     }
 }

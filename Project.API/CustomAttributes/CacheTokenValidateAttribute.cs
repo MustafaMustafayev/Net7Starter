@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Project.Core.Abstract;
 using Project.Core.Concrete;
 using Project.Core.CustomMiddlewares.Translation;
-using Project.DTO.DTOs.Responses;
+using Project.DTO.Responses;
 
 namespace Project.API.CustomAttributes;
 
@@ -14,6 +14,7 @@ public class CacheTokenValidateAttribute : Attribute, IAuthorizationFilter
     {
         if (context.HttpContext.RequestServices.GetService(typeof(IUtilService)) is not UtilService utilService ||
             !utilService.IsTokenExistsInCache(context.HttpContext.Request.Headers.Authorization))
-            context.Result = new UnauthorizedObjectResult(new ErrorResult(Localization.Translate(Messages.YourSessionIsClosed)));
+            context.Result =
+                new UnauthorizedObjectResult(new ErrorResult(Localization.Translate(Messages.YourSessionIsClosed)));
     }
 }

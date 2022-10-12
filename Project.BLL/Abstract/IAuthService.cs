@@ -1,6 +1,6 @@
-﻿using Project.DTO.DTOs.AuthDto;
-using Project.DTO.DTOs.Responses;
-using Project.DTO.DTOs.UserDto;
+﻿using Project.DTO.Auth;
+using Project.DTO.Responses;
+using Project.DTO.User;
 
 namespace Project.BLL.Abstract;
 

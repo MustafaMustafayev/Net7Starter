@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Project.DTO.DTOs.CustomLoggingDTOs;
+using Project.DTO.CustomLogging;
 using Project.Entity.Entities;
 
 namespace Project.BLL.Mappers;

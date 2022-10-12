@@ -1,8 +1,8 @@
 using AutoMapper;
-using Project.DTO.DTOs.CustomLoggingDTOs;
-using Project.DTO.DTOs.OrganizationDTOs;
-using Project.DTO.DTOs.RoleDTOs;
-using Project.DTO.DTOs.UserDto;
+using Project.DTO.CustomLogging;
+using Project.DTO.Organization;
+using Project.DTO.Role;
+using Project.DTO.User;
 using Project.Entity.Entities;
 
 namespace Project.BLL.Mappers;

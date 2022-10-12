@@ -4,9 +4,9 @@ using Project.Core.Abstract;
 using Project.Core.CustomMiddlewares.Translation;
 using Project.Core.Helper;
 using Project.DAL.UnitOfWorks.Abstract;
-using Project.DTO.DTOs.AuthDto;
-using Project.DTO.DTOs.Responses;
-using Project.DTO.DTOs.UserDto;
+using Project.DTO.Auth;
+using Project.DTO.Responses;
+using Project.DTO.User;
 using Project.Entity.Entities;
 
 namespace Project.BLL.Concrete;
@@ -42,10 +42,13 @@ public class AuthService : IAuthService
     public async Task<IDataResult<UserToListDto>> LoginByTokenAsync(string token)
     {
         var userId = _utilService.GetUserIdFromToken(token);
-        if (userId is null) return new ErrorDataResult<UserToListDto>(Localization.Translate(Messages.CanNotFoundUserIdInYourAccessToken));
+        if (userId is null)
+            return new ErrorDataResult<UserToListDto>(
+                Localization.Translate(Messages.CanNotFoundUserIdInYourAccessToken));
 
         var user = await _unitOfWork.UserRepository.GetAsync(m => m.Id == userId);
-        if (user == null) return new ErrorDataResult<UserToListDto>(Localization.Translate(Messages.InvalidUserCredentials));
+        if (user == null)
+            return new ErrorDataResult<UserToListDto>(Localization.Translate(Messages.InvalidUserCredentials));
 
         return new SuccessDataResult<UserToListDto>(_mapper.Map<User, UserToListDto>(user));
     }

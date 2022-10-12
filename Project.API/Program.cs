@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -25,7 +26,7 @@ using Project.DAL.Concrete;
 using Project.DAL.DatabaseContext;
 using Project.DAL.UnitOfWorks.Abstract;
 using Project.DAL.UnitOfWorks.Concrete;
-using Project.DTO.DTOs.AuthDto.AuthValidators;
+using Project.DTO.Auth.AuthValidators;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -46,6 +47,8 @@ builder.Services.AddControllers(opt => { opt.Filters.Add(typeof(ValidatorActionF
 builder.Services.AddFluentValidationAutoValidation().AddValidatorsFromAssemblyContaining<LoginDtoValidator>();
 
 builder.WebHost.UseSentry();
+
+//Mappers section uncomment which one you want to use. Comment others
 
 //AutoMapper
 builder.Services.AddScoped<IGenericMapper, AutoMapperGenericMapping<AutomapperProfile>>();
@@ -84,9 +87,11 @@ builder.Services.AddScoped<IRoleService, RoleService>();
 
 builder.Services.AddScoped<IOrganizationRepository, OrganizationRepository>();
 
-builder.Services.AddScoped<IOrganizationService, OrganizationService>();
+//builder.Services.AddScoped<IOrganizationService, OrganizationService>();
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+builder.Services.AddMediatR(typeof(UnitOfWork).Assembly);
 
 /*
 builder.Services.AddMiniProfiler(options =>

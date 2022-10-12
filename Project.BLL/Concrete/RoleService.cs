@@ -2,8 +2,8 @@
 using Project.BLL.Mappers.GenericMapping;
 using Project.Core.CustomMiddlewares.Translation;
 using Project.DAL.UnitOfWorks.Abstract;
-using Project.DTO.DTOs.Responses;
-using Project.DTO.DTOs.RoleDTOs;
+using Project.DTO.Responses;
+using Project.DTO.Role;
 using Project.Entity.Entities;
 
 namespace Project.BLL.Concrete;
@@ -44,7 +44,8 @@ public class RoleService : IRoleService
 
     public async Task<IDataResult<RoleToListDto>> GetAsync(int id)
     {
-        var data = _mapper.Map<Role, RoleToListDto>(await _unitOfWork.RoleRepository.GetAsNoTrackingAsync(m => m.RoleId == id));
+        var data = _mapper.Map<Role, RoleToListDto>(
+            await _unitOfWork.RoleRepository.GetAsNoTrackingAsync(m => m.RoleId == id));
         return new SuccessDataResult<RoleToListDto>(data);
     }
 
