@@ -1,4 +1,4 @@
-﻿namespace Project.DTO.DTOs.CustomLoggingDTOs;
+﻿namespace Project.DTO.DTOs.CustomLoggingDto;
 
 public record RequestLogDto
 {

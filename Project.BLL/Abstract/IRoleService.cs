@@ -1,5 +1,5 @@
 ﻿using Project.DTO.DTOs.Responses;
-using Project.DTO.DTOs.RoleDTOs;
+using Project.DTO.DTOs.RoleDto;
 
 namespace Project.BLL.Abstract;
 

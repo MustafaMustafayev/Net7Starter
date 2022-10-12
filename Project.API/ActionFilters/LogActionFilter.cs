@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Project.BLL.Abstract;
 using Project.Core.Abstract;
 using Project.Core.Helper;
-using Project.DTO.DTOs.CustomLoggingDTOs;
+using Project.DTO.DTOs.CustomLoggingDto;
 
 namespace Project.API.ActionFilters;
 

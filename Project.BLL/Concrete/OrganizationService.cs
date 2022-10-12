@@ -2,7 +2,7 @@
 using Project.BLL.Mappers.GenericMapping;
 using Project.Core.CustomMiddlewares.Translation;
 using Project.DAL.UnitOfWorks.Abstract;
-using Project.DTO.DTOs.OrganizationDTOs;
+using Project.DTO.DTOs.OrganizationDto;
 using Project.DTO.DTOs.Responses;
 using Project.Entity.Entities;
 
@@ -38,7 +38,8 @@ public class OrganizationService : IOrganizationService
 
     public async Task<IDataResult<List<OrganizationToListDto>>> GetAsync()
     {
-        var datas = _mapper.Map<List<Organization>, List<OrganizationToListDto>>(await _unitOfWork.OrganizationRepository.GetListAsync());
+        var datas = _mapper.Map<List<Organization>, List<OrganizationToListDto>>(
+            await _unitOfWork.OrganizationRepository.GetListAsync());
         return new SuccessDataResult<List<OrganizationToListDto>>(datas);
     }
 

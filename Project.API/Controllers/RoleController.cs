@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Project.API.ActionFilters;
 using Project.BLL.Abstract;
 using Project.DTO.DTOs.Responses;
-using Project.DTO.DTOs.RoleDTOs;
+using Project.DTO.DTOs.RoleDto;
 using Swashbuckle.AspNetCore.Annotations;
 using IResult = Project.DTO.DTOs.Responses.IResult;
 

@@ -1,4 +1,4 @@
-﻿namespace Project.DTO.DTOs.OrganizationDTOs;
+﻿namespace Project.DTO.DTOs.OrganizationDto;
 
 public record OrganizationToListDto
 {

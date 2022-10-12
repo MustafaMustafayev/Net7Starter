@@ -1,7 +1,7 @@
 using AutoMapper;
-using Project.DTO.DTOs.CustomLoggingDTOs;
-using Project.DTO.DTOs.OrganizationDTOs;
-using Project.DTO.DTOs.RoleDTOs;
+using Project.DTO.DTOs.CustomLoggingDto;
+using Project.DTO.DTOs.OrganizationDto;
+using Project.DTO.DTOs.RoleDto;
 using Project.DTO.DTOs.UserDto;
 using Project.Entity.Entities;
 

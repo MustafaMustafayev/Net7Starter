@@ -1,4 +1,4 @@
-﻿using Project.DTO.DTOs.OrganizationDTOs;
+﻿using Project.DTO.DTOs.OrganizationDto;
 using Project.DTO.DTOs.Responses;
 
 namespace Project.BLL.Abstract;

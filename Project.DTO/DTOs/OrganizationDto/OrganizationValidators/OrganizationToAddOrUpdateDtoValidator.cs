@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace Project.DTO.DTOs.OrganizationDTOs.OrganizationValidators;
+namespace Project.DTO.DTOs.OrganizationDto.OrganizationValidators;
 
 public class OrganizationToAddOrUpdateDtoValidator : AbstractValidator<OrganizationToAddOrUpdateDto>
 {

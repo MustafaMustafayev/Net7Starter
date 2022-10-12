@@ -14,6 +14,7 @@ public class CacheTokenValidateAttribute : Attribute, IAuthorizationFilter
     {
         if (context.HttpContext.RequestServices.GetService(typeof(IUtilService)) is not UtilService utilService ||
             !utilService.IsTokenExistsInCache(context.HttpContext.Request.Headers.Authorization))
-            context.Result = new UnauthorizedObjectResult(new ErrorResult(Localization.Translate(Messages.YourSessionIsClosed)));
+            context.Result =
+                new UnauthorizedObjectResult(new ErrorResult(Localization.Translate(Messages.YourSessionIsClosed)));
     }
 }

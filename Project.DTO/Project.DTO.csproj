@@ -19,11 +19,11 @@
         <None Remove="DTOs\UserDTOs\UserValidators\"/>
     </ItemGroup>
     <ItemGroup>
-        <Folder Include="DTOs\CustomLoggingDTOs\"/>
-        <Folder Include="DTOs\RoleDTOs\"/>
-        <Folder Include="DTOs\OrganizationDTOs\"/>
-        <Folder Include="DTOs\OrganizationDTOs\OrganizationValidators\"/>
-        <Folder Include="DTOs\RoleDTOs\RoleValidators\"/>
+        <Folder Include="DTOs\CustomLoggingDto\"/>
+        <Folder Include="DTOs\RoleDto\"/>
+        <Folder Include="DTOs\OrganizationDto\"/>
+        <Folder Include="DTOs\OrganizationDto\OrganizationValidators\"/>
+        <Folder Include="DTOs\RoleDto\RoleValidators\"/>
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="FluentValidation.AspNetCore" Version="11.2.1"/>

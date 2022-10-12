@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Project.API.ActionFilters;
 using Project.BLL.Abstract;
-using Project.DTO.DTOs.OrganizationDTOs;
+using Project.DTO.DTOs.OrganizationDto;
 using Project.DTO.DTOs.Responses;
 using Swashbuckle.AspNetCore.Annotations;
 using IResult = Project.DTO.DTOs.Responses.IResult;

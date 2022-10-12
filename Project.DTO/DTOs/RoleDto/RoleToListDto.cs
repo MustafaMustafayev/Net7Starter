@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Project.DTO.DTOs.RoleDTOs;
+namespace Project.DTO.DTOs.RoleDto;
 
 public record RoleToListDto
 {

@@ -1,4 +1,4 @@
-﻿using Project.DTO.DTOs.CustomLoggingDTOs;
+﻿using Project.DTO.DTOs.CustomLoggingDto;
 
 namespace Project.BLL.Abstract;
 

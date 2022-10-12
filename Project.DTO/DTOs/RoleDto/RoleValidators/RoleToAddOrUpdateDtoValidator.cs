@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace Project.DTO.DTOs.RoleDTOs.RoleValidators;
+namespace Project.DTO.DTOs.RoleDto.RoleValidators;
 
 public class RoleToAddOrUpdateDtoValidator : AbstractValidator<RoleToAddOrUpdateDto>
 {

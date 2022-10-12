@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Project.DTO.DTOs.OrganizationDTOs;
+using Project.DTO.DTOs.OrganizationDto;
 using Project.Entity.Entities;
 
 namespace Project.BLL.Mappers;
