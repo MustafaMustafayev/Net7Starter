@@ -2,8 +2,8 @@
 using Project.BLL.Mappers.GenericMapping;
 using Project.Core.CustomMiddlewares.Translation;
 using Project.DAL.UnitOfWorks.Abstract;
-using Project.DTO.DTOs.Responses;
-using Project.DTO.DTOs.RoleDto;
+using Project.DTO.Responses;
+using Project.DTO.Role;
 using Project.Entity.Entities;
 
 namespace Project.BLL.Concrete;

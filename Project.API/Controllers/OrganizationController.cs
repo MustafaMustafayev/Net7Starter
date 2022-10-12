@@ -1,12 +1,13 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Project.API.ActionFilters;
-using Project.BLL.Abstract;
-using Project.DTO.DTOs.OrganizationDto;
-using Project.DTO.DTOs.Responses;
+using Project.BLL.MediatR.Commands;
+using Project.BLL.MediatR.Queries;
+using Project.DTO.Organization;
+using Project.DTO.Responses;
 using Swashbuckle.AspNetCore.Annotations;
-using IResult = Project.DTO.DTOs.Responses.IResult;
 
 namespace Project.API.Controllers;
 
@@ -16,11 +17,11 @@ namespace Project.API.Controllers;
 [AllowAnonymous]
 public class OrganizationController : Controller
 {
-    private readonly IOrganizationService _organizationService;
+    private readonly IMediator _mediator;
 
-    public OrganizationController(IOrganizationService organizationService)
+    public OrganizationController(IMediator mediator)
     {
-        _organizationService = organizationService;
+        _mediator = mediator;
     }
 
     [SwaggerOperation(Summary = "get organizations")]
@@ -28,7 +29,7 @@ public class OrganizationController : Controller
     [HttpGet]
     public async Task<IActionResult> Get()
     {
-        return Ok(await _organizationService.GetAsync());
+        return Ok(await _mediator.Send(new GetOrganizationListQuery()));
     }
 
     [SwaggerOperation(Summary = "get organization")]
@@ -36,31 +37,47 @@ public class OrganizationController : Controller
     [HttpGet("{id}")]
     public async Task<IActionResult> Get([FromRoute] int id)
     {
-        return Ok(await _organizationService.GetAsync(id));
+        return Ok(await _mediator.Send(new GetOrganizationByIdQuery(id)));
     }
 
     [SwaggerOperation(Summary = "create organization")]
-    [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
+    [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IDataResult<OrganizationToListDto>))]
     [HttpPost]
-    public async Task<IActionResult> Add([FromBody] OrganizationToAddOrUpdateDto dto)
+    public async Task<IActionResult> Add([FromBody] OrganizationToAddOrUpdateDto request)
     {
-        return Ok(await _organizationService.AddAsync(dto));
+        return Ok(await _mediator.Send(new AddOrganizationCommand(request)));
     }
 
-    [SwaggerOperation(Summary = "update organization")]
-    [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
-    [HttpPut]
-    public async Task<IActionResult> Update([FromBody] OrganizationToAddOrUpdateDto dto)
-    {
-        return Ok(await _organizationService.UpdateAsync(dto));
-    }
-
-    [SwaggerOperation(Summary = "delete organization")]
-    [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete([FromRoute] int id)
-    {
-        await _organizationService.DeleteAsync(id);
-        return Ok();
-    }
+    // [SwaggerOperation(Summary = "get organization")]
+    // [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IDataResult<OrganizationToListDto>))]
+    // [HttpGet("{id}")]
+    // public async Task<IActionResult> Get([FromRoute] int id)
+    // {
+    //     return Ok(await _organizationService.GetAsync(id));
+    // }
+    //
+    // [SwaggerOperation(Summary = "create organization")]
+    // [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
+    // [HttpPost]
+    // public async Task<IActionResult> Add([FromBody] OrganizationToAddOrUpdateDto dto)
+    // {
+    //     return Ok(await _organizationService.AddAsync(dto));
+    // }
+    //
+    // [SwaggerOperation(Summary = "update organization")]
+    // [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
+    // [HttpPut]
+    // public async Task<IActionResult> Update([FromBody] OrganizationToAddOrUpdateDto dto)
+    // {
+    //     return Ok(await _organizationService.UpdateAsync(dto));
+    // }
+    //
+    // [SwaggerOperation(Summary = "delete organization")]
+    // [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
+    // [HttpDelete("{id}")]
+    // public async Task<IActionResult> Delete([FromRoute] int id)
+    // {
+    //     await _organizationService.DeleteAsync(id);
+    //     return Ok();
+    // }
 }

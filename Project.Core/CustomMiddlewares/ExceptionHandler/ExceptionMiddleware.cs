@@ -3,7 +3,7 @@ using System.Text.Json;
 using Microsoft.AspNetCore.Http;
 using Project.Core.CustomMiddlewares.Translation;
 using Project.Core.Logging;
-using Project.DTO.DTOs.Responses;
+using Project.DTO.Responses;
 using Sentry;
 
 // using Sentry;

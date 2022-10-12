@@ -4,7 +4,7 @@ using System.Security.Cryptography;
 using System.Text;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.IdentityModel.Tokens;
-using Project.DTO.DTOs.UserDto;
+using Project.DTO.User;
 
 namespace Project.Core.Helper;
 

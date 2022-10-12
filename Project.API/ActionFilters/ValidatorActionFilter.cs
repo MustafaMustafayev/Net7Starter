@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Project.Core.CustomMiddlewares.Translation;
-using Project.DTO.DTOs.Responses;
+using Project.DTO.Responses;
 
 namespace Project.API.ActionFilters;
 

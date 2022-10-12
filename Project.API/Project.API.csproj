@@ -10,6 +10,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.0.0"/>
         <PackageReference Include="Sentry.AspNetCore" Version="3.18.0"/>
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3"/>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.5">

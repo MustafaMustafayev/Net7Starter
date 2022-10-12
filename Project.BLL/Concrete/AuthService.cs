@@ -4,9 +4,9 @@ using Project.Core.Abstract;
 using Project.Core.CustomMiddlewares.Translation;
 using Project.Core.Helper;
 using Project.DAL.UnitOfWorks.Abstract;
-using Project.DTO.DTOs.AuthDto;
-using Project.DTO.DTOs.Responses;
-using Project.DTO.DTOs.UserDto;
+using Project.DTO.Auth;
+using Project.DTO.Responses;
+using Project.DTO.User;
 using Project.Entity.Entities;
 
 namespace Project.BLL.Concrete;

@@ -1,7 +1,7 @@
 ﻿using Project.BLL.Abstract;
 using Project.BLL.Mappers.GenericMapping;
 using Project.DAL.UnitOfWorks.Abstract;
-using Project.DTO.DTOs.CustomLoggingDto;
+using Project.DTO.CustomLogging;
 using Project.Entity.Entities;
 
 namespace Project.BLL.Concrete;

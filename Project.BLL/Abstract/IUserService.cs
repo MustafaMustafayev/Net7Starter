@@ -1,6 +1,6 @@
 ﻿using Project.DAL.Utility;
-using Project.DTO.DTOs.Responses;
-using Project.DTO.DTOs.UserDto;
+using Project.DTO.Responses;
+using Project.DTO.User;
 
 namespace Project.BLL.Abstract;
 

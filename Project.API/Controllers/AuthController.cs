@@ -5,10 +5,10 @@ using Project.BLL.Abstract;
 using Project.Core.Abstract;
 using Project.Core.CustomMiddlewares.Translation;
 using Project.Core.Helper;
-using Project.DTO.DTOs.AuthDto;
-using Project.DTO.DTOs.Responses;
+using Project.DTO.Auth;
+using Project.DTO.Responses;
 using Swashbuckle.AspNetCore.Annotations;
-using IResult = Project.DTO.DTOs.Responses.IResult;
+using IResult = Project.DTO.Responses.IResult;
 
 namespace Project.API.Controllers;
 

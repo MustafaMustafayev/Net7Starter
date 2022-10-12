@@ -4,8 +4,8 @@ using Project.Core.CustomMiddlewares.Translation;
 using Project.Core.Helper;
 using Project.DAL.UnitOfWorks.Abstract;
 using Project.DAL.Utility;
-using Project.DTO.DTOs.Responses;
-using Project.DTO.DTOs.UserDto;
+using Project.DTO.Responses;
+using Project.DTO.User;
 using Project.Entity.Entities;
 
 namespace Project.BLL.Concrete;

@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Project.DTO.DTOs.UserDto;
+using Project.DTO.User;
 using Project.Entity.Entities;
 
 namespace Project.BLL.Mappers;
