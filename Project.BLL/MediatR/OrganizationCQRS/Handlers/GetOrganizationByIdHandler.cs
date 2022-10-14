@@ -1,11 +1,11 @@
 ﻿using MapsterMapper;
 using MediatR;
-using Project.BLL.MediatR.Queries;
+using Project.BLL.MediatR.OrganizationCQRS.Queries;
 using Project.DAL.UnitOfWorks.Abstract;
 using Project.DTO.Organization;
 using Project.DTO.Responses;
 
-namespace Project.BLL.MediatR.Handlers;
+namespace Project.BLL.MediatR.OrganizationCQRS.Handlers;
 
 public class GetOrganizationByIdHandler : IRequestHandler<GetOrganizationByIdQuery, IDataResult<OrganizationToListDto>>
 {

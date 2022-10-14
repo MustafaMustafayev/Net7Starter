@@ -22,4 +22,7 @@
         <ProjectReference Include="..\Project.DTO\Project.DTO.csproj"/>
         <ProjectReference Include="..\Project.Entity\Project.Entity.csproj"/>
     </ItemGroup>
+    <ItemGroup>
+        <Folder Include="MediatR\OrganizationCQRS"/>
+    </ItemGroup>
 </Project>

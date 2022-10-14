@@ -87,8 +87,6 @@ builder.Services.AddScoped<IRoleService, RoleService>();
 
 builder.Services.AddScoped<IOrganizationRepository, OrganizationRepository>();
 
-//builder.Services.AddScoped<IOrganizationService, OrganizationService>();
-
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddMediatR(typeof(UnitOfWork).Assembly);
@@ -155,7 +153,9 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.EnableAnnotations();
 
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "REST API", Version = "v1" });
+    c.SwaggerDoc("v1",
+        new OpenApiInfo
+            { Title = configSettings.SwaggerSettings.Title, Version = configSettings.SwaggerSettings.Version });
 
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
