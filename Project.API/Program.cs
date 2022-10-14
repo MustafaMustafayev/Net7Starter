@@ -153,7 +153,7 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.EnableAnnotations();
 
-    c.SwaggerDoc("v1",
+    c.SwaggerDoc(configSettings.SwaggerSettings.Version,
         new OpenApiInfo
             { Title = configSettings.SwaggerSettings.Title, Version = configSettings.SwaggerSettings.Version });
 
