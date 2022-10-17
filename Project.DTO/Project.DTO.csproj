@@ -19,7 +19,7 @@
         <None Remove="DTOs\UserDTOs\UserValidators\"/>
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="FluentValidation.AspNetCore" Version="11.2.1"/>
+        <PackageReference Include="FluentValidation.AspNetCore" Version="11.2.2"/>
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\Project.Entity\Project.Entity.csproj"/>

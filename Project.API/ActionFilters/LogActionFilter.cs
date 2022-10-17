@@ -25,14 +25,14 @@ public class LogActionFilter : IAsyncActionFilter
         var httpContext = context.HttpContext;
 
         var traceIdentitier = httpContext?.TraceIdentifier;
-        var clientIp = httpContext.Features.Get<IHttpConnectionFeature>()?.RemoteIpAddress?.ToString();
-        var uri = httpContext.Request.Host + httpContext.Request.Path;
+        var clientIp = httpContext?.Features.Get<IHttpConnectionFeature>()?.RemoteIpAddress?.ToString();
+        var uri = httpContext?.Request.Host + httpContext?.Request.Path;
 
         var token = string.Empty;
         int? userId = null;
         var authHeaderName = _configSettings.AuthSettings.HeaderName;
 
-        if (!string.IsNullOrEmpty(httpContext.Request.Headers[authHeaderName]) &&
+        if (!string.IsNullOrEmpty(httpContext?.Request.Headers[authHeaderName]) &&
             httpContext.Request.Headers[authHeaderName].ToString().Length > 7)
         {
             token = httpContext.Request.Headers[authHeaderName].ToString();

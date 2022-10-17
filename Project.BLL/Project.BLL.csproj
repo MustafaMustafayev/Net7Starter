@@ -4,7 +4,7 @@
         <TargetFramework>net6.0</TargetFramework>
         <CodeAnalysisRuleSet>../settings.ruleset</CodeAnalysisRuleSet>
         <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>warnings</Nullable>
+        <Nullable>enable</Nullable>
     </PropertyGroup>
 
     <ItemGroup>
@@ -12,9 +12,8 @@
         <None Remove="StyleCop.Analyzers"/>
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0"/>
-        <PackageReference Include="Mapster" Version="7.4.0-pre03"/>
-        <PackageReference Include="TinyMapper" Version="3.0.3"/>
+        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0"/>
+        <PackageReference Include="MediatR" Version="11.0.0"/>
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\Project.Core\Project.Core.csproj"/>
