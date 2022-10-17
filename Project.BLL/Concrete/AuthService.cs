@@ -1,5 +1,5 @@
-﻿using Project.BLL.Abstract;
-using Project.BLL.Mappers.GenericMapping;
+﻿using AutoMapper;
+using Project.BLL.Abstract;
 using Project.Core.Abstract;
 using Project.Core.CustomMiddlewares.Translation;
 using Project.Core.Helper;
@@ -7,17 +7,16 @@ using Project.DAL.UnitOfWorks.Abstract;
 using Project.DTO.Auth;
 using Project.DTO.Responses;
 using Project.DTO.User;
-using Project.Entity.Entities;
 
 namespace Project.BLL.Concrete;
 
 public class AuthService : IAuthService
 {
-    private readonly IGenericMapper _mapper;
+    private readonly IMapper _mapper;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IUtilService _utilService;
 
-    public AuthService(IUnitOfWork unitOfWork, IGenericMapper mapper, IUtilService utilService)
+    public AuthService(IUnitOfWork unitOfWork, IMapper mapper, IUtilService utilService)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
@@ -36,7 +35,7 @@ public class AuthService : IAuthService
         if (user == null)
             return new ErrorDataResult<UserToListDto>(Localization.Translate(Messages.InvalidUserCredentials));
 
-        return new SuccessDataResult<UserToListDto>(_mapper.Map<User, UserToListDto>(user));
+        return new SuccessDataResult<UserToListDto>(_mapper.Map<UserToListDto>(user));
     }
 
     public async Task<IDataResult<UserToListDto>> LoginByTokenAsync(string token)
@@ -50,7 +49,7 @@ public class AuthService : IAuthService
         if (user == null)
             return new ErrorDataResult<UserToListDto>(Localization.Translate(Messages.InvalidUserCredentials));
 
-        return new SuccessDataResult<UserToListDto>(_mapper.Map<User, UserToListDto>(user));
+        return new SuccessDataResult<UserToListDto>(_mapper.Map<UserToListDto>(user));
     }
 
     public IResult SendVerificationCodeToEmailAsync(string email)

@@ -14,7 +14,7 @@ using Project.API.Hubs;
 using Project.BLL.Abstract;
 using Project.BLL.Concrete;
 using Project.BLL.Mappers;
-using Project.BLL.Mappers.GenericMapping;
+using Project.BLL.MediatR;
 using Project.Core.Abstract;
 using Project.Core.Concrete;
 using Project.Core.CustomMiddlewares.ExceptionHandler;
@@ -42,24 +42,15 @@ builder.Services.AddSingleton(configSettings);
 
 builder.Services.AddSingleton<ILoggerManager, LoggerManager>();
 
-builder.Services.AddControllers(opt => { opt.Filters.Add(typeof(ValidatorActionFilter)); });
+builder.Services.AddControllers(opt => opt.Filters.Add(typeof(ValidatorActionFilter)));
 
 builder.Services.AddFluentValidationAutoValidation().AddValidatorsFromAssemblyContaining<LoginDtoValidator>();
 
 builder.WebHost.UseSentry();
 
-//Mappers section uncomment which one you want to use. Comment others
+builder.Services.AddAutoMapper(Automapper.GetAutoMapperProfilesFromAllAssemblies().ToArray());
 
-//AutoMapper
-builder.Services.AddScoped<IGenericMapper, AutoMapperGenericMapping<AutomapperProfile>>();
-
-//Mapster
-//builder.Services.AddScoped<IGenericMapper, MapsterGenericMapping>();
-
-//TinyMapper
-//builder.Services.AddScoped<IGenericMapper, TinyGenericMapperMapping>();
-
-builder.Services.AddDbContext<DataContext>(options => { options.UseNpgsql(configSettings.ConnectionStrings.AppDb); });
+builder.Services.AddDbContext<DataContext>(options => options.UseNpgsql(configSettings.ConnectionStrings.AppDb));
 
 builder.Services.AddHttpContextAccessor();
 
@@ -89,7 +80,7 @@ builder.Services.AddScoped<IOrganizationRepository, OrganizationRepository>();
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-builder.Services.AddMediatR(typeof(UnitOfWork).Assembly);
+builder.Services.AddMediatR(typeof(MediatrAssemblyContainer).Assembly);
 
 /*
 builder.Services.AddMiniProfiler(options =>
@@ -136,14 +127,7 @@ builder.Services.ConfigureApplicationCookie(options =>
     };
 });
 
-builder.Services.AddCors(o => o.AddPolicy("CorsPolicy", b =>
-{
-    b
-        .AllowAnyMethod()
-        .AllowAnyHeader()
-        .AllowCredentials()
-        .WithOrigins("http://localhost:4200");
-}));
+builder.Services.AddCors(o => o.AddPolicy("CorsPolicy", b => b.AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin()));
 
 builder.Services.AddScoped<LogActionFilter>();
 
@@ -153,7 +137,7 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.EnableAnnotations();
 
-    c.SwaggerDoc(configSettings.SwaggerSettings.Version,
+    c.SwaggerDoc("v1",
         new OpenApiInfo
             { Title = configSettings.SwaggerSettings.Title, Version = configSettings.SwaggerSettings.Version });
 

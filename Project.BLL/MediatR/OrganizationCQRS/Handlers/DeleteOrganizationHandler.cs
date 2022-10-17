@@ -1,4 +1,4 @@
-﻿using MapsterMapper;
+﻿using AutoMapper;
 using MediatR;
 using Project.BLL.MediatR.OrganizationCQRS.Commands;
 using Project.DAL.UnitOfWorks.Abstract;
@@ -20,7 +20,7 @@ public class DeleteOrganizationHandler : IRequestHandler<DeleteOrganizationComma
     public async Task<IResult> Handle(DeleteOrganizationCommand request, CancellationToken cancellationToken)
     {
         var data = await _unitOfWork.OrganizationRepository.GetAsync(e => e.OrganizationId == request.Id);
-        _unitOfWork.OrganizationRepository.Delete(data);
+        _unitOfWork.OrganizationRepository.Delete(data!);
 
         return new SuccessResult();
     }

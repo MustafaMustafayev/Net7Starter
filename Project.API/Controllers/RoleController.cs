@@ -42,7 +42,7 @@ public class RoleController : Controller
     [SwaggerOperation(Summary = "create role")]
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
     [HttpPost]
-    public async Task<IActionResult> Add([FromBody] RoleToAddOrUpdateDto role)
+    public async Task<IActionResult> Add([FromBody] RoleToAddDto role)
     {
         return Ok(await _roleService.AddAsync(role));
     }
@@ -50,7 +50,7 @@ public class RoleController : Controller
     [SwaggerOperation(Summary = "update role")]
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
     [HttpPut]
-    public async Task<IActionResult> Update([FromBody] RoleToAddOrUpdateDto role)
+    public async Task<IActionResult> Update([FromBody] RoleToUpdateDto role)
     {
         return Ok(await _roleService.UpdateAsync(role));
     }

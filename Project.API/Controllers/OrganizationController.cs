@@ -44,7 +44,7 @@ public class OrganizationController : Controller
     [SwaggerOperation(Summary = "create organization")]
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
     [HttpPost]
-    public async Task<IActionResult> Add([FromBody] OrganizationToAddOrUpdateDto request)
+    public async Task<IActionResult> Add([FromBody] OrganizationToAddDto request)
     {
         return Ok(await _mediator.Send(new AddOrganizationCommand(request)));
     }
@@ -52,7 +52,7 @@ public class OrganizationController : Controller
     [SwaggerOperation(Summary = "update organization")]
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
     [HttpPut]
-    public async Task<IActionResult> Update([FromBody] OrganizationToAddOrUpdateDto request)
+    public async Task<IActionResult> Update([FromBody] OrganizationToUpdateDto request)
     {
         return Ok(await _mediator.Send(new UpdateOrganizationCommand(request)));
     }

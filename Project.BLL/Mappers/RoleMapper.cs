@@ -9,6 +9,7 @@ public class RoleMapper : Profile
     public RoleMapper()
     {
         CreateMap<Role, RoleToListDto>();
-        CreateMap<RoleToAddOrUpdateDto, Role>();
+        CreateMap<RoleToAddDto, Role>();
+        CreateMap<RoleToUpdateDto, Role>();
     }
 }

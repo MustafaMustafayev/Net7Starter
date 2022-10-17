@@ -1,4 +1,4 @@
-﻿using MapsterMapper;
+﻿using AutoMapper;
 using MediatR;
 using Project.BLL.MediatR.OrganizationCQRS.Commands;
 using Project.DAL.UnitOfWorks.Abstract;
