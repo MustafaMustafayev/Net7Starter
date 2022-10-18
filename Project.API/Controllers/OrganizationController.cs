@@ -3,11 +3,12 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Project.API.ActionFilters;
-using Project.BLL.MediatR.Commands;
-using Project.BLL.MediatR.Queries;
+using Project.BLL.MediatR.OrganizationCQRS.Commands;
+using Project.BLL.MediatR.OrganizationCQRS.Queries;
 using Project.DTO.Organization;
 using Project.DTO.Responses;
 using Swashbuckle.AspNetCore.Annotations;
+using IResult = Project.DTO.Responses.IResult;
 
 namespace Project.API.Controllers;
 
@@ -41,43 +42,26 @@ public class OrganizationController : Controller
     }
 
     [SwaggerOperation(Summary = "create organization")]
-    [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IDataResult<OrganizationToListDto>))]
+    [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
     [HttpPost]
-    public async Task<IActionResult> Add([FromBody] OrganizationToAddOrUpdateDto request)
+    public async Task<IActionResult> Add([FromBody] OrganizationToAddDto request)
     {
         return Ok(await _mediator.Send(new AddOrganizationCommand(request)));
     }
 
-    // [SwaggerOperation(Summary = "get organization")]
-    // [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IDataResult<OrganizationToListDto>))]
-    // [HttpGet("{id}")]
-    // public async Task<IActionResult> Get([FromRoute] int id)
-    // {
-    //     return Ok(await _organizationService.GetAsync(id));
-    // }
-    //
-    // [SwaggerOperation(Summary = "create organization")]
-    // [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
-    // [HttpPost]
-    // public async Task<IActionResult> Add([FromBody] OrganizationToAddOrUpdateDto dto)
-    // {
-    //     return Ok(await _organizationService.AddAsync(dto));
-    // }
-    //
-    // [SwaggerOperation(Summary = "update organization")]
-    // [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
-    // [HttpPut]
-    // public async Task<IActionResult> Update([FromBody] OrganizationToAddOrUpdateDto dto)
-    // {
-    //     return Ok(await _organizationService.UpdateAsync(dto));
-    // }
-    //
-    // [SwaggerOperation(Summary = "delete organization")]
-    // [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
-    // [HttpDelete("{id}")]
-    // public async Task<IActionResult> Delete([FromRoute] int id)
-    // {
-    //     await _organizationService.DeleteAsync(id);
-    //     return Ok();
-    // }
+    [SwaggerOperation(Summary = "update organization")]
+    [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
+    [HttpPut]
+    public async Task<IActionResult> Update([FromBody] OrganizationToUpdateDto request)
+    {
+        return Ok(await _mediator.Send(new UpdateOrganizationCommand(request)));
+    }
+
+    [SwaggerOperation(Summary = "delete organization")]
+    [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete([FromRoute] int id)
+    {
+        return Ok(await _mediator.Send(new DeleteOrganizationCommand(id)));
+    }
 }

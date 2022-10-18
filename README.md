@@ -1,4 +1,9 @@
 # Net6ApiStarter
+
+### Code contributors
+
+![Alt](https://repobeats.axiom.co/api/embed/8a34edc6094601ed624424f8b121ad4937d0f8dd.svg "Repobeats analytics image")
+
 Net6 web api project with code first approach. In this template n-tier architecture, repository and unit of work pattern implemented, 
 database based logging implemented using action filters, request profiling added using MiniProfiler, unhandled exception handled by sentry, 
 response security headers added, audit properties implemented by overriding SaveChangesAsync method of DbContext, docker-compose yaml written, 

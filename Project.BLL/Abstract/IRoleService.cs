@@ -9,9 +9,9 @@ public interface IRoleService
 
     Task<IDataResult<RoleToListDto>> GetAsync(int id);
 
-    Task<IDataResult<Result>> AddAsync(RoleToAddOrUpdateDto dto);
+    Task<IResult> AddAsync(RoleToAddDto dto);
 
-    Task<IDataResult<Result>> UpdateAsync(RoleToAddOrUpdateDto dto);
+    Task<IResult> UpdateAsync(RoleToUpdateDto dto);
 
     Task<IResult> DeleteAsync(int id);
 }

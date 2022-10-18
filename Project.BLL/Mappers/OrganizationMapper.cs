@@ -9,6 +9,7 @@ public class OrganizationMapper : Profile
     public OrganizationMapper()
     {
         CreateMap<Organization, OrganizationToListDto>();
-        CreateMap<OrganizationToAddOrUpdateDto, Organization>();
+        CreateMap<OrganizationToAddDto, Organization>();
+        CreateMap<OrganizationToUpdateDto, Organization>();
     }
 }

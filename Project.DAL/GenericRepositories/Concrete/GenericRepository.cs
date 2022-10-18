@@ -35,22 +35,22 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity>
         _ctx.Remove(entity);
     }
 
-    public async Task<TEntity> GetAsync(Expression<Func<TEntity, bool>> filter)
+    public async Task<TEntity?> GetAsync(Expression<Func<TEntity, bool>> filter)
     {
         return await _ctx.Set<TEntity>().FirstOrDefaultAsync(filter);
     }
 
-    public async Task<TEntity> GetAsNoTrackingAsync(Expression<Func<TEntity, bool>> filter)
+    public async Task<TEntity?> GetAsNoTrackingAsync(Expression<Func<TEntity, bool>> filter)
     {
         return await _ctx.Set<TEntity>().AsNoTracking().FirstOrDefaultAsync(filter);
     }
 
-    public IQueryable<TEntity> GetList(Expression<Func<TEntity, bool>> filter = null)
+    public IQueryable<TEntity?> GetList(Expression<Func<TEntity, bool>>? filter = null)
     {
         return filter == null ? _ctx.Set<TEntity>() : _ctx.Set<TEntity>().Where(filter);
     }
 
-    public IQueryable<TEntity> GetAsNoTrackingList(Expression<Func<TEntity, bool>> filter = null)
+    public IQueryable<TEntity> GetAsNoTrackingList(Expression<Func<TEntity, bool>>? filter = null)
     {
         return (filter == null ? _ctx.Set<TEntity>().AsNoTracking() : _ctx.Set<TEntity>().Where(filter)).AsNoTracking();
     }
@@ -70,7 +70,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity>
         return entity;
     }
 
-    public async Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> filter = null)
+    public async Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>>? filter = null)
     {
         return filter == null
             ? await _ctx.Set<TEntity>().ToListAsync()

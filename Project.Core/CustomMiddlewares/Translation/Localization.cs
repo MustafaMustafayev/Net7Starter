@@ -4,6 +4,6 @@ public static class Localization
 {
     public static string Translate(Messages message)
     {
-        return MsgResource.ResourceManager.GetString(message.ToString());
+        return MsgResource.ResourceManager.GetString(message.ToString())!;
     }
 }

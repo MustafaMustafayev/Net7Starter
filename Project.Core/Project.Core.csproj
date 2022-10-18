@@ -4,7 +4,7 @@
         <TargetFramework>net6.0</TargetFramework>
         <CodeAnalysisRuleSet>../settings.ruleset</CodeAnalysisRuleSet>
         <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>warnings</Nullable>
+        <Nullable>enable</Nullable>
     </PropertyGroup>
 
     <ItemGroup>
@@ -14,9 +14,9 @@
         <None Remove="StyleCop.Analyzers"/>
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="Newtonsoft.Json" Version="13.0.1"/>
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.5"/>
-        <PackageReference Include="NLog.Web.AspNetCore" Version="5.0.0"/>
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.2-beta2"/>
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.10"/>
+        <PackageReference Include="NLog.Web.AspNetCore" Version="5.1.4"/>
         <PackageReference Include="Sentry" Version="3.18.0"/>
     </ItemGroup>
     <ItemGroup>

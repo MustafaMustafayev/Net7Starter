@@ -4,7 +4,7 @@
         <TargetFramework>net6.0</TargetFramework>
         <CodeAnalysisRuleSet>../settings.ruleset</CodeAnalysisRuleSet>
         <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>warnings</Nullable>
+        <Nullable>enable</Nullable>
     </PropertyGroup>
 
     <ItemGroup>
@@ -15,9 +15,8 @@
         <None Remove="stylecop.json"/>
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="MediatR" Version="11.0.0"/>
-        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.4"/>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="6.0.5"/>
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.0-rc.2"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="7.0.0-rc.2.22472.11"/>
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\Project.Core\Project.Core.csproj"/>

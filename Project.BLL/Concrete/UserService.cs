@@ -1,5 +1,5 @@
-﻿using Project.BLL.Abstract;
-using Project.BLL.Mappers.GenericMapping;
+﻿using AutoMapper;
+using Project.BLL.Abstract;
 using Project.Core.CustomMiddlewares.Translation;
 using Project.Core.Helper;
 using Project.DAL.UnitOfWorks.Abstract;
@@ -12,10 +12,10 @@ namespace Project.BLL.Concrete;
 
 public class UserService : IUserService
 {
-    private readonly IGenericMapper _mapper;
+    private readonly IMapper _mapper;
     private readonly IUnitOfWork _unitOfWork;
 
-    public UserService(IUnitOfWork unitOfWork, IGenericMapper mapper)
+    public UserService(IUnitOfWork unitOfWork, IMapper mapper)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
@@ -26,20 +26,22 @@ public class UserService : IUserService
         if (await _unitOfWork.UserRepository.IsUserExistAsync(userToAddDto.Username, null))
             return new ErrorResult(Localization.Translate(Messages.UserIsExist));
 
-        var user = _mapper.Map<UserToAddDto, User>(userToAddDto);
+        var user = _mapper.Map<User>(userToAddDto);
+
         user.Salt = SecurityHelper.GenerateSalt();
         user.Password = SecurityHelper.HashPassword(user.Password, user.Salt);
+
         var added = await _unitOfWork.UserRepository.AddAsync(user);
         await _unitOfWork.CommitAsync();
 
-        //return new SuccessDataResult<UserToListDto>(_mapper.Map<UserToListDto>(added), Localization.Translate(Messages.Success));
         return new SuccessResult(Localization.Translate(Messages.Success));
     }
 
     public async Task<IResult> DeleteAsync(int userId)
     {
         var user = await _unitOfWork.UserRepository.GetAsync(m => m.Id == userId);
-        user.IsDeleted = true;
+        user!.IsDeleted = true;
+
         _unitOfWork.UserRepository.Update(user);
         await _unitOfWork.CommitAsync();
 
@@ -49,13 +51,14 @@ public class UserService : IUserService
     public async Task<IDataResult<List<UserToListDto>>> GetAsync()
     {
         var users = _unitOfWork.UserRepository.GetAsNoTrackingList().ToList();
-        return new SuccessDataResult<List<UserToListDto>>(_mapper.Map<List<User>, List<UserToListDto>>(users));
+
+        return new SuccessDataResult<List<UserToListDto>>(_mapper.Map<List<UserToListDto>>(users));
     }
 
     public async Task<IDataResult<UserToListDto>> GetAsync(int userId)
     {
-        var user = _mapper.Map<User, UserToListDto>(
-            await _unitOfWork.UserRepository.GetAsNoTrackingAsync(m => m.Id == userId));
+        var user = _mapper.Map<UserToListDto>((await _unitOfWork.UserRepository.GetAsNoTrackingAsync(m => m.Id == userId))!);
+
         return new SuccessDataResult<UserToListDto>(user);
     }
 
@@ -64,9 +67,9 @@ public class UserService : IUserService
         if (await _unitOfWork.UserRepository.IsUserExistAsync(userToUpdateDto.Username, userToUpdateDto.Id))
             return new ErrorResult(Localization.Translate(Messages.UserIsExist));
 
-        await _unitOfWork.UserRepository.UpdateUserAsync(_mapper.Map<UserToUpdateDto, User>(userToUpdateDto));
-
+        await _unitOfWork.UserRepository.UpdateUserAsync(_mapper.Map<User>(userToUpdateDto));
         await _unitOfWork.CommitAsync();
+
         return new SuccessResult(Localization.Translate(Messages.Success));
     }
 
@@ -74,8 +77,9 @@ public class UserService : IUserService
     {
         var users = _unitOfWork.UserRepository.GetAsNoTrackingList();
         var response = await PaginatedList<User>.CreateAsync(users.OrderBy(m => m.Id), pageIndex, pageSize);
-        var responseDto = new PaginatedList<UserToListDto>(_mapper.Map<List<User>, List<UserToListDto>>(response.Datas),
-            response.TotalRecordCount, response.PageIndex, response.TotalPageCount);
+
+        var responseDto = new PaginatedList<UserToListDto>(_mapper.Map<List<UserToListDto>>(response.Datas), response.TotalRecordCount, response.PageIndex, response.TotalPageCount);
+
         return new SuccessDataResult<PaginatedList<UserToListDto>>(responseDto);
     }
 }
