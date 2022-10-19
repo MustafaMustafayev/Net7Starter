@@ -8,9 +8,9 @@ using Project.API.DependencyContainers;
 using Project.API.Hubs;
 using Project.BLL.Mappers;
 using Project.BLL.MediatR;
-using Project.Core.CustomMiddlewares.ExceptionHandler;
-using Project.Core.CustomMiddlewares.Translation;
 using Project.Core.Helper;
+using Project.Core.Middlewares.ExceptionHandler;
+using Project.Core.Middlewares.Translation;
 using Project.DAL.DatabaseContext;
 using Project.DTO.Auth.AuthValidators;
 

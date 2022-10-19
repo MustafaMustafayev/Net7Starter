@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Project.BLL.Abstract;
-using Project.Core.CustomMiddlewares.Translation;
+using Project.Core.Middlewares.Translation;
 using Project.DAL.UnitOfWorks.Abstract;
 using Project.DTO.Responses;
 using Project.DTO.Role;
