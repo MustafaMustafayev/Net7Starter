@@ -57,7 +57,8 @@ public class UserService : IUserService
 
     public async Task<IDataResult<UserToListDto>> GetAsync(int userId)
     {
-        var user = _mapper.Map<UserToListDto>((await _unitOfWork.UserRepository.GetAsNoTrackingAsync(m => m.Id == userId))!);
+        var user = _mapper.Map<UserToListDto>(
+            (await _unitOfWork.UserRepository.GetAsNoTrackingAsync(m => m.Id == userId))!);
 
         return new SuccessDataResult<UserToListDto>(user);
     }
@@ -78,7 +79,8 @@ public class UserService : IUserService
         var users = _unitOfWork.UserRepository.GetAsNoTrackingList();
         var response = await PaginatedList<User>.CreateAsync(users.OrderBy(m => m.Id), pageIndex, pageSize);
 
-        var responseDto = new PaginatedList<UserToListDto>(_mapper.Map<List<UserToListDto>>(response.Datas), response.TotalRecordCount, response.PageIndex, response.TotalPageCount);
+        var responseDto = new PaginatedList<UserToListDto>(_mapper.Map<List<UserToListDto>>(response.Datas),
+            response.TotalRecordCount, response.PageIndex, response.TotalPageCount);
 
         return new SuccessDataResult<PaginatedList<UserToListDto>>(responseDto);
     }

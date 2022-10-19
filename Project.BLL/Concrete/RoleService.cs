@@ -49,7 +49,8 @@ public class RoleService : IRoleService
 
     public async Task<IDataResult<RoleToListDto>> GetAsync(int id)
     {
-        var data = _mapper.Map<RoleToListDto>((await _unitOfWork.RoleRepository.GetAsNoTrackingAsync(m => m.RoleId == id))!);
+        var data = _mapper.Map<RoleToListDto>(
+            (await _unitOfWork.RoleRepository.GetAsNoTrackingAsync(m => m.RoleId == id))!);
 
         return new SuccessDataResult<RoleToListDto>(data);
     }
