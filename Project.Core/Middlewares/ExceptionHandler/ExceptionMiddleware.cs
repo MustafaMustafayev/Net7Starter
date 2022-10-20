@@ -1,13 +1,12 @@
 ﻿using System.Net;
 using System.Text.Json;
 using Microsoft.AspNetCore.Http;
-using Project.Core.CustomMiddlewares.Translation;
 using Project.Core.Logging;
+using Project.Core.Middlewares.Translation;
 using Project.DTO.Responses;
 using Sentry;
 
-// using Sentry;
-namespace Project.Core.CustomMiddlewares.ExceptionHandler;
+namespace Project.Core.Middlewares.ExceptionHandler;
 
 public class ExceptionMiddleware
 {

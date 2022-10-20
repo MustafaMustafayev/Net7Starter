@@ -64,7 +64,7 @@ public class UnitOfWork : IUnitOfWork
         if (disposing) _dataContext.Dispose();
     }
 
-    protected async ValueTask DisposeAsync(bool disposing)
+    private async ValueTask DisposeAsync(bool disposing)
     {
         if (disposing) await _dataContext.DisposeAsync();
     }

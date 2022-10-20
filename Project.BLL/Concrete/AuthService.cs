@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using Project.BLL.Abstract;
 using Project.Core.Abstract;
-using Project.Core.CustomMiddlewares.Translation;
 using Project.Core.Helper;
+using Project.Core.Middlewares.Translation;
 using Project.DAL.UnitOfWorks.Abstract;
 using Project.DTO.Auth;
 using Project.DTO.Responses;

@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Project.API.ActionFilters;
 using Project.BLL.Abstract;
 using Project.Core.Abstract;
-using Project.Core.CustomMiddlewares.Translation;
 using Project.Core.Helper;
+using Project.Core.Middlewares.Translation;
 using Project.DTO.Auth;
 using Project.DTO.Responses;
 using Swashbuckle.AspNetCore.Annotations;
@@ -62,7 +62,7 @@ public class AuthController : Controller
 
     [SwaggerOperation(Summary = "send email for reset password")]
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
-    [HttpPost("sendVerificationCode")]
+    [HttpGet("verificationCode")]
     [AllowAnonymous]
     public IActionResult SendVerificationCode([FromQuery] string email)
     {
@@ -79,7 +79,7 @@ public class AuthController : Controller
 
     [SwaggerOperation(Summary = "login by token")]
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IDataResult<LoginResponseDto>))]
-    [HttpGet("LoginByToken")]
+    [HttpGet("loginByToken")]
     [AllowAnonymous]
     public async Task<IActionResult> LoginByToken()
     {

@@ -1,4 +1,4 @@
-﻿namespace Project.Core.CustomMiddlewares.Translation;
+﻿namespace Project.Core.Middlewares.Translation;
 
 public enum Messages
 {

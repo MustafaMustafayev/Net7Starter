@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Filters;
 using Project.Core.Abstract;
 using Project.Core.Concrete;
-using Project.Core.CustomMiddlewares.Translation;
+using Project.Core.Middlewares.Translation;
 using Project.DTO.Responses;
 
 namespace Project.API.CustomAttributes;

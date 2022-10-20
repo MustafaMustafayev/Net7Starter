@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Project.Core.Constants;
 
-namespace Project.Core.CustomMiddlewares.Translation;
+namespace Project.Core.Middlewares.Translation;
 
 public class LocalizationMiddleware
 {
