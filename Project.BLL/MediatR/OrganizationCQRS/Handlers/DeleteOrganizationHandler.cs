@@ -20,7 +20,7 @@ public class DeleteOrganizationHandler : IRequestHandler<DeleteOrganizationComma
     public async Task<IResult> Handle(DeleteOrganizationCommand request, CancellationToken cancellationToken)
     {
         var data = await _unitOfWork.OrganizationRepository.GetAsync(e => e.OrganizationId == request.Id);
-        _unitOfWork.OrganizationRepository.Delete(data!);
+        _unitOfWork.OrganizationRepository.SoftDelete(data!);
 
         return new SuccessResult();
     }

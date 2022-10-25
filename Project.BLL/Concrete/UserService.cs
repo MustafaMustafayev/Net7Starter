@@ -84,4 +84,30 @@ public class UserService : IUserService
 
         return new SuccessDataResult<PaginatedList<UserToListDto>>(responseDto);
     }
+
+    public async Task<IResult> UpdateProfilePhotoAsync(int userId, string photoFileName)
+    {
+        var user = await _unitOfWork.UserRepository.GetAsync(m => m.Id == userId);
+        if (user == null) return new ErrorResult(Localization.Translate(Messages.InvalidUserCredentials));
+
+        user.ProfilePhotoFileName = photoFileName;
+
+        _unitOfWork.UserRepository.Update(_mapper.Map<User>(user));
+        await _unitOfWork.CommitAsync();
+
+        return new SuccessResult();
+    }
+
+    public async Task<IResult> DeleteProfilePhotoAsync(int userId)
+    {
+        var user = await _unitOfWork.UserRepository.GetAsync(m => m.Id == userId);
+        if (user == null) return new ErrorResult(Localization.Translate(Messages.InvalidUserCredentials));
+
+        user.ProfilePhotoFileName = null;
+
+        _unitOfWork.UserRepository.Update(_mapper.Map<User>(user));
+        await _unitOfWork.CommitAsync();
+
+        return new SuccessResult();
+    }
 }

@@ -15,4 +15,6 @@ public class User : AuditableEntity
 
     [Display(Name = "İstifadəçiyə göndərilmiş sonuncu email təsdiqləmə kodu. Şifrəni yeniləyən zaman lazım olacaq.")]
     public string? LastVerificationCode { get; set; }
+
+    public string? ProfilePhotoFileName { get; set; }
 }

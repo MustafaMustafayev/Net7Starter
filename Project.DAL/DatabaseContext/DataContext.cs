@@ -25,7 +25,6 @@ public class DataContext : DbContext
     public DbSet<Organization> Organizations { get; set; }
 
     public DbSet<Role> Roles { get; set; }
-
     public DbSet<RequestLog> RequestLogs { get; set; }
 
     public DbSet<ResponseLog> ResponseLogs { get; set; }

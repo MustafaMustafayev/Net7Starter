@@ -18,9 +18,11 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity>
     public async Task<TEntity> AddAsync(TEntity entity)
     {
         var newEntity = _ctx.CreateProxy<TEntity>();
+
         _ctx.Entry(newEntity).CurrentValues.SetValues(entity);
         _ctx.Entry(entity).State = EntityState.Detached;
         await _ctx.AddAsync(newEntity);
+
         return newEntity;
     }
 
@@ -35,9 +37,30 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity>
         _ctx.Remove(entity);
     }
 
-    public async Task<TEntity?> GetAsync(Expression<Func<TEntity, bool>> filter)
+    public void SoftDelete(TEntity entity)
     {
-        return await _ctx.Set<TEntity>().FirstOrDefaultAsync(filter);
+        var property = entity.GetType().GetProperty("IsDeleted");
+
+        if (property is null)
+            throw new ArgumentException($"The property with type: {entity.GetType()} can not be SoftDeleted, " +
+                                        "because it doesn't contains IsDeleted property, and did not implemented AuditableEntity class.");
+
+        if (((bool?)property.GetValue(entity)!).Value) throw new Exception("This entity was already deleted");
+
+        property.SetValue(entity, true);
+
+        var updatedEntity = _ctx.CreateProxy<TEntity>();
+
+        _ctx.Entry(updatedEntity).CurrentValues.SetValues(entity);
+        _ctx.Entry(entity).State = EntityState.Detached;
+        _ctx.Update(updatedEntity);
+    }
+
+    public async Task<TEntity?> GetAsync(Expression<Func<TEntity, bool>> filter, bool ignoreQueryFilters = false)
+    {
+        return ignoreQueryFilters
+            ? await _ctx.Set<TEntity>().IgnoreQueryFilters().FirstOrDefaultAsync(filter)
+            : await _ctx.Set<TEntity>().FirstOrDefaultAsync(filter);
     }
 
     public async Task<TEntity?> GetAsNoTrackingAsync(Expression<Func<TEntity, bool>> filter)
@@ -45,22 +68,41 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity>
         return await _ctx.Set<TEntity>().AsNoTracking().FirstOrDefaultAsync(filter);
     }
 
-    public IQueryable<TEntity?> GetList(Expression<Func<TEntity, bool>>? filter = null)
+    public IQueryable<TEntity?> GetList(Expression<Func<TEntity, bool>>? filter = null, bool ignoreQueryFilters = false)
     {
-        return filter == null ? _ctx.Set<TEntity>() : _ctx.Set<TEntity>().Where(filter);
+        return filter is null
+            ? ignoreQueryFilters
+                ? _ctx.Set<TEntity>().IgnoreQueryFilters()
+                : _ctx.Set<TEntity>()
+            : ignoreQueryFilters
+                ? _ctx.Set<TEntity>().Where(filter).IgnoreQueryFilters()
+                : _ctx.Set<TEntity>().Where(filter);
+    }
+
+    public async Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>>? filter = null, bool ignoreQueryFilters = false)
+    {
+        return filter is null
+            ? ignoreQueryFilters
+                ? await _ctx.Set<TEntity>().IgnoreQueryFilters().ToListAsync()
+                : await _ctx.Set<TEntity>().ToListAsync()
+            : ignoreQueryFilters
+                ? await _ctx.Set<TEntity>().Where(filter).IgnoreQueryFilters().ToListAsync()
+                : await _ctx.Set<TEntity>().Where(filter).ToListAsync();
     }
 
     public IQueryable<TEntity> GetAsNoTrackingList(Expression<Func<TEntity, bool>>? filter = null)
     {
-        return (filter == null ? _ctx.Set<TEntity>().AsNoTracking() : _ctx.Set<TEntity>().Where(filter)).AsNoTracking();
+        return (filter is null ? _ctx.Set<TEntity>().AsNoTracking() : _ctx.Set<TEntity>().Where(filter)).AsNoTracking();
     }
 
     public TEntity Update(TEntity entity)
     {
         var updatedEntity = _ctx.CreateProxy<TEntity>();
+
         _ctx.Entry(updatedEntity).CurrentValues.SetValues(entity);
         _ctx.Entry(entity).State = EntityState.Detached;
         _ctx.Update(updatedEntity);
+
         return updatedEntity;
     }
 
@@ -68,12 +110,5 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity>
     {
         _ctx.UpdateRange(entity);
         return entity;
-    }
-
-    public async Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>>? filter = null)
-    {
-        return filter == null
-            ? await _ctx.Set<TEntity>().ToListAsync()
-            : await _ctx.Set<TEntity>().Where(filter).ToListAsync();
     }
 }
