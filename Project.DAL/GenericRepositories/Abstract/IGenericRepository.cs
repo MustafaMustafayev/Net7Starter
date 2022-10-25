@@ -11,7 +11,7 @@ public interface IGenericRepository<T>
 
     IQueryable<T?> GetList(Expression<Func<T, bool>>? filter = null, bool ignoreQueryFilters = false);
 
-    Task<List<T>> GetListAsync(Expression<Func<T, bool>>? filter = null, bool ignoreQueryFilters = true);
+    Task<List<T>> GetListAsync(Expression<Func<T, bool>>? filter = null, bool ignoreQueryFilters = false);
 
     IQueryable<T> GetAsNoTrackingList(Expression<Func<T, bool>>? filter = null);
 
