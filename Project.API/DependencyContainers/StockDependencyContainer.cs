@@ -8,6 +8,7 @@ using Project.BLL.Abstract;
 using Project.BLL.Concrete;
 using Project.Core.Abstract;
 using Project.Core.Concrete;
+using Project.Core.Constants;
 using Project.Core.Helper;
 using Project.Core.Logging;
 using Project.DAL.Abstract;
@@ -21,7 +22,7 @@ public static class StockDependencyContainer
 {
     public static void RegisterNLogger(this IServiceCollection services)
     {
-        LogManager.LoadConfiguration(string.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
+        LogManager.LoadConfiguration(string.Concat(Directory.GetCurrentDirectory(), Constants.NLogConfigPath));
 
         services.AddSingleton<ILoggerManager, LoggerManager>();
     }
@@ -72,11 +73,11 @@ public static class StockDependencyContainer
         {
             c.EnableAnnotations();
 
-            c.SwaggerDoc("v1",
+            c.SwaggerDoc(config.SwaggerSettings.Version,
                 new OpenApiInfo
                     { Title = config.SwaggerSettings.Title, Version = config.SwaggerSettings.Version });
 
-            c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+            c.AddSecurityDefinition(config.AuthSettings.TokenPrefix, new OpenApiSecurityScheme
             {
                 Name = "Authorization",
                 Type = SecuritySchemeType.ApiKey,

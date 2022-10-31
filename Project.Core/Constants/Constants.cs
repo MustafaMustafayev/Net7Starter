@@ -2,7 +2,10 @@
 
 public static class Constants
 {
+    public const string EnableAllCorsName = "CorsPolicy";
+    public const string NLogConfigPath = "/nlog.config";
     public const string CacheTokensKey = "ActiveTokens";
+
     public const int MaxProfilePhotoBytes = 5300000;
 
     public const string EmptyProfilePictureBase64 =

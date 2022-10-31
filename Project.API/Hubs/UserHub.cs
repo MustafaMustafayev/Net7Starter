@@ -3,13 +3,14 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.SignalR;
+using Project.Core.Constants;
 using Project.Core.Helper;
 
 namespace Project.API.Hubs;
 
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 [Authorize]
-[EnableCors("CorsPolicy")]
+[EnableCors(Constants.EnableAllCorsName)]
 public class UserHub : Hub
 {
     private readonly ConfigSettings _configSettings;

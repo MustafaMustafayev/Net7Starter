@@ -1,13 +1,13 @@
 ﻿using FluentValidation;
 using FluentValidation.AspNetCore;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Project.API.ActionFilters;
 using Project.API.BackgroundServices;
 using Project.API.DependencyContainers;
 using Project.API.Hubs;
 using Project.BLL.Mappers;
 using Project.BLL.MediatR;
+using Project.Core.Constants;
 using Project.Core.Helper;
 using Project.Core.Middlewares.ExceptionHandler;
 using Project.Core.Middlewares.Translation;
@@ -32,7 +32,8 @@ builder.WebHost.UseSentry();
 
 builder.Services.AddAutoMapper(Automapper.GetAutoMapperProfilesFromAllAssemblies().ToArray());
 
-builder.Services.AddDbContext<DataContext>(options => options.UseNpgsql(config.ConnectionStrings.AppDb));
+// moved to DAL, to remove Microsoft.EntityFrameworkCore.Design dependency from API layer
+builder.Services.AddDatabaseContext(config.ConnectionStrings.AppDb);
 
 builder.Services.AddHttpContextAccessor();
 
@@ -51,7 +52,7 @@ builder.Services.AddHealthChecks();
 
 builder.Services.RegisterAuthentication(config);
 
-builder.Services.AddCors(o => o.AddPolicy("CorsPolicy", b => b.AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin()));
+builder.Services.AddCors(o => o.AddPolicy(Constants.EnableAllCorsName, b => b.AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin()));
 
 builder.Services.AddScoped<LogActionFilter>();
 
@@ -70,7 +71,7 @@ app.UseSwaggerUI();
 
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
-app.UseCors("CorsPolicy");
+app.UseCors(Constants.EnableAllCorsName);
 
 app.UseMiddleware<LocalizationMiddleware>();
 

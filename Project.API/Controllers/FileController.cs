@@ -10,7 +10,7 @@ using Project.Core.Middlewares.Translation;
 using Project.DTO.Responses;
 using Project.DTO.User;
 using Swashbuckle.AspNetCore.Annotations;
-using IResult = Microsoft.AspNetCore.Http.IResult;
+using IResult = Project.DTO.Responses.IResult;
 using Messages = Project.Core.Middlewares.Translation.Messages;
 
 namespace Project.API.Controllers;
