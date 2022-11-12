@@ -33,7 +33,7 @@ public class FileController : Controller
     [SwaggerOperation(Summary = "upload user profile photo")]
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IDataResult<string>))]
     [HttpPost("user/profile")]
-    [CacheTokenValidate]
+    [CacheToken]
     public async Task<IActionResult> UploadUserProfilePhoto([FromForm] IFormFile file)
     {
         var orijinalFileName = Path.GetFileName(file.FileName);
@@ -42,7 +42,8 @@ public class FileController : Controller
         if (fileExtension is not ".png" && fileExtension is not ".jpg" && fileExtension is not ".jpeg")
             return Ok(new ErrorResult(Localization.Translate(Messages.FileIsNotImage)));
 
-        if (file.Length > Constants.MaxProfilePhotoBytes) return Ok(new ErrorDataResult<string>(Localization.Translate(Messages.FileIsLargeThan2Mb)));
+        if (file.Length > Constants.MaxProfilePhotoBytes)
+            return Ok(new ErrorDataResult<string>(Localization.Translate(Messages.FileIsLargeThan2Mb)));
 
         var path = Path.Combine(_environment.WebRootPath, "user_data", "photos", "profile");
         var fileName = $"{Guid.NewGuid()}-{orijinalFileName}";
@@ -50,7 +51,8 @@ public class FileController : Controller
         await FileHelper.WriteFile(file, fileName, path);
 
         var userId = _utilService.GetUserIdFromToken(HttpContext.Request.Headers.Authorization);
-        if (userId is null) return Ok(new ErrorDataResult<string>(Localization.Translate(Messages.CanNotFoundUserIdInYourAccessToken)));
+        if (userId is null)
+            return Ok(new ErrorDataResult<string>(Localization.Translate(Messages.CanNotFoundUserIdInYourAccessToken)));
 
         await _userService.UpdateProfilePhotoAsync(userId.Value, fileName);
 
@@ -68,11 +70,12 @@ public class FileController : Controller
     [SwaggerOperation(Summary = "delete user profile photo")]
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
     [HttpDelete("user/profile")]
-    [CacheTokenValidate]
+    [CacheToken]
     public async Task<IActionResult> DeleteUserPhoto()
     {
         var userId = _utilService.GetUserIdFromToken(HttpContext.Request.Headers.Authorization);
-        if (userId is null) return BadRequest(new ErrorResult(Localization.Translate(Messages.CanNotFoundUserIdInYourAccessToken)));
+        if (userId is null)
+            return BadRequest(new ErrorResult(Localization.Translate(Messages.CanNotFoundUserIdInYourAccessToken)));
 
         var user = await _userService.GetAsync(userId.Value);
         if (user.Data is null) return Ok(new ErrorResult(Localization.Translate(Messages.InvalidUserCredentials)));

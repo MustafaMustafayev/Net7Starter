@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Project.BLL.Abstract;
-using Project.Core.Helper;
+using Project.Core.Config;
 using Project.DTO.Responses;
 using Project.DTO.User;
 using Swashbuckle.AspNetCore.Annotations;

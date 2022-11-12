@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.SignalR;
+using Project.Core.Config;
 using Project.Core.Constants;
-using Project.Core.Helper;
 
 namespace Project.API.Hubs;
 

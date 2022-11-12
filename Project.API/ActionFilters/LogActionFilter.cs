@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Filters;
 using Project.BLL.Abstract;
 using Project.Core.Abstract;
-using Project.Core.Helper;
+using Project.Core.Config;
 using Project.DTO.CustomLogging;
 
 namespace Project.API.ActionFilters;

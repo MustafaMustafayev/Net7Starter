@@ -5,22 +5,22 @@ using IResult = Project.DTO.Responses.IResult;
 
 namespace Project.Core.Helper;
 
-public class FileHelper
+public static class FileHelper
 {
     public static async Task WriteFile(IFormFile file, string name, string path)
     {
         if (!Directory.Exists(path)) Directory.CreateDirectory(path);
 
-        using (var fileStream = new FileStream(Path.Combine(path, name), FileMode.Create))
-        {
-            await file.CopyToAsync(fileStream);
-        }
+        await using var fileStream = new FileStream(Path.Combine(path, name), FileMode.Create);
+        await file.CopyToAsync(fileStream);
     }
 
     public static async Task<IDataResult<string>> ReadFileAsByte64(string name, string path)
     {
         var filePath = Path.Combine(path, name);
-        if (File.Exists(filePath)) return new SuccessDataResult<string>(data: Convert.ToBase64String(await File.ReadAllBytesAsync(filePath)));
+        if (File.Exists(filePath))
+            return new SuccessDataResult<string>(data: Convert.ToBase64String(await File.ReadAllBytesAsync(filePath)));
+
         return new ErrorDataResult<string>(Localization.Translate(Messages.FileIsNotFound));
     }
 
@@ -30,6 +30,7 @@ public class FileHelper
         if (!File.Exists(filePath)) return new SuccessResult();
 
         File.Delete(filePath);
+
         return new SuccessResult();
     }
 }

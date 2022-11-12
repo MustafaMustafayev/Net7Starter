@@ -8,7 +8,7 @@ using Project.DTO.Responses;
 namespace Project.API.CustomAttributes;
 
 [AttributeUsage(AttributeTargets.Method)]
-public class CacheTokenValidateAttribute : Attribute, IAuthorizationFilter
+public class CacheTokenAttribute : Attribute, IAuthorizationFilter
 {
     public void OnAuthorization(AuthorizationFilterContext context)
     {

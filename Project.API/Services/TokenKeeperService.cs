@@ -1,9 +1,9 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
+using Project.Core.Config;
 using Project.Core.Constants;
-using Project.Core.Helper;
 using Project.Core.Logging;
 
-namespace Project.API.BackgroundServices;
+namespace Project.API.Services;
 
 public class TokenKeeperHostedService : IHostedService, IDisposable
 {
@@ -45,9 +45,8 @@ public class TokenKeeperHostedService : IHostedService, IDisposable
     private void ClearExpiredTokensFromMemory(object? state)
     {
         _executionCounter++;
-        Dictionary<string, DateTime>? tokens;
 
-        _memoryCache.TryGetValue(Constants.CacheTokensKey, out tokens);
+        _memoryCache.TryGetValue(Constants.CacheTokensKey, out Dictionary<string, DateTime>? tokens);
         if (tokens is null || !tokens.Any()) return;
 
         foreach (var token in tokens.Where(token => DateTime.Now > token.Value)) tokens.Remove(token.Key);

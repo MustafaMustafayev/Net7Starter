@@ -4,7 +4,7 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using Project.Core.Abstract;
-using Project.Core.Helper;
+using Project.Core.Config;
 
 namespace Project.Core.Concrete;
 
