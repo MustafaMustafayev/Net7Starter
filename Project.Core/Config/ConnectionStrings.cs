@@ -1,4 +1,4 @@
-﻿namespace Project.Core.Helper;
+﻿namespace Project.Core.Config;
 
 public record ConnectionStrings
 {

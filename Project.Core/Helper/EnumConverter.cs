@@ -1,6 +1,6 @@
 ﻿namespace Project.Core.Helper;
 
-public class EnumConverter<T>
+public static class EnumConverter<T>
     where T : Enum
 {
     public static IEnumerable<string> GetAllValuesAsIEnumerable()

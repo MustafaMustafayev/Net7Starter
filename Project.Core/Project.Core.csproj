@@ -15,9 +15,9 @@
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="Newtonsoft.Json" Version="13.0.2-beta2"/>
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.10"/>
-        <PackageReference Include="NLog.Web.AspNetCore" Version="5.1.4"/>
-        <PackageReference Include="Sentry" Version="3.18.0"/>
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.11"/>
+        <PackageReference Include="NLog.Web.AspNetCore" Version="5.1.5"/>
+        <PackageReference Include="Sentry" Version="3.23.1"/>
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\Project.DTO\Project.DTO.csproj"/>

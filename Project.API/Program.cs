@@ -1,14 +1,14 @@
 ﻿using FluentValidation;
 using FluentValidation.AspNetCore;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Project.API.ActionFilters;
-using Project.API.BackgroundServices;
-using Project.API.DependencyContainers;
+using Project.API.Containers;
 using Project.API.Hubs;
+using Project.API.Services;
 using Project.BLL.Mappers;
 using Project.BLL.MediatR;
-using Project.Core.Helper;
+using Project.Core.Config;
+using Project.Core.Constants;
 using Project.Core.Middlewares.ExceptionHandler;
 using Project.Core.Middlewares.Translation;
 using Project.DAL.DatabaseContext;
@@ -28,22 +28,26 @@ builder.Services.AddControllers(opt => opt.Filters.Add(typeof(ValidatorActionFil
 
 builder.Services.AddFluentValidationAutoValidation().AddValidatorsFromAssemblyContaining<LoginDtoValidator>();
 
-builder.WebHost.UseSentry();
+if (config.SentrySettings.IsEnabled) builder.WebHost.UseSentry();
 
 builder.Services.AddAutoMapper(Automapper.GetAutoMapperProfilesFromAllAssemblies().ToArray());
 
-builder.Services.AddDbContext<DataContext>(options => options.UseNpgsql(config.ConnectionStrings.AppDb));
+// moved to DAL, to remove Microsoft.EntityFrameworkCore.Design dependency from API layer
+builder.Services.AddDatabaseContext(config.ConnectionStrings.AppDb);
 
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddMemoryCache();
 
+builder.Services.RegisterHttpClients(config);
+
 builder.Services.AddHostedService<TokenKeeperHostedService>();
 
-builder.Services.RegisterRepositories();
+if (config.RedisSettings.IsEnabled) builder.Services.AddHostedService<RedisIndexCreatorService>();
 
-// register unit of work after registering repositories
-builder.Services.RegisterUnitOfWork();
+if (config.RedisSettings.IsEnabled) builder.Services.RegisterRedis(config);
+
+builder.Services.RegisterRepositories();
 
 builder.Services.AddMediatR(typeof(MediatrAssemblyContainer).Assembly);
 
@@ -51,13 +55,16 @@ builder.Services.AddHealthChecks();
 
 builder.Services.RegisterAuthentication(config);
 
-builder.Services.AddCors(o => o.AddPolicy("CorsPolicy", b => b.AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin()));
+builder.Services.AddCors(o =>
+    o.AddPolicy(Constants.EnableAllCorsName, b => b.AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin()));
 
 builder.Services.AddScoped<LogActionFilter>();
 
 builder.Services.AddEndpointsApiExplorer();
 
-builder.Services.RegisterSwagger(config);
+if (config.SwaggerSettings.IsEnabled) builder.Services.RegisterSwagger(config);
+
+builder.Services.RegisterMiniProfiler();
 
 builder.Services.AddSignalR();
 
@@ -65,12 +72,13 @@ var app = builder.Build();
 
 // if (app.Environment.IsDevelopment())
 
-app.UseSwagger();
-app.UseSwaggerUI();
+if (config.SwaggerSettings.IsEnabled) app.UseSwagger();
+
+if (config.SwaggerSettings.IsEnabled) app.UseSwaggerUI();
 
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
-app.UseCors("CorsPolicy");
+app.UseCors(Constants.EnableAllCorsName);
 
 app.UseMiddleware<LocalizationMiddleware>();
 
@@ -94,13 +102,15 @@ app.Use(async (context, next) =>
     await next.Invoke();
 });
 
-app.UseSentryTracing();
+if (config.SentrySettings.IsEnabled) app.UseSentryTracing();
 
 app.UseStaticFiles();
 
 app.UseAuthorization();
 
 app.UseAuthentication();
+
+app.UseMiniProfiler();
 
 app.UseHealthChecks("/hc");
 

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Project.API.ActionFilters;
 using Project.BLL.Abstract;
 using Project.Core.Abstract;
+using Project.Core.Config;
 using Project.Core.Helper;
 using Project.Core.Middlewares.Translation;
 using Project.DTO.Auth;

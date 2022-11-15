@@ -1,6 +1,6 @@
-﻿namespace Project.Core.Helper;
+﻿namespace Project.Core.Config;
 
-public record SwaggerSettings
+public record SwaggerSettings : Controllable
 {
     public string Title { get; set; }
     public string Version { get; set; }

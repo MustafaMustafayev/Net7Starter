@@ -16,4 +16,6 @@ public interface IUserService
     Task<IResult> UpdateAsync(UserToUpdateDto userToUpdateDto);
 
     Task<IResult> DeleteAsync(int userId);
+    Task<IResult> UpdateProfilePhotoAsync(int userId, string photoFileName);
+    Task<IResult> DeleteProfilePhotoAsync(int userId);
 }

@@ -14,5 +14,8 @@ public enum Messages
     InvalidVerificationCode,
     CanNotFoundCompanyIdInYourAccessToken,
     CanNotFoundUserIdInYourAccessToken,
-    YourSessionIsClosed
+    YourSessionIsClosed,
+    FileIsNotImage,
+    FileIsLargeThan2Mb,
+    FileIsNotFound
 }
