@@ -48,12 +48,12 @@ public class UserService : IUserService
         return new SuccessResult();
     }
 
-    public Task<IDataResult<List<UserToListDto>>> GetAsync()
+    public Task<IDataResult<IQueryable<UserToListDto>>> GetAsync()
     {
         var users = _unitOfWork.UserRepository.GetAsNoTrackingList().ToList();
 
-        return Task.FromResult<IDataResult<List<UserToListDto>>>(
-            new SuccessDataResult<List<UserToListDto>>(_mapper.Map<List<UserToListDto>>(users)));
+        return Task.FromResult<IDataResult<IQueryable<UserToListDto>>>(
+            new SuccessDataResult<IQueryable<UserToListDto>>(_mapper.Map<IQueryable<UserToListDto>>(users)));
     }
 
     public async Task<IDataResult<UserToListDto>> GetAsync(int userId)

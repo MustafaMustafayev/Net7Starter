@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using IResult = DTO.Responses.IResult;
 using Messages = CORE.Middlewares.Translation.Messages;
+using Path = System.IO.Path;
 
 namespace API.Controllers;
 
@@ -78,7 +79,6 @@ public class FileController : Controller
             return BadRequest(new ErrorResult(Localization.Translate(Messages.CanNotFoundUserIdInYourAccessToken)));
 
         var user = await _userService.GetAsync(userId.Value);
-        if (user.Data is null) return Ok(new ErrorResult(Localization.Translate(Messages.InvalidUserCredentials)));
 
         if (user.Data.ProfilePhotoFileName is null) return Ok(new SuccessResult());
 
@@ -95,6 +95,7 @@ public class FileController : Controller
     {
         var uploads = Path.Combine(_environment.WebRootPath, "files");
         var filePath = uploads + "/" + fileName;
+
         return PhysicalFile(filePath, "APPLICATION/octet-stream", Path.GetFileName(fileName));
     }
 }

@@ -12,7 +12,16 @@
 
     <ItemGroup>
         <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="8.0.0"/>
+        <PackageReference Include="GraphQL.Server.Transports.AspNetCore" Version="7.1.1"/>
+        <PackageReference Include="GraphQL.Server.Ui.Voyager" Version="7.1.1"/>
+        <PackageReference Include="HotChocolate.Abstractions" Version="13.0.0-preview.81"/>
+        <PackageReference Include="HotChocolate.AspNetCore" Version="13.0.0-preview.81"/>
+        <PackageReference Include="HotChocolate.Data.EntityFramework" Version="13.0.0-preview.81"/>
         <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.0.0"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.0">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
         <PackageReference Include="MiniProfiler.EntityFrameworkCore" Version="4.2.22"/>
         <PackageReference Include="Redis.OM" Version="0.3.1"/>
         <PackageReference Include="Sentry.AspNetCore" Version="3.24.0"/>

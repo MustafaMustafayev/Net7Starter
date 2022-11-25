@@ -1,5 +1,6 @@
 ﻿using API.ActionFilters;
 using API.Containers;
+using API.Graphql.Role;
 using API.Hubs;
 using API.Services;
 using BLL.Mappers;
@@ -12,7 +13,9 @@ using DAL.DatabaseContext;
 using DTO.Auth.Validators;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using GraphQL.Server.Ui.Voyager;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,8 +35,7 @@ if (config.SentrySettings.IsEnabled) builder.WebHost.UseSentry();
 
 builder.Services.AddAutoMapper(Automapper.GetAutoMapperProfilesFromAllAssemblies().ToArray());
 
-// moved to DAL, to remove Microsoft.EntityFrameworkCore.Design dependency from API layer
-builder.Services.AddDatabaseContext(config.ConnectionStrings.AppDb);
+builder.Services.AddDbContext<DataContext>(options => options.UseNpgsql(config.ConnectionStrings.AppDb));
 
 builder.Services.AddHttpContextAccessor();
 
@@ -48,6 +50,13 @@ if (config.RedisSettings.IsEnabled) builder.Services.AddHostedService<RedisIndex
 if (config.RedisSettings.IsEnabled) builder.Services.RegisterRedis(config);
 
 builder.Services.RegisterRepositories();
+
+builder.Services.AddGraphQLServer()
+    .AddQueryType<Query>()
+    .AddMutationType<Mutation>()
+    .AddProjections()
+    .AddSorting()
+    .AddFiltering();
 
 builder.Services.AddMediatR(typeof(MediatrAssemblyContainer).Assembly);
 
@@ -92,7 +101,7 @@ app.Use((context, next) =>
     return next();
 });
 
-// this headers will broke miniprofiler. check inspect in mini profiler
+// this headers will broke miniprofiler. inspect in mini profiler
 // app.Use(async (context, next) =>
 // {
 //     context.Response.Headers.Add("X-Content-Type-Options", "nosniff");
@@ -118,5 +127,12 @@ app.UseHealthChecks("/hc");
 app.MapControllers();
 
 app.MapHub<UserHub>("/userHub");
+
+app.MapGraphQL((PathString)"/graphql");
+
+app.UseGraphQLVoyager("/graphql-voyager", new VoyagerOptions
+{
+    GraphQLEndPoint = "/graphql"
+});
 
 app.Run();

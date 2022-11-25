@@ -63,11 +63,6 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity>
             : await _ctx.Set<TEntity>().FirstOrDefaultAsync(filter);
     }
 
-    public async Task<TEntity?> GetAsNoTrackingAsync(Expression<Func<TEntity, bool>> filter)
-    {
-        return await _ctx.Set<TEntity>().AsNoTracking().FirstOrDefaultAsync(filter);
-    }
-
     public IQueryable<TEntity?> GetList(Expression<Func<TEntity, bool>>? filter = null, bool ignoreQueryFilters = false)
     {
         return filter is null
@@ -79,16 +74,9 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity>
                 : _ctx.Set<TEntity>().Where(filter);
     }
 
-    public async Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>>? filter = null,
-        bool ignoreQueryFilters = false)
+    public async Task<TEntity?> GetAsNoTrackingAsync(Expression<Func<TEntity, bool>> filter)
     {
-        return filter is null
-            ? ignoreQueryFilters
-                ? await _ctx.Set<TEntity>().IgnoreQueryFilters().ToListAsync()
-                : await _ctx.Set<TEntity>().ToListAsync()
-            : ignoreQueryFilters
-                ? await _ctx.Set<TEntity>().Where(filter).IgnoreQueryFilters().ToListAsync()
-                : await _ctx.Set<TEntity>().Where(filter).ToListAsync();
+        return await _ctx.Set<TEntity>().AsNoTracking().FirstOrDefaultAsync(filter);
     }
 
     public IQueryable<TEntity> GetAsNoTrackingList(Expression<Func<TEntity, bool>>? filter = null)
@@ -112,4 +100,15 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity>
         _ctx.UpdateRange(entity);
         return entity;
     }
+
+    // public async Task<IQueryable> GetListAsync(Expression<Func<TEntity, bool>>? filter = null, bool ignoreQueryFilters = false)
+    // {
+    //     return filter is null
+    //         ? ignoreQueryFilters
+    //             ? await _ctx.Set<TEntity>().IgnoreQueryFilters().ToListAsync()
+    //             : await _ctx.Set<TEntity>().ToListAsync()
+    //         : ignoreQueryFilters
+    //             ? await _ctx.Set<TEntity>().Where(filter).IgnoreQueryFilters().ToListAsync()
+    //             : await _ctx.Set<TEntity>().Where(filter).ToListAsync();
+    // }
 }

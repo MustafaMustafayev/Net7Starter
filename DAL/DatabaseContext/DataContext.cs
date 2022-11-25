@@ -13,8 +13,7 @@ public class DataContext : DbContext
     private readonly IUtilService _utilService;
 
     public DataContext(DbContextOptions<DataContext> options, IHttpContextAccessor httpContextAccessor,
-        IUtilService utilService)
-        : base(options)
+        IUtilService utilService) : base(options)
     {
         _httpContextAccessor = httpContextAccessor;
         _utilService = utilService;

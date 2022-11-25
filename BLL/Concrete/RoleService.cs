@@ -40,11 +40,16 @@ public class RoleService : IRoleService
         return new SuccessResult(Localization.Translate(Messages.Success));
     }
 
-    public async Task<IDataResult<List<RoleToListDto>>> GetAsync()
+    public async Task<IDataResult<IQueryable<RoleToListDto>>> GetAsync()
     {
-        var datas = _mapper.Map<List<RoleToListDto>>(await _unitOfWork.RoleRepository.GetListAsync());
+        var datas = _mapper.Map<IQueryable<RoleToListDto>>(_unitOfWork.RoleRepository.GetList());
 
-        return new SuccessDataResult<List<RoleToListDto>>(datas);
+        return new SuccessDataResult<IQueryable<RoleToListDto>>(datas);
+    }
+
+    public async Task<IDataResult<IQueryable<Role>>> GraphQlGetAsync()
+    {
+        return new SuccessDataResult<IQueryable<Role>>(_unitOfWork.RoleRepository.GetList());
     }
 
     public async Task<IDataResult<RoleToListDto>> GetAsync(int id)

@@ -8,7 +8,8 @@ using MediatR;
 namespace BLL.MediatR.OrganizationCQRS.Handlers;
 
 public class
-    GetOrganizationListHandler : IRequestHandler<GetOrganizationListQuery, IDataResult<List<OrganizationToListDto>>>
+    GetOrganizationListHandler : IRequestHandler<GetOrganizationListQuery,
+        IDataResult<IQueryable<OrganizationToListDto>>>
 {
     private readonly IMapper _mapper;
     private readonly IUnitOfWork _unitOfWork;
@@ -19,12 +20,12 @@ public class
         _mapper = mapper;
     }
 
-    public async Task<IDataResult<List<OrganizationToListDto>>> Handle(GetOrganizationListQuery request,
+    public async Task<IDataResult<IQueryable<OrganizationToListDto>>> Handle(GetOrganizationListQuery request,
         CancellationToken cancellationToken)
     {
-        var data = await _unitOfWork.OrganizationRepository.GetListAsync();
-        var result = _mapper.Map<List<OrganizationToListDto>>(data);
+        var data = _unitOfWork.OrganizationRepository.GetList();
+        var result = _mapper.Map<IQueryable<OrganizationToListDto>>(data);
 
-        return new SuccessDataResult<List<OrganizationToListDto>>(result);
+        return new SuccessDataResult<IQueryable<OrganizationToListDto>>(result);
     }
 }
