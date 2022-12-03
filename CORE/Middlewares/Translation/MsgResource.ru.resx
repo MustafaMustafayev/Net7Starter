@@ -175,6 +175,9 @@
     <value>Ошибка проверки модели</value>
   </data>
     <data name="DataIsExistInFavourite" xml:space="preserve">
-        <value>Информация доступна</value>
-    </data>
+    <value>Информация доступна</value>
+  </data>
+    <data name="ForbidFileExtension" xml:space="preserve">
+    <value>Ошибка file extension</value>
+  </data>
 </root>

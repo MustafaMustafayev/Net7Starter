@@ -2,7 +2,7 @@
 
 namespace ENTITIES.Entities;
 
-public class Role : AuditableEntity, IEntity
+public class Role : Auditable, IEntity
 {
     [Key] public int RoleId { get; set; }
 

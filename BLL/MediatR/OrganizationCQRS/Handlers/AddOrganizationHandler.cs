@@ -22,7 +22,6 @@ public class AddOrganizationHandler : IRequestHandler<AddOrganizationCommand, IR
     {
         var mapped = _mapper.Map<Organization>(request.Organization);
         await _unitOfWork.OrganizationRepository.AddAsync(mapped);
-        // var result = _mapper.Map<OrganizationToListDto>(data);
 
         return new SuccessResult();
     }

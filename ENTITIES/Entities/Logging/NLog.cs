@@ -1,4 +1,4 @@
-﻿namespace ENTITIES.Entities;
+﻿namespace ENTITIES.Entities.Logging;
 
 public class NLog : IEntity
 {
@@ -12,7 +12,7 @@ public class NLog : IEntity
 
     public string Message { get; set; }
 
-    public string Callsite { get; set; }
+    public string CallSite { get; set; }
 
     public string Logger { get; set; }
 

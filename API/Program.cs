@@ -45,11 +45,14 @@ builder.Services.RegisterHttpClients(config);
 
 builder.Services.AddHostedService<TokenKeeperHostedService>();
 
-if (config.RedisSettings.IsEnabled) builder.Services.AddHostedService<RedisIndexCreatorService>();
-
-if (config.RedisSettings.IsEnabled) builder.Services.RegisterRedis(config);
+if (config.RedisSettings.IsEnabled)
+{
+    builder.Services.AddHostedService<RedisIndexCreatorService>();
+    builder.Services.RegisterRedis(config);
+}
 
 builder.Services.RegisterRepositories();
+builder.Services.RegisterUnitOfWork();
 
 builder.Services.AddGraphQLServer()
     .AddQueryType<Query>()
@@ -83,7 +86,8 @@ var app = builder.Build();
 
 if (config.SwaggerSettings.IsEnabled) app.UseSwagger();
 
-if (config.SwaggerSettings.IsEnabled) app.UseSwaggerUI();
+if (config.SwaggerSettings.IsEnabled)
+    app.UseSwaggerUI(c => c.InjectStylesheet($"/swagger_ui/{config.SwaggerSettings.Theme}.css"));
 
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 

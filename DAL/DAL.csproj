@@ -9,11 +9,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <None Remove="Npgsql.EntityFrameworkCore.PostgreSQL" />
-        <None Remove="StyleCop.Analyzers" />
-        <None Remove="Microsoft.EntityFrameworkCore.Proxies" />
-        <None Remove="Microsoft.AspNetCore.Http" />
-        <None Remove="stylecop.json" />
+        <None Remove="Npgsql.EntityFrameworkCore.PostgreSQL"/>
+        <None Remove="StyleCop.Analyzers"/>
+        <None Remove="Microsoft.EntityFrameworkCore.Proxies"/>
+        <None Remove="Microsoft.AspNetCore.Http"/>
+        <None Remove="stylecop.json"/>
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.0">
@@ -24,11 +24,11 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.0" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="7.0.0" />
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.0"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="7.0.0"/>
     </ItemGroup>
     <ItemGroup>
-        <ProjectReference Include="..\CORE\CORE.csproj" />
-        <ProjectReference Include="..\ENTITIES\ENTITIES.csproj" />
+        <ProjectReference Include="..\CORE\CORE.csproj"/>
+        <ProjectReference Include="..\ENTITIES\ENTITIES.csproj"/>
     </ItemGroup>
 </Project>

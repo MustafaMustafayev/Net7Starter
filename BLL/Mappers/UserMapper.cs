@@ -11,5 +11,6 @@ public class UserMapper : Profile
         CreateMap<User, UserToListDto>();
         CreateMap<UserToAddDto, User>();
         CreateMap<UserToUpdateDto, User>();
+        CreateMap<Photo, PhotoToListDto>();
     }
 }

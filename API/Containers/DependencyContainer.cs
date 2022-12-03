@@ -1,6 +1,8 @@
 ﻿using System.Text;
 using BLL.Abstract;
 using BLL.Concrete;
+using BLL.RabbitMq.Abstract;
+using BLL.RabbitMq.Concrete;
 using CORE.Abstract;
 using CORE.Concrete;
 using CORE.Config;
@@ -21,7 +23,7 @@ using StackExchange.Profiling.SqlFormatters;
 
 namespace API.Containers;
 
-public static class StockDependencyContainer
+public static class DependencyContainer
 {
     public static void RegisterNLogger(this IServiceCollection services)
     {
@@ -119,12 +121,11 @@ public static class StockDependencyContainer
         services.AddScoped<IRoleRepository, RoleRepository>();
         services.AddScoped<IRoleService, RoleService>();
         services.AddScoped<IOrganizationRepository, OrganizationRepository>();
-
-        // register unit of work after registering repositories
-        services.RegisterUnitOfWork();
+        services.AddScoped<IConsumerService, ConsumerService>();
+        services.AddScoped<IProducerService, ProducerService>();
     }
 
-    private static void RegisterUnitOfWork(this IServiceCollection services)
+    public static void RegisterUnitOfWork(this IServiceCollection services)
     {
         services.AddScoped<IUnitOfWork, UnitOfWork>();
     }

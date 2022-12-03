@@ -2,7 +2,7 @@
 using BLL.Abstract;
 using DAL.UnitOfWorks.Abstract;
 using DTO.CustomLogging;
-using ENTITIES.Entities;
+using ENTITIES.Entities.Logging;
 
 namespace BLL.Concrete;
 

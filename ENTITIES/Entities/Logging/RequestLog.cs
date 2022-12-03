@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace ENTITIES.Entities;
+namespace ENTITIES.Entities.Logging;
 
 public class RequestLog
 {

@@ -1,7 +1,7 @@
 ﻿using DAL.Abstract;
 using DAL.DatabaseContext;
 using DAL.GenericRepositories.Concrete;
-using ENTITIES.Entities;
+using ENTITIES.Entities.Logging;
 
 namespace DAL.Concrete;
 
