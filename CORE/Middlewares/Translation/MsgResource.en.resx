@@ -175,6 +175,9 @@
     <value>Model verification error</value>
   </data>
     <data name="DataIsExistInFavourite" xml:space="preserve">
-        <value>Information is available</value>
-    </data>
+    <value>Information is available</value>
+  </data>
+    <data name="ForbidFileExtension" xml:space="preserve">
+    <value>Unsupported file extension</value>
+  </data>
 </root>

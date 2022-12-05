@@ -6,7 +6,7 @@ namespace BLL.Abstract;
 
 public interface IUserService
 {
-    Task<IDataResult<IQueryable<UserToListDto>>> GetAsync();
+    Task<IDataResult<List<UserToListDto>>> GetAsync();
     Task<IDataResult<PaginatedList<UserToListDto>>> GetAsPaginatedListAsync(int pageIndex, int pageSize);
 
     Task<IDataResult<UserToListDto>> GetAsync(int userId);

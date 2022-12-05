@@ -8,7 +8,13 @@ public record UserToAddDto
     [Required] public string Email { get; set; }
     [Required] public string ContactNumber { get; set; }
 
-    [Required] public string Password { get; set; }
+    [RegularExpression("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$",
+        ErrorMessage = "Şifrə formatı düzgün deyil")]
+    [Required]
+    public string Password { get; set; }
 
-    [Compare("Password")] public string PasswordConfirmation { get; set; }
+    [RegularExpression("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$",
+        ErrorMessage = "Şifrə formatı düzgün deyil")]
+    [Compare("Password")]
+    public string PasswordConfirmation { get; set; }
 }

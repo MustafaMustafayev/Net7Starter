@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ENTITIES.Entities;
 
-public class Organization : AuditableEntity, IEntity
+public class Organization : Auditable, IEntity
 {
     [Key] public int OrganizationId { get; set; }
 

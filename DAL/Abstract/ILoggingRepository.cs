@@ -1,5 +1,5 @@
 ﻿using DAL.GenericRepositories.Abstract;
-using ENTITIES.Entities;
+using ENTITIES.Entities.Logging;
 
 namespace DAL.Abstract;
 

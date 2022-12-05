@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ENTITIES.Entities;
+namespace ENTITIES.Entities.Logging;
 
 public class ResponseLog
 {

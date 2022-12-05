@@ -17,5 +17,6 @@ public enum Messages
     YourSessionIsClosed,
     FileIsNotImage,
     FileIsLargeThan2Mb,
-    FileIsNotFound
+    FileIsNotFound,
+    ForbidFileExtension
 }

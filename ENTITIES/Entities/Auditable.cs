@@ -1,6 +1,6 @@
 ﻿namespace ENTITIES.Entities;
 
-public class AuditableEntity
+public class Auditable
 {
     public int? CreatedBy { get; set; }
 

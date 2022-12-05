@@ -24,9 +24,8 @@ public static class FileHelper
         return new ErrorDataResult<string>(Localization.Translate(Messages.FileIsNotFound));
     }
 
-    public static IResult DeleteFile(string name, string path)
+    public static IResult DeleteFile(string filePath)
     {
-        var filePath = Path.Combine(path, name);
         if (!File.Exists(filePath)) return new SuccessResult();
 
         File.Delete(filePath);

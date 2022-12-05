@@ -32,15 +32,14 @@ public class UserHub : Hub
             optionalNotificationMessage);
     }
 
+    public override async Task OnConnectedAsync()
+    {
+        //await JoinGroup();
+        await base.OnConnectedAsync();
+    }
 
-    // public override async Task OnConnectedAsync()
-    // {
-    //     //await JoinGroup();
-    //     await base.OnConnectedAsync();
-    // }
-    //
-    // public override async Task OnDisconnectedAsync(Exception exception)
-    // {
-    //     await base.OnDisconnectedAsync(exception);
-    // }
+    public override async Task OnDisconnectedAsync(Exception exception)
+    {
+        await base.OnDisconnectedAsync(exception);
+    }
 }

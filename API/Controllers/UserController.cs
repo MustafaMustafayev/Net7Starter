@@ -26,7 +26,7 @@ public class UserController : Controller
 
     [SwaggerOperation(Summary = "get users as paginated list")]
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IDataResult<List<UserToListDto>>))]
-    [HttpGet("getAsPaginatedList")]
+    [HttpGet("paginate")]
     public async Task<IActionResult> GetAsPaginated()
     {
         var pageIndex = Convert.ToInt32(HttpContext.Request.Headers[_configSettings.RequestSettings.PageIndex]);
