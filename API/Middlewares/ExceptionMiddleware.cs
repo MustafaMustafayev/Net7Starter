@@ -1,15 +1,12 @@
 ﻿using System.Net;
 using System.Text.Json;
 using CORE.Config;
+using CORE.Localization;
 using CORE.Logging;
-using CORE.Middlewares.Translation;
 using DTO.Responses;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Hosting;
 using Sentry;
 
-namespace CORE.Middlewares.ExceptionHandler;
+namespace API.Middlewares;
 
 public class ExceptionMiddleware
 {
@@ -54,7 +51,10 @@ public class ExceptionMiddleware
         //     AccessViolationException => "Access violation error from the custom middleware",
         //     _ => "Internal Server Error from the custom middleware."
         // };
-        var response = new ErrorDataResult<Result>(Localization.Translate(Messages.GeneralError));
+
+        var translatedStringFromResourceFile = Messages.GeneralError.Translate();
+
+        var response = new ErrorDataResult<Result>();
 
         await context.Response.WriteAsync(JsonSerializer.Serialize(response));
     }
