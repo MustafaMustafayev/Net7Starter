@@ -31,7 +31,8 @@ public class UserController : Controller
     {
         var pageIndex = Convert.ToInt32(HttpContext.Request.Headers[_configSettings.RequestSettings.PageIndex]);
         var pageSize = Convert.ToInt32(HttpContext.Request.Headers[_configSettings.RequestSettings.PageSize]);
-        return Ok(await _userService.GetAsPaginatedListAsync(pageIndex, pageSize));
+        var response = await _userService.GetAsPaginatedListAsync(pageIndex, pageSize);
+        return Ok(response);
     }
 
     [SwaggerOperation(Summary = "get users")]
@@ -39,7 +40,8 @@ public class UserController : Controller
     [HttpGet]
     public async Task<IActionResult> Get()
     {
-        return Ok(await _userService.GetAsync());
+        var response = await _userService.GetAsync();
+        return Ok(response);
     }
 
     [SwaggerOperation(Summary = "get user")]
@@ -47,7 +49,8 @@ public class UserController : Controller
     [HttpGet("{id}")]
     public async Task<IActionResult> Get([FromRoute] int id)
     {
-        return Ok(await _userService.GetAsync(id));
+        var response = await _userService.GetAsync(id);
+        return Ok(response);
     }
 
     [AllowAnonymous]
@@ -56,15 +59,17 @@ public class UserController : Controller
     [HttpPost("register")]
     public async Task<IActionResult> Add([FromBody] UserToAddDto dto)
     {
-        return Ok(await _userService.AddAsync(dto));
+        var response = await _userService.AddAsync(dto);
+        return Ok(response);
     }
 
     [SwaggerOperation(Summary = "update user")]
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
-    [HttpPut]
-    public async Task<IActionResult> Update([FromBody] UserToUpdateDto dto)
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UserToUpdateDto dto)
     {
-        return Ok(await _userService.UpdateAsync(dto));
+        var response = await _userService.UpdateAsync(id, dto);
+        return Ok(response);
     }
 
     [SwaggerOperation(Summary = "delete user")]
@@ -72,7 +77,7 @@ public class UserController : Controller
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete([FromRoute] int id)
     {
-        await _userService.DeleteAsync(id);
-        return Ok(new SuccessDataResult<Result>());
+        var response = await _userService.SoftDeleteAsync(id);
+        return Ok(response);
     }
 }

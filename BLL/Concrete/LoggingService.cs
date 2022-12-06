@@ -17,10 +17,10 @@ public class LoggingService : ILoggingService
         _mapper = mapper;
     }
 
-    public async Task AddLogAsync(RequestLogDto requestLogDto)
+    public async Task AddLogAsync(RequestLogDto dto)
     {
-        var entity = _mapper.Map<RequestLog>(requestLogDto);
-        await _unitOfWork.LoggingRepository.AddLogAsync(entity);
+        var data = _mapper.Map<RequestLog>(dto);
+        await _unitOfWork.LoggingRepository.AddLogAsync(data);
         await _unitOfWork.CommitAsync();
     }
 }

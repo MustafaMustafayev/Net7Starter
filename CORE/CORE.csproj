@@ -13,6 +13,7 @@
         <None Remove="Microsoft.AspNetCore.Cryptography.KeyDerivation"/>
         <None Remove="Microsoft.AspNetCore.Authentication.JwtBearer"/>
         <None Remove="StyleCop.Analyzers"/>
+        <None Remove="Middlewares\TokenMiddleware\"/>
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="Newtonsoft.Json" Version="13.0.2"/>

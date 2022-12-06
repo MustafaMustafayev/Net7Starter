@@ -18,11 +18,25 @@
         <None Remove="DTOs\OrganizationDTOs\OrganizationValidators\"/>
         <None Remove="DTOs\RoleDTOs\RoleValidators\"/>
         <None Remove="DTOs\UserDTOs\UserValidators\"/>
+        <None Remove="Permission\"/>
+        <None Remove="Token\"/>
+        <None Remove="CustomLogging\Validators\"/>
+        <None Remove="Permission\Validators\"/>
+        <None Remove="Responses\Validators\"/>
+        <None Remove="Token\Validators\"/>
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="FluentValidation.AspNetCore" Version="11.2.2"/>
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\ENTITIES\ENTITIES.csproj"/>
+    </ItemGroup>
+    <ItemGroup>
+        <Folder Include="Permission\"/>
+        <Folder Include="Token\"/>
+        <Folder Include="CustomLogging\Validators\"/>
+        <Folder Include="Permission\Validators\"/>
+        <Folder Include="Responses\Validators\"/>
+        <Folder Include="Token\Validators\"/>
     </ItemGroup>
 </Project>

@@ -3,10 +3,10 @@ using System.Web.Helpers;
 using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
 
-namespace API.ActionFilters;
+namespace API.Attributes;
 
 [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class)]
-public sealed class ValidateHttpAntiForgeryTokenAttribute : FilterAttribute, IAuthorizationFilter
+public sealed class ValidateForgeryTokenAttribute : FilterAttribute, IAuthorizationFilter
 {
     public Task<HttpResponseMessage> ExecuteAuthorizationFilterAsync(HttpActionContext actionContext,
         CancellationToken cancellationToken, Func<Task<HttpResponseMessage>> continuation)

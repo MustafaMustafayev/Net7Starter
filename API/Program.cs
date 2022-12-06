@@ -2,13 +2,12 @@
 using API.Containers;
 using API.Graphql.Role;
 using API.Hubs;
+using API.Middlewares;
 using API.Services;
 using BLL.Mappers;
 using BLL.MediatR;
 using CORE.Config;
 using CORE.Constants;
-using CORE.Middlewares.ExceptionHandler;
-using CORE.Middlewares.Translation;
 using DAL.DatabaseContext;
 using DTO.Auth.Validators;
 using FluentValidation;
@@ -27,7 +26,7 @@ builder.Configuration.GetSection("Config").Bind(config);
 
 builder.Services.AddSingleton(config);
 
-builder.Services.AddControllers(opt => opt.Filters.Add(typeof(ValidatorActionFilter)));
+builder.Services.AddControllers(opt => opt.Filters.Add(typeof(ModelValidatorActionFilter)));
 
 builder.Services.AddFluentValidationAutoValidation().AddValidatorsFromAssemblyContaining<LoginDtoValidator>();
 
@@ -42,8 +41,6 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddMemoryCache();
 
 builder.Services.RegisterHttpClients(config);
-
-builder.Services.AddHostedService<TokenKeeperHostedService>();
 
 if (config.RedisSettings.IsEnabled)
 {
@@ -96,6 +93,8 @@ app.UseCors(Constants.EnableAllCorsName);
 app.UseMiddleware<LocalizationMiddleware>();
 
 app.UseMiddleware<ExceptionMiddleware>();
+
+//app.UseMiddleware<ValidateBlackListMiddleware>();
 
 app.UseHttpsRedirection();
 

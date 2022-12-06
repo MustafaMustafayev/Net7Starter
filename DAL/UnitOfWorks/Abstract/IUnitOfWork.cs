@@ -13,6 +13,8 @@ public interface IUnitOfWork : IAsyncDisposable
     public IRoleRepository RoleRepository { get; set; }
 
     public IOrganizationRepository OrganizationRepository { get; set; }
+    public IPermissionRepository PermissionRepository { get; set; }
+    public ITokenRepository TokenRepository { get; set; }
 
     public Task CommitAsync();
 }

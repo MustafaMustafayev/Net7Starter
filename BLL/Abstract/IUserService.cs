@@ -9,13 +9,13 @@ public interface IUserService
     Task<IDataResult<List<UserToListDto>>> GetAsync();
     Task<IDataResult<PaginatedList<UserToListDto>>> GetAsPaginatedListAsync(int pageIndex, int pageSize);
 
-    Task<IDataResult<UserToListDto>> GetAsync(int userId);
+    Task<IDataResult<UserToListDto>> GetAsync(int id);
 
-    Task<IResult> AddAsync(UserToAddDto userToAddDto);
+    Task<IResult> AddAsync(UserToAddDto dto);
 
-    Task<IResult> UpdateAsync(UserToUpdateDto userToUpdateDto);
+    Task<IResult> UpdateAsync(int id, UserToUpdateDto dto);
 
-    Task<IResult> DeleteAsync(int userId);
-    Task<IResult> UpdateProfilePhotoAsync(int userId, string photoFileName);
-    Task<IResult> DeleteProfilePhotoAsync(int userId);
+    Task<IResult> SoftDeleteAsync(int id);
+    Task<IResult> UpdateProfilePhotoAsync(int id, string photoFileName);
+    Task<IResult> DeleteProfilePhotoAsync(int id);
 }

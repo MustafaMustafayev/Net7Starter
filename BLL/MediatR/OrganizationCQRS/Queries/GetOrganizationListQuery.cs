@@ -4,4 +4,4 @@ using MediatR;
 
 namespace BLL.MediatR.OrganizationCQRS.Queries;
 
-public record GetOrganizationListQuery : IRequest<IDataResult<IQueryable<OrganizationToListDto>>>;
+public record GetOrganizationListQuery : IRequest<IDataResult<List<OrganizationToListDto>>>;

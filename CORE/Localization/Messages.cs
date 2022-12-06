@@ -1,4 +1,4 @@
-﻿namespace CORE.Middlewares.Translation;
+﻿namespace CORE.Localization;
 
 public enum Messages
 {

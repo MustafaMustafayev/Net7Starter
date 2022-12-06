@@ -84,10 +84,10 @@ public static class DependencyContainer
 
             c.AddSecurityDefinition(config.AuthSettings.TokenPrefix, new OpenApiSecurityScheme
             {
-                Name = "Authorization",
+                Name = config.AuthSettings.HeaderName,
                 Type = SecuritySchemeType.ApiKey,
                 Scheme = config.AuthSettings.TokenPrefix,
-                BearerFormat = "JWT",
+                BearerFormat = config.AuthSettings.Type,
                 In = ParameterLocation.Header,
                 Description = "JWT Authorization header using the Bearer scheme."
             });
@@ -123,6 +123,10 @@ public static class DependencyContainer
         services.AddScoped<IOrganizationRepository, OrganizationRepository>();
         services.AddScoped<IConsumerService, ConsumerService>();
         services.AddScoped<IProducerService, ProducerService>();
+        services.AddScoped<IPermissionRepository, PermissionRepository>();
+        services.AddScoped<IPermissionService, PermissionService>();
+        services.AddScoped<ITokenRepository, TokenRepository>();
+        services.AddScoped<ITokenService, TokenService>();
     }
 
     public static void RegisterUnitOfWork(this IServiceCollection services)

@@ -1,7 +1,6 @@
 ﻿using System.Linq.Expressions;
 using CORE.Abstract;
 using DAL.CustomMigrations;
-using DTO.User;
 using ENTITIES.Entities;
 using ENTITIES.Entities.Logging;
 using Microsoft.AspNetCore.Http;
@@ -22,14 +21,20 @@ public class DataContext : DbContext
     }
 
     public DbSet<User> Users { get; set; }
+
     public DbSet<Photo> Photos { get; set; }
 
     public DbSet<Organization> Organizations { get; set; }
 
     public DbSet<Role> Roles { get; set; }
+
     public DbSet<RequestLog> RequestLogs { get; set; }
 
     public DbSet<ResponseLog> ResponseLogs { get; set; }
+
+    public DbSet<Permission> Permissions { get; set; }
+
+    public DbSet<Token> Tokens { get; set; }
 
     public DbSet<ENTITIES.Entities.Logging.NLog> NLogs { get; set; }
 
@@ -45,7 +50,7 @@ public class DataContext : DbContext
     }
 
     /* migration commands
-      dotnet ef --startup-project ../API migrations add redisentities --context DataContext
+      dotnet ef --startup-project ../API migrations add tokens --context DataContext
       dotnet ef --startup-project ../API database update --context DataContext
     */
 
@@ -62,6 +67,8 @@ public class DataContext : DbContext
                     ), parameter);
                 modelBuilder.Entity(entityType.ClrType).HasQueryFilter(deletedCheck);
             }
+
+        modelBuilder.Entity<Token>().HasQueryFilter(m => !m.IsDeleted);
 
         DataSeed.Seed(modelBuilder);
     }

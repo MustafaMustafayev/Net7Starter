@@ -16,7 +16,9 @@ public class UnitOfWork : IUnitOfWork
         IAuthRepository authRepository,
         ILoggingRepository loggingRepository,
         IRoleRepository roleRepository,
-        IOrganizationRepository organizationRepository)
+        IOrganizationRepository organizationRepository,
+        IPermissionRepository permissionRepository,
+        ITokenRepository tokenRepository)
     {
         _dataContext = dataContext;
         UserRepository = userRepository;
@@ -24,6 +26,8 @@ public class UnitOfWork : IUnitOfWork
         LoggingRepository = loggingRepository;
         RoleRepository = roleRepository;
         OrganizationRepository = organizationRepository;
+        PermissionRepository = permissionRepository;
+        TokenRepository = tokenRepository;
     }
 
     public IUserRepository UserRepository { get; set; }
@@ -35,6 +39,8 @@ public class UnitOfWork : IUnitOfWork
     public IRoleRepository RoleRepository { get; set; }
 
     public IOrganizationRepository OrganizationRepository { get; set; }
+    public IPermissionRepository PermissionRepository { get; set; }
+    public ITokenRepository TokenRepository { get; set; }
 
     public async Task CommitAsync()
     {

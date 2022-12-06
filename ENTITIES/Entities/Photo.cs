@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace DTO.User;
+namespace ENTITIES.Entities;
 
 public class Photo
 {

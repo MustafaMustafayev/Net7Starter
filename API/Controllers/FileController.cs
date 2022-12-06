@@ -3,14 +3,14 @@ using BLL.Abstract;
 using CORE.Abstract;
 using CORE.Constants;
 using CORE.Helper;
-using CORE.Middlewares.Translation;
+using CORE.Localization;
 using DTO.Responses;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using IResult = DTO.Responses.IResult;
-using Messages = CORE.Middlewares.Translation.Messages;
+using Messages = CORE.Localization.Messages;
 using Path = System.IO.Path;
 
 namespace API.Controllers;
@@ -33,30 +33,30 @@ public class FileController : Controller
     [SwaggerOperation(Summary = "upload file")]
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IDataResult<string>))]
     [HttpPost("upload")]
-    [CacheToken]
-    public async Task<IActionResult> UploadUserProfilePhoto([FromForm] IFormFile file)
+    [ValidateToken]
+    public async Task<IActionResult> Upload([FromForm] IFormFile file)
     {
         var orijinalFileName = Path.GetFileName(file.FileName);
         var fileExtension = Path.GetExtension(file.FileName);
         if (!Constants.AllowedFileExtensions.Contains(fileExtension))
-            return Ok(new ErrorDataResult<string>(Localization.Translate(Messages.ForbidFileExtension)));
+            return Ok(new ErrorDataResult<string>(Messages.ForbidFileExtension.Translate()));
 
         if (file.Length > Constants.AllowedLength)
-            return Ok(new ErrorDataResult<string>(Localization.Translate(Messages.FileIsLargeThan2Mb)));
+            return Ok(new ErrorDataResult<string>(Messages.FileIsLargeThan2Mb.Translate()));
 
         var path = Path.Combine(_environment.WebRootPath, "files");
         var fileName = $"{Guid.NewGuid()}-{orijinalFileName}";
 
         await FileHelper.WriteFile(file, fileName, path);
 
-        return Ok(new SuccessDataResult<string>(fileName, Localization.Translate(Messages.Success)));
+        return Ok(new SuccessDataResult<string>(fileName, Messages.Success.Translate()));
     }
 
     [SwaggerOperation(Summary = "delete file")]
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
     [HttpDelete("{fileName}")]
-    [CacheToken]
-    public IActionResult DeleteUserPhoto([FromRoute] string fileName)
+    [ValidateToken]
+    public IActionResult Delete([FromRoute] string fileName)
     {
         var filePath = Path.Combine(_environment.WebRootPath, "files", fileName);
         FileHelper.DeleteFile(filePath);
@@ -67,7 +67,7 @@ public class FileController : Controller
     [SwaggerOperation(Summary = "download file")]
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(void))]
     [HttpGet("{fileName}/download")]
-    [CacheToken]
+    [ValidateToken]
     public IActionResult Download([FromRoute] string fileName)
     {
         var filePath = Path.Combine(_environment.WebRootPath, "files", fileName);

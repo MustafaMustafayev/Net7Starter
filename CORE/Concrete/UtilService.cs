@@ -1,4 +1,5 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Cryptography;
 using System.Text;
 using CORE.Abstract;
 using CORE.Config;
@@ -74,30 +75,47 @@ public class UtilService : IUtilService
         }
     }
 
-    public void AddTokenToCache(string token, DateTime expireDate)
+    // DISABLED BECAUSE TOKEN SERVICE WAS MOVED TO DATABASE *******************
+    //
+    // public void AddTokenToCache(string token, DateTime expireDate)
+    // {
+    //     Dictionary<string, DateTime>? tokens;
+    //
+    //     _memoryCache.TryGetValue(Constants.Constants.CacheTokensKey, out tokens);
+    //
+    //     if (tokens is null) tokens = new Dictionary<string, DateTime>();
+    //
+    //     tokens.Add($"{_configSettings.AuthSettings.TokenPrefix} {token}", expireDate);
+    //
+    //     _memoryCache.Set(Constants.Constants.CacheTokensKey, tokens,
+    //         TimeSpan.FromHours(_configSettings.AuthSettings.TokenExpirationTimeInHours));
+    // }
+    //
+    // public bool IsTokenExistsInCache(string? token)
+    // {
+    //     if (string.IsNullOrEmpty(token)) return false;
+    //
+    //     _memoryCache.TryGetValue(Constants.Constants.CacheTokensKey, out Dictionary<string, DateTime>? tokens);
+    //
+    //     if (tokens is null || !tokens.Any()) return false;
+    //
+    //     return tokens.ContainsKey(token);
+    // }
+
+    public string GenerateRefreshToken()
     {
-        Dictionary<string, DateTime>? tokens;
+        var randomNumber = new byte[64];
+        using var rng = RandomNumberGenerator.Create();
+        rng.GetBytes(randomNumber);
 
-        _memoryCache.TryGetValue(Constants.Constants.CacheTokensKey, out tokens);
-
-        if (tokens is null) tokens = new Dictionary<string, DateTime>();
-
-        tokens.Add($"{_configSettings.AuthSettings.TokenPrefix} {token}", expireDate);
-
-        _memoryCache.Set(Constants.Constants.CacheTokensKey, tokens,
-            TimeSpan.FromHours(_configSettings.AuthSettings.TokenExpirationTimeInHours));
+        return Convert.ToBase64String(randomNumber);
     }
 
-    public bool IsTokenExistsInCache(string? token)
+    public string GetTokenStringFromHeader(string? jwtToken)
     {
-        if (string.IsNullOrEmpty(token)) return false;
-        Dictionary<string, DateTime>? tokens;
+        if (string.IsNullOrEmpty(jwtToken) || jwtToken.Length < 7) throw new Exception();
 
-        _memoryCache.TryGetValue(Constants.Constants.CacheTokensKey, out tokens);
-
-        if (tokens is null || !tokens.Any()) return false;
-
-        return tokens.ContainsKey(token);
+        return jwtToken[7..];
     }
 
     public string GetContentType()

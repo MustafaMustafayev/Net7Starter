@@ -10,6 +10,8 @@
         <LangVersion>default</LangVersion>
     </PropertyGroup>
 
+    <PropertyGroup Condition=" '$(RunConfiguration)' == 'API - Production' "/>
+    <PropertyGroup Condition=" '$(RunConfiguration)' == 'API - Development' "/>
     <ItemGroup>
         <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="8.0.0"/>
         <PackageReference Include="GraphQL.Server.Transports.AspNetCore" Version="7.1.1"/>
@@ -40,10 +42,12 @@
         <None Remove="Controllers\"/>
         <None Remove="MiniProfiler.AspNetCore.Mvc"/>
         <None Remove="FluentValidation.AspNetCore"/>
+        <None Remove="Middlewares\"/>
     </ItemGroup>
     <ItemGroup>
         <Folder Include="Controllers\"/>
         <Folder Include="wwwroot\files\"/>
+        <Folder Include="Middlewares\"/>
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\BLL\BLL.csproj">
