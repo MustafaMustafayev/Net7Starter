@@ -34,6 +34,7 @@ public class PermissionController : Controller
         var pageSize =
             Convert.ToInt32(HttpContext.Request.Headers[_configSettings.RequestSettings.PageSize]);
         var response = await _permissionService.GetAsPaginatedListAsync(pageIndex, pageSize);
+
         return Ok(response);
     }
 

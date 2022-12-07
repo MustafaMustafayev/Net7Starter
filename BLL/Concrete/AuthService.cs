@@ -83,6 +83,7 @@ public class AuthService : IAuthService
         var tokens = await _unitOfWork.TokenRepository.GetActiveTokensAsync(accessToken);
         tokens.ForEach(m => m.IsDeleted = true);
         await _unitOfWork.CommitAsync();
+
         return new SuccessResult(Messages.Success.Translate());
     }
 }

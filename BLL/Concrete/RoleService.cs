@@ -27,6 +27,7 @@ public class RoleService : IRoleService
             await _unitOfWork.PermissionRepository.GetListAsync(m =>
                 dto.PermissionIds.Contains(m.PermissionId));
         data.Permissions = permissions;
+
         await _unitOfWork.RoleRepository.AddAsync(data);
         await _unitOfWork.CommitAsync();
 
@@ -36,6 +37,7 @@ public class RoleService : IRoleService
     public async Task<IResult> SoftDeleteAsync(int id)
     {
         var data = await _unitOfWork.RoleRepository.GetAsync(m => m.RoleId == id);
+
         _unitOfWork.RoleRepository.SoftDelete(data);
         await _unitOfWork.CommitAsync();
 

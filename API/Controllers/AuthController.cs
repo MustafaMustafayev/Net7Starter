@@ -47,27 +47,12 @@ public class AuthController : Controller
 
         request.Password = SecurityHelper.HashPassword(request.Password, userSalt);
 
-        var userDto = await _authService.LoginAsync(request);
-        if (!userDto.Success) return Ok(userDto);
+        var loginResult = await _authService.LoginAsync(request);
+        if (!loginResult.Success) return Unauthorized(loginResult);
 
-        var securityHelper = new SecurityHelper(_configSettings);
-        var accessTokenExpireDate =
-            DateTime.UtcNow.AddHours(_configSettings.AuthSettings.TokenExpirationTimeInHours);
+        var response = await _tokenService.CreateTokenAsync(loginResult.Data);
 
-        var loginResponseDto = new LoginResponseDto
-        {
-            User = userDto.Data,
-            AccessToken = securityHelper.CreateTokenForUser(userDto.Data, accessTokenExpireDate),
-            AccessTokenExpireDate = accessTokenExpireDate,
-            RefreshToken = _utilService.GenerateRefreshToken(),
-            RefreshTokenExpireDate =
-                accessTokenExpireDate.AddMinutes(_configSettings.AuthSettings
-                    .RefreshTokenAdditionalMinutes)
-        };
-
-        await _tokenService.AddAsync(loginResponseDto);
-
-        return Ok(new SuccessDataResult<LoginResponseDto>(loginResponseDto));
+        return Ok(response);
     }
 
     [SwaggerOperation(Summary = "send email for reset password")]
@@ -84,28 +69,13 @@ public class AuthController : Controller
     [HttpPost("refresh")]
     public async Task<IActionResult> Refresh([FromBody] RefreshTokenDto refreshTokenDto)
     {
-        var response = await _tokenService.GetAsync(refreshTokenDto);
-        if (response.Data == null) return Unauthorized();
-        await _tokenService.SoftDeleteAsync(response.Data.TokenId);
+        var tokenResponse = await _tokenService.GetAsync(refreshTokenDto);
+        if (tokenResponse.Data == null) return Unauthorized();
+        await _tokenService.SoftDeleteAsync(tokenResponse.Data.TokenId);
 
-        var securityHelper = new SecurityHelper(_configSettings);
-        var accessTokenExpireDate =
-            DateTime.UtcNow.AddHours(_configSettings.AuthSettings.TokenExpirationTimeInHours);
+        var response = await _tokenService.CreateTokenAsync(tokenResponse.Data.User);
 
-        var loginResponseDto = new LoginResponseDto
-        {
-            User = response.Data.User,
-            AccessToken =
-                securityHelper.CreateTokenForUser(response.Data.User, accessTokenExpireDate),
-            AccessTokenExpireDate = accessTokenExpireDate,
-            RefreshToken = _utilService.GenerateRefreshToken(),
-            RefreshTokenExpireDate =
-                accessTokenExpireDate.AddMinutes(_configSettings.AuthSettings
-                    .RefreshTokenAdditionalMinutes)
-        };
-        await _tokenService.AddAsync(loginResponseDto);
-
-        return Ok(new SuccessDataResult<LoginResponseDto>(loginResponseDto));
+        return Ok(response);
     }
 
     [SwaggerOperation(Summary = "reset password")]
@@ -124,30 +94,13 @@ public class AuthController : Controller
     public async Task<IActionResult> LoginByToken()
     {
         if (string.IsNullOrEmpty(HttpContext.Request.Headers.Authorization))
-            return Unauthorized(
-                new ErrorResult(Messages.CanNotFoundUserIdInYourAccessToken.Translate()));
-        var response =
-            await _authService.LoginByTokenAsync(HttpContext.Request.Headers.Authorization!);
-        if (!response.Success) return BadRequest(response.Data);
+            return Unauthorized(new ErrorResult(Messages.CanNotFoundUserIdInYourAccessToken.Translate()));
+        var loginByTokenResponse = await _authService.LoginByTokenAsync(HttpContext.Request.Headers.Authorization!);
+        if (!loginByTokenResponse.Success) return BadRequest(loginByTokenResponse.Data);
 
-        var securityHelper = new SecurityHelper(_configSettings);
-        var accessTokenExpireDate =
-            DateTime.UtcNow.AddHours(_configSettings.AuthSettings.TokenExpirationTimeInHours);
+        var response = await _tokenService.CreateTokenAsync(loginByTokenResponse.Data);
 
-        var loginResponseDto = new LoginResponseDto
-        {
-            User = response.Data,
-            AccessToken = securityHelper.CreateTokenForUser(response.Data, accessTokenExpireDate),
-            AccessTokenExpireDate = accessTokenExpireDate,
-            RefreshToken = _utilService.GenerateRefreshToken(),
-            RefreshTokenExpireDate =
-                accessTokenExpireDate.AddMinutes(_configSettings.AuthSettings
-                    .RefreshTokenAdditionalMinutes)
-        };
-
-        await _tokenService.AddAsync(loginResponseDto);
-
-        return Ok(new SuccessDataResult<LoginResponseDto>(loginResponseDto));
+        return Ok(response);
     }
 
     [SwaggerOperation(Summary = "logout")]

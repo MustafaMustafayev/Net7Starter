@@ -1,6 +1,4 @@
 ﻿using API.Attributes;
-using BLL.Abstract;
-using CORE.Abstract;
 using CORE.Constants;
 using CORE.Helper;
 using CORE.Localization;
@@ -20,15 +18,10 @@ namespace API.Controllers;
 public class FileController : Controller
 {
     private readonly IWebHostEnvironment _environment;
-    private readonly IUserService _userService;
-    private readonly IUtilService _utilService;
 
-    public FileController(IWebHostEnvironment environment, IUserService userService,
-        IUtilService utilService)
+    public FileController(IWebHostEnvironment environment)
     {
         _environment = environment;
-        _userService = userService;
-        _utilService = utilService;
     }
 
     [SwaggerOperation(Summary = "upload file")]

@@ -71,6 +71,7 @@ public class UserService : IUserService
 
         var data = _mapper.Map<User>(dto);
         data.UserId = id;
+
         await _unitOfWork.UserRepository.UpdateUserAsync(data);
         await _unitOfWork.CommitAsync();
 
@@ -98,7 +99,7 @@ public class UserService : IUserService
         var data = await _unitOfWork.UserRepository.GetAsync(m => m.UserId == id);
         if (data == null) return new ErrorResult(Messages.InvalidUserCredentials.Translate());
 
-        data.Photo.FileName = photoFileName;
+        data.Photo!.FileName = photoFileName;
 
         _unitOfWork.UserRepository.Update(_mapper.Map<User>(data));
         await _unitOfWork.CommitAsync();
