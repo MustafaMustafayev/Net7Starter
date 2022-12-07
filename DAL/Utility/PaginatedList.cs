@@ -23,7 +23,8 @@ public class PaginatedList<T> : PaginationInfo
 
     public List<T> Datas { get; set; }
 
-    public static async Task<PaginatedList<T>> CreateAsync(IQueryable<T> source, int pageIndex, int pageSize)
+    public static async Task<PaginatedList<T>> CreateAsync(IQueryable<T> source, int pageIndex,
+        int pageSize)
     {
         var count = await source.CountAsync();
         List<T> items;

@@ -18,7 +18,8 @@ public static class ExpressionHelper
         Expression<Func<T, bool>> expression2)
     {
         var invocationExpression = Expression.Invoke(expression2, expression1.Parameters);
-        return Expression.Lambda<Func<T, bool>>(Expression.OrElse(expression1.Body, invocationExpression),
+        return Expression.Lambda<Func<T, bool>>(
+            Expression.OrElse(expression1.Body, invocationExpression),
             expression1.Parameters);
     }
 
@@ -26,7 +27,8 @@ public static class ExpressionHelper
         Expression<Func<T, bool>> expression2)
     {
         var invocationExpression = Expression.Invoke(expression2, expression1.Parameters);
-        return Expression.Lambda<Func<T, bool>>(Expression.AndAlso(expression1.Body, invocationExpression),
+        return Expression.Lambda<Func<T, bool>>(
+            Expression.AndAlso(expression1.Body, invocationExpression),
             expression1.Parameters);
     }
 }

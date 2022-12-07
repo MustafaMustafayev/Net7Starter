@@ -44,7 +44,7 @@ public class UserService : IUserService
         _unitOfWork.UserRepository.SoftDelete(data);
         await _unitOfWork.CommitAsync();
 
-        return new SuccessResult();
+        return new SuccessResult(Messages.Success.Translate());
     }
 
     public Task<IDataResult<List<UserToListDto>>> GetAsync()
@@ -52,7 +52,8 @@ public class UserService : IUserService
         var datas = _unitOfWork.UserRepository.GetAsNoTrackingList().ToList();
 
         return Task.FromResult<IDataResult<List<UserToListDto>>>(
-            new SuccessDataResult<List<UserToListDto>>(_mapper.Map<List<UserToListDto>>(datas)));
+            new SuccessDataResult<List<UserToListDto>>(_mapper.Map<List<UserToListDto>>(datas),
+                Messages.Success.Translate()));
     }
 
     public async Task<IDataResult<UserToListDto>> GetAsync(int id)
@@ -60,7 +61,7 @@ public class UserService : IUserService
         var data = _mapper.Map<UserToListDto>(
             (await _unitOfWork.UserRepository.GetAsNoTrackingAsync(m => m.UserId == id))!);
 
-        return new SuccessDataResult<UserToListDto>(data);
+        return new SuccessDataResult<UserToListDto>(data, Messages.Success.Translate());
     }
 
     public async Task<IResult> UpdateAsync(int id, UserToUpdateDto dto)
@@ -76,15 +77,20 @@ public class UserService : IUserService
         return new SuccessResult(Messages.Success.Translate());
     }
 
-    public async Task<IDataResult<PaginatedList<UserToListDto>>> GetAsPaginatedListAsync(int pageIndex, int pageSize)
+    public async Task<IDataResult<PaginatedList<UserToListDto>>> GetAsPaginatedListAsync(
+        int pageIndex, int pageSize)
     {
         var datas = _unitOfWork.UserRepository.GetAsNoTrackingList();
-        var response = await PaginatedList<User>.CreateAsync(datas.OrderBy(m => m.UserId), pageIndex, pageSize);
+        var response =
+            await PaginatedList<User>.CreateAsync(datas.OrderBy(m => m.UserId), pageIndex,
+                pageSize);
 
-        var responseDto = new PaginatedList<UserToListDto>(_mapper.Map<List<UserToListDto>>(response.Datas),
+        var responseDto = new PaginatedList<UserToListDto>(
+            _mapper.Map<List<UserToListDto>>(response.Datas),
             response.TotalRecordCount, response.PageIndex, response.TotalPageCount);
 
-        return new SuccessDataResult<PaginatedList<UserToListDto>>(responseDto);
+        return new SuccessDataResult<PaginatedList<UserToListDto>>(responseDto,
+            Messages.Success.Translate());
     }
 
     public async Task<IResult> UpdateProfilePhotoAsync(int id, string photoFileName)
@@ -97,7 +103,7 @@ public class UserService : IUserService
         _unitOfWork.UserRepository.Update(_mapper.Map<User>(data));
         await _unitOfWork.CommitAsync();
 
-        return new SuccessResult();
+        return new SuccessResult(Messages.Success.Translate());
     }
 
     public async Task<IResult> DeleteProfilePhotoAsync(int id)
@@ -110,6 +116,6 @@ public class UserService : IUserService
         _unitOfWork.UserRepository.Update(_mapper.Map<User>(data));
         await _unitOfWork.CommitAsync();
 
-        return new SuccessResult();
+        return new SuccessResult(Messages.Success.Translate());
     }
 }

@@ -5,11 +5,13 @@ namespace DAL.GenericRepositories.Abstract;
 public interface IGenericRepository<T>
     where T : class, new()
 {
-    Task<List<T>> GetListAsync(Expression<Func<T, bool>>? filter = null, bool ignoreQueryFilters = false);
+    Task<List<T>> GetListAsync(Expression<Func<T, bool>>? filter = null,
+        bool ignoreQueryFilters = false);
 
     Task<T?> GetAsync(Expression<Func<T, bool>> filter, bool ignoreQueryFilters = false);
 
-    IQueryable<T?> GetList(Expression<Func<T, bool>>? filter = null, bool ignoreQueryFilters = false);
+    IQueryable<T?> GetList(Expression<Func<T, bool>>? filter = null,
+        bool ignoreQueryFilters = false);
 
     Task<T?> GetAsNoTrackingAsync(Expression<Func<T, bool>> filter);
 

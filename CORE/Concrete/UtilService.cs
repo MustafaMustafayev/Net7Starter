@@ -3,7 +3,6 @@ using System.Security.Cryptography;
 using System.Text;
 using CORE.Abstract;
 using CORE.Config;
-using Microsoft.Extensions.Caching.Memory;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 
@@ -12,11 +11,9 @@ namespace CORE.Concrete;
 public class UtilService : IUtilService
 {
     private readonly ConfigSettings _configSettings;
-    private readonly IMemoryCache _memoryCache;
 
-    public UtilService(ConfigSettings configSettings, IMemoryCache memoryCache)
+    public UtilService(ConfigSettings configSettings)
     {
-        _memoryCache = memoryCache;
         _configSettings = configSettings;
     }
 
@@ -28,20 +25,22 @@ public class UtilService : IUtilService
     public int? GetUserIdFromToken(string? tokenString)
     {
         if (string.IsNullOrEmpty(tokenString)) return null;
-        if (!tokenString.Contains("Bearer ")) return null;
+        if (!tokenString.Contains($"{_configSettings.AuthSettings.TokenPrefix} ")) return null;
 
         var token = new JwtSecurityToken(tokenString[7..]);
 
-        return Convert.ToInt32(token.Claims.First(c => c.Type == _configSettings.AuthSettings.TokenUserIdKey).Value);
+        return Convert.ToInt32(token.Claims
+            .First(c => c.Type == _configSettings.AuthSettings.TokenUserIdKey).Value);
     }
 
     public int? GetCompanyIdFromToken(string? tokenString)
     {
         if (string.IsNullOrEmpty(tokenString)) return null;
-        if (!tokenString.Contains("Bearer ")) return null;
+        if (!tokenString.Contains($"{_configSettings.AuthSettings.TokenPrefix} ")) return null;
 
         var token = new JwtSecurityToken(tokenString[7..]);
-        var companyIdClaim = token.Claims.First(c => c.Type == _configSettings.AuthSettings.TokenCompanyIdKey);
+        var companyIdClaim =
+            token.Claims.First(c => c.Type == _configSettings.AuthSettings.TokenCompanyIdKey);
 
         if (companyIdClaim is null || string.IsNullOrEmpty(companyIdClaim.Value)) return null;
 
@@ -74,33 +73,6 @@ public class UtilService : IUtilService
             return false;
         }
     }
-
-    // DISABLED BECAUSE TOKEN SERVICE WAS MOVED TO DATABASE *******************
-    //
-    // public void AddTokenToCache(string token, DateTime expireDate)
-    // {
-    //     Dictionary<string, DateTime>? tokens;
-    //
-    //     _memoryCache.TryGetValue(Constants.Constants.CacheTokensKey, out tokens);
-    //
-    //     if (tokens is null) tokens = new Dictionary<string, DateTime>();
-    //
-    //     tokens.Add($"{_configSettings.AuthSettings.TokenPrefix} {token}", expireDate);
-    //
-    //     _memoryCache.Set(Constants.Constants.CacheTokensKey, tokens,
-    //         TimeSpan.FromHours(_configSettings.AuthSettings.TokenExpirationTimeInHours));
-    // }
-    //
-    // public bool IsTokenExistsInCache(string? token)
-    // {
-    //     if (string.IsNullOrEmpty(token)) return false;
-    //
-    //     _memoryCache.TryGetValue(Constants.Constants.CacheTokensKey, out Dictionary<string, DateTime>? tokens);
-    //
-    //     if (tokens is null || !tokens.Any()) return false;
-    //
-    //     return tokens.ContainsKey(token);
-    // }
 
     public string GenerateRefreshToken()
     {

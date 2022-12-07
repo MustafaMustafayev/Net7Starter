@@ -20,7 +20,8 @@ public class
         _mapper = mapper;
     }
 
-    public async Task<IDataResult<List<OrganizationToListDto>>> Handle(GetOrganizationListQuery request,
+    public async Task<IDataResult<List<OrganizationToListDto>>> Handle(
+        GetOrganizationListQuery request,
         CancellationToken cancellationToken)
     {
         var data = await _unitOfWork.OrganizationRepository.GetListAsync();

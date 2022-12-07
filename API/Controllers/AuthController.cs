@@ -24,7 +24,8 @@ public class AuthController : Controller
     private readonly ITokenService _tokenService;
     private readonly IUtilService _utilService;
 
-    public AuthController(IAuthService authService, ConfigSettings configSettings, IUtilService utilService,
+    public AuthController(IAuthService authService, ConfigSettings configSettings,
+        IUtilService utilService,
         ITokenService tokenService)
     {
         _authService = authService;
@@ -50,8 +51,8 @@ public class AuthController : Controller
         if (!userDto.Success) return Ok(userDto);
 
         var securityHelper = new SecurityHelper(_configSettings);
-
-        var accessTokenExpireDate = DateTime.UtcNow.AddHours(_configSettings.AuthSettings.TokenExpirationTimeInHours);
+        var accessTokenExpireDate =
+            DateTime.UtcNow.AddHours(_configSettings.AuthSettings.TokenExpirationTimeInHours);
 
         var loginResponseDto = new LoginResponseDto
         {
@@ -60,8 +61,10 @@ public class AuthController : Controller
             AccessTokenExpireDate = accessTokenExpireDate,
             RefreshToken = _utilService.GenerateRefreshToken(),
             RefreshTokenExpireDate =
-                accessTokenExpireDate.AddMinutes(_configSettings.AuthSettings.RefreshTokenAdditionalMinutes)
+                accessTokenExpireDate.AddMinutes(_configSettings.AuthSettings
+                    .RefreshTokenAdditionalMinutes)
         };
+
         await _tokenService.AddAsync(loginResponseDto);
 
         return Ok(new SuccessDataResult<LoginResponseDto>(loginResponseDto));
@@ -86,17 +89,19 @@ public class AuthController : Controller
         await _tokenService.SoftDeleteAsync(response.Data.TokenId);
 
         var securityHelper = new SecurityHelper(_configSettings);
-
-        var accessTokenExpireDate = DateTime.UtcNow.AddHours(_configSettings.AuthSettings.TokenExpirationTimeInHours);
+        var accessTokenExpireDate =
+            DateTime.UtcNow.AddHours(_configSettings.AuthSettings.TokenExpirationTimeInHours);
 
         var loginResponseDto = new LoginResponseDto
         {
             User = response.Data.User,
-            AccessToken = securityHelper.CreateTokenForUser(response.Data.User, accessTokenExpireDate),
+            AccessToken =
+                securityHelper.CreateTokenForUser(response.Data.User, accessTokenExpireDate),
             AccessTokenExpireDate = accessTokenExpireDate,
             RefreshToken = _utilService.GenerateRefreshToken(),
             RefreshTokenExpireDate =
-                accessTokenExpireDate.AddMinutes(_configSettings.AuthSettings.RefreshTokenAdditionalMinutes)
+                accessTokenExpireDate.AddMinutes(_configSettings.AuthSettings
+                    .RefreshTokenAdditionalMinutes)
         };
         await _tokenService.AddAsync(loginResponseDto);
 
@@ -119,13 +124,15 @@ public class AuthController : Controller
     public async Task<IActionResult> LoginByToken()
     {
         if (string.IsNullOrEmpty(HttpContext.Request.Headers.Authorization))
-            return Unauthorized(new ErrorResult(Messages.CanNotFoundUserIdInYourAccessToken.Translate()));
-        var response = await _authService.LoginByTokenAsync(HttpContext.Request.Headers.Authorization!);
+            return Unauthorized(
+                new ErrorResult(Messages.CanNotFoundUserIdInYourAccessToken.Translate()));
+        var response =
+            await _authService.LoginByTokenAsync(HttpContext.Request.Headers.Authorization!);
         if (!response.Success) return BadRequest(response.Data);
 
         var securityHelper = new SecurityHelper(_configSettings);
-
-        var accessTokenExpireDate = DateTime.UtcNow.AddHours(_configSettings.AuthSettings.TokenExpirationTimeInHours);
+        var accessTokenExpireDate =
+            DateTime.UtcNow.AddHours(_configSettings.AuthSettings.TokenExpirationTimeInHours);
 
         var loginResponseDto = new LoginResponseDto
         {
@@ -134,8 +141,10 @@ public class AuthController : Controller
             AccessTokenExpireDate = accessTokenExpireDate,
             RefreshToken = _utilService.GenerateRefreshToken(),
             RefreshTokenExpireDate =
-                accessTokenExpireDate.AddMinutes(_configSettings.AuthSettings.RefreshTokenAdditionalMinutes)
+                accessTokenExpireDate.AddMinutes(_configSettings.AuthSettings
+                    .RefreshTokenAdditionalMinutes)
         };
+
         await _tokenService.AddAsync(loginResponseDto);
 
         return Ok(new SuccessDataResult<LoginResponseDto>(loginResponseDto));
@@ -147,8 +156,10 @@ public class AuthController : Controller
     public async Task<IActionResult> Logout()
     {
         var accessToken =
-            _utilService.GetTokenStringFromHeader(HttpContext.Request.Headers[_configSettings.AuthSettings.HeaderName]);
+            _utilService.GetTokenStringFromHeader(
+                HttpContext.Request.Headers[_configSettings.AuthSettings.HeaderName]!);
         var response = await _authService.LogoutAsync(accessToken);
+
         return Ok(response);
     }
 }

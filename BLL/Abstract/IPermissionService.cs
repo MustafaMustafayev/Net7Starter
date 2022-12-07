@@ -8,7 +8,8 @@ public interface IPermissionService
 {
     Task<IDataResult<List<PermissionToListDto>>> GetAsync();
 
-    Task<IDataResult<PaginatedList<PermissionToListDto>>> GetAsPaginatedListAsync(int pageIndex, int pageSize);
+    Task<IDataResult<PaginatedList<PermissionToListDto>>> GetAsPaginatedListAsync(int pageIndex,
+        int pageSize);
 
     Task<IDataResult<PermissionToListDto>> GetAsync(int id);
 

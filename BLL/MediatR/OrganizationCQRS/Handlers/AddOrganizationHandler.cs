@@ -18,7 +18,8 @@ public class AddOrganizationHandler : IRequestHandler<AddOrganizationCommand, IR
         _mapper = mapper;
     }
 
-    public async Task<IResult> Handle(AddOrganizationCommand request, CancellationToken cancellationToken)
+    public async Task<IResult> Handle(AddOrganizationCommand request,
+        CancellationToken cancellationToken)
     {
         var mapped = _mapper.Map<Organization>(request.Organization);
         await _unitOfWork.OrganizationRepository.AddAsync(mapped);

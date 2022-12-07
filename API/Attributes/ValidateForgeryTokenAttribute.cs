@@ -8,7 +8,8 @@ namespace API.Attributes;
 [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class)]
 public sealed class ValidateForgeryTokenAttribute : FilterAttribute, IAuthorizationFilter
 {
-    public Task<HttpResponseMessage> ExecuteAuthorizationFilterAsync(HttpActionContext actionContext,
+    public Task<HttpResponseMessage> ExecuteAuthorizationFilterAsync(
+        HttpActionContext actionContext,
         CancellationToken cancellationToken, Func<Task<HttpResponseMessage>> continuation)
     {
         try

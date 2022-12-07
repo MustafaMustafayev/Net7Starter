@@ -22,13 +22,15 @@ public class UserHub : Hub
 
     public async Task JoinGroup(string? optionalNotificationMessage)
     {
-        var companyId = Context.User?.FindFirst(_configSettings.AuthSettings.TokenCompanyIdKey)?.Value;
+        var companyId = Context.User?.FindFirst(_configSettings.AuthSettings.TokenCompanyIdKey)
+            ?.Value;
 
         if (companyId is null) return;
 
         await Groups.AddToGroupAsync(Context.ConnectionId, companyId);
 
-        await Clients.Groups(companyId).SendAsync("UserJoined", Context.User?.FindFirst(ClaimTypes.Name)?.Value,
+        await Clients.Groups(companyId).SendAsync("UserJoined",
+            Context.User?.FindFirst(ClaimTypes.Name)?.Value,
             optionalNotificationMessage);
     }
 

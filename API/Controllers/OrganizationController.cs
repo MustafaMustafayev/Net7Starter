@@ -25,7 +25,8 @@ public class OrganizationController : Controller
     }
 
     [SwaggerOperation(Summary = "get organizations")]
-    [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IDataResult<List<OrganizationToListDto>>))]
+    [SwaggerResponse(StatusCodes.Status200OK,
+        type: typeof(IDataResult<List<OrganizationToListDto>>))]
     [HttpGet]
     public async Task<IActionResult> Get()
     {

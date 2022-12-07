@@ -12,7 +12,8 @@ public class User : Auditable
     [Required] public string Password { get; set; }
     public string Salt { get; set; }
 
-    [Display(Name = "İstifadəçiyə göndərilmiş sonuncu email təsdiqləmə kodu. Şifrəni yeniləyən zaman lazım olacaq.")]
+    [Display(Name =
+        "İstifadəçiyə göndərilmiş sonuncu email təsdiqləmə kodu. Şifrəni yeniləyən zaman lazım olacaq.")]
     public string? LastVerificationCode { get; set; }
 
     [Required] public UserType Type { get; set; }

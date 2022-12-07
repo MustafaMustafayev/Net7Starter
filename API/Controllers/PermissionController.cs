@@ -29,8 +29,10 @@ public class PermissionController : Controller
     [HttpGet("paginate")]
     public async Task<IActionResult> GetAsPaginated()
     {
-        var pageIndex = Convert.ToInt32(HttpContext.Request.Headers[_configSettings.RequestSettings.PageIndex]);
-        var pageSize = Convert.ToInt32(HttpContext.Request.Headers[_configSettings.RequestSettings.PageSize]);
+        var pageIndex =
+            Convert.ToInt32(HttpContext.Request.Headers[_configSettings.RequestSettings.PageIndex]);
+        var pageSize =
+            Convert.ToInt32(HttpContext.Request.Headers[_configSettings.RequestSettings.PageSize]);
         var response = await _permissionService.GetAsPaginatedListAsync(pageIndex, pageSize);
         return Ok(response);
     }
@@ -63,7 +65,8 @@ public class PermissionController : Controller
 
     [SwaggerOperation(Summary = "update permission")]
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update([FromRoute] int id, [FromBody] PermissionToUpdateDto dto)
+    public async Task<IActionResult> Update([FromRoute] int id,
+        [FromBody] PermissionToUpdateDto dto)
     {
         var response = await _permissionService.UpdateAsync(id, dto);
         return Ok(response);

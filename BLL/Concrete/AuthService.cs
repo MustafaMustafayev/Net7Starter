@@ -30,24 +30,29 @@ public class AuthService : IAuthService
 
     public async Task<IDataResult<UserToListDto>> LoginAsync(LoginDto dto)
     {
-        var data = await _unitOfWork.UserRepository.GetAsync(m => m.Email == dto.Email && m.Password == dto.Password);
+        var data =
+            await _unitOfWork.UserRepository.GetAsync(m =>
+                m.Email == dto.Email && m.Password == dto.Password);
         if (data == null)
             return new ErrorDataResult<UserToListDto>(Messages.InvalidUserCredentials.Translate());
 
-        return new SuccessDataResult<UserToListDto>(_mapper.Map<UserToListDto>(data));
+        return new SuccessDataResult<UserToListDto>(_mapper.Map<UserToListDto>(data),
+            Messages.Success.Translate());
     }
 
     public async Task<IDataResult<UserToListDto>> LoginByTokenAsync(string token)
     {
         var userId = _utilService.GetUserIdFromToken(token);
         if (userId is null)
-            return new ErrorDataResult<UserToListDto>(Messages.CanNotFoundUserIdInYourAccessToken.Translate());
+            return new ErrorDataResult<UserToListDto>(Messages.CanNotFoundUserIdInYourAccessToken
+                .Translate());
 
         var data = await _unitOfWork.UserRepository.GetAsync(m => m.UserId == userId);
         if (data == null)
             return new ErrorDataResult<UserToListDto>(Messages.InvalidUserCredentials.Translate());
 
-        return new SuccessDataResult<UserToListDto>(_mapper.Map<UserToListDto>(data));
+        return new SuccessDataResult<UserToListDto>(_mapper.Map<UserToListDto>(data),
+            Messages.Success.Translate());
     }
 
     public IResult SendVerificationCodeToEmailAsync(string email)
@@ -62,7 +67,8 @@ public class AuthService : IAuthService
 
         if (data is null) return new ErrorResult(Messages.UserIsNotExist.Translate());
 
-        if (data.LastVerificationCode is null || !data.LastVerificationCode.Equals(dto.VerificationCode))
+        if (data.LastVerificationCode is null ||
+            !data.LastVerificationCode.Equals(dto.VerificationCode))
             return new ErrorResult(Messages.InvalidVerificationCode.Translate());
 
         data.Salt = SecurityHelper.GenerateSalt();

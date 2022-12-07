@@ -20,16 +20,26 @@ public class ValidateTokenAttribute : Attribute, IAuthorizationFilter
         if (Constants.AllowAnonymous.Contains(context.HttpContext.Request.Path)) return;
 
         var configSettings =
-            (context.HttpContext.RequestServices.GetService(typeof(ConfigSettings)) as ConfigSettings)!;
-        var tokenService = (context.HttpContext.RequestServices.GetService(typeof(ITokenService)) as TokenService)!;
-        var utilService = (context.HttpContext.RequestServices.GetService(typeof(IUtilService)) as UtilService)!;
+            (context.HttpContext.RequestServices.GetService(typeof(ConfigSettings)) as
+                ConfigSettings)!;
+        var tokenService =
+            (context.HttpContext.RequestServices
+                .GetService(typeof(ITokenService)) as TokenService)!;
+        var utilService =
+            (context.HttpContext.RequestServices.GetService(typeof(IUtilService)) as UtilService)!;
 
-        string? jwtToken = context.HttpContext.Request.Headers[configSettings.AuthSettings.HeaderName];
-        string? refreshToken = context.HttpContext.Request.Headers[configSettings.AuthSettings.RefreshTokenHeaderName];
+        string? jwtToken =
+            context.HttpContext.Request.Headers[configSettings.AuthSettings.HeaderName];
+        string? refreshToken =
+            context.HttpContext.Request.Headers[configSettings.AuthSettings.RefreshTokenHeaderName];
 
-        var isValid = await tokenService.IsValid(utilService.GetTokenStringFromHeader(jwtToken), refreshToken!);
+        var validationResult =
+            await tokenService.CheckValidationAsync(utilService.GetTokenStringFromHeader(jwtToken),
+                refreshToken!);
 
-        if (!isValid)
-            context.Result = new UnauthorizedObjectResult(new ErrorResult(Messages.YourSessionIsClosed.Translate()));
+        if (!validationResult.Success)
+            context.Result =
+                new UnauthorizedObjectResult(
+                    new ErrorResult(Messages.YourSessionIsClosed.Translate()));
     }
 }

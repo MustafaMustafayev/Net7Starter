@@ -19,7 +19,8 @@ public static class FileHelper
     {
         var filePath = Path.Combine(path, name);
         if (File.Exists(filePath))
-            return new SuccessDataResult<string>(data: Convert.ToBase64String(await File.ReadAllBytesAsync(filePath)));
+            return new SuccessDataResult<string>(
+                data: Convert.ToBase64String(await File.ReadAllBytesAsync(filePath)));
 
         return new ErrorDataResult<string>(Messages.FileIsNotFound.Translate());
     }

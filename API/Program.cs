@@ -28,17 +28,17 @@ builder.Services.AddSingleton(config);
 
 builder.Services.AddControllers(opt => opt.Filters.Add(typeof(ModelValidatorActionFilter)));
 
-builder.Services.AddFluentValidationAutoValidation().AddValidatorsFromAssemblyContaining<LoginDtoValidator>();
+builder.Services.AddFluentValidationAutoValidation()
+    .AddValidatorsFromAssemblyContaining<LoginDtoValidator>();
 
 if (config.SentrySettings.IsEnabled) builder.WebHost.UseSentry();
 
 builder.Services.AddAutoMapper(Automapper.GetAutoMapperProfilesFromAllAssemblies().ToArray());
 
-builder.Services.AddDbContext<DataContext>(options => options.UseNpgsql(config.ConnectionStrings.AppDb));
+builder.Services.AddDbContext<DataContext>(options =>
+    options.UseNpgsql(config.ConnectionStrings.AppDb));
 
 builder.Services.AddHttpContextAccessor();
-
-builder.Services.AddMemoryCache();
 
 builder.Services.RegisterHttpClients(config);
 
@@ -65,9 +65,12 @@ builder.Services.AddHealthChecks();
 builder.Services.RegisterAuthentication(config);
 
 builder.Services.AddCors(o =>
-    o.AddPolicy(Constants.EnableAllCorsName, b => b.AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin()));
+    o.AddPolicy(Constants.EnableAllCorsName,
+        b => b.AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin()));
 
 builder.Services.AddScoped<LogActionFilter>();
+
+builder.Services.AddScoped<ModelValidatorActionFilter>();
 
 builder.Services.AddEndpointsApiExplorer();
 

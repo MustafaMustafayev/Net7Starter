@@ -6,6 +6,7 @@ public static class TranslatorExtension
     {
         ;
         return MsgResource.ResourceManager.GetString(message.ToString())
-               ?? throw new ArgumentNullException($"{message.ToString()} - Key was not found in MessageResource file");
+               ?? throw new ArgumentNullException(
+                   $"{message.ToString()} - Key was not found in MessageResource file");
     }
 }

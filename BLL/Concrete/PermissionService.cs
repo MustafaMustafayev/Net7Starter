@@ -39,33 +39,40 @@ public class PermissionService : IPermissionService
         return new SuccessResult(Messages.Success.Translate());
     }
 
-    public async Task<IDataResult<PaginatedList<PermissionToListDto>>> GetAsPaginatedListAsync(int pageIndex,
+    public async Task<IDataResult<PaginatedList<PermissionToListDto>>> GetAsPaginatedListAsync(
+        int pageIndex,
         int pageSize)
     {
         var datas = _unitOfWork.PermissionRepository.GetAsNoTrackingList();
         var response =
-            await PaginatedList<Permission>.CreateAsync(datas.OrderBy(m => m.PermissionId), pageIndex, pageSize);
+            await PaginatedList<Permission>.CreateAsync(datas.OrderBy(m => m.PermissionId),
+                pageIndex, pageSize);
 
-        var responseDto = new PaginatedList<PermissionToListDto>(_mapper.Map<List<PermissionToListDto>>(response.Datas),
+        var responseDto = new PaginatedList<PermissionToListDto>(
+            _mapper.Map<List<PermissionToListDto>>(response.Datas),
             response.TotalRecordCount, response.PageIndex, response.TotalPageCount);
 
-        return new SuccessDataResult<PaginatedList<PermissionToListDto>>(responseDto);
+        return new SuccessDataResult<PaginatedList<PermissionToListDto>>(responseDto,
+            Messages.Success.Translate());
     }
 
     public async Task<IDataResult<List<PermissionToListDto>>> GetAsync()
     {
-        var datas = _mapper.Map<List<PermissionToListDto>>(_unitOfWork.PermissionRepository.GetAsNoTrackingList()
+        var datas = _mapper.Map<List<PermissionToListDto>>(_unitOfWork.PermissionRepository
+            .GetAsNoTrackingList()
             .ToList());
 
-        return new SuccessDataResult<List<PermissionToListDto>>(datas);
+        return new SuccessDataResult<List<PermissionToListDto>>(datas,
+            Messages.Success.Translate());
     }
 
     public async Task<IDataResult<PermissionToListDto>> GetAsync(int id)
     {
         var datas = _mapper.Map<PermissionToListDto>(
-            (await _unitOfWork.PermissionRepository.GetAsNoTrackingAsync(m => m.PermissionId == id))!);
+            (await _unitOfWork.PermissionRepository.GetAsNoTrackingAsync(m => m.PermissionId == id))
+            !);
 
-        return new SuccessDataResult<PermissionToListDto>(datas);
+        return new SuccessDataResult<PermissionToListDto>(datas, Messages.Success.Translate());
     }
 
     public async Task<IResult> UpdateAsync(int permissionId, PermissionToUpdateDto dto)

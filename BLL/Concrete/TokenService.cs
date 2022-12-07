@@ -31,16 +31,19 @@ public class TokenService : ITokenService
 
     public async Task<IDataResult<TokenToListDto>> GetAsync(RefreshTokenDto dto)
     {
-        var data = _mapper.Map<TokenToListDto>((await _unitOfWork.TokenRepository.GetAsNoTrackingAsync(m =>
-            m.AccessToken == dto.AccessToken && m.RefreshToken == dto.RefreshToken &&
-            m.RefreshTokenExpireDate > DateTime.UtcNow))!);
+        var data = _mapper.Map<TokenToListDto>(
+            (await _unitOfWork.TokenRepository.GetAsNoTrackingAsync(m =>
+                m.AccessToken == dto.AccessToken && m.RefreshToken == dto.RefreshToken &&
+                m.RefreshTokenExpireDate > DateTime.UtcNow))!);
 
-        return new SuccessDataResult<TokenToListDto>(data);
+        return new SuccessDataResult<TokenToListDto>(data, Messages.Success.Translate());
     }
 
-    public async Task<bool> IsValid(string accessToken, string refreshToken)
+    public async Task<IResult> CheckValidationAsync(string accessToken, string refreshToken)
     {
-        return await _unitOfWork.TokenRepository.IsValid(accessToken, refreshToken);
+        return await _unitOfWork.TokenRepository.IsValid(accessToken, refreshToken)
+            ? new SuccessResult(Messages.Success.Translate())
+            : new ErrorResult(Messages.PermissionDenied.Translate());
     }
 
     public async Task<IResult> SoftDeleteAsync(int id)
@@ -50,6 +53,6 @@ public class TokenService : ITokenService
         _unitOfWork.TokenRepository.SoftDelete(data);
         await _unitOfWork.CommitAsync();
 
-        return new SuccessResult();
+        return new SuccessResult(Messages.Success.Translate());
     }
 }

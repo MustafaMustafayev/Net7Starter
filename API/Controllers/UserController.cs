@@ -29,8 +29,10 @@ public class UserController : Controller
     [HttpGet("paginate")]
     public async Task<IActionResult> GetAsPaginated()
     {
-        var pageIndex = Convert.ToInt32(HttpContext.Request.Headers[_configSettings.RequestSettings.PageIndex]);
-        var pageSize = Convert.ToInt32(HttpContext.Request.Headers[_configSettings.RequestSettings.PageSize]);
+        var pageIndex =
+            Convert.ToInt32(HttpContext.Request.Headers[_configSettings.RequestSettings.PageIndex]);
+        var pageSize =
+            Convert.ToInt32(HttpContext.Request.Headers[_configSettings.RequestSettings.PageSize]);
         var response = await _userService.GetAsPaginatedListAsync(pageIndex, pageSize);
         return Ok(response);
     }

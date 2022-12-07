@@ -18,7 +18,8 @@ public class UpdateOrganizationHandler : IRequestHandler<UpdateOrganizationComma
         _mapper = mapper;
     }
 
-    public Task<IResult> Handle(UpdateOrganizationCommand request, CancellationToken cancellationToken)
+    public Task<IResult> Handle(UpdateOrganizationCommand request,
+        CancellationToken cancellationToken)
     {
         var mapped = _mapper.Map<Organization>(request.Organization);
         _unitOfWork.OrganizationRepository.Update(mapped);

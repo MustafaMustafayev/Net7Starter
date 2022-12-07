@@ -23,7 +23,8 @@ public class FileController : Controller
     private readonly IUserService _userService;
     private readonly IUtilService _utilService;
 
-    public FileController(IWebHostEnvironment environment, IUserService userService, IUtilService utilService)
+    public FileController(IWebHostEnvironment environment, IUserService userService,
+        IUtilService utilService)
     {
         _environment = environment;
         _userService = userService;
