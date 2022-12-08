@@ -13,8 +13,9 @@ using Path = System.IO.Path;
 
 namespace API.Controllers;
 
-[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 [Route("api/[controller]")]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+[ValidateToken]
 public class FileController : Controller
 {
     private readonly IWebHostEnvironment _environment;

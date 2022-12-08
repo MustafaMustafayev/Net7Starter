@@ -47,19 +47,17 @@ public class UserService : IUserService
         return new SuccessResult(Messages.Success.Translate());
     }
 
-    public Task<IDataResult<List<UserToListDto>>> GetAsync()
+    public async Task<IDataResult<List<UserToListDto>>> GetAsync()
     {
-        var datas = _unitOfWork.UserRepository.GetAsNoTrackingList().ToList();
+        var datas = await _unitOfWork.UserRepository.GetListAsync();
 
-        return Task.FromResult<IDataResult<List<UserToListDto>>>(
-            new SuccessDataResult<List<UserToListDto>>(_mapper.Map<List<UserToListDto>>(datas),
-                Messages.Success.Translate()));
+        return new SuccessDataResult<List<UserToListDto>>(_mapper.Map<List<UserToListDto>>(datas),
+            Messages.Success.Translate());
     }
 
     public async Task<IDataResult<UserToListDto>> GetAsync(int id)
     {
-        var data = _mapper.Map<UserToListDto>(
-            (await _unitOfWork.UserRepository.GetAsNoTrackingAsync(m => m.UserId == id))!);
+        var data = _mapper.Map<UserToListDto>(await _unitOfWork.UserRepository.GetAsync(m => m.UserId == id));
 
         return new SuccessDataResult<UserToListDto>(data, Messages.Success.Translate());
     }
@@ -81,7 +79,7 @@ public class UserService : IUserService
     public async Task<IDataResult<PaginatedList<UserToListDto>>> GetAsPaginatedListAsync(
         int pageIndex, int pageSize)
     {
-        var datas = _unitOfWork.UserRepository.GetAsNoTrackingList();
+        var datas = _unitOfWork.UserRepository.GetList();
         var response =
             await PaginatedList<User>.CreateAsync(datas.OrderBy(m => m.UserId), pageIndex,
                 pageSize);

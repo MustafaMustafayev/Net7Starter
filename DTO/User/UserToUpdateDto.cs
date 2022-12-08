@@ -1,10 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace DTO.User;
+﻿namespace DTO.User;
 
 public record UserToUpdateDto
 {
-    [Required] public string Email { get; set; }
-    [Required] public string ContactNumber { get; set; }
-    [Required] public string Username { get; set; }
+    public string Email { get; set; }
+    public string ContactNumber { get; set; }
+    public string Username { get; set; }
+    public int RoleId { get; set; }
 }

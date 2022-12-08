@@ -6,7 +6,7 @@ using CORE.Helper;
 using CORE.Localization;
 using DTO.Auth;
 using DTO.Responses;
-using DTO.Token;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -16,7 +16,7 @@ namespace API.Controllers;
 
 [Route("api/[controller]")]
 [ServiceFilter(typeof(LogActionFilter))]
-[Authorize]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class AuthController : Controller
 {
     private readonly IAuthService _authService;
@@ -65,14 +65,18 @@ public class AuthController : Controller
     }
 
     [SwaggerOperation(Summary = "refesh access token")]
-    [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
-    [HttpPost("refresh")]
-    public async Task<IActionResult> Refresh([FromBody] RefreshTokenDto refreshTokenDto)
+    [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IDataResult<LoginResponseDto>))]
+    [HttpGet("refresh")]
+    public async Task<IActionResult> Refresh()
     {
-        var tokenResponse = await _tokenService.GetAsync(refreshTokenDto);
-        if (tokenResponse.Data == null) return Unauthorized();
-        await _tokenService.SoftDeleteAsync(tokenResponse.Data.TokenId);
+        var jwtToken =
+            _utilService.GetTokenStringFromHeader(
+                HttpContext.Request.Headers[_configSettings.AuthSettings.HeaderName]!);
+        string refreshToken = HttpContext.Request.Headers[_configSettings.AuthSettings.RefreshTokenHeaderName]!;
 
+        var tokenResponse = await _tokenService.GetAsync(jwtToken, refreshToken);
+
+        await _tokenService.SoftDeleteAsync(tokenResponse.Data.TokenId);
         var response = await _tokenService.CreateTokenAsync(tokenResponse.Data.User);
 
         return Ok(response);
@@ -95,6 +99,7 @@ public class AuthController : Controller
     {
         if (string.IsNullOrEmpty(HttpContext.Request.Headers.Authorization))
             return Unauthorized(new ErrorResult(Messages.CanNotFoundUserIdInYourAccessToken.Translate()));
+
         var loginByTokenResponse = await _authService.LoginByTokenAsync(HttpContext.Request.Headers.Authorization!);
         if (!loginByTokenResponse.Success) return BadRequest(loginByTokenResponse.Data);
 

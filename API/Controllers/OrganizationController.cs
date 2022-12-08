@@ -1,4 +1,5 @@
 ﻿using API.ActionFilters;
+using API.Attributes;
 using BLL.MediatR.OrganizationCQRS.Commands;
 using BLL.MediatR.OrganizationCQRS.Queries;
 using DTO.Organization;
@@ -12,9 +13,10 @@ using IResult = DTO.Responses.IResult;
 
 namespace API.Controllers;
 
-[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 [Route("api/[controller]")]
 [ServiceFilter(typeof(LogActionFilter))]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+[ValidateToken]
 public class OrganizationController : Controller
 {
     private readonly IMediator _mediator;
@@ -54,10 +56,10 @@ public class OrganizationController : Controller
 
     [SwaggerOperation(Summary = "update organization")]
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
-    [HttpPut]
-    public async Task<IActionResult> Update([FromBody] OrganizationToUpdateDto request)
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update([FromRoute] int id, [FromBody] OrganizationToUpdateDto request)
     {
-        var response = await _mediator.Send(new UpdateOrganizationCommand(request));
+        var response = await _mediator.Send(new UpdateOrganizationCommand(id, request));
         return Ok(response);
     }
 

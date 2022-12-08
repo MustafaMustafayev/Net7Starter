@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace DTO.Organization;
+﻿namespace DTO.Organization;
 
 public record OrganizationToAddDto
 {
@@ -12,11 +10,11 @@ public record OrganizationToAddDto
 
     public int? ParentOrganizationId { get; set; }
 
-    [Phone] public string PhoneNumber { get; set; }
+    public string PhoneNumber { get; set; }
 
     public string Tin { get; set; }
 
-    [EmailAddress] public string Email { get; set; }
+    public string Email { get; set; }
 
     public string Rekvizit { get; set; }
 }

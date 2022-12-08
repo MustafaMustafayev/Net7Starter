@@ -1,4 +1,5 @@
 ﻿using API.ActionFilters;
+using API.Attributes;
 using BLL.Abstract;
 using CORE.Config;
 using DTO.Permission;
@@ -10,9 +11,10 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace API.Controllers;
 
-[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 [Route("api/[controller]")]
 [ServiceFilter(typeof(LogActionFilter))]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+[ValidateToken]
 public class PermissionController : Controller
 {
     private readonly ConfigSettings _configSettings;

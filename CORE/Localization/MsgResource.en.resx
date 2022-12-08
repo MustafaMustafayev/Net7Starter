@@ -172,9 +172,6 @@
     <data name="UserIsExist" xml:space="preserve">
     <value>User available</value>
   </data>
-    <data name="UserIsNotLogin" xml:space="preserve">
-    <value>You are not logged in</value>
-  </data>
     <data name="UsernameIsExist" xml:space="preserve">
     <value>Registration by email is available</value>
   </data>

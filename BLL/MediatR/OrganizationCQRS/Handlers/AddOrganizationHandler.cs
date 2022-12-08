@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BLL.MediatR.OrganizationCQRS.Commands;
+using CORE.Localization;
 using DAL.UnitOfWorks.Abstract;
 using DTO.Responses;
 using ENTITIES.Entities;
@@ -24,6 +25,8 @@ public class AddOrganizationHandler : IRequestHandler<AddOrganizationCommand, IR
         var mapped = _mapper.Map<Organization>(request.Organization);
         await _unitOfWork.OrganizationRepository.AddAsync(mapped);
 
-        return new SuccessResult();
+        await _unitOfWork.CommitAsync();
+
+        return new SuccessResult(Messages.Success.Translate());
     }
 }

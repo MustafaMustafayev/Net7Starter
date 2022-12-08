@@ -76,6 +76,7 @@ public class PermissionService : IPermissionService
     {
         var data = _mapper.Map<Permission>(dto);
         data.PermissionId = permissionId;
+
         _unitOfWork.PermissionRepository.Update(data);
         await _unitOfWork.CommitAsync();
 

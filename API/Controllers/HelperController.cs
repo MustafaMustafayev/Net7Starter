@@ -1,4 +1,5 @@
 ﻿using API.ActionFilters;
+using API.Attributes;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -6,9 +7,10 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace API.Controllers;
 
-[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 [Route("api/[controller]")]
 [ServiceFilter(typeof(LogActionFilter))]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+[ValidateToken]
 public class HelperController : Controller
 {
     [SwaggerOperation(Summary = "search filter keys")]

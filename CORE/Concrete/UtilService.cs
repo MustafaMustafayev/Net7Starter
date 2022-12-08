@@ -51,12 +51,11 @@ public class UtilService : IUtilService
     {
         if (string.IsNullOrEmpty(tokenString) || tokenString.Length < 7) return false;
 
-        tokenString = tokenString[7..];
         var tokenHandler = new JwtSecurityTokenHandler();
         var secretKey = Encoding.ASCII.GetBytes(_configSettings.AuthSettings.SecretKey);
         try
         {
-            tokenHandler.ValidateToken(tokenString, new TokenValidationParameters
+            tokenHandler.ValidateToken(tokenString[7..], new TokenValidationParameters
             {
                 ValidateIssuerSigningKey = false,
                 IssuerSigningKey = new SymmetricSecurityKey(secretKey),

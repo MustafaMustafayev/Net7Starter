@@ -23,9 +23,9 @@ public class RoleService : IRoleService
     public async Task<IResult> AddAsync(RoleToAddDto dto)
     {
         var data = _mapper.Map<Role>(dto);
+
         var permissions =
-            await _unitOfWork.PermissionRepository.GetListAsync(m =>
-                dto.PermissionIds.Contains(m.PermissionId));
+            await _unitOfWork.PermissionRepository.GetListAsync(m => dto.PermissionIds.Contains(m.PermissionId));
         data.Permissions = permissions;
 
         await _unitOfWork.RoleRepository.AddAsync(data);
@@ -46,9 +46,7 @@ public class RoleService : IRoleService
 
     public async Task<IDataResult<List<RoleToListDto>>> GetAsync()
     {
-        var datas =
-            _mapper.Map<List<RoleToListDto>>(_unitOfWork.RoleRepository.GetAsNoTrackingList()
-                .ToList());
+        var datas = _mapper.Map<List<RoleToListDto>>(await _unitOfWork.RoleRepository.GetListAsync());
 
         return new SuccessDataResult<List<RoleToListDto>>(datas, Messages.Success.Translate());
     }
@@ -61,8 +59,7 @@ public class RoleService : IRoleService
 
     public async Task<IDataResult<RoleToListDto>> GetAsync(int id)
     {
-        var data = _mapper.Map<RoleToListDto>(
-            (await _unitOfWork.RoleRepository.GetAsNoTrackingAsync(m => m.RoleId == id))!);
+        var data = _mapper.Map<RoleToListDto>(await _unitOfWork.RoleRepository.GetAsync(m => m.RoleId == id));
 
         return new SuccessDataResult<RoleToListDto>(data, Messages.Success.Translate());
     }
@@ -73,11 +70,10 @@ public class RoleService : IRoleService
         data.RoleId = id;
 
         var permissions =
-            await _unitOfWork.PermissionRepository.GetListAsync(m =>
-                dto.PermissionIds.Contains(m.PermissionId));
+            await _unitOfWork.PermissionRepository.GetListAsync(m => dto.PermissionIds.Contains(m.PermissionId));
         data.Permissions = permissions;
 
-        _unitOfWork.RoleRepository.Update(data);
+        _unitOfWork.RoleRepository.UpdateRoleAsync(data);
         await _unitOfWork.CommitAsync();
 
         return new SuccessResult(Messages.Success.Translate());

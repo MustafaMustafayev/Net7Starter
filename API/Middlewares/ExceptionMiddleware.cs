@@ -33,15 +33,16 @@ public class ExceptionMiddleware
         catch (Exception ex)
         {
             _logger.LogError($"Something went wrong: {ex}");
+
             if (_config.SentrySettings.IsEnabled) SentrySdk.CaptureException(ex);
 
             if (_env.IsDevelopment()) throw;
 
-            await HandleExceptionAsync(httpContext, ex);
+            await HandleExceptionAsync(httpContext);
         }
     }
 
-    private static async Task HandleExceptionAsync(HttpContext context, Exception exception)
+    private static async Task HandleExceptionAsync(HttpContext context)
     {
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
@@ -52,10 +53,7 @@ public class ExceptionMiddleware
         //     _ => "Internal Server Error from the custom middleware."
         // };
 
-        var translatedStringFromResourceFile = Messages.GeneralError.Translate();
-
-        var response = new ErrorDataResult<Result>();
-
+        var response = new ErrorResult(Messages.GeneralError.Translate());
         await context.Response.WriteAsync(JsonSerializer.Serialize(response));
     }
 }

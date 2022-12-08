@@ -178,9 +178,6 @@
     <data name="UserIsExist" xml:space="preserve">
     <value>İstifadəçi mövcuddur</value>
   </data>
-    <data name="UserIsNotLogin" xml:space="preserve">
-    <value>Sistemə daxil olmamısınız</value>
-  </data>
     <data name="UsernameIsExist" xml:space="preserve">
     <value>Bu email ilə qeydiyyat mövcuddur</value>
   </data>

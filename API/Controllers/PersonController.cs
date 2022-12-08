@@ -1,6 +1,8 @@
 ﻿using API.ActionFilters;
+using API.Attributes;
 using DTO.Responses;
 using ENTITIES.Entities.Redis;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Redis.OM;
@@ -11,7 +13,8 @@ namespace API.Controllers;
 
 [Route("api/[controller]")]
 [ServiceFilter(typeof(LogActionFilter))]
-[Authorize]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+[ValidateToken]
 public class PersonController : Controller
 {
     private readonly RedisCollection<Person> _collection;

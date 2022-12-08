@@ -6,7 +6,6 @@ public class Token : IEntity
 
     public virtual User User { get; set; }
     public int UserId { get; set; }
-
     public string AccessToken { get; set; }
     public DateTimeOffset AccessTokenExpireDate { get; set; }
     public string RefreshToken { get; set; }

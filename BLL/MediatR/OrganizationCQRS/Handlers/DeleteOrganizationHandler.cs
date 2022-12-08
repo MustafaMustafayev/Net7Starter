@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BLL.MediatR.OrganizationCQRS.Commands;
+using CORE.Localization;
 using DAL.UnitOfWorks.Abstract;
 using DTO.Responses;
 using MediatR;
@@ -24,6 +25,8 @@ public class DeleteOrganizationHandler : IRequestHandler<DeleteOrganizationComma
             await _unitOfWork.OrganizationRepository.GetAsync(e => e.OrganizationId == request.Id);
         _unitOfWork.OrganizationRepository.SoftDelete(data!);
 
-        return new SuccessResult();
+        await _unitOfWork.CommitAsync();
+
+        return new SuccessResult(Messages.Success.Translate());
     }
 }

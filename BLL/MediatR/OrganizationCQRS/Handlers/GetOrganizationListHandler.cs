@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BLL.MediatR.OrganizationCQRS.Queries;
+using CORE.Localization;
 using DAL.UnitOfWorks.Abstract;
 using DTO.Organization;
 using DTO.Responses;
@@ -27,6 +28,6 @@ public class
         var data = await _unitOfWork.OrganizationRepository.GetListAsync();
         var result = _mapper.Map<List<OrganizationToListDto>>(data);
 
-        return new SuccessDataResult<List<OrganizationToListDto>>(result);
+        return new SuccessDataResult<List<OrganizationToListDto>>(result, Messages.Success.Translate());
     }
 }

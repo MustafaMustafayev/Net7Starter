@@ -1,4 +1,5 @@
 ﻿using API.ActionFilters;
+using API.Attributes;
 using BLL.Abstract;
 using DTO.Responses;
 using DTO.Role;
@@ -10,10 +11,10 @@ using IResult = DTO.Responses.IResult;
 
 namespace API.Controllers;
 
-[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 [Route("api/[controller]")]
 [ServiceFilter(typeof(LogActionFilter))]
-[AllowAnonymous]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+[ValidateToken]
 public class RoleController : Controller
 {
     private readonly IRoleService _roleService;

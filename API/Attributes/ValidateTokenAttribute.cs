@@ -4,42 +4,30 @@ using CORE.Abstract;
 using CORE.Concrete;
 using CORE.Config;
 using CORE.Constants;
-using CORE.Localization;
-using DTO.Responses;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Messages = CORE.Localization.Messages;
 
 namespace API.Attributes;
 
-[AttributeUsage(AttributeTargets.Method)]
+// [AttributeUsage(AttributeTargets.Method)]
 public class ValidateTokenAttribute : Attribute, IAuthorizationFilter
 {
-    public async void OnAuthorization(AuthorizationFilterContext context)
+    public void OnAuthorization(AuthorizationFilterContext context)
     {
         if (Constants.AllowAnonymous.Contains(context.HttpContext.Request.Path)) return;
 
         var configSettings =
-            (context.HttpContext.RequestServices.GetService(typeof(ConfigSettings)) as
-                ConfigSettings)!;
-        var tokenService =
-            (context.HttpContext.RequestServices
-                .GetService(typeof(ITokenService)) as TokenService)!;
-        var utilService =
-            (context.HttpContext.RequestServices.GetService(typeof(IUtilService)) as UtilService)!;
+            (context.HttpContext.RequestServices.GetService(typeof(ConfigSettings)) as ConfigSettings)!;
+        var tokenService = (context.HttpContext.RequestServices.GetService(typeof(ITokenService)) as TokenService)!;
+        var utilService = (context.HttpContext.RequestServices.GetService(typeof(IUtilService)) as UtilService)!;
 
-        string? jwtToken =
-            context.HttpContext.Request.Headers[configSettings.AuthSettings.HeaderName];
-        string? refreshToken =
-            context.HttpContext.Request.Headers[configSettings.AuthSettings.RefreshTokenHeaderName];
+        string? jwtToken = context.HttpContext.Request.Headers[configSettings.AuthSettings.HeaderName];
+        string? refreshToken = context.HttpContext.Request.Headers[configSettings.AuthSettings.RefreshTokenHeaderName];
 
-        var validationResult =
-            await tokenService.CheckValidationAsync(utilService.GetTokenStringFromHeader(jwtToken),
-                refreshToken!);
+        var validationResult = tokenService
+            .CheckValidationAsync(utilService.GetTokenStringFromHeader(jwtToken), refreshToken!).Result;
 
         if (!validationResult.Success)
-            context.Result =
-                new UnauthorizedObjectResult(
-                    new ErrorResult(Messages.YourSessionIsClosed.Translate()));
+            context.Result = new UnauthorizedObjectResult(validationResult);
     }
 }

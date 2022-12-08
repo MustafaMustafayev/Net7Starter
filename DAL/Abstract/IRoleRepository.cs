@@ -5,4 +5,5 @@ namespace DAL.Abstract;
 
 public interface IRoleRepository : IGenericRepository<Role>
 {
+    Role UpdateRoleAsync(Role role);
 }

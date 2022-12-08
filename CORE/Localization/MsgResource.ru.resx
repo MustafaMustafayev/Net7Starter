@@ -172,9 +172,6 @@
     <data name="UserIsExist" xml:space="preserve">
     <value>Пользователь доступен</value>
   </data>
-    <data name="UserIsNotLogin" xml:space="preserve">
-    <value>Вы не авторизованы</value>
-  </data>
     <data name="UsernameIsExist" xml:space="preserve">
     <value>Доступна регистрация по электронной почте</value>
   </data>

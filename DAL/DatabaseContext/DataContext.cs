@@ -28,13 +28,11 @@ public class DataContext : DbContext
     public DbSet<Organization> Organizations { get; set; }
 
     public DbSet<Role> Roles { get; set; }
-
     public DbSet<RequestLog> RequestLogs { get; set; }
 
     public DbSet<ResponseLog> ResponseLogs { get; set; }
 
     public DbSet<Permission> Permissions { get; set; }
-
     public DbSet<Token> Tokens { get; set; }
 
     public DbSet<ENTITIES.Entities.Logging.NLog> NLogs { get; set; }
@@ -53,6 +51,9 @@ public class DataContext : DbContext
     /* migration commands
       dotnet ef --startup-project ../API migrations add tokens --context DataContext
       dotnet ef --startup-project ../API database update --context DataContext
+      
+      dotnet ef migrations add Initial --startup-project API  --project DAL
+      dotnet ef database update Initial --startup-project API  --project DAL
     */
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -81,8 +82,7 @@ public class DataContext : DbContext
             .Where(e =>
                 e.Entity is Auditable && e.State is EntityState.Added or EntityState.Modified);
 
-        var tokenString = _httpContextAccessor?.HttpContext?.Request.Headers["Authorization"]
-            .ToString();
+        var tokenString = _httpContextAccessor.HttpContext?.Request.Headers["Authorization"].ToString();
         foreach (var entityEntry in entries)
             switch (entityEntry.State)
             {
