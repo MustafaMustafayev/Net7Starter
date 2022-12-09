@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using BLL.Abstract;
 using CORE.Helper;
-using CORE.Middlewares.Translation;
+using CORE.Localization;
 using DAL.UnitOfWorks.Abstract;
 using DAL.Utility;
 using DTO.Responses;
@@ -21,94 +21,100 @@ public class UserService : IUserService
         _mapper = mapper;
     }
 
-    public async Task<IResult> AddAsync(UserToAddDto userToAddDto)
+    public async Task<IResult> AddAsync(UserToAddDto dto)
     {
-        if (await _unitOfWork.UserRepository.IsUserExistAsync(userToAddDto.Username, null))
-            return new ErrorResult(Localization.Translate(Messages.UserIsExist));
+        if (await _unitOfWork.UserRepository.IsUserExistAsync(dto.Username, null))
+            return new ErrorResult(Messages.UserIsExist.Translate());
 
-        var user = _mapper.Map<User>(userToAddDto);
+        var data = _mapper.Map<User>(dto);
 
-        user.Salt = SecurityHelper.GenerateSalt();
-        user.Password = SecurityHelper.HashPassword(user.Password, user.Salt);
+        data.Salt = SecurityHelper.GenerateSalt();
+        data.Password = SecurityHelper.HashPassword(data.Password, data.Salt);
 
-        var added = await _unitOfWork.UserRepository.AddAsync(user);
+        var added = await _unitOfWork.UserRepository.AddAsync(data);
         await _unitOfWork.CommitAsync();
 
-        return new SuccessResult(Localization.Translate(Messages.Success));
+        return new SuccessResult(Messages.Success.Translate());
     }
 
-    public async Task<IResult> DeleteAsync(int userId)
+    public async Task<IResult> SoftDeleteAsync(int id)
     {
-        var user = await _unitOfWork.UserRepository.GetAsync(m => m.UserId == userId);
-        user!.IsDeleted = true;
+        var data = await _unitOfWork.UserRepository.GetAsync(m => m.UserId == id);
 
-        _unitOfWork.UserRepository.Update(user);
+        _unitOfWork.UserRepository.SoftDelete(data);
         await _unitOfWork.CommitAsync();
 
-        return new SuccessResult();
+        return new SuccessResult(Messages.Success.Translate());
     }
 
-    public Task<IDataResult<List<UserToListDto>>> GetAsync()
+    public async Task<IDataResult<List<UserToListDto>>> GetAsync()
     {
-        var users = _unitOfWork.UserRepository.GetAsNoTrackingList().ToList();
+        var datas = await _unitOfWork.UserRepository.GetListAsync();
 
-        return Task.FromResult<IDataResult<List<UserToListDto>>>(
-            new SuccessDataResult<List<UserToListDto>>(_mapper.Map<List<UserToListDto>>(users)));
+        return new SuccessDataResult<List<UserToListDto>>(_mapper.Map<List<UserToListDto>>(datas),
+            Messages.Success.Translate());
     }
 
-    public async Task<IDataResult<UserToListDto>> GetAsync(int userId)
+    public async Task<IDataResult<UserToListDto>> GetAsync(int id)
     {
-        var user = _mapper.Map<UserToListDto>(
-            (await _unitOfWork.UserRepository.GetAsNoTrackingAsync(m => m.UserId == userId))!);
+        var data = _mapper.Map<UserToListDto>(await _unitOfWork.UserRepository.GetAsync(m => m.UserId == id));
 
-        return new SuccessDataResult<UserToListDto>(user);
+        return new SuccessDataResult<UserToListDto>(data, Messages.Success.Translate());
     }
 
-    public async Task<IResult> UpdateAsync(UserToUpdateDto userToUpdateDto)
+    public async Task<IResult> UpdateAsync(int id, UserToUpdateDto dto)
     {
-        if (await _unitOfWork.UserRepository.IsUserExistAsync(userToUpdateDto.Username, userToUpdateDto.UserId))
-            return new ErrorResult(Localization.Translate(Messages.UserIsExist));
+        if (await _unitOfWork.UserRepository.IsUserExistAsync(dto.Username, id))
+            return new ErrorResult(Messages.UserIsExist.Translate());
 
-        await _unitOfWork.UserRepository.UpdateUserAsync(_mapper.Map<User>(userToUpdateDto));
+        var data = _mapper.Map<User>(dto);
+        data.UserId = id;
+
+        await _unitOfWork.UserRepository.UpdateUserAsync(data);
         await _unitOfWork.CommitAsync();
 
-        return new SuccessResult(Localization.Translate(Messages.Success));
+        return new SuccessResult(Messages.Success.Translate());
     }
 
-    public async Task<IDataResult<PaginatedList<UserToListDto>>> GetAsPaginatedListAsync(int pageIndex, int pageSize)
+    public async Task<IDataResult<PaginatedList<UserToListDto>>> GetAsPaginatedListAsync(
+        int pageIndex, int pageSize)
     {
-        var users = _unitOfWork.UserRepository.GetAsNoTrackingList();
-        var response = await PaginatedList<User>.CreateAsync(users.OrderBy(m => m.UserId), pageIndex, pageSize);
+        var datas = _unitOfWork.UserRepository.GetList();
+        var response =
+            await PaginatedList<User>.CreateAsync(datas.OrderBy(m => m.UserId), pageIndex,
+                pageSize);
 
-        var responseDto = new PaginatedList<UserToListDto>(_mapper.Map<List<UserToListDto>>(response.Datas),
+        var responseDto = new PaginatedList<UserToListDto>(
+            _mapper.Map<List<UserToListDto>>(response.Datas),
             response.TotalRecordCount, response.PageIndex, response.TotalPageCount);
 
-        return new SuccessDataResult<PaginatedList<UserToListDto>>(responseDto);
+        return new SuccessDataResult<PaginatedList<UserToListDto>>(responseDto,
+            Messages.Success.Translate());
     }
 
-    public async Task<IResult> UpdateProfilePhotoAsync(int userId, string photoFileName)
+    public async Task<IResult> UpdateProfilePhotoAsync(int id, string photoFileName)
     {
-        var user = await _unitOfWork.UserRepository.GetAsync(m => m.UserId == userId);
-        if (user == null) return new ErrorResult(Localization.Translate(Messages.InvalidUserCredentials));
+        var data = await _unitOfWork.UserRepository.GetAsync(m => m.UserId == id);
+        if (data == null) return new ErrorResult(Messages.InvalidUserCredentials.Translate());
 
-        user.Photo.FileName = photoFileName;
+        data.Photo!.FileName = photoFileName;
 
-        _unitOfWork.UserRepository.Update(_mapper.Map<User>(user));
+        _unitOfWork.UserRepository.Update(_mapper.Map<User>(data));
         await _unitOfWork.CommitAsync();
 
-        return new SuccessResult();
+        return new SuccessResult(Messages.Success.Translate());
     }
 
-    public async Task<IResult> DeleteProfilePhotoAsync(int userId)
+    public async Task<IResult> DeleteProfilePhotoAsync(int id)
     {
-        var user = await _unitOfWork.UserRepository.GetAsync(m => m.UserId == userId);
-        if (user == null) return new ErrorResult(Localization.Translate(Messages.InvalidUserCredentials));
+        var data = await _unitOfWork.UserRepository.GetAsync(m => m.UserId == id);
+        if (data == null) return new ErrorResult(Messages.InvalidUserCredentials.Translate());
 
-        user.Photo = null;
+        data.Photo = null;
 
-        _unitOfWork.UserRepository.Update(_mapper.Map<User>(user));
+        _unitOfWork.UserRepository.Update(_mapper.Map<User>(data));
         await _unitOfWork.CommitAsync();
 
-        return new SuccessResult();
+        return new SuccessResult(Messages.Success.Translate());
     }
 }

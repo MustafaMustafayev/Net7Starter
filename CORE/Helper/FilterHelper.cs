@@ -4,7 +4,8 @@ namespace CORE.Helper;
 
 public static class FilterHelper
 {
-    public static void InjectTenantFilter<TEntity>(bool useTenantIdFilter, string tenantProperyName, int? tenantId,
+    public static void InjectTenantFilter<TEntity>(bool useTenantIdFilter, string tenantProperyName,
+        int? tenantId,
         ref Expression<Func<TEntity, bool>>? filter)
     {
         if (!useTenantIdFilter || tenantId is null) return;
@@ -16,8 +17,11 @@ public static class FilterHelper
         var right = Expression.Constant(tenantId, left.Type);
 
         var expression =
-            (Expression<Func<TEntity, bool>>)Expression.Lambda(Expression.Equal(left, right), parameter);
+            (Expression<Func<TEntity, bool>>)Expression.Lambda(Expression.Equal(left, right),
+                parameter);
 
-        filter = filter is null ? expression : ExpressionHelper.True<TEntity>().And(filter).And(expression);
+        filter = filter is null
+            ? expression
+            : ExpressionHelper.True<TEntity>().And(filter).And(expression);
     }
 }

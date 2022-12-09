@@ -59,7 +59,8 @@
               : using a System.ComponentModel.TypeConverter
               : and then encoded with base64 encoding.
       -->
-    <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"
+    <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"
                 id="root"
                 xmlns="">
         <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
@@ -86,10 +87,13 @@
                     <xsd:element name="data">
                         <xsd:complexType>
                             <xsd:sequence>
-                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
-                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0"
+                                             msdata:Ordinal="1"/>
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0"
+                                             msdata:Ordinal="2"/>
                             </xsd:sequence>
-                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+                            <xsd:attribute name="name" type="xsd:string" use="required"
+                                           msdata:Ordinal="1"/>
                             <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
                             <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
                             <xsd:attribute ref="xml:space"/>
@@ -98,7 +102,8 @@
                     <xsd:element name="resheader">
                         <xsd:complexType>
                             <xsd:sequence>
-                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0"
+                                             msdata:Ordinal="1"/>
                             </xsd:sequence>
                             <xsd:attribute name="name" type="xsd:string" use="required"/>
                         </xsd:complexType>
@@ -114,70 +119,69 @@
         <value>2.0</value>
     </resheader>
     <resheader name="reader">
-        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral,
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0,
+            Culture=neutral,
             PublicKeyToken=b77a5c561934e089
         </value>
     </resheader>
     <resheader name="writer">
-        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral,
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0,
+            Culture=neutral,
             PublicKeyToken=b77a5c561934e089
         </value>
     </resheader>
     <data name="BasketDidNotSendByCurrentUser" xml:space="preserve">
-    <value>Товары в корзине не были куплены</value>
+    <value>Səbətdəki məhsullar alınmayıb</value>
   </data>
     <data name="DataIsExistInBasket" xml:space="preserve">
-    <value>Информация доступна в корзине</value>
-  </data>
-    <data name="EmailDoesNotExist" xml:space="preserve">
-    <value>Не зарегистрирован с указанным адресом электронной почты</value>
-  </data>
-    <data name="GeneralError" xml:space="preserve">
-    <value>Произошла ошибка</value>
-  </data>
-    <data name="InvalidDateToResetPasswordMessage" xml:space="preserve">
-    <value>Код подтверждения неверный</value>
-  </data>
-    <data name="InvalidFotoFormat" xml:space="preserve">
-    <value>Формат изображения, которое вы добавили, не соответствует</value>
-  </data>
-    <data name="InvalidModel" xml:space="preserve">
-    <value>Информация введена не корректно</value>
-  </data>
-    <data name="InvalidUserCredentials" xml:space="preserve">
-    <value>Информация о пользователе неверна</value>
-  </data>
-    <data name="MailSended" xml:space="preserve">
-    <value>На ваш электронный адрес отправлено письмо</value>
-  </data>
-    <data name="PasswordResetted" xml:space="preserve">
-    <value>Ваш пароль был обновлен</value>
-  </data>
-    <data name="PermissionDenied" xml:space="preserve">
-    <value>У вас нет разрешения на выполнение операции</value>
-  </data>
-    <data name="Success" xml:space="preserve">
-    <value>Успешно выполнено</value>
-  </data>
-    <data name="UserDoesNotExist" xml:space="preserve">
-    <value>Пользователь недоступен</value>
-  </data>
-    <data name="UserIsExist" xml:space="preserve">
-    <value>Пользователь доступен</value>
-  </data>
-    <data name="UserIsNotLogin" xml:space="preserve">
-    <value>Вы не авторизованы</value>
-  </data>
-    <data name="UsernameIsExist" xml:space="preserve">
-    <value>Доступна регистрация по электронной почте</value>
-  </data>
-    <data name="ValidationError" xml:space="preserve">
-    <value>Ошибка проверки модели</value>
+    <value>Məlumat səbətdə mövcuddur</value>
   </data>
     <data name="DataIsExistInFavourite" xml:space="preserve">
-    <value>Информация доступна</value>
+    <value>Məlumat mövcuddur</value>
+  </data>
+    <data name="EmailDoesNotExist" xml:space="preserve">
+    <value>Qeyd edilmiş elektron poçt ünvanı ilə qeydiyyat edilməyib</value>
   </data>
     <data name="ForbidFileExtension" xml:space="preserve">
-    <value>Ошибка file extension</value>
+    <value>Fayl uzantısı sistem tərəfindən dəstəklənmir</value>
+  </data>
+    <data name="GeneralError" xml:space="preserve">
+    <value>Xəta baş verdi</value>
+  </data>
+    <data name="InvalidDateToResetPasswordMessage" xml:space="preserve">
+    <value>Təsdiq kodu doğru deyil</value>
+  </data>
+    <data name="InvalidFotoFormat" xml:space="preserve">
+    <value>Əlavə etdiyiniz şəkilin formatı uyğun deyil</value>
+  </data>
+    <data name="InvalidModel" xml:space="preserve">
+    <value>Məlumatlar düzgün daxil edilməyib</value>
+  </data>
+    <data name="InvalidUserCredentials" xml:space="preserve">
+    <value>İstifadəçi məlumatları yanlışdır</value>
+  </data>
+    <data name="MailSended" xml:space="preserve">
+    <value>Elektron poçt ünvanınıza email göndərildi</value>
+  </data>
+    <data name="PasswordResetted" xml:space="preserve">
+    <value>Şifrəniz yeniləndi</value>
+  </data>
+    <data name="PermissionDenied" xml:space="preserve">
+    <value>Əməliyyatın icrası üçün icazəniz yoxdur</value>
+  </data>
+    <data name="Success" xml:space="preserve">
+    <value>Uğurla icra edildi</value>
+  </data>
+    <data name="UserDoesNotExist" xml:space="preserve">
+    <value>İstifadəçi mövcud deyil</value>
+  </data>
+    <data name="UserIsExist" xml:space="preserve">
+    <value>İstifadəçi mövcuddur</value>
+  </data>
+    <data name="UsernameIsExist" xml:space="preserve">
+    <value>Bu email ilə qeydiyyat mövcuddur</value>
+  </data>
+    <data name="ValidationError" xml:space="preserve">
+    <value>Model doğrulama xətası</value>
   </data>
 </root>

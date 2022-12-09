@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace DTO.User;
+namespace ENTITIES.Entities;
 
-public class Photo
+public class Photo : Auditable, IEntity
 {
     [Key] public int PhotoId { get; set; }
 

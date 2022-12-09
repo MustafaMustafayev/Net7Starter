@@ -1,4 +1,5 @@
 ﻿using API.ActionFilters;
+using API.Attributes;
 using BLL.Abstract;
 using DTO.Responses;
 using DTO.Role;
@@ -10,10 +11,10 @@ using IResult = DTO.Responses.IResult;
 
 namespace API.Controllers;
 
-[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 [Route("api/[controller]")]
 [ServiceFilter(typeof(LogActionFilter))]
-[AllowAnonymous]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+[ValidateToken]
 public class RoleController : Controller
 {
     private readonly IRoleService _roleService;
@@ -28,7 +29,8 @@ public class RoleController : Controller
     [HttpGet]
     public async Task<IActionResult> Get()
     {
-        return Ok(await _roleService.GetAsync());
+        var response = await _roleService.GetAsync();
+        return Ok(response);
     }
 
     [SwaggerOperation(Summary = "get role")]
@@ -36,23 +38,35 @@ public class RoleController : Controller
     [HttpGet("{id}")]
     public async Task<IActionResult> Get([FromRoute] int id)
     {
-        return Ok(await _roleService.GetAsync(id));
+        var response = await _roleService.GetAsync(id);
+        return Ok(response);
+    }
+
+    [SwaggerOperation(Summary = "get role permissions")]
+    [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IDataResult<RoleToListDto>))]
+    [HttpGet("{id}/permissions")]
+    public async Task<IActionResult> GetRolePermissions([FromRoute] int id)
+    {
+        var response = await _roleService.GetPermissionsAsync(id);
+        return Ok(response);
     }
 
     [SwaggerOperation(Summary = "create role")]
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
     [HttpPost]
-    public async Task<IActionResult> Add([FromBody] RoleToAddDto role)
+    public async Task<IActionResult> Add([FromBody] RoleToAddDto dto)
     {
-        return Ok(await _roleService.AddAsync(role));
+        var response = await _roleService.AddAsync(dto);
+        return Ok(response);
     }
 
     [SwaggerOperation(Summary = "update role")]
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
-    [HttpPut]
-    public async Task<IActionResult> Update([FromBody] RoleToUpdateDto role)
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update([FromRoute] int id, [FromBody] RoleToUpdateDto dto)
     {
-        return Ok(await _roleService.UpdateAsync(role));
+        var response = await _roleService.UpdateAsync(id, dto);
+        return Ok(response);
     }
 
     [SwaggerOperation(Summary = "delete role")]
@@ -60,7 +74,7 @@ public class RoleController : Controller
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete([FromRoute] int id)
     {
-        await _roleService.DeleteAsync(id);
-        return Ok();
+        var response = await _roleService.SoftDeleteAsync(id);
+        return Ok(response);
     }
 }

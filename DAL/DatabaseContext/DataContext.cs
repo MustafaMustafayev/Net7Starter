@@ -1,7 +1,6 @@
 ﻿using System.Linq.Expressions;
 using CORE.Abstract;
 using DAL.CustomMigrations;
-using DTO.User;
 using ENTITIES.Entities;
 using ENTITIES.Entities.Logging;
 using Microsoft.AspNetCore.Http;
@@ -14,7 +13,8 @@ public class DataContext : DbContext
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly IUtilService _utilService;
 
-    public DataContext(DbContextOptions<DataContext> options, IHttpContextAccessor httpContextAccessor,
+    public DataContext(DbContextOptions<DataContext> options,
+        IHttpContextAccessor httpContextAccessor,
         IUtilService utilService) : base(options)
     {
         _httpContextAccessor = httpContextAccessor;
@@ -22,6 +22,7 @@ public class DataContext : DbContext
     }
 
     public DbSet<User> Users { get; set; }
+
     public DbSet<Photo> Photos { get; set; }
 
     public DbSet<Organization> Organizations { get; set; }
@@ -30,6 +31,9 @@ public class DataContext : DbContext
     public DbSet<RequestLog> RequestLogs { get; set; }
 
     public DbSet<ResponseLog> ResponseLogs { get; set; }
+
+    public DbSet<Permission> Permissions { get; set; }
+    public DbSet<Token> Tokens { get; set; }
 
     public DbSet<ENTITIES.Entities.Logging.NLog> NLogs { get; set; }
 
@@ -45,8 +49,11 @@ public class DataContext : DbContext
     }
 
     /* migration commands
-      dotnet ef --startup-project ../API migrations add redisentities --context DataContext
+      dotnet ef --startup-project ../API migrations add tokens --context DataContext
       dotnet ef --startup-project ../API database update --context DataContext
+      
+      dotnet ef migrations add Initial --startup-project API  --project DAL
+      dotnet ef database update Initial --startup-project API  --project DAL
     */
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -63,6 +70,8 @@ public class DataContext : DbContext
                 modelBuilder.Entity(entityType.ClrType).HasQueryFilter(deletedCheck);
             }
 
+        modelBuilder.Entity<Token>().HasQueryFilter(m => !m.IsDeleted);
+
         DataSeed.Seed(modelBuilder);
     }
 
@@ -70,9 +79,10 @@ public class DataContext : DbContext
     {
         var entries = ChangeTracker
             .Entries()
-            .Where(e => e.Entity is Auditable && e.State is EntityState.Added or EntityState.Modified);
+            .Where(e =>
+                e.Entity is Auditable && e.State is EntityState.Added or EntityState.Modified);
 
-        var tokenString = _httpContextAccessor?.HttpContext?.Request.Headers["Authorization"].ToString();
+        var tokenString = _httpContextAccessor.HttpContext?.Request.Headers["Authorization"].ToString();
         foreach (var entityEntry in entries)
             switch (entityEntry.State)
             {
@@ -80,25 +90,32 @@ public class DataContext : DbContext
                     // var originalValues = entityEntry.OriginalValues.ToObject();
                     // var currentValues = entityEntry.CurrentValues.ToObject();
                     ((Auditable)entityEntry.Entity).CreatedAt = DateTime.Now;
-                    ((Auditable)entityEntry.Entity).CreatedBy = _utilService.GetUserIdFromToken(tokenString);
+                    ((Auditable)entityEntry.Entity).CreatedBy =
+                        _utilService.GetUserIdFromToken(tokenString);
                     break;
                 case EntityState.Modified:
                 {
-                    Entry((Auditable)entityEntry.Entity).Property(p => p.CreatedAt).IsModified = false;
-                    Entry((Auditable)entityEntry.Entity).Property(p => p.CreatedBy).IsModified = false;
+                    Entry((Auditable)entityEntry.Entity).Property(p => p.CreatedAt).IsModified =
+                        false;
+                    Entry((Auditable)entityEntry.Entity).Property(p => p.CreatedBy).IsModified =
+                        false;
 
                     if (((Auditable)entityEntry.Entity).IsDeleted)
                     {
-                        Entry((Auditable)entityEntry.Entity).Property(p => p.ModifiedBy).IsModified = false;
-                        Entry((Auditable)entityEntry.Entity).Property(p => p.ModifiedAt).IsModified = false;
+                        Entry((Auditable)entityEntry.Entity).Property(p => p.ModifiedBy)
+                            .IsModified = false;
+                        Entry((Auditable)entityEntry.Entity).Property(p => p.ModifiedAt)
+                            .IsModified = false;
 
                         ((Auditable)entityEntry.Entity).DeletedAt = DateTime.Now;
-                        ((Auditable)entityEntry.Entity).DeletedBy = _utilService.GetUserIdFromToken(tokenString);
+                        ((Auditable)entityEntry.Entity).DeletedBy =
+                            _utilService.GetUserIdFromToken(tokenString);
                     }
                     else
                     {
                         ((Auditable)entityEntry.Entity).ModifiedAt = DateTime.Now;
-                        ((Auditable)entityEntry.Entity).ModifiedBy = _utilService.GetUserIdFromToken(tokenString);
+                        ((Auditable)entityEntry.Entity).ModifiedBy =
+                            _utilService.GetUserIdFromToken(tokenString);
                     }
 
                     break;

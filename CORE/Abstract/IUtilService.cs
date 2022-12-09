@@ -7,7 +7,6 @@ public interface IUtilService
 
     public int? GetUserIdFromToken(string? tokenString);
     public int? GetCompanyIdFromToken(string? tokenString);
-
-    public void AddTokenToCache(string token, DateTime expireDate);
-    public bool IsTokenExistsInCache(string? token);
+    public string GenerateRefreshToken();
+    public string GetTokenStringFromHeader(string jwtToken);
 }

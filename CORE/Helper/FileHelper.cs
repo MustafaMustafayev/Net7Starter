@@ -1,4 +1,4 @@
-﻿using CORE.Middlewares.Translation;
+﻿using CORE.Localization;
 using DTO.Responses;
 using Microsoft.AspNetCore.Http;
 using IResult = DTO.Responses.IResult;
@@ -19,9 +19,10 @@ public static class FileHelper
     {
         var filePath = Path.Combine(path, name);
         if (File.Exists(filePath))
-            return new SuccessDataResult<string>(data: Convert.ToBase64String(await File.ReadAllBytesAsync(filePath)));
+            return new SuccessDataResult<string>(
+                data: Convert.ToBase64String(await File.ReadAllBytesAsync(filePath)));
 
-        return new ErrorDataResult<string>(Localization.Translate(Messages.FileIsNotFound));
+        return new ErrorDataResult<string>(Messages.FileIsNotFound.Translate());
     }
 
     public static IResult DeleteFile(string filePath)

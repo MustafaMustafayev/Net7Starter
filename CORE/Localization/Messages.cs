@@ -1,4 +1,4 @@
-﻿namespace CORE.Middlewares.Translation;
+﻿namespace CORE.Localization;
 
 public enum Messages
 {
@@ -14,7 +14,6 @@ public enum Messages
     InvalidVerificationCode,
     CanNotFoundCompanyIdInYourAccessToken,
     CanNotFoundUserIdInYourAccessToken,
-    YourSessionIsClosed,
     FileIsNotImage,
     FileIsLargeThan2Mb,
     FileIsNotFound,

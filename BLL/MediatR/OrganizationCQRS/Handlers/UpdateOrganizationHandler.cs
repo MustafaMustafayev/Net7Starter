@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BLL.MediatR.OrganizationCQRS.Commands;
+using CORE.Localization;
 using DAL.UnitOfWorks.Abstract;
 using DTO.Responses;
 using ENTITIES.Entities;
@@ -18,12 +19,15 @@ public class UpdateOrganizationHandler : IRequestHandler<UpdateOrganizationComma
         _mapper = mapper;
     }
 
-    public Task<IResult> Handle(UpdateOrganizationCommand request, CancellationToken cancellationToken)
+    public async Task<IResult> Handle(UpdateOrganizationCommand request,
+        CancellationToken cancellationToken)
     {
         var mapped = _mapper.Map<Organization>(request.Organization);
-        _unitOfWork.OrganizationRepository.Update(mapped);
-        // var result = _mapper.Map<OrganizationToListDto>(data);
+        mapped.OrganizationId = request.organizationId;
 
-        return Task.FromResult<IResult>(new SuccessResult());
+        _unitOfWork.OrganizationRepository.Update(mapped);
+        await _unitOfWork.CommitAsync();
+
+        return new SuccessResult(Messages.Success.Translate());
     }
 }

@@ -1,8 +1,8 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Cryptography;
 using System.Text;
 using CORE.Abstract;
 using CORE.Config;
-using Microsoft.Extensions.Caching.Memory;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 
@@ -11,11 +11,9 @@ namespace CORE.Concrete;
 public class UtilService : IUtilService
 {
     private readonly ConfigSettings _configSettings;
-    private readonly IMemoryCache _memoryCache;
 
-    public UtilService(ConfigSettings configSettings, IMemoryCache memoryCache)
+    public UtilService(ConfigSettings configSettings)
     {
-        _memoryCache = memoryCache;
         _configSettings = configSettings;
     }
 
@@ -27,20 +25,22 @@ public class UtilService : IUtilService
     public int? GetUserIdFromToken(string? tokenString)
     {
         if (string.IsNullOrEmpty(tokenString)) return null;
-        if (!tokenString.Contains("Bearer ")) return null;
+        if (!tokenString.Contains($"{_configSettings.AuthSettings.TokenPrefix} ")) return null;
 
         var token = new JwtSecurityToken(tokenString[7..]);
 
-        return Convert.ToInt32(token.Claims.First(c => c.Type == _configSettings.AuthSettings.TokenUserIdKey).Value);
+        return Convert.ToInt32(token.Claims
+            .First(c => c.Type == _configSettings.AuthSettings.TokenUserIdKey).Value);
     }
 
     public int? GetCompanyIdFromToken(string? tokenString)
     {
         if (string.IsNullOrEmpty(tokenString)) return null;
-        if (!tokenString.Contains("Bearer ")) return null;
+        if (!tokenString.Contains($"{_configSettings.AuthSettings.TokenPrefix} ")) return null;
 
         var token = new JwtSecurityToken(tokenString[7..]);
-        var companyIdClaim = token.Claims.First(c => c.Type == _configSettings.AuthSettings.TokenCompanyIdKey);
+        var companyIdClaim =
+            token.Claims.First(c => c.Type == _configSettings.AuthSettings.TokenCompanyIdKey);
 
         if (companyIdClaim is null || string.IsNullOrEmpty(companyIdClaim.Value)) return null;
 
@@ -51,12 +51,11 @@ public class UtilService : IUtilService
     {
         if (string.IsNullOrEmpty(tokenString) || tokenString.Length < 7) return false;
 
-        tokenString = tokenString[7..];
         var tokenHandler = new JwtSecurityTokenHandler();
         var secretKey = Encoding.ASCII.GetBytes(_configSettings.AuthSettings.SecretKey);
         try
         {
-            tokenHandler.ValidateToken(tokenString, new TokenValidationParameters
+            tokenHandler.ValidateToken(tokenString[7..], new TokenValidationParameters
             {
                 ValidateIssuerSigningKey = false,
                 IssuerSigningKey = new SymmetricSecurityKey(secretKey),
@@ -74,30 +73,20 @@ public class UtilService : IUtilService
         }
     }
 
-    public void AddTokenToCache(string token, DateTime expireDate)
+    public string GenerateRefreshToken()
     {
-        Dictionary<string, DateTime>? tokens;
+        var randomNumber = new byte[64];
+        using var rng = RandomNumberGenerator.Create();
+        rng.GetBytes(randomNumber);
 
-        _memoryCache.TryGetValue(Constants.Constants.CacheTokensKey, out tokens);
-
-        if (tokens is null) tokens = new Dictionary<string, DateTime>();
-
-        tokens.Add($"{_configSettings.AuthSettings.TokenPrefix} {token}", expireDate);
-
-        _memoryCache.Set(Constants.Constants.CacheTokensKey, tokens,
-            TimeSpan.FromHours(_configSettings.AuthSettings.TokenExpirationTimeInHours));
+        return Convert.ToBase64String(randomNumber);
     }
 
-    public bool IsTokenExistsInCache(string? token)
+    public string GetTokenStringFromHeader(string? jwtToken)
     {
-        if (string.IsNullOrEmpty(token)) return false;
-        Dictionary<string, DateTime>? tokens;
+        if (string.IsNullOrEmpty(jwtToken) || jwtToken.Length < 7) throw new Exception();
 
-        _memoryCache.TryGetValue(Constants.Constants.CacheTokensKey, out tokens);
-
-        if (tokens is null || !tokens.Any()) return false;
-
-        return tokens.ContainsKey(token);
+        return jwtToken[7..];
     }
 
     public string GetContentType()

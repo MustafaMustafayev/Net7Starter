@@ -21,19 +21,28 @@
     ├── API 
     │   ├── ActionFilters
     │   │   ├── LogActionFilter
-    │   │   └── ValidatorActionFilter
-    │   ├── BackgroundServices
-    │   │   └── TokenKeeperService
+    │   │   └── ModelValidatorActionFilter
+    │   ├── Attributes
+    │   │   ├── ValidateForgeryTokenAttribute
+    │   │   └── ValidateTokenAttribute
+    │   ├── Containers
+    │   │   └── DependencyContainer
     │   ├── Controllers
     │   │   ├── UserController
     │   │   └── ...
-    │   ├── CustomAttributes
-    │   │   └── CacheTokenValidateAttribute
-    │   ├── DependencyContainers
-    │   │   └── StockDependencyContainer
-    │   └── Hubs
-    │       ├── UserHub
-    │       └── ...
+    │   ├── Graphql
+    │   │   ├── Role
+    │   │   │   ├── Mutation
+    │   │   │   └── Query
+    │   │   └── ...
+    │   ├── Hubs
+    │   │   ├── UserHub
+    │   │   └── ...
+    │   ├── Middlewares
+    │   │   ├── ExceptionMiddleware
+    │   │   └── LocalizationMiddleware
+    │   └── Services
+    │       └── RedisIndexCreatorService
     │
     │── ── ── ── ── ── ── ── ── ── ── ── ── ──
     │
@@ -61,6 +70,7 @@
     │       │       ├── GetOrganizationListQuery
     │       │       └── ...
     │       └── ...
+    │       //TODO ADD RABBITMQ HERE
     │ 
     │── ── ── ── ── ── ── ── ── ── ── ── ── ──
     │
@@ -73,34 +83,32 @@
     │   │   ├── Constants
     │   │   ├── LocalizationConstants
     │   │   └── Messages
-    │   ├── Enums
-    │   │   └── URole
-    │   ├── Helper
+    │   ├── Config
     │   │   ├── AuthSettings
     │   │   ├── ConfigSettings
     │   │   ├── ConnectionStrings
-    │   │   ├── EnumConverter
+    │   │   ├── Controllable
+    │   │   ├── HttpClientSettings
+    │   │   ├── HttpHeader
+    │   │   ├── RedisSettings
+    │   │   ├── RequestSettings
+    │   │   ├── SentrySettings
+    │   │   └── SwaggerSettings
+    │   ├── Helper
     │   │   ├── ExpressionHelper
     │   │   ├── FileHelper
     │   │   ├── FilterHelper
     │   │   ├── ObjectSerializer
-    │   │   ├── RequestSettings
-    │   │   ├── SecurityHelper
-    │   │   └── SwaggerSettings
+    │   │   └── SecurityHelper
     │   ├── Logging
     │   │   ├── ILoggerManager
     │   │   └── LoggerManager
-    │   └── Middlewares
-    │       ├── ExceptionHandler
-    │       │   └── ExceptionMiddleware
-    │       └── Translation
-    │           ├── Localization
-    │           ├── LocalizationMiddleware
-    │           ├── LocalizationMiddleware
-    │           ├── Messages
-    │           ├── MsgResource.az
-    │           ├── MsgResource.en
-    │           └── MsgResource.ru
+    │   └── Localization
+    │       ├── TranslatorExtension
+    │       ├── Messages
+    │       ├── MsgResource.az
+    │       ├── MsgResource.en
+    │       └── MsgResource.ru
     │
     │── ── ── ── ── ── ── ── ── ── ── ── ── ──
     │
@@ -144,12 +152,17 @@
     │
     │── ── ── ── ── ── ── ── ── ── ── ── ── ──
     │
-    └── ENTITY
-        ├── Entities
-        │   ├── User
-        │   └── ..
-        ├── Enums
-        │   ├── UserType
-        │   └── ..
-        └── IEntities
-            └── IEntity
+    ├── ENTITIES
+    │   ├── Entities
+    │   │   ├── Redis
+    │   │   │   └── ..
+    │   │   ├── Logging
+    │   │   │   └── ..
+    │   │   ├── User
+    │   │   └── ..
+    │   ├── Enums
+    │   │   ├── UserType
+    │   │   └── ..
+    │   └── IEntity
+    │
+    └── ── ── ── ── ── ── ── ── ── ── ── ── ──

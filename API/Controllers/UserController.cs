@@ -1,4 +1,6 @@
-﻿using BLL.Abstract;
+﻿using API.ActionFilters;
+using API.Attributes;
+using BLL.Abstract;
 using CORE.Config;
 using DTO.Responses;
 using DTO.User;
@@ -10,9 +12,9 @@ using IResult = DTO.Responses.IResult;
 
 namespace API.Controllers;
 
-[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 [Route("api/[controller]")]
-[AllowAnonymous]
+[ServiceFilter(typeof(LogActionFilter))]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class UserController : Controller
 {
     private readonly ConfigSettings _configSettings;
@@ -27,27 +29,36 @@ public class UserController : Controller
     [SwaggerOperation(Summary = "get users as paginated list")]
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IDataResult<List<UserToListDto>>))]
     [HttpGet("paginate")]
+    [ValidateToken]
     public async Task<IActionResult> GetAsPaginated()
     {
-        var pageIndex = Convert.ToInt32(HttpContext.Request.Headers[_configSettings.RequestSettings.PageIndex]);
-        var pageSize = Convert.ToInt32(HttpContext.Request.Headers[_configSettings.RequestSettings.PageSize]);
-        return Ok(await _userService.GetAsPaginatedListAsync(pageIndex, pageSize));
+        var pageIndex =
+            Convert.ToInt32(HttpContext.Request.Headers[_configSettings.RequestSettings.PageIndex]);
+        var pageSize =
+            Convert.ToInt32(HttpContext.Request.Headers[_configSettings.RequestSettings.PageSize]);
+        var response = await _userService.GetAsPaginatedListAsync(pageIndex, pageSize);
+
+        return Ok(response);
     }
 
     [SwaggerOperation(Summary = "get users")]
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IDataResult<List<UserToListDto>>))]
     [HttpGet]
+    [ValidateToken]
     public async Task<IActionResult> Get()
     {
-        return Ok(await _userService.GetAsync());
+        var response = await _userService.GetAsync();
+        return Ok(response);
     }
 
     [SwaggerOperation(Summary = "get user")]
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IDataResult<UserToListDto>))]
     [HttpGet("{id}")]
+    [ValidateToken]
     public async Task<IActionResult> Get([FromRoute] int id)
     {
-        return Ok(await _userService.GetAsync(id));
+        var response = await _userService.GetAsync(id);
+        return Ok(response);
     }
 
     [AllowAnonymous]
@@ -56,23 +67,27 @@ public class UserController : Controller
     [HttpPost("register")]
     public async Task<IActionResult> Add([FromBody] UserToAddDto dto)
     {
-        return Ok(await _userService.AddAsync(dto));
+        var response = await _userService.AddAsync(dto);
+        return Ok(response);
     }
 
     [SwaggerOperation(Summary = "update user")]
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
-    [HttpPut]
-    public async Task<IActionResult> Update([FromBody] UserToUpdateDto dto)
+    [HttpPut("{id}")]
+    [ValidateToken]
+    public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UserToUpdateDto dto)
     {
-        return Ok(await _userService.UpdateAsync(dto));
+        var response = await _userService.UpdateAsync(id, dto);
+        return Ok(response);
     }
 
     [SwaggerOperation(Summary = "delete user")]
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
     [HttpDelete("{id}")]
+    [ValidateToken]
     public async Task<IActionResult> Delete([FromRoute] int id)
     {
-        await _userService.DeleteAsync(id);
-        return Ok(new SuccessDataResult<Result>());
+        var response = await _userService.SoftDeleteAsync(id);
+        return Ok(response);
     }
 }

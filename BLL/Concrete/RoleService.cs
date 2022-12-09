@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
 using BLL.Abstract;
-using CORE.Middlewares.Translation;
+using CORE.Localization;
 using DAL.UnitOfWorks.Abstract;
+using DTO.Permission;
 using DTO.Responses;
 using DTO.Role;
 using ENTITIES.Entities;
@@ -21,52 +22,69 @@ public class RoleService : IRoleService
 
     public async Task<IResult> AddAsync(RoleToAddDto dto)
     {
-        var entity = _mapper.Map<Role>(dto);
+        var data = _mapper.Map<Role>(dto);
 
-        await _unitOfWork.RoleRepository.AddAsync(entity);
+        var permissions =
+            await _unitOfWork.PermissionRepository.GetListAsync(m => dto.PermissionIds.Contains(m.PermissionId));
+        data.Permissions = permissions;
+
+        await _unitOfWork.RoleRepository.AddAsync(data);
         await _unitOfWork.CommitAsync();
 
-        return new SuccessResult(Localization.Translate(Messages.Success));
+        return new SuccessResult(Messages.Success.Translate());
     }
 
-    public async Task<IResult> DeleteAsync(int id)
+    public async Task<IResult> SoftDeleteAsync(int id)
     {
-        var entity = await _unitOfWork.RoleRepository.GetAsync(m => m.RoleId == id);
-        entity!.IsDeleted = true;
+        var data = await _unitOfWork.RoleRepository.GetAsync(m => m.RoleId == id);
 
-        _unitOfWork.RoleRepository.Update(entity);
+        _unitOfWork.RoleRepository.SoftDelete(data);
         await _unitOfWork.CommitAsync();
 
-        return new SuccessResult(Localization.Translate(Messages.Success));
+        return new SuccessResult(Messages.Success.Translate());
     }
 
     public async Task<IDataResult<List<RoleToListDto>>> GetAsync()
     {
-        var datas = _mapper.Map<List<RoleToListDto>>(_unitOfWork.RoleRepository.GetList());
+        var datas = _mapper.Map<List<RoleToListDto>>(await _unitOfWork.RoleRepository.GetListAsync());
 
-        return new SuccessDataResult<List<RoleToListDto>>(datas);
+        return new SuccessDataResult<List<RoleToListDto>>(datas, Messages.Success.Translate());
     }
 
     public async Task<IDataResult<IQueryable<Role>>> GraphQlGetAsync()
     {
-        return new SuccessDataResult<IQueryable<Role>>(_unitOfWork.RoleRepository.GetList());
+        return new SuccessDataResult<IQueryable<Role>>(_unitOfWork.RoleRepository.GetList()!,
+            Messages.Success.Translate());
     }
 
     public async Task<IDataResult<RoleToListDto>> GetAsync(int id)
     {
-        var data = _mapper.Map<RoleToListDto>(
-            (await _unitOfWork.RoleRepository.GetAsNoTrackingAsync(m => m.RoleId == id))!);
+        var data = _mapper.Map<RoleToListDto>(await _unitOfWork.RoleRepository.GetAsync(m => m.RoleId == id));
 
-        return new SuccessDataResult<RoleToListDto>(data);
+        return new SuccessDataResult<RoleToListDto>(data, Messages.Success.Translate());
     }
 
-    public async Task<IResult> UpdateAsync(RoleToUpdateDto dto)
+    public async Task<IResult> UpdateAsync(int id, RoleToUpdateDto dto)
     {
-        var entity = _mapper.Map<Role>(dto);
+        var data = _mapper.Map<Role>(dto);
+        data.RoleId = id;
 
-        _unitOfWork.RoleRepository.Update(entity);
+        var permissions =
+            await _unitOfWork.PermissionRepository.GetListAsync(m => dto.PermissionIds.Contains(m.PermissionId));
+        data.Permissions = permissions;
+
+        _unitOfWork.RoleRepository.UpdateRoleAsync(data);
         await _unitOfWork.CommitAsync();
 
-        return new SuccessResult(Localization.Translate(Messages.Success));
+        return new SuccessResult(Messages.Success.Translate());
+    }
+
+    public async Task<IDataResult<List<PermissionToListDto>>> GetPermissionsAsync(int id)
+    {
+        var datas = _mapper.Map<List<PermissionToListDto>>(
+            (await _unitOfWork.RoleRepository.GetAsync(m => m.RoleId == id))!.Permissions);
+
+        return new SuccessDataResult<List<PermissionToListDto>>(datas,
+            Messages.Success.Translate());
     }
 }

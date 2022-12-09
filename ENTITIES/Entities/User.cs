@@ -1,6 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using DTO.User;
-using ENTITIES.Enums;
 
 namespace ENTITIES.Entities;
 
@@ -16,6 +14,7 @@ public class User : Auditable
     [Display(Name = "İstifadəçiyə göndərilmiş sonuncu email təsdiqləmə kodu. Şifrəni yeniləyən zaman lazım olacaq.")]
     public string? LastVerificationCode { get; set; }
 
-    [Required] public UserType Type { get; set; }
+    [Required] public int RoleId { get; set; }
+    [Required] public virtual Role Role { get; set; }
     public virtual Photo? Photo { get; set; }
 }

@@ -15,4 +15,8 @@
     <ItemGroup>
         <PackageReference Include="Redis.OM" Version="0.3.1"/>
     </ItemGroup>
+
+    <ItemGroup>
+        <Folder Include="Enums"/>
+    </ItemGroup>
 </Project>

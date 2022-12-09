@@ -8,7 +8,7 @@ public class RoleMapper : Profile
 {
     public RoleMapper()
     {
-        CreateMap<Role, RoleToListDto>();
+        CreateMap<Role, RoleToListDto>().ReverseMap();
         CreateMap<RoleToAddDto, Role>();
         CreateMap<RoleToUpdateDto, Role>();
     }

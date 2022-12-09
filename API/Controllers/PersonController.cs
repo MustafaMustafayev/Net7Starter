@@ -1,6 +1,8 @@
 ﻿using API.ActionFilters;
+using API.Attributes;
 using DTO.Responses;
 using ENTITIES.Entities.Redis;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Redis.OM;
@@ -11,7 +13,8 @@ namespace API.Controllers;
 
 [Route("api/[controller]")]
 [ServiceFilter(typeof(LogActionFilter))]
-[Authorize]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+[ValidateToken]
 public class PersonController : Controller
 {
     private readonly RedisCollection<Person> _collection;
@@ -44,11 +47,13 @@ public class PersonController : Controller
     [SwaggerOperation(Summary = "filter by geo")]
     [SwaggerResponse(StatusCodes.Status200OK)]
     [HttpGet("filterGeo")]
-    public IActionResult FilterByGeo([FromQuery] double lon, [FromQuery] double lat, [FromQuery] double radius,
+    public IActionResult FilterByGeo([FromQuery] double lon, [FromQuery] double lat,
+        [FromQuery] double radius,
         [FromQuery] string unit)
     {
         return Ok(new SuccessDataResult<List<Person>>(_collection
-            .GeoFilter(x => x.Address!.Location, lon, lat, radius, Enum.Parse<GeoLocDistanceUnit>(unit)).ToList()));
+            .GeoFilter(x => x.Address!.Location, lon, lat, radius,
+                Enum.Parse<GeoLocDistanceUnit>(unit)).ToList()));
     }
 
     [SwaggerOperation(Summary = "filter by name")]
@@ -65,7 +70,8 @@ public class PersonController : Controller
     [HttpGet("postalCode")]
     public IActionResult FilterByPostalCode([FromQuery] string postalCode)
     {
-        return Ok(new SuccessDataResult<List<Person>>(_collection.Where(x => x.Address!.PostalCode == postalCode)
+        return Ok(new SuccessDataResult<List<Person>>(_collection
+            .Where(x => x.Address!.PostalCode == postalCode)
             .ToList()));
     }
 
@@ -74,7 +80,9 @@ public class PersonController : Controller
     [HttpGet("fullText")]
     public IActionResult FilterByPersonalStatement([FromQuery] string text)
     {
-        return Ok(new SuccessDataResult<List<Person>>(_collection.Where(x => x.PersonalStatement == text).ToList()));
+        return Ok(
+            new SuccessDataResult<List<Person>>(_collection.Where(x => x.PersonalStatement == text)
+                .ToList()));
     }
 
     [SwaggerOperation(Summary = "filter by street name")]
@@ -82,7 +90,8 @@ public class PersonController : Controller
     [HttpGet("streetName")]
     public IActionResult FilterByStreetName([FromQuery] string streetName)
     {
-        return Ok(new SuccessDataResult<List<Person>>(_collection.Where(x => x.Address!.StreetName == streetName)
+        return Ok(new SuccessDataResult<List<Person>>(_collection
+            .Where(x => x.Address!.StreetName == streetName)
             .ToList()));
     }
 
@@ -91,7 +100,9 @@ public class PersonController : Controller
     [HttpGet("skill")]
     public IActionResult FilterBySkill([FromQuery] string skill)
     {
-        return Ok(new SuccessDataResult<List<Person>>(_collection.Where(x => x.Skills.Contains(skill)).ToList()));
+        return Ok(
+            new SuccessDataResult<List<Person>>(_collection.Where(x => x.Skills.Contains(skill))
+                .ToList()));
     }
 
     [SwaggerOperation(Summary = "update person to redis")]

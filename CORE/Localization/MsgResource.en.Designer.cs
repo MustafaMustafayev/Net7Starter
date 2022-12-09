@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace CORE.Middlewares.Translation {
+namespace CORE.Localization {
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>
@@ -36,7 +36,7 @@ namespace CORE.Middlewares.Translation {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("CORE.Middlewares.Translation.MsgResource", typeof(MsgResource).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("CORE.Localization.MsgResource", typeof(MsgResource).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

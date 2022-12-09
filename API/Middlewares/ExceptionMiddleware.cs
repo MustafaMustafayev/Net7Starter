@@ -1,15 +1,12 @@
 ﻿using System.Net;
 using System.Text.Json;
 using CORE.Config;
+using CORE.Localization;
 using CORE.Logging;
-using CORE.Middlewares.Translation;
 using DTO.Responses;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Hosting;
 using Sentry;
 
-namespace CORE.Middlewares.ExceptionHandler;
+namespace API.Middlewares;
 
 public class ExceptionMiddleware
 {
@@ -36,15 +33,16 @@ public class ExceptionMiddleware
         catch (Exception ex)
         {
             _logger.LogError($"Something went wrong: {ex}");
+
             if (_config.SentrySettings.IsEnabled) SentrySdk.CaptureException(ex);
 
             if (_env.IsDevelopment()) throw;
 
-            await HandleExceptionAsync(httpContext, ex);
+            await HandleExceptionAsync(httpContext);
         }
     }
 
-    private static async Task HandleExceptionAsync(HttpContext context, Exception exception)
+    private static async Task HandleExceptionAsync(HttpContext context)
     {
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
@@ -54,8 +52,8 @@ public class ExceptionMiddleware
         //     AccessViolationException => "Access violation error from the custom middleware",
         //     _ => "Internal Server Error from the custom middleware."
         // };
-        var response = new ErrorDataResult<Result>(Localization.Translate(Messages.GeneralError));
 
+        var response = new ErrorResult(Messages.GeneralError.Translate());
         await context.Response.WriteAsync(JsonSerializer.Serialize(response));
     }
 }

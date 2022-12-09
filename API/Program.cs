@@ -2,13 +2,12 @@
 using API.Containers;
 using API.Graphql.Role;
 using API.Hubs;
+using API.Middlewares;
 using API.Services;
 using BLL.Mappers;
 using BLL.MediatR;
 using CORE.Config;
 using CORE.Constants;
-using CORE.Middlewares.ExceptionHandler;
-using CORE.Middlewares.Translation;
 using DAL.DatabaseContext;
 using DTO.Auth.Validators;
 using FluentValidation;
@@ -27,23 +26,21 @@ builder.Configuration.GetSection("Config").Bind(config);
 
 builder.Services.AddSingleton(config);
 
-builder.Services.AddControllers(opt => opt.Filters.Add(typeof(ValidatorActionFilter)));
+builder.Services.AddControllers(opt => opt.Filters.Add(typeof(ModelValidatorActionFilter)));
 
-builder.Services.AddFluentValidationAutoValidation().AddValidatorsFromAssemblyContaining<LoginDtoValidator>();
+builder.Services.AddFluentValidationAutoValidation()
+    .AddValidatorsFromAssemblyContaining<LoginDtoValidator>();
 
 if (config.SentrySettings.IsEnabled) builder.WebHost.UseSentry();
 
 builder.Services.AddAutoMapper(Automapper.GetAutoMapperProfilesFromAllAssemblies().ToArray());
 
-builder.Services.AddDbContext<DataContext>(options => options.UseNpgsql(config.ConnectionStrings.AppDb));
+builder.Services.AddDbContext<DataContext>(options =>
+    options.UseNpgsql(config.ConnectionStrings.AppDb));
 
 builder.Services.AddHttpContextAccessor();
 
-builder.Services.AddMemoryCache();
-
 builder.Services.RegisterHttpClients(config);
-
-builder.Services.AddHostedService<TokenKeeperHostedService>();
 
 if (config.RedisSettings.IsEnabled)
 {
@@ -68,9 +65,12 @@ builder.Services.AddHealthChecks();
 builder.Services.RegisterAuthentication(config);
 
 builder.Services.AddCors(o =>
-    o.AddPolicy(Constants.EnableAllCorsName, b => b.AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin()));
+    o.AddPolicy(Constants.EnableAllCorsName,
+        b => b.AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin()));
 
 builder.Services.AddScoped<LogActionFilter>();
+
+builder.Services.AddScoped<ModelValidatorActionFilter>();
 
 builder.Services.AddEndpointsApiExplorer();
 
@@ -96,6 +96,8 @@ app.UseCors(Constants.EnableAllCorsName);
 app.UseMiddleware<LocalizationMiddleware>();
 
 app.UseMiddleware<ExceptionMiddleware>();
+
+//app.UseMiddleware<ValidateBlackListMiddleware>();
 
 app.UseHttpsRedirection();
 

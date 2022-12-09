@@ -1,4 +1,5 @@
 ﻿using API.ActionFilters;
+using API.Attributes;
 using BLL.MediatR.OrganizationCQRS.Commands;
 using BLL.MediatR.OrganizationCQRS.Queries;
 using DTO.Organization;
@@ -12,10 +13,10 @@ using IResult = DTO.Responses.IResult;
 
 namespace API.Controllers;
 
-[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 [Route("api/[controller]")]
 [ServiceFilter(typeof(LogActionFilter))]
-[AllowAnonymous]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+[ValidateToken]
 public class OrganizationController : Controller
 {
     private readonly IMediator _mediator;
@@ -26,11 +27,13 @@ public class OrganizationController : Controller
     }
 
     [SwaggerOperation(Summary = "get organizations")]
-    [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IDataResult<List<OrganizationToListDto>>))]
+    [SwaggerResponse(StatusCodes.Status200OK,
+        type: typeof(IDataResult<List<OrganizationToListDto>>))]
     [HttpGet]
     public async Task<IActionResult> Get()
     {
-        return Ok(await _mediator.Send(new GetOrganizationListQuery()));
+        var response = await _mediator.Send(new GetOrganizationListQuery());
+        return Ok(response);
     }
 
     [SwaggerOperation(Summary = "get organization")]
@@ -38,7 +41,8 @@ public class OrganizationController : Controller
     [HttpGet("{id}")]
     public async Task<IActionResult> Get([FromRoute] int id)
     {
-        return Ok(await _mediator.Send(new GetOrganizationByIdQuery(id)));
+        var response = await _mediator.Send(new GetOrganizationByIdQuery(id));
+        return Ok(response);
     }
 
     [SwaggerOperation(Summary = "create organization")]
@@ -46,15 +50,17 @@ public class OrganizationController : Controller
     [HttpPost]
     public async Task<IActionResult> Add([FromBody] OrganizationToAddDto request)
     {
-        return Ok(await _mediator.Send(new AddOrganizationCommand(request)));
+        var response = await _mediator.Send(new AddOrganizationCommand(request));
+        return Ok(response);
     }
 
     [SwaggerOperation(Summary = "update organization")]
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
-    [HttpPut]
-    public async Task<IActionResult> Update([FromBody] OrganizationToUpdateDto request)
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update([FromRoute] int id, [FromBody] OrganizationToUpdateDto request)
     {
-        return Ok(await _mediator.Send(new UpdateOrganizationCommand(request)));
+        var response = await _mediator.Send(new UpdateOrganizationCommand(id, request));
+        return Ok(response);
     }
 
     [SwaggerOperation(Summary = "delete organization")]
@@ -62,6 +68,7 @@ public class OrganizationController : Controller
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete([FromRoute] int id)
     {
-        return Ok(await _mediator.Send(new DeleteOrganizationCommand(id)));
+        var response = await _mediator.Send(new DeleteOrganizationCommand(id));
+        return Ok(response);
     }
 }

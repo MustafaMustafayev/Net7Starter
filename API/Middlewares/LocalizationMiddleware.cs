@@ -1,8 +1,7 @@
 ﻿using System.Globalization;
 using CORE.Constants;
-using Microsoft.AspNetCore.Http;
 
-namespace CORE.Middlewares.Translation;
+namespace API.Middlewares;
 
 public class LocalizationMiddleware
 {

@@ -13,19 +13,22 @@ public class LogActionFilter : IAsyncActionFilter
     private readonly ILoggingService _loggingService;
     private readonly IUtilService _utilService;
 
-    public LogActionFilter(IUtilService utilService, ILoggingService loggingService, ConfigSettings configSettings)
+    public LogActionFilter(IUtilService utilService, ILoggingService loggingService,
+        ConfigSettings configSettings)
     {
         _utilService = utilService;
         _loggingService = loggingService;
         _configSettings = configSettings;
     }
 
-    public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
+    public async Task OnActionExecutionAsync(ActionExecutingContext context,
+        ActionExecutionDelegate next)
     {
         var httpContext = context.HttpContext;
 
         var traceIdentitier = httpContext?.TraceIdentifier;
-        var clientIp = httpContext?.Features.Get<IHttpConnectionFeature>()?.RemoteIpAddress?.ToString();
+        var clientIp = httpContext?.Features.Get<IHttpConnectionFeature>()?.RemoteIpAddress
+            ?.ToString();
         var uri = httpContext?.Request.Host + httpContext?.Request.Path;
 
         var token = string.Empty;
@@ -37,7 +40,8 @@ public class LogActionFilter : IAsyncActionFilter
         {
             token = httpContext.Request.Headers[authHeaderName].ToString();
             userId = !string.IsNullOrEmpty(token)
-                ? _utilService.GetUserIdFromToken(httpContext.Request.Headers[authHeaderName].ToString())
+                ? _utilService.GetUserIdFromToken(httpContext.Request.Headers[authHeaderName]
+                    .ToString())
                 : null;
         }
 
