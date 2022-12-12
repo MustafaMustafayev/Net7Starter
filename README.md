@@ -8,8 +8,10 @@
 > database based logging implemented using action filters, request profiling added using MiniProfiler, unhandled exception handled by sentry,
 > response security headers added, audit properties implemented by overriding SaveChangesAsync method of DbContext, docker-compose yaml written,
 > authentication and authorization implemented using custom middleware, generic CRUD operations implemented, automapper configured,
+> simple one to many role and permission logic implemented,
+> password policy implemented
+> antiforgery token implemented
 > generic pagination, global exception handling, localization, whitelist, custom generic automapping & validations between entity and dtos implemented.
-> Simple book library model implemented for test issues.
 > Database and application dockerized. Docker compose implemented with build step.
 
 ## Structure
