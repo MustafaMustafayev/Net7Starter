@@ -47,7 +47,7 @@
     <ItemGroup>
         <Folder Include="Controllers\"/>
         <Folder Include="wwwroot\files\"/>
-        <Folder Include="Middlewares\"/>
+        <Folder Include="wwwroot\users\"/>
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\BLL\BLL.csproj">
