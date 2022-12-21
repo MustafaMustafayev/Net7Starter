@@ -49,6 +49,7 @@ if (config.RedisSettings.IsEnabled)
 }
 
 builder.Services.RegisterRepositories();
+builder.Services.RegisterAntiForgeryToken();
 builder.Services.RegisterUnitOfWork();
 
 builder.Services.AddGraphQLServer()
@@ -97,6 +98,8 @@ app.UseMiddleware<LocalizationMiddleware>();
 
 app.UseMiddleware<ExceptionMiddleware>();
 
+app.UseMiddleware<ValidateAntiForgeryTokenMiddleware>();
+
 //app.UseMiddleware<ValidateBlackListMiddleware>();
 
 app.UseHttpsRedirection();
@@ -107,16 +110,15 @@ app.Use((context, next) =>
     return next();
 });
 
-// this headers will broke miniprofiler. inspect in mini profiler
-// app.Use(async (context, next) =>
-// {
-//     context.Response.Headers.Add("X-Content-Type-Options", "nosniff");
-//     context.Response.Headers.Add("Content-Security-Policy", "default-src 'self'");
-//     context.Response.Headers.Add("X-XSS-Protection", "1; mode=block");
-//     context.Response.Headers.Add("X-Frame-Options", "Deny");
-//     context.Response.Headers.Add("Referrer-Policy", "no-referrer");
-//     await next.Invoke();
-// });
+app.Use(async (context, next) =>
+{
+    context.Response.Headers.Add("X-Content-Type-Options", "nosniff");
+    context.Response.Headers.Add("Content-Security-Policy", "default-src 'self'");
+    context.Response.Headers.Add("X-XSS-Protection", "1; mode=block");
+    context.Response.Headers.Add("X-Frame-Options", "Deny");
+    context.Response.Headers.Add("Referrer-Policy", "no-referrer");
+    await next.Invoke();
+});
 
 if (config.SentrySettings.IsEnabled) app.UseSentryTracing();
 
@@ -126,7 +128,7 @@ app.UseAuthorization();
 
 app.UseAuthentication();
 
-app.UseMiniProfiler();
+// app.UseMiniProfiler();
 
 app.UseHealthChecks("/hc");
 

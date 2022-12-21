@@ -137,6 +137,14 @@ public static class DependencyContainer
         services.AddSingleton<UserHub>();
     }
 
+    public static void RegisterAntiForgeryToken(this IServiceCollection services)
+    {
+        services.AddAntiforgery(options =>
+        {
+            options.HeaderName = "X-XSRF-TOKEN";
+        });
+    }
+
     public static void RegisterUnitOfWork(this IServiceCollection services)
     {
         services.AddScoped<IUnitOfWork, UnitOfWork>();
