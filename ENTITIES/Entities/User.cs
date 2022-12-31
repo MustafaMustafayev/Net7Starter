@@ -16,5 +16,5 @@ public class User : Auditable
 
     [Required] public int RoleId { get; set; }
     [Required] public virtual Role Role { get; set; }
-    public virtual Photo? Photo { get; set; }
+    public string? ImagePath { get; set; }
 }

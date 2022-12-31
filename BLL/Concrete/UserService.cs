@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BLL.Abstract;
+using CORE.Enums;
 using CORE.Helper;
 using CORE.Localization;
 using DAL.UnitOfWorks.Abstract;
@@ -26,6 +27,9 @@ public class UserService : IUserService
         if (await _unitOfWork.UserRepository.IsUserExistAsync(dto.Username, null))
             return new ErrorResult(Messages.UserIsExist.Translate());
 
+        dto.RoleId = dto.RoleId == 0 || !dto.RoleId.HasValue
+            ? (await _unitOfWork.RoleRepository.GetAsync(m => m.Key == ERole.viewer.ToString())).RoleId
+            : dto.RoleId;
         var data = _mapper.Map<User>(dto);
 
         data.Salt = SecurityHelper.GenerateSalt();
@@ -67,6 +71,10 @@ public class UserService : IUserService
         if (await _unitOfWork.UserRepository.IsUserExistAsync(dto.Username, id))
             return new ErrorResult(Messages.UserIsExist.Translate());
 
+        dto.RoleId = dto.RoleId == 0 || !dto.RoleId.HasValue
+            ? (await _unitOfWork.RoleRepository.GetAsync(m => m.Key == ERole.viewer.ToString())).RoleId
+            : dto.RoleId;
+
         var data = _mapper.Map<User>(dto);
         data.UserId = id;
 
@@ -97,7 +105,7 @@ public class UserService : IUserService
         var data = await _unitOfWork.UserRepository.GetAsync(m => m.UserId == id);
         if (data == null) return new ErrorResult(Messages.InvalidUserCredentials.Translate());
 
-        data.Photo!.FileName = photoFileName;
+        data.ImagePath = photoFileName;
 
         _unitOfWork.UserRepository.Update(_mapper.Map<User>(data));
         await _unitOfWork.CommitAsync();
@@ -110,7 +118,7 @@ public class UserService : IUserService
         var data = await _unitOfWork.UserRepository.GetAsync(m => m.UserId == id);
         if (data == null) return new ErrorResult(Messages.InvalidUserCredentials.Translate());
 
-        data.Photo = null;
+        data.ImagePath = null;
 
         _unitOfWork.UserRepository.Update(_mapper.Map<User>(data));
         await _unitOfWork.CommitAsync();

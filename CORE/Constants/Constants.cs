@@ -5,6 +5,7 @@ public static class Constants
     public const string EnableAllCorsName = "CorsPolicy";
     public const string NLogConfigPath = "/nlog.config";
     public const string CacheTokensKey = "ActiveTokens";
+    public const string AuthHeader = "Authorization";
 
     public const int AllowedLength = 5300000;
 

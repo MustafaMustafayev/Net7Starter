@@ -9,5 +9,5 @@ public record UserToListDto
     public string Email { get; set; }
     public string ContactNumber { get; set; }
     public RoleToListDto Role { get; set; }
-    public PhotoToListDto? Photo { get; set; }
+    public string? ImagePath { get; set; }
 }

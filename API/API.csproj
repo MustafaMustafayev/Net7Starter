@@ -45,9 +45,9 @@
         <None Remove="Middlewares\" />
     </ItemGroup>
     <ItemGroup>
-        <Folder Include="Controllers\" />
-        <Folder Include="wwwroot\files\" />
-        <Folder Include="Middlewares\" />
+        <Folder Include="Controllers\"/>
+        <Folder Include="wwwroot\files\"/>
+        <Folder Include="wwwroot\users\"/>
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\BLL\BLL.csproj">

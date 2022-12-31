@@ -85,9 +85,7 @@ public static class DependencyContainer
 
             c.SwaggerDoc(config.SwaggerSettings.Version,
                 new OpenApiInfo
-                {
-                    Title = config.SwaggerSettings.Title, Version = config.SwaggerSettings.Version
-                });
+                    { Title = config.SwaggerSettings.Title, Version = config.SwaggerSettings.Version });
 
             c.AddSecurityDefinition(config.AuthSettings.TokenPrefix, new OpenApiSecurityScheme
             {
@@ -99,6 +97,13 @@ public static class DependencyContainer
                 Description = "JWT Authorization header using the Bearer scheme."
             });
 
+            c.AddSecurityDefinition(config.AuthSettings.RefreshTokenHeaderName, new OpenApiSecurityScheme
+            {
+                Name = config.AuthSettings.RefreshTokenHeaderName,
+                In = ParameterLocation.Header,
+                Description = "Refresh token header."
+            });
+
             c.AddSecurityRequirement(new OpenApiSecurityRequirement
             {
                 {
@@ -108,6 +113,17 @@ public static class DependencyContainer
                         {
                             Type = ReferenceType.SecurityScheme,
                             Id = config.AuthSettings.TokenPrefix
+                        }
+                    },
+                    Array.Empty<string>()
+                },
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = config.AuthSettings.RefreshTokenHeaderName
                         }
                     },
                     Array.Empty<string>()
