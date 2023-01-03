@@ -130,15 +130,6 @@
             PublicKeyToken=b77a5c561934e089
         </value>
     </resheader>
-    <data name="BasketDidNotSendByCurrentUser" xml:space="preserve">
-    <value>Səbətdəki məhsullar alınmayıb</value>
-  </data>
-    <data name="DataIsExistInBasket" xml:space="preserve">
-    <value>Məlumat səbətdə mövcuddur</value>
-  </data>
-    <data name="DataIsExistInFavourite" xml:space="preserve">
-    <value>Məlumat mövcuddur</value>
-  </data>
     <data name="EmailDoesNotExist" xml:space="preserve">
     <value>Qeyd edilmiş elektron poçt ünvanı ilə qeydiyyat edilməyib</value>
   </data>
@@ -148,20 +139,11 @@
     <data name="GeneralError" xml:space="preserve">
     <value>Xəta baş verdi</value>
   </data>
-    <data name="InvalidDateToResetPasswordMessage" xml:space="preserve">
-    <value>Təsdiq kodu doğru deyil</value>
-  </data>
-    <data name="InvalidFotoFormat" xml:space="preserve">
-    <value>Əlavə etdiyiniz şəkilin formatı uyğun deyil</value>
-  </data>
     <data name="InvalidModel" xml:space="preserve">
     <value>Məlumatlar düzgün daxil edilməyib</value>
   </data>
     <data name="InvalidUserCredentials" xml:space="preserve">
     <value>İstifadəçi məlumatları yanlışdır</value>
-  </data>
-    <data name="MailSended" xml:space="preserve">
-    <value>Elektron poçt ünvanınıza email göndərildi</value>
   </data>
     <data name="PasswordResetted" xml:space="preserve">
     <value>Şifrəniz yeniləndi</value>
@@ -172,16 +154,10 @@
     <data name="Success" xml:space="preserve">
     <value>Uğurla icra edildi</value>
   </data>
-    <data name="UserDoesNotExist" xml:space="preserve">
+    <data name="UserIsNotExist" xml:space="preserve">
     <value>İstifadəçi mövcud deyil</value>
   </data>
     <data name="UserIsExist" xml:space="preserve">
     <value>İstifadəçi mövcuddur</value>
-  </data>
-    <data name="UsernameIsExist" xml:space="preserve">
-    <value>Bu email ilə qeydiyyat mövcuddur</value>
-  </data>
-    <data name="ValidationError" xml:space="preserve">
-    <value>Model doğrulama xətası</value>
   </data>
 </root>

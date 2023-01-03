@@ -12,9 +12,7 @@ public enum Messages
     PasswordResetted,
     VerificationCodeSent,
     InvalidVerificationCode,
-    CanNotFoundCompanyIdInYourAccessToken,
     CanNotFoundUserIdInYourAccessToken,
-    FileIsNotImage,
     FileIsLargeThan2Mb,
     FileIsNotFound,
     ForbidFileExtension

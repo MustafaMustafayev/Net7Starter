@@ -4,20 +4,20 @@
 
 ![Alt](https://repobeats.axiom.co/api/embed/8a34edc6094601ed624424f8b121ad4937d0f8dd.svg "Repobeats analytics image")
 
-> .NET 6.0 Web Api project with Entity framework 6 code first approach. In this template n-tier architecture, repository and unit of work pattern implemented,
+> .NET 7.0 Web Api project with Entity framework 6 code first approach. In this template n-tier architecture, repository and unit of work pattern implemented,
 > database based logging implemented using action filters, request profiling added using MiniProfiler, unhandled exception handled by sentry,
 > response security headers added, audit properties implemented by overriding SaveChangesAsync method of DbContext, docker-compose yaml written,
 > authentication and authorization implemented using custom middleware, generic CRUD operations implemented, automapper configured,
 > simple one to many role and permission logic implemented,
 > password policy implemented
-> antiforgery token implemented
+> anti forgery token implemented
 > generic pagination, global exception handling, localization, whitelist, custom generic automapping & validations between entity and dtos implemented.
 > Database and application dockerized. Docker compose implemented with build step.
 
 ## Structure
 
     │── ── ── ── ── ── ── ── ── ── ── ── ── ──
-    │ .NET 6.0 WebApi Starter Project
+    │ .NET 7.0 WebApi Starter Project
     │── ── ── ── ── ── ── ── ── ── ── ── ── ──
     │
     ├── API 

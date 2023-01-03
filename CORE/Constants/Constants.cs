@@ -14,5 +14,5 @@ public static class Constants
 
     public static List<string> AllowedFileExtensions = new();
     public static List<string> AllowAnonymous = new();
-    public static List<string> AntiForgeryTokenMethodTypes = new List<string>() { "post", "put", "delete", "patch" };
+    public static List<string> AntiForgeryTokenMethodTypes = new() { "post", "put", "delete", "patch" };
 }
