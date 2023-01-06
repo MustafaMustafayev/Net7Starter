@@ -130,32 +130,17 @@
             PublicKeyToken=b77a5c561934e089
         </value>
     </resheader>
-    <data name="BasketDidNotSendByCurrentUser" xml:space="preserve">
-    <value>The products in the basket were not purchased</value>
-  </data>
-    <data name="DataIsExistInBasket" xml:space="preserve">
-    <value>Information is available in the basket</value>
-  </data>
     <data name="EmailDoesNotExist" xml:space="preserve">
     <value>Not registered with the specified e-mail address</value>
   </data>
     <data name="GeneralError" xml:space="preserve">
     <value>An error occurred</value>
   </data>
-    <data name="InvalidDateToResetPasswordMessage" xml:space="preserve">
-    <value>The confirmation code is incorrect</value>
-  </data>
-    <data name="InvalidFotoFormat" xml:space="preserve">
-    <value>The format of the image you added does not match</value>
-  </data>
     <data name="InvalidModel" xml:space="preserve">
     <value>The information was not entered correctly</value>
   </data>
     <data name="InvalidUserCredentials" xml:space="preserve">
     <value>User information is incorrect</value>
-  </data>
-    <data name="MailSended" xml:space="preserve">
-    <value>An email has been sent to your email address</value>
   </data>
     <data name="PasswordResetted" xml:space="preserve">
     <value>Your password has been updated</value>
@@ -166,20 +151,11 @@
     <data name="Success" xml:space="preserve">
     <value>Successfully executed</value>
   </data>
-    <data name="UserDoesNotExist" xml:space="preserve">
+    <data name="UserIsNotExist" xml:space="preserve">
     <value>User not available</value>
   </data>
     <data name="UserIsExist" xml:space="preserve">
     <value>User available</value>
-  </data>
-    <data name="UsernameIsExist" xml:space="preserve">
-    <value>Registration by email is available</value>
-  </data>
-    <data name="ValidationError" xml:space="preserve">
-    <value>Model verification error</value>
-  </data>
-    <data name="DataIsExistInFavourite" xml:space="preserve">
-    <value>Information is available</value>
   </data>
     <data name="ForbidFileExtension" xml:space="preserve">
     <value>Unsupported file extension</value>

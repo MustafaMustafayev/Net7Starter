@@ -2,7 +2,7 @@
 
 namespace DAL.UnitOfWorks.Abstract;
 
-public interface IUnitOfWork : IAsyncDisposable
+public interface IUnitOfWork : IAsyncDisposable, IDisposable
 {
     public IUserRepository UserRepository { get; set; }
 
