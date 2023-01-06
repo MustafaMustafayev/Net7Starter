@@ -1,4 +1,4 @@
-# Net6ApiStarter
+# Net7ApiStarter
 
 ### Code contributors
 
