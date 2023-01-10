@@ -26,7 +26,7 @@ public class PermissionController : Controller
         _configSettings = configSettings;
     }
 
-    [SwaggerOperation(Summary = "get users as paginated list")]
+    [SwaggerOperation(Summary = "get perrmissions as paginated list")]
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IDataResult<List<PermissionToListDto>>))]
     [HttpGet("paginate")]
     public async Task<IActionResult> GetAsPaginated()
