@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 namespace DAL.GenericRepositories.Concrete;
 
 public class GenericRepository<TEntity> : IGenericRepository<TEntity>
-    where TEntity : class, new()
+    where TEntity : class
 {
     private readonly DataContext _ctx;
 

@@ -3,7 +3,7 @@
 public record PhotoToListDto
 {
     public int PhotoId { get; set; }
-    public string FileName { get; set; }
-    public string Extension { get; set; }
-    public string Base64 { get; set; }
+    public required string FileName { get; set; }
+    public required string Extension { get; set; }
+    public required string Base64 { get; set; }
 }

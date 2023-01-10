@@ -6,8 +6,8 @@ public record RoleToListDto
 {
     public int RoleId { get; set; }
 
-    public string Name { get; set; }
+    public required string Name { get; set; }
 
-    public string Key { get; set; }
-    public List<PermissionToListDto> Permissions { get; set; }
+    public required string Key { get; set; }
+    public List<PermissionToListDto>? Permissions { get; set; }
 }

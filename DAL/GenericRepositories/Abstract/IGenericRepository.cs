@@ -3,7 +3,7 @@
 namespace DAL.GenericRepositories.Abstract;
 
 public interface IGenericRepository<T>
-    where T : class, new()
+    where T : class
 {
     Task<List<T>> GetListAsync(Expression<Func<T, bool>>? filter = null,
         bool ignoreQueryFilters = false);

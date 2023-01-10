@@ -49,7 +49,7 @@ public class DataContext : DbContext
     }
 
     /* migration commands
-      dotnet ef --startup-project ../API migrations add tokens --context DataContext
+      dotnet ef --startup-project ../API migrations add test --context DataContext
       dotnet ef --startup-project ../API database update --context DataContext
       
       dotnet ef migrations add Initial --startup-project API  --project DAL
