@@ -50,6 +50,7 @@ if (config.RedisSettings.IsEnabled)
 
 builder.Services.RegisterRepositories();
 builder.Services.RegisterApiVersioning();
+builder.Services.RegisterRateLimit();
 builder.Services.RegisterAntiForgeryToken();
 builder.Services.RegisterUnitOfWork();
 
@@ -132,6 +133,8 @@ app.UseAuthentication();
 // app.UseMiniProfiler();
 
 app.UseHealthChecks("/hc");
+
+app.UseRateLimiter();
 
 app.MapControllers();
 
