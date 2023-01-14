@@ -15,6 +15,7 @@ using DAL.UnitOfWorks.Abstract;
 using DAL.UnitOfWorks.Concrete;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using NLog;
@@ -132,6 +133,19 @@ public static class DependencyContainer
         });
     }
 
+    public static void RegisterApiVersioning(this IServiceCollection services)
+    {
+        services.AddApiVersioning(opt =>
+        {
+            opt.DefaultApiVersion = new Microsoft.AspNetCore.Mvc.ApiVersion(1, 0);
+            opt.AssumeDefaultVersionWhenUnspecified = true;
+            opt.ReportApiVersions = true;
+            opt.ApiVersionReader = ApiVersionReader.Combine(new UrlSegmentApiVersionReader(),
+                                                            new HeaderApiVersionReader("x-api-version"),
+                                                            new MediaTypeApiVersionReader("x-api-version"));
+        });
+
+    }
     public static void RegisterRepositories(this IServiceCollection services)
     {
         services.AddScoped<IAuthRepository, AuthRepository>();
