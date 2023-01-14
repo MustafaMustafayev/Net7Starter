@@ -49,6 +49,7 @@ if (config.RedisSettings.IsEnabled)
 }
 
 builder.Services.RegisterRepositories();
+builder.Services.RegisterApiVersioning();
 builder.Services.RegisterAntiForgeryToken();
 builder.Services.RegisterUnitOfWork();
 
