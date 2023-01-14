@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using System.Threading.RateLimiting;
 using API.Hubs;
 using BLL.Abstract;
 using BLL.Concrete;
@@ -146,6 +147,25 @@ public static class DependencyContainer
         });
 
     }
+
+    public static void RegisterRateLimit(this IServiceCollection services)
+    {
+        services.AddRateLimiter(options =>
+        {
+            options.RejectionStatusCode = 429; //default value is 503
+            options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(httpContext =>
+                RateLimitPartition.GetFixedWindowLimiter(
+                    partitionKey: httpContext.User.Identity?.Name ?? httpContext.Request.Headers.Host.ToString(),
+                    factory: partition => new FixedWindowRateLimiterOptions
+                    {
+                        AutoReplenishment = true,
+                        PermitLimit = 100,
+                        QueueLimit = 0,
+                        Window = TimeSpan.FromMinutes(1)
+                    }));
+        });
+    }
+
     public static void RegisterRepositories(this IServiceCollection services)
     {
         services.AddScoped<IAuthRepository, AuthRepository>();

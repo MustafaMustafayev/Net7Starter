@@ -1,5 +1,4 @@
 ﻿using DTO.Responses;
-using GraphQL;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -11,13 +10,11 @@ namespace API.Controllers
     public class VersioningController : ControllerBase
     {
         [HttpGet]
-        [AllowAnonymous]
         public IActionResult Get()
         {
             return Ok(new SuccessResult());
         }
 
-        [AllowAnonymous]
         [MapToApiVersion("2.0")]
         [HttpGet("{id}")]
         public IActionResult Get([FromRoute] int id)
