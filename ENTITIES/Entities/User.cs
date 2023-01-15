@@ -13,6 +13,7 @@ public class User : Auditable
 
     [Display(Name = "İstifadəçiyə göndərilmiş sonuncu email təsdiqləmə kodu. Şifrəni yeniləyən zaman lazım olacaq.")]
     public string? LastVerificationCode { get; set; }
+
     public int? RoleId { get; set; }
     public virtual Role? Role { get; set; }
     public string? ImagePath { get; set; }

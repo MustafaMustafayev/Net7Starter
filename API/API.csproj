@@ -10,44 +10,44 @@
         <LangVersion>default</LangVersion>
     </PropertyGroup>
 
-    <PropertyGroup Condition=" '$(RunConfiguration)' == 'API - Production' " />
-    <PropertyGroup Condition=" '$(RunConfiguration)' == 'API - Development' " />
+    <PropertyGroup Condition=" '$(RunConfiguration)' == 'API - Production' "/>
+    <PropertyGroup Condition=" '$(RunConfiguration)' == 'API - Development' "/>
     <ItemGroup>
-        <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="8.0.0" />
-        <PackageReference Include="GraphQL.Server.Transports.AspNetCore" Version="7.2.0" />
-        <PackageReference Include="GraphQL.Server.Ui.Voyager" Version="7.2.0" />
-        <PackageReference Include="HotChocolate.Abstractions" Version="13.0.0-preview.81" />
-        <PackageReference Include="HotChocolate.AspNetCore" Version="13.0.0-preview.81" />
-        <PackageReference Include="HotChocolate.Data.EntityFramework" Version="13.0.0-preview.81" />
-        <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
-        <PackageReference Include="Microsoft.AspNet.WebApi.Core" Version="5.2.9" />
-        <PackageReference Include="Microsoft.AspNet.WebPages" Version="3.2.9" />
-        <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.0.0" />
+        <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="8.0.0"/>
+        <PackageReference Include="GraphQL.Server.Transports.AspNetCore" Version="7.2.0"/>
+        <PackageReference Include="GraphQL.Server.Ui.Voyager" Version="7.2.0"/>
+        <PackageReference Include="HotChocolate.Abstractions" Version="13.0.0-preview.81"/>
+        <PackageReference Include="HotChocolate.AspNetCore" Version="13.0.0-preview.81"/>
+        <PackageReference Include="HotChocolate.Data.EntityFramework" Version="13.0.0-preview.81"/>
+        <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.0.0"/>
+        <PackageReference Include="Microsoft.AspNet.WebApi.Core" Version="5.2.9"/>
+        <PackageReference Include="Microsoft.AspNet.WebPages" Version="3.2.9"/>
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.0.0"/>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.1">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="MiniProfiler.EntityFrameworkCore" Version="4.2.22" />
-        <PackageReference Include="Redis.OM" Version="0.4.0" />
-        <PackageReference Include="Sentry.AspNetCore" Version="3.25.0" />
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
-        <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.4.0" />
-        <PackageReference Include="MiniProfiler.AspNetCore.Mvc" Version="4.2.22" />
-        <PackageReference Include="FluentValidation.AspNetCore" Version="11.2.2" />
+        <PackageReference Include="MiniProfiler.EntityFrameworkCore" Version="4.2.22"/>
+        <PackageReference Include="Redis.OM" Version="0.4.0"/>
+        <PackageReference Include="Sentry.AspNetCore" Version="3.25.0"/>
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0"/>
+        <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.4.0"/>
+        <PackageReference Include="MiniProfiler.AspNetCore.Mvc" Version="4.2.22"/>
+        <PackageReference Include="FluentValidation.AspNetCore" Version="11.2.2"/>
     </ItemGroup>
 
     <ItemGroup>
-        <None Remove="Microsoft.EntityFrameworkCore.Design" />
-        <None Remove="StyleCop.Analyzers" />
-        <None Remove="Swashbuckle.AspNetCore.Annotations" />
-        <None Remove="Controllers\" />
-        <None Remove="MiniProfiler.AspNetCore.Mvc" />
-        <None Remove="FluentValidation.AspNetCore" />
-        <None Remove="Middlewares\" />
+        <None Remove="Microsoft.EntityFrameworkCore.Design"/>
+        <None Remove="StyleCop.Analyzers"/>
+        <None Remove="Swashbuckle.AspNetCore.Annotations"/>
+        <None Remove="Controllers\"/>
+        <None Remove="MiniProfiler.AspNetCore.Mvc"/>
+        <None Remove="FluentValidation.AspNetCore"/>
+        <None Remove="Middlewares\"/>
     </ItemGroup>
     <ItemGroup>
-        <Folder Include="wwwroot\files\" />
-        <Folder Include="wwwroot\users\" />
+        <Folder Include="wwwroot\files\"/>
+        <Folder Include="wwwroot\users\"/>
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\BLL\BLL.csproj">
@@ -61,6 +61,6 @@
         </ProjectReference>
     </ItemGroup>
     <ItemGroup>
-        <Content Remove="wwwroot\files\" />
+        <Content Remove="wwwroot\files\"/>
     </ItemGroup>
 </Project>

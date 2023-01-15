@@ -16,6 +16,7 @@ using DAL.UnitOfWorks.Abstract;
 using DAL.UnitOfWorks.Concrete;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -138,14 +139,13 @@ public static class DependencyContainer
     {
         services.AddApiVersioning(opt =>
         {
-            opt.DefaultApiVersion = new Microsoft.AspNetCore.Mvc.ApiVersion(1, 0);
+            opt.DefaultApiVersion = new ApiVersion(1, 0);
             opt.AssumeDefaultVersionWhenUnspecified = true;
             opt.ReportApiVersions = true;
             opt.ApiVersionReader = ApiVersionReader.Combine(new UrlSegmentApiVersionReader(),
-                                                            new HeaderApiVersionReader("x-api-version"),
-                                                            new MediaTypeApiVersionReader("x-api-version"));
+                new HeaderApiVersionReader("x-api-version"),
+                new MediaTypeApiVersionReader("x-api-version"));
         });
-
     }
 
     public static void RegisterRateLimit(this IServiceCollection services)
@@ -155,8 +155,8 @@ public static class DependencyContainer
             options.RejectionStatusCode = 429; //default value is 503
             options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(httpContext =>
                 RateLimitPartition.GetFixedWindowLimiter(
-                    partitionKey: httpContext.User.Identity?.Name ?? httpContext.Request.Headers.Host.ToString(),
-                    factory: partition => new FixedWindowRateLimiterOptions
+                    httpContext.User.Identity?.Name ?? httpContext.Request.Headers.Host.ToString(),
+                    partition => new FixedWindowRateLimiterOptions
                     {
                         AutoReplenishment = true,
                         PermitLimit = 100,
