@@ -10,7 +10,7 @@ public interface IGenericRepository<T>
 
     Task<T?> GetAsync(Expression<Func<T, bool>> filter, bool ignoreQueryFilters = false);
 
-    IQueryable<T?> GetList(Expression<Func<T, bool>>? filter = null,
+    IQueryable<T> GetList(Expression<Func<T, bool>>? filter = null,
         bool ignoreQueryFilters = false);
 
     Task<T?> GetAsNoTrackingAsync(Expression<Func<T, bool>> filter);
