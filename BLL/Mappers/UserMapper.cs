@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DTO.Auth;
 using DTO.User;
 using ENTITIES.Entities;
 
@@ -12,5 +13,6 @@ public class UserMapper : Profile
         CreateMap<UserToAddDto, User>();
         CreateMap<UserToUpdateDto, User>();
         CreateMap<Photo, PhotoToListDto>();
+        CreateMap<UserToListDto, UserResponseDto>().ForMember(x => x.UserId, opt => opt.Ignore());
     }
 }
