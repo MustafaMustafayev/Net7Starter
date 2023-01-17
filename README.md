@@ -9,9 +9,12 @@
 > response security headers added, audit properties implemented by overriding SaveChangesAsync method of DbContext, docker-compose yaml written,
 > authentication and authorization implemented using custom middleware, generic CRUD operations implemented, automapper configured,
 > simple one to many role and permission logic implemented,
-> password policy implemented
-> anti forgery token implemented
-> generic pagination, global exception handling, localization, whitelist, custom generic automapping & validations between entity and dtos implemented.
+> password policy implemented,
+> anti forgery token implemented,
+> generic pagination, global exception handling, localization, whitelist, custom generic automapping & validations between entity and dtos implemented,
+> mail sender implemented,
+> rate limiting implemented,
+> encoding and decoding implemened,
 > Database and application dockerized. Docker compose implemented with build step.
 
 ## Structure
