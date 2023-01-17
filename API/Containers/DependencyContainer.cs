@@ -159,9 +159,9 @@ public static class DependencyContainer
                     factory: partition => new FixedWindowRateLimiterOptions
                     {
                         AutoReplenishment = true,
-                        PermitLimit = 100,
-                        QueueLimit = 0,
-                        Window = TimeSpan.FromMinutes(1)
+                        PermitLimit = 5,
+                        QueueLimit = 2,
+                        Window = TimeSpan.FromSeconds(10)
                     }));
 
             options.OnRejected = (context, cancellationToken) =>
