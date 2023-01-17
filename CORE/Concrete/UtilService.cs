@@ -5,7 +5,6 @@ using CORE.Abstract;
 using CORE.Config;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
-
 namespace CORE.Concrete;
 
 public class UtilService : IUtilService
@@ -28,9 +27,8 @@ public class UtilService : IUtilService
         if (!tokenString.Contains($"{_configSettings.AuthSettings.TokenPrefix} ")) return null;
 
         var token = new JwtSecurityToken(tokenString[7..]);
-
-        return Convert.ToInt32(token.Claims
-            .First(c => c.Type == _configSettings.AuthSettings.TokenUserIdKey).Value);
+        string userId = Decrypt(token.Claims.First(c => c.Type == _configSettings.AuthSettings.TokenUserIdKey).Value);
+        return Convert.ToInt32(userId);
     }
 
     public int? GetCompanyIdFromToken(string? tokenString)
@@ -93,4 +91,26 @@ public class UtilService : IUtilService
     {
         return _configSettings.AuthSettings.ContentType;
     }
-}
+
+    public string Encrypt(string value)
+    {
+        byte[] key = Convert.FromBase64String(_configSettings.CryptographySettings.KeyBase64);
+        byte[] iv = Convert.FromBase64String(_configSettings.CryptographySettings.VBase64);
+        SymmetricAlgorithm algorithm = DES.Create();
+        ICryptoTransform transform = algorithm.CreateEncryptor(key, iv);
+        byte[] inputbuffer = Encoding.Unicode.GetBytes(value);
+        byte[] outputBuffer = transform.TransformFinalBlock(inputbuffer, 0, inputbuffer.Length);
+        return Convert.ToBase64String(outputBuffer);  
+    }
+
+    public string Decrypt(string value)
+    {
+        byte[] key = Convert.FromBase64String(_configSettings.CryptographySettings.KeyBase64);
+        byte[] iv = Convert.FromBase64String(_configSettings.CryptographySettings.VBase64);
+        SymmetricAlgorithm algorithm = DES.Create();
+        ICryptoTransform transform = algorithm.CreateDecryptor(key, iv);
+        byte[] inputbuffer = Convert.FromBase64String(value);
+        byte[] outputBuffer = transform.TransformFinalBlock(inputbuffer, 0, inputbuffer.Length);
+        return Encoding.Unicode.GetString(outputBuffer);
+    }
+  }

@@ -3,6 +3,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using CORE.Abstract;
 using CORE.Config;
 using DTO.User;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
@@ -13,10 +14,11 @@ namespace CORE.Helper;
 public class SecurityHelper
 {
     private readonly ConfigSettings _configSettings;
-
-    public SecurityHelper(ConfigSettings configSettings)
+    private readonly IUtilService _utilService;
+    public SecurityHelper(ConfigSettings configSettings, IUtilService utilService)
     {
         _configSettings = configSettings;
+        _utilService = utilService;
     }
 
     public static string GenerateSalt()
@@ -49,7 +51,7 @@ public class SecurityHelper
     {
         var claims = new List<Claim>
         {
-            new(_configSettings.AuthSettings.TokenUserIdKey, userDto.UserId.ToString()),
+            new(_configSettings.AuthSettings.TokenUserIdKey, _utilService.Encrypt(userDto.UserId.ToString())),
             new(ClaimTypes.Name, userDto.Username),
             new(ClaimTypes.Expiration, expirationDate.ToString(CultureInfo.InvariantCulture))
         };

@@ -9,4 +9,6 @@ public interface IUtilService
     public int? GetCompanyIdFromToken(string? tokenString);
     public string GenerateRefreshToken();
     public string GetTokenStringFromHeader(string jwtToken);
+    public string Encrypt(string value);
+    public string Decrypt(string value);
 }
