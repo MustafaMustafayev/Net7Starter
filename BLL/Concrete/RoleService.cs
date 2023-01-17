@@ -73,7 +73,7 @@ public class RoleService : IRoleService
             await _unitOfWork.PermissionRepository.GetListAsync(m => dto.PermissionIds.Contains(m.PermissionId));
         data.Permissions = permissions;
 
-        _unitOfWork.RoleRepository.UpdateRoleAsync(data);
+        _unitOfWork.RoleRepository.UpdateRole(data);
         await _unitOfWork.CommitAsync();
 
         return new SuccessResult(Messages.Success.Translate());

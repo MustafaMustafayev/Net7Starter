@@ -163,6 +163,12 @@ public static class DependencyContainer
                         QueueLimit = 0,
                         Window = TimeSpan.FromMinutes(1)
                     }));
+
+            options.OnRejected = (context, cancellationToken) =>
+            {
+                //implement logic if rate limit happens
+                return new();
+            };
         });
     }
 
