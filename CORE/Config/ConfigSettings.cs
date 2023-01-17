@@ -10,4 +10,5 @@ public record ConfigSettings
     public SentrySettings SentrySettings { get; set; } = default!;
     public HttpClientSettings FirstHttpClientSettings { get; set; } = default!;
     public CryptographySettings CryptographySettings { get; set; } = default!;
+    public MailSettings MailSettings { get; set; } = default!;
 }
