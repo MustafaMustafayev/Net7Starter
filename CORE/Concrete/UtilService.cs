@@ -122,9 +122,6 @@ public class UtilService : IUtilService
         {
             var fromAddress = new MailAddress(_configSettings.MailSettings.Address, _configSettings.MailSettings.DisplayName);
             var toAddress = new MailAddress(email, email);
-            string fromPassword = _configSettings.MailSettings.MailKey;
-            string subject = _configSettings.MailSettings.Subject;
-            string body = message;
 
             var smtp = new SmtpClient
             {
@@ -133,13 +130,13 @@ public class UtilService : IUtilService
                 EnableSsl = false,
                 DeliveryMethod = SmtpDeliveryMethod.Network,
                 UseDefaultCredentials = false,
-                Credentials = new NetworkCredential(fromAddress.Address, fromPassword)
+                Credentials = new NetworkCredential(fromAddress.Address, _configSettings.MailSettings.MailKey)
             };
 
             using (var data = new MailMessage(fromAddress, toAddress)
             {
-                Subject = subject,
-                Body = body
+                Subject = _configSettings.MailSettings.Subject,
+                Body = message
             })
             await smtp.SendMailAsync(data);
         }
