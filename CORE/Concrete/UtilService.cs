@@ -1,4 +1,6 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
+using System.Net.Mail;
+using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 using CORE.Abstract;
@@ -100,7 +102,7 @@ public class UtilService : IUtilService
         ICryptoTransform transform = algorithm.CreateEncryptor(key, iv);
         byte[] inputbuffer = Encoding.Unicode.GetBytes(value);
         byte[] outputBuffer = transform.TransformFinalBlock(inputbuffer, 0, inputbuffer.Length);
-        return Convert.ToBase64String(outputBuffer);  
+        return Convert.ToBase64String(outputBuffer);
     }
 
     public string Decrypt(string value)
@@ -113,4 +115,33 @@ public class UtilService : IUtilService
         byte[] outputBuffer = transform.TransformFinalBlock(inputbuffer, 0, inputbuffer.Length);
         return Encoding.Unicode.GetString(outputBuffer);
     }
-  }
+
+    public async Task SendMail(string email, string message)
+    {
+        if (!string.IsNullOrEmpty(email) && email.Contains("@"))
+        {
+            var fromAddress = new MailAddress(_configSettings.MailSettings.Address, _configSettings.MailSettings.DisplayName);
+            var toAddress = new MailAddress(email, email);
+            string fromPassword = _configSettings.MailSettings.MailKey;
+            string subject = _configSettings.MailSettings.Subject;
+            string body = message;
+
+            var smtp = new SmtpClient
+            {
+                Host = _configSettings.MailSettings.Host,
+                Port = int.Parse(_configSettings.MailSettings.Port),
+                EnableSsl = false,
+                DeliveryMethod = SmtpDeliveryMethod.Network,
+                UseDefaultCredentials = false,
+                Credentials = new NetworkCredential(fromAddress.Address, fromPassword)
+            };
+
+            using (var data = new MailMessage(fromAddress, toAddress)
+            {
+                Subject = subject,
+                Body = body
+            })
+            await smtp.SendMailAsync(data);
+        }
+    }
+}
