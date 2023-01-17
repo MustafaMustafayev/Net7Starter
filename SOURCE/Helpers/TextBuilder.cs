@@ -1,7 +1,7 @@
 ﻿using System.Text;
-using SourceBuilder.Models;
+using SOURCE.Models;
 
-namespace SourceBuilder.Helpers;
+namespace SOURCE.Helpers;
 
 public static class TextBuilder
 {

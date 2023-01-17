@@ -1,8 +1,8 @@
 ﻿using System.Text;
 using System.Text.Json;
-using SourceBuilder.Models;
+using SOURCE.Models;
 
-namespace SourceBuilder.Helpers;
+namespace SOURCE.Helpers;
 
 public class FileHelper
 {
@@ -29,7 +29,7 @@ public class FileHelper
             Console.WriteLine($"I found your file and skipped creating this. {filePath}");
             return true;
         }
-        
+
         await using var fs = File.Create(filePath);
 
         var title = new UTF8Encoding(true).GetBytes(sourceFile.Text);

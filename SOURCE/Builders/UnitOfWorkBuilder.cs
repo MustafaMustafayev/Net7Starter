@@ -1,15 +1,16 @@
-﻿using SourceBuilder.Builders.Abstract;
-using SourceBuilder.Helpers;
-using SourceBuilder.Models;
+﻿using SOURCE.Builders.Abstract;
+using SOURCE.Helpers;
+using SOURCE.Models;
+using SOURCE.Workers;
 
-namespace SourceBuilder.Builders;
+namespace SOURCE.Builders;
 
 // ReSharper disable once UnusedType.Global
 public class UnitOfWorkBuilder : IBuilder
 {
-    public void Build(List<Entity> entities)
+    public void BuildSourceCode(List<Entity> entities)
     {
         var text = TextBuilder.BuildTextForUnitOfWork(entities);
-        Workers.SourceBuilder.Instance.AddSourceFile(Constants.UnitOfWorkPath, "UnitOfWork.cs", text);
+        SourceBuilder.Instance.AddSourceFile(Constants.UnitOfWorkPath, "UnitOfWork.cs", text);
     }
 }

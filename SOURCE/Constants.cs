@@ -1,4 +1,4 @@
-﻿namespace SourceBuilder;
+﻿namespace SOURCE;
 
 public static class Constants
 {

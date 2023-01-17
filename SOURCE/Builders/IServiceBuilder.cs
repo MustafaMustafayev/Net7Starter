@@ -1,19 +1,20 @@
-﻿using SourceBuilder.Builders.Abstract;
-using SourceBuilder.Helpers;
-using SourceBuilder.Models;
+﻿using SOURCE.Builders.Abstract;
+using SOURCE.Helpers;
+using SOURCE.Models;
+using SOURCE.Workers;
 
-namespace SourceBuilder.Builders;
+namespace SOURCE.Builders;
 
 // ReSharper disable once InconsistentNaming
 // ReSharper disable once UnusedType.Global
 public class IServiceBuilder : IBuilder
 {
-    public void Build(List<Entity> entities)
+    public void BuildSourceCode(List<Entity> entities)
     {
         entities.ForEach(model =>
         {
             var text = TextBuilder.BuildTextForIEntityService(model);
-            Workers.SourceBuilder.Instance.AddSourceFile(Constants.IServicePath, $"I{model.Name}Service.cs", text);
+            SourceBuilder.Instance.AddSourceFile(Constants.IServicePath, $"I{model.Name}Service.cs", text);
         });
     }
 }

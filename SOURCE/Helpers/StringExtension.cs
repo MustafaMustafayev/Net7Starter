@@ -1,4 +1,4 @@
-﻿namespace SourceBuilder.Helpers;
+﻿namespace SOURCE.Helpers;
 
 public static class StringExtensions
 {

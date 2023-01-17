@@ -1,8 +1,8 @@
-﻿using SourceBuilder.Builders.Abstract;
-using SourceBuilder.Helpers;
-using SourceBuilder.Models;
+﻿using SOURCE.Builders.Abstract;
+using SOURCE.Helpers;
+using SOURCE.Models;
 
-namespace SourceBuilder.Workers;
+namespace SOURCE.Workers;
 
 public class SourceBuilder
 {
@@ -42,7 +42,7 @@ public class SourceBuilder
         foreach (var type in types)
         {
             var instance = (IBuilder)Activator.CreateInstance(type)!;
-            instance.Build(entities);
+            instance.BuildSourceCode(entities);
         }
 
         if (!_sourceFiles.Any()) return true;

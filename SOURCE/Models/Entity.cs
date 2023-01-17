@@ -1,4 +1,4 @@
-﻿namespace SourceBuilder.Models;
+﻿namespace SOURCE.Models;
 
 public class Entity
 {

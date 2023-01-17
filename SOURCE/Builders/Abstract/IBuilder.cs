@@ -1,8 +1,8 @@
-﻿using SourceBuilder.Models;
+﻿using SOURCE.Models;
 
-namespace SourceBuilder.Builders.Abstract;
+namespace SOURCE.Builders.Abstract;
 
 public interface IBuilder
 {
-    void Build(List<Entity> entities);
+    void BuildSourceCode(List<Entity> entities);
 }
