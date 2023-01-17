@@ -2,5 +2,5 @@
 
 public record RedisSettings : Controllable
 {
-    public string Connection { get; set; }
+    public required string Connection { get; set; }
 }

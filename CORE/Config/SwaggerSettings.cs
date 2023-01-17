@@ -2,7 +2,7 @@
 
 public record SwaggerSettings : Controllable
 {
-    public string Title { get; set; }
-    public string Version { get; set; }
-    public string Theme { get; set; }
+    public required string Title { get; set; }
+    public required string Version { get; set; }
+    public required string Theme { get; set; }
 }

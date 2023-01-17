@@ -16,14 +16,10 @@ public sealed class ValidateForgeryTokenAttribute : FilterAttribute, IAuthorizat
         {
             AntiForgery.Validate();
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             // log if antiforgery token is invalid
-
-            actionContext.Response = new HttpResponseMessage
-            {
-                StatusCode = HttpStatusCode.Forbidden
-            };
+            actionContext.Response = new HttpResponseMessage { StatusCode = HttpStatusCode.Forbidden };
 
             return FromResult(actionContext.Response);
         }

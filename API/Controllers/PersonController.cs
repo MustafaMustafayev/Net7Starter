@@ -38,10 +38,10 @@ public class PersonController : Controller
     [SwaggerOperation(Summary = "filter by age")]
     [SwaggerResponse(StatusCodes.Status200OK)]
     [HttpGet("filterAge")]
-    public async Task<IActionResult> FilterByAge([FromQuery] int minAge, [FromQuery] int maxAge)
+    public Task<IActionResult> FilterByAge([FromQuery] int minAge, [FromQuery] int maxAge)
     {
         var datas = _collection.Where(x => x.Age >= minAge && x.Age <= maxAge).ToList();
-        return Ok(new SuccessDataResult<List<Person>>(datas));
+        return Task.FromResult<IActionResult>(Ok(new SuccessDataResult<List<Person>>(datas)));
     }
 
     [SwaggerOperation(Summary = "filter by geo")]

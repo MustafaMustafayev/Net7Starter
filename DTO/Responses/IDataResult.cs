@@ -1,6 +1,6 @@
 ﻿namespace DTO.Responses;
 
-public interface IDataResult<T> : IResult
+public interface IDataResult<out T> : IResult
 {
-    T Data { get; }
+    T? Data { get; }
 }

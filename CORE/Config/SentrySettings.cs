@@ -2,5 +2,4 @@
 
 public record SentrySettings : Controllable
 {
-    public bool IsEnabled { get; set; }
 }

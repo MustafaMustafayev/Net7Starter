@@ -10,6 +10,6 @@ public class Query
     public async Task<IQueryable<ENTITIES.Entities.Role>> GetRolesAsync(
         [Service] IRoleService service)
     {
-        return (await service.GraphQlGetAsync()).Data;
+        return (await service.GraphQlGetAsync()).Data!;
     }
 }

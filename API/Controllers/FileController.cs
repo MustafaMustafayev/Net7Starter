@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using IResult = DTO.Responses.IResult;
-using Messages = CORE.Localization.Messages;
 using Path = System.IO.Path;
 
 namespace API.Controllers;

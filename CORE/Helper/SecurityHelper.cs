@@ -15,6 +15,7 @@ public class SecurityHelper
 {
     private readonly ConfigSettings _configSettings;
     private readonly IUtilService _utilService;
+
     public SecurityHelper(ConfigSettings configSettings, IUtilService utilService)
     {
         _configSettings = configSettings;
@@ -25,9 +26,9 @@ public class SecurityHelper
     {
         var saltBytes = new byte[16];
 
-        using (var provider = new RNGCryptoServiceProvider())
+        using (var rng = RandomNumberGenerator.Create())
         {
-            provider.GetNonZeroBytes(saltBytes);
+            rng.GetBytes(saltBytes);
         }
 
         return Convert.ToBase64String(saltBytes);

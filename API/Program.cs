@@ -100,7 +100,7 @@ app.UseMiddleware<LocalizationMiddleware>();
 app.UseMiddleware<ExceptionMiddleware>();
 
 // anti forgery token implementation
-app.UseMiddleware<AntiForgeryTokenValidator>();
+//app.UseMiddleware<AntiForgeryTokenValidator>();
 
 //app.UseMiddleware<ValidateBlackListMiddleware>();
 

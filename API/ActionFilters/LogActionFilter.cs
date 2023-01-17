@@ -56,7 +56,7 @@ public class LogActionFilter : IAsyncActionFilter
             ClientIp = clientIp,
             Uri = uri,
             Payload = bodyContent,
-            Method = httpContext.Request.Method,
+            Method = httpContext?.Request.Method,
             Token = token,
             UserId = userId,
             RequestDate = DateTime.Now
@@ -64,7 +64,7 @@ public class LogActionFilter : IAsyncActionFilter
 
         await next();
 
-        var responseStatusCode = httpContext.Response.StatusCode;
+        var responseStatusCode = httpContext?.Response.StatusCode;
         var responseLog = new ResponseLogDto
         {
             TraceIdentifier = traceIdentitier,

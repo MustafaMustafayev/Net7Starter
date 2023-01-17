@@ -10,7 +10,7 @@ public record OrganizationToListDto
 
     public required string Address { get; set; }
 
-    public OrganizationToListDto ParentOrganization { get; set; }
+    public OrganizationToListDto? ParentOrganization { get; set; }
 
     public int? ParentOrganizationId { get; set; }
 
