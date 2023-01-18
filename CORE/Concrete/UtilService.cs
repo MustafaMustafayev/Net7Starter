@@ -116,11 +116,10 @@ public class UtilService : IUtilService
     {
         return _configSettings.AuthSettings.ContentType;
     }
-}
 
     public async Task SendMail(string email, string message)
     {
-        if (!string.IsNullOrEmpty(email) && email.Contains("@"))
+        if (!string.IsNullOrEmpty(email) && email.Contains('@'))
         {
             var fromAddress = new MailAddress(_configSettings.MailSettings.Address, _configSettings.MailSettings.DisplayName);
             var toAddress = new MailAddress(email, email);
@@ -135,11 +134,12 @@ public class UtilService : IUtilService
                 Credentials = new NetworkCredential(fromAddress.Address, _configSettings.MailSettings.MailKey)
             };
 
-            using (var data = new MailMessage(fromAddress, toAddress)
+            using var data = new MailMessage(fromAddress, toAddress)
             {
                 Subject = _configSettings.MailSettings.Subject,
                 Body = message
-            })
+            };
+            
             await smtp.SendMailAsync(data);
         }
     }
