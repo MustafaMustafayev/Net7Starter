@@ -15,7 +15,7 @@ public class RoleRepository : GenericRepository<Role>, IRoleRepository
         _dataContext = dataContext;
     }
 
-    public Role UpdateRoleAsync(Role role)
+    public Role UpdateRole(Role role)
     {
         return _dataContext.Roles.Update(role).Entity;
     }

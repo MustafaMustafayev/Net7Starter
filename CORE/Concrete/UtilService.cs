@@ -1,4 +1,6 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
+using System.Net.Mail;
+using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 using CORE.Abstract;
@@ -113,5 +115,32 @@ public class UtilService : IUtilService
     public string GetContentType()
     {
         return _configSettings.AuthSettings.ContentType;
+    }
+}
+
+    public async Task SendMail(string email, string message)
+    {
+        if (!string.IsNullOrEmpty(email) && email.Contains("@"))
+        {
+            var fromAddress = new MailAddress(_configSettings.MailSettings.Address, _configSettings.MailSettings.DisplayName);
+            var toAddress = new MailAddress(email, email);
+
+            var smtp = new SmtpClient
+            {
+                Host = _configSettings.MailSettings.Host,
+                Port = int.Parse(_configSettings.MailSettings.Port),
+                EnableSsl = false,
+                DeliveryMethod = SmtpDeliveryMethod.Network,
+                UseDefaultCredentials = false,
+                Credentials = new NetworkCredential(fromAddress.Address, _configSettings.MailSettings.MailKey)
+            };
+
+            using (var data = new MailMessage(fromAddress, toAddress)
+            {
+                Subject = _configSettings.MailSettings.Subject,
+                Body = message
+            })
+            await smtp.SendMailAsync(data);
+        }
     }
 }
