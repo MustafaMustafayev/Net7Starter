@@ -156,7 +156,7 @@ public static class DependencyContainer
             options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(httpContext =>
                 RateLimitPartition.GetFixedWindowLimiter(
                     httpContext.User.Identity?.Name ?? httpContext.Request.Headers.Host.ToString(),
-                    partition => new FixedWindowRateLimiterOptions
+                    _ => new FixedWindowRateLimiterOptions
                     {
                         AutoReplenishment = true,
                         PermitLimit = 5,
@@ -164,11 +164,7 @@ public static class DependencyContainer
                         Window = TimeSpan.FromSeconds(10)
                     }));
 
-            options.OnRejected = (context, cancellationToken) =>
-            {
-                //implement logic if rate limit happens
-                return new();
-            };
+            options.OnRejected = (_,_) => new ValueTask();
         });
     }
 

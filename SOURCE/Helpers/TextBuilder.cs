@@ -105,7 +105,7 @@ public class {entityName}Service : I{entityName}Service
         text = text.Replace("{entityName}", entity.Name);
         return text;
     }
-    
+
     public static string BuildTextForEntityController(Entity entity)
     {
         var text = @"
