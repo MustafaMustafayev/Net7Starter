@@ -1,12 +1,11 @@
-﻿namespace CORE.Config
+﻿namespace CORE.Config;
+
+public record MailSettings
 {
-    public record MailSettings
-    {
-        public string Address { get; set; } = default!;
-        public string DisplayName { get; set; } = default!;
-        public string MailKey { get; set; } = default!;
-        public string Subject { get; set; } = default!;
-        public string Host { get; set; } = default!;
-        public string Port { get; set; } = default!;
-    }
+    public required string Address { get; set; }
+    public required  string DisplayName { get; set; }
+    public required string MailKey { get; set; }
+    public required string Subject { get; set; }
+    public required string Host { get; set; }
+    public  required string Port { get; set; }
 }

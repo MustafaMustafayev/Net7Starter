@@ -1,6 +1,6 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
-using System.Net.Mail;
 using System.Net;
+using System.Net.Mail;
 using System.Security.Cryptography;
 using System.Text;
 using CORE.Abstract;
@@ -112,11 +112,6 @@ public class UtilService : IUtilService
         return Encoding.Unicode.GetString(outputBuffer);
     }
 
-    public string GetContentType()
-    {
-        return _configSettings.AuthSettings.ContentType;
-    }
-
     public async Task SendMail(string email, string message)
     {
         if (!string.IsNullOrEmpty(email) && email.Contains('@'))
@@ -139,8 +134,13 @@ public class UtilService : IUtilService
                 Subject = _configSettings.MailSettings.Subject,
                 Body = message
             };
-            
+
             await smtp.SendMailAsync(data);
         }
+    }
+
+    public string GetContentType()
+    {
+        return _configSettings.AuthSettings.ContentType;
     }
 }
