@@ -15,6 +15,8 @@
 > mail sender implemented,
 > rate limiting implemented,
 > encoding and decoding implemened,
+> sftp functions implemented,
+> source code generator for DAL, BLL, API layer implemented,
 > Database and application dockerized. Docker compose implemented with build step.
 
 ## Structure
