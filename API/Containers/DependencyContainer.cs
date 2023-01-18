@@ -88,7 +88,7 @@ public static class DependencyContainer
 
             c.SwaggerDoc(config.SwaggerSettings.Version,
                 new OpenApiInfo
-                    { Title = config.SwaggerSettings.Title, Version = config.SwaggerSettings.Version });
+                { Title = config.SwaggerSettings.Title, Version = config.SwaggerSettings.Version });
 
             c.AddSecurityDefinition(config.AuthSettings.TokenPrefix, new OpenApiSecurityScheme
             {
@@ -197,6 +197,17 @@ public static class DependencyContainer
     public static void RegisterUnitOfWork(this IServiceCollection services)
     {
         services.AddScoped<IUnitOfWork, UnitOfWork>();
+    }
+
+    public static void RegisterOutputCache(this IServiceCollection services)
+    {
+        services.AddOutputCache(options =>
+        {
+            options.AddBasePolicy(builder =>
+            {
+                builder.Expire(TimeSpan.FromMinutes(2));
+            });
+        });
     }
 
     public static void RegisterRedis(this IServiceCollection services, ConfigSettings config)
