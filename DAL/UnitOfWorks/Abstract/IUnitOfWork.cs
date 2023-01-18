@@ -4,17 +4,15 @@ namespace DAL.UnitOfWorks.Abstract;
 
 public interface IUnitOfWork : IAsyncDisposable, IDisposable
 {
-    public IUserRepository UserRepository { get; set; }
+    public IUserRepository UserRepository { get; }
 
-    public IAuthRepository AuthRepository { get; set; }
+    public ILoggingRepository LoggingRepository { get; }
 
-    public ILoggingRepository LoggingRepository { get; set; }
+    public IRoleRepository RoleRepository { get; }
 
-    public IRoleRepository RoleRepository { get; set; }
-
-    public IOrganizationRepository OrganizationRepository { get; set; }
-    public IPermissionRepository PermissionRepository { get; set; }
-    public ITokenRepository TokenRepository { get; set; }
+    public IOrganizationRepository OrganizationRepository { get; }
+    public IPermissionRepository PermissionRepository { get; }
+    public ITokenRepository TokenRepository { get; }
 
     public Task CommitAsync();
 }

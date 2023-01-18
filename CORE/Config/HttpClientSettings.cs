@@ -2,9 +2,9 @@
 
 public record HttpClientSettings
 {
-    public string TokenPrefix { get; set; }
-    public string BaseUrl { get; set; }
-    public string Name { get; set; }
-    public int TimeoutInSeconds { get; set; }
-    public List<HttpHeader> Headers { get; set; }
+    public required string TokenPrefix { get; set; }
+    public required string BaseUrl { get; set; }
+    public required string Name { get; set; }
+    public required int TimeoutInSeconds { get; set; }
+    public required List<HttpHeader> Headers { get; set; }
 }

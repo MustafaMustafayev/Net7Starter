@@ -2,17 +2,17 @@
 
 public record DataResult<T> : Result, IDataResult<T>
 {
-    public DataResult(T data, bool success, string message)
+    protected DataResult(T? data, bool success, string message)
         : base(success, message)
     {
         Data = data;
     }
 
-    public DataResult(T data, bool success)
+    protected DataResult(T? data, bool success)
         : base(success)
     {
         Data = data;
     }
 
-    public T Data { get; }
+    public T? Data { get; }
 }

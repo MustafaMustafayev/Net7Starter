@@ -13,7 +13,6 @@ public class UnitOfWork : IUnitOfWork
     public UnitOfWork(
         DataContext dataContext,
         IUserRepository userRepository,
-        IAuthRepository authRepository,
         ILoggingRepository loggingRepository,
         IRoleRepository roleRepository,
         IOrganizationRepository organizationRepository,
@@ -22,7 +21,6 @@ public class UnitOfWork : IUnitOfWork
     {
         _dataContext = dataContext;
         UserRepository = userRepository;
-        AuthRepository = authRepository;
         LoggingRepository = loggingRepository;
         RoleRepository = roleRepository;
         OrganizationRepository = organizationRepository;
@@ -31,8 +29,6 @@ public class UnitOfWork : IUnitOfWork
     }
 
     public IUserRepository UserRepository { get; set; }
-
-    public IAuthRepository AuthRepository { get; set; }
 
     public ILoggingRepository LoggingRepository { get; set; }
 

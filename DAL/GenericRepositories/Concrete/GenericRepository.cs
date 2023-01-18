@@ -58,8 +58,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity>
         _ctx.Update(updatedEntity);
     }
 
-    public async Task<TEntity?> GetAsync(Expression<Func<TEntity, bool>> filter,
-        bool ignoreQueryFilters = false)
+    public async Task<TEntity?> GetAsync(Expression<Func<TEntity, bool>> filter, bool ignoreQueryFilters = false)
     {
         return ignoreQueryFilters
             ? await _ctx.Set<TEntity>().IgnoreQueryFilters().FirstOrDefaultAsync(filter)
@@ -78,8 +77,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity>
                 : await _ctx.Set<TEntity>().Where(filter).ToListAsync();
     }
 
-    public IQueryable<TEntity?> GetList(Expression<Func<TEntity, bool>>? filter = null,
-        bool ignoreQueryFilters = false)
+    public IQueryable<TEntity> GetList(Expression<Func<TEntity, bool>>? filter = null, bool ignoreQueryFilters = false)
     {
         return filter is null
             ? ignoreQueryFilters

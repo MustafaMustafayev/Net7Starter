@@ -2,5 +2,5 @@
 
 public record ConnectionStrings
 {
-    public string  AppDb { get; set; }
+    public required string AppDb { get; set; }
 }

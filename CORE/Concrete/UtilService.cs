@@ -7,6 +7,7 @@ using CORE.Abstract;
 using CORE.Config;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
+
 namespace CORE.Concrete;
 
 public class UtilService : IUtilService
@@ -29,7 +30,7 @@ public class UtilService : IUtilService
         if (!tokenString.Contains($"{_configSettings.AuthSettings.TokenPrefix} ")) return null;
 
         var token = new JwtSecurityToken(tokenString[7..]);
-        string userId = Decrypt(token.Claims.First(c => c.Type == _configSettings.AuthSettings.TokenUserIdKey).Value);
+        var userId = Decrypt(token.Claims.First(c => c.Type == _configSettings.AuthSettings.TokenUserIdKey).Value);
         return Convert.ToInt32(userId);
     }
 
@@ -89,36 +90,36 @@ public class UtilService : IUtilService
         return jwtToken[7..];
     }
 
-    public string GetContentType()
-    {
-        return _configSettings.AuthSettings.ContentType;
-    }
-
     public string Encrypt(string value)
     {
-        byte[] key = Convert.FromBase64String(_configSettings.CryptographySettings.KeyBase64);
-        byte[] iv = Convert.FromBase64String(_configSettings.CryptographySettings.VBase64);
+        var key = Convert.FromBase64String(_configSettings.CryptographySettings.KeyBase64);
+        var iv = Convert.FromBase64String(_configSettings.CryptographySettings.VBase64);
         SymmetricAlgorithm algorithm = DES.Create();
-        ICryptoTransform transform = algorithm.CreateEncryptor(key, iv);
-        byte[] inputbuffer = Encoding.Unicode.GetBytes(value);
-        byte[] outputBuffer = transform.TransformFinalBlock(inputbuffer, 0, inputbuffer.Length);
+        var transform = algorithm.CreateEncryptor(key, iv);
+        var inputbuffer = Encoding.Unicode.GetBytes(value);
+        var outputBuffer = transform.TransformFinalBlock(inputbuffer, 0, inputbuffer.Length);
         return Convert.ToBase64String(outputBuffer);
     }
 
     public string Decrypt(string value)
     {
-        byte[] key = Convert.FromBase64String(_configSettings.CryptographySettings.KeyBase64);
-        byte[] iv = Convert.FromBase64String(_configSettings.CryptographySettings.VBase64);
+        var key = Convert.FromBase64String(_configSettings.CryptographySettings.KeyBase64);
+        var iv = Convert.FromBase64String(_configSettings.CryptographySettings.VBase64);
         SymmetricAlgorithm algorithm = DES.Create();
-        ICryptoTransform transform = algorithm.CreateDecryptor(key, iv);
-        byte[] inputbuffer = Convert.FromBase64String(value);
-        byte[] outputBuffer = transform.TransformFinalBlock(inputbuffer, 0, inputbuffer.Length);
+        var transform = algorithm.CreateDecryptor(key, iv);
+        var inputbuffer = Convert.FromBase64String(value);
+        var outputBuffer = transform.TransformFinalBlock(inputbuffer, 0, inputbuffer.Length);
         return Encoding.Unicode.GetString(outputBuffer);
+    }
+
+    public string GetContentType()
+    {
+        return _configSettings.AuthSettings.ContentType;
     }
 
     public async Task SendMail(string email, string message)
     {
-        if (!string.IsNullOrEmpty(email) && email.Contains("@"))
+        if (!string.IsNullOrEmpty(email) && email.Contains('@'))
         {
             var fromAddress = new MailAddress(_configSettings.MailSettings.Address, _configSettings.MailSettings.DisplayName);
             var toAddress = new MailAddress(email, email);
@@ -133,11 +134,12 @@ public class UtilService : IUtilService
                 Credentials = new NetworkCredential(fromAddress.Address, _configSettings.MailSettings.MailKey)
             };
 
-            using (var data = new MailMessage(fromAddress, toAddress)
+            using var data = new MailMessage(fromAddress, toAddress)
             {
                 Subject = _configSettings.MailSettings.Subject,
                 Body = message
-            })
+            };
+            
             await smtp.SendMailAsync(data);
         }
     }

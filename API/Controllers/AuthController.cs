@@ -50,7 +50,7 @@ public class AuthController : Controller
         var loginResult = await _authService.LoginAsync(request);
         if (!loginResult.Success) return Unauthorized(loginResult);
 
-        var response = await _tokenService.CreateTokenAsync(loginResult.Data);
+        var response = await _tokenService.CreateTokenAsync(loginResult.Data!);
 
         return Ok(response);
     }
@@ -76,7 +76,7 @@ public class AuthController : Controller
 
         var tokenResponse = await _tokenService.GetAsync(jwtToken, refreshToken);
 
-        await _tokenService.SoftDeleteAsync(tokenResponse.Data.TokenId);
+        await _tokenService.SoftDeleteAsync(tokenResponse.Data!.TokenId);
         var response = await _tokenService.CreateTokenAsync(tokenResponse.Data.User);
 
         return Ok(response);
@@ -103,7 +103,7 @@ public class AuthController : Controller
         var loginByTokenResponse = await _authService.LoginByTokenAsync(HttpContext.Request.Headers.Authorization!);
         if (!loginByTokenResponse.Success) return BadRequest(loginByTokenResponse.Data);
 
-        var response = await _tokenService.CreateTokenAsync(loginByTokenResponse.Data);
+        var response = await _tokenService.CreateTokenAsync(loginByTokenResponse.Data!);
 
         return Ok(response);
     }

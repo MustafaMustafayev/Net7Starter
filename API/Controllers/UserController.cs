@@ -4,6 +4,7 @@ using BLL.Abstract;
 using CORE.Abstract;
 using CORE.Config;
 using CORE.Constants;
+using CORE.Localization;
 using DTO.Responses;
 using DTO.User;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -66,8 +67,10 @@ public class UserController : Controller
     [HttpGet("profile")]
     public async Task<IActionResult> GetProfileInfo()
     {
-        var id = _utilService.GetUserIdFromToken(HttpContext.Request.Headers[Constants.AuthHeader]).Value;
-        var response = await _userService.GetAsync(id);
+        var userId = _utilService.GetUserIdFromToken(HttpContext.Request.Headers[Constants.AuthHeader]);
+        if (userId is null) return Unauthorized(new ErrorResult(Messages.CanNotFoundUserIdInYourAccessToken.Translate()));
+
+        var response = await _userService.GetAsync(userId.Value);
         return Ok(response);
     }
 
@@ -134,9 +137,10 @@ public class UserController : Controller
             await file.CopyToAsync(fileStream);
         }
 
-        var id = _utilService.GetUserIdFromToken(HttpContext.Request.Headers[Constants.AuthHeader]).Value;
+        var userId = _utilService.GetUserIdFromToken(HttpContext.Request.Headers[Constants.AuthHeader]);
+        if (userId is null) return Unauthorized(new ErrorResult(Messages.CanNotFoundUserIdInYourAccessToken.Translate()));
 
-        var response = await _userService.UpdateProfilePhotoAsync(id, filePath);
+        var response = await _userService.UpdateProfilePhotoAsync(userId.Value, filePath);
         return Ok(response);
     }
 
@@ -147,9 +151,10 @@ public class UserController : Controller
     [HttpDelete("image")]
     public async Task<IActionResult> DeleteImage()
     {
-        var id = _utilService.GetUserIdFromToken(HttpContext.Request.Headers[Constants.AuthHeader]).Value;
+        var userId = _utilService.GetUserIdFromToken(HttpContext.Request.Headers[Constants.AuthHeader]);
+        if (userId is null) return Unauthorized(new ErrorResult(Messages.CanNotFoundUserIdInYourAccessToken.Translate()));
 
-        var response = await _userService.DeleteProfilePhotoAsync(id);
+        var response = await _userService.DeleteProfilePhotoAsync(userId.Value);
         return Ok(response);
     }
 }

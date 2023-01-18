@@ -28,7 +28,7 @@ public class UserService : IUserService
             return new ErrorResult(Messages.UserIsExist.Translate());
 
         dto.RoleId = dto.RoleId == 0 || !dto.RoleId.HasValue
-            ? (await _unitOfWork.RoleRepository.GetAsync(m => m.Key == ERole.viewer.ToString())).RoleId
+            ? (await _unitOfWork.RoleRepository.GetAsync(m => m.Key == ERole.viewer.ToString()))?.RoleId
             : dto.RoleId;
         var data = _mapper.Map<User>(dto);
 
@@ -45,7 +45,7 @@ public class UserService : IUserService
     {
         var data = await _unitOfWork.UserRepository.GetAsync(m => m.UserId == id);
 
-        _unitOfWork.UserRepository.SoftDelete(data);
+        _unitOfWork.UserRepository.SoftDelete(data!);
         await _unitOfWork.CommitAsync();
 
         return new SuccessResult(Messages.Success.Translate());
@@ -72,7 +72,7 @@ public class UserService : IUserService
             return new ErrorResult(Messages.UserIsExist.Translate());
 
         dto.RoleId = dto.RoleId == 0 || !dto.RoleId.HasValue
-            ? (await _unitOfWork.RoleRepository.GetAsync(m => m.Key == ERole.viewer.ToString())).RoleId
+            ? (await _unitOfWork.RoleRepository.GetAsync(m => m.Key == ERole.viewer.ToString()))?.RoleId
             : dto.RoleId;
 
         var data = _mapper.Map<User>(dto);

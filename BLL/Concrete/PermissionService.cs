@@ -33,7 +33,7 @@ public class PermissionService : IPermissionService
     public async Task<IResult> SoftDeleteAsync(int id)
     {
         var data = await _unitOfWork.PermissionRepository.GetAsync(m => m.PermissionId == id);
-        _unitOfWork.PermissionRepository.SoftDelete(data);
+        _unitOfWork.PermissionRepository.SoftDelete(data!);
         await _unitOfWork.CommitAsync();
 
         return new SuccessResult(Messages.Success.Translate());
@@ -55,13 +55,13 @@ public class PermissionService : IPermissionService
             Messages.Success.Translate());
     }
 
-    public async Task<IDataResult<List<PermissionToListDto>>> GetAsync()
+    public Task<IDataResult<List<PermissionToListDto>>> GetAsync()
     {
         var datas = _mapper.Map<List<PermissionToListDto>>(_unitOfWork.PermissionRepository.GetAsNoTrackingList()
             .ToList());
 
-        return new SuccessDataResult<List<PermissionToListDto>>(datas,
-            Messages.Success.Translate());
+        return Task.FromResult<IDataResult<List<PermissionToListDto>>>(new SuccessDataResult<List<PermissionToListDto>>(datas,
+            Messages.Success.Translate()));
     }
 
     public async Task<IDataResult<PermissionToListDto>> GetAsync(int id)

@@ -4,7 +4,7 @@ public class Token : IEntity
 {
     public int TokenId { get; set; }
 
-    public required virtual User User { get; set; }
+    public virtual required User User { get; set; }
     public int UserId { get; set; }
     public required string AccessToken { get; set; }
     public DateTimeOffset AccessTokenExpireDate { get; set; }

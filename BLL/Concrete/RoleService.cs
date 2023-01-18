@@ -25,7 +25,7 @@ public class RoleService : IRoleService
         var data = _mapper.Map<Role>(dto);
 
         var permissions =
-            await _unitOfWork.PermissionRepository.GetListAsync(m => dto.PermissionIds.Contains(m.PermissionId));
+            await _unitOfWork.PermissionRepository.GetListAsync(m => dto.PermissionIds!.Contains(m.PermissionId));
         data.Permissions = permissions;
 
         await _unitOfWork.RoleRepository.AddAsync(data);
@@ -38,7 +38,7 @@ public class RoleService : IRoleService
     {
         var data = await _unitOfWork.RoleRepository.GetAsync(m => m.RoleId == id);
 
-        _unitOfWork.RoleRepository.SoftDelete(data);
+        _unitOfWork.RoleRepository.SoftDelete(data!);
         await _unitOfWork.CommitAsync();
 
         return new SuccessResult(Messages.Success.Translate());
@@ -51,10 +51,10 @@ public class RoleService : IRoleService
         return new SuccessDataResult<List<RoleToListDto>>(datas, Messages.Success.Translate());
     }
 
-    public async Task<IDataResult<IQueryable<Role>>> GraphQlGetAsync()
+    public Task<IDataResult<IQueryable<Role>>> GraphQlGetAsync()
     {
-        return new SuccessDataResult<IQueryable<Role>>(_unitOfWork.RoleRepository.GetList()!,
-            Messages.Success.Translate());
+        return Task.FromResult<IDataResult<IQueryable<Role>>>(new SuccessDataResult<IQueryable<Role>>(_unitOfWork.RoleRepository.GetList()!,
+            Messages.Success.Translate()));
     }
 
     public async Task<IDataResult<RoleToListDto>> GetAsync(int id)
@@ -70,7 +70,7 @@ public class RoleService : IRoleService
         data.RoleId = id;
 
         var permissions =
-            await _unitOfWork.PermissionRepository.GetListAsync(m => dto.PermissionIds.Contains(m.PermissionId));
+            await _unitOfWork.PermissionRepository.GetListAsync(m => dto.PermissionIds!.Contains(m.PermissionId));
         data.Permissions = permissions;
 
         _unitOfWork.RoleRepository.UpdateRole(data);

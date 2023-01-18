@@ -2,6 +2,6 @@
 
 public record HttpHeader
 {
-    public string Name { get; set; }
-    public dynamic Value { get; set; }
+    public required string Name { get; set; }
+    public required dynamic Value { get; set; }
 }

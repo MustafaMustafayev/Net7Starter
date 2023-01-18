@@ -36,7 +36,6 @@
         <Folder Include="Token\"/>
         <Folder Include="CustomLogging\Validators\"/>
         <Folder Include="Permission\Validators\"/>
-        <Folder Include="Responses\Validators\"/>
         <Folder Include="Token\Validators\"/>
     </ItemGroup>
 </Project>

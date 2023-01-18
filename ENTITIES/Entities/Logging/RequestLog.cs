@@ -23,7 +23,7 @@ public class RequestLog
 
     public int? UserId { get; set; }
 
-    public required virtual ResponseLog ResponseLog { get; set; }
+    public virtual required ResponseLog ResponseLog { get; set; }
 
     [ForeignKey("ResponseLog")] public int ResponseLogId { get; set; }
 

@@ -2,14 +2,14 @@
 
 public record AuthSettings
 {
-    public string Type { get; set; }
-    public string HeaderName { get; set; }
-    public string RefreshTokenHeaderName { get; set; }
-    public string TokenPrefix { get; set; }
-    public string ContentType { get; set; }
-    public string SecretKey { get; set; }
-    public string TokenUserIdKey { get; set; }
-    public string TokenCompanyIdKey { get; set; }
-    public int TokenExpirationTimeInHours { get; set; }
-    public int RefreshTokenAdditionalMinutes { get; set; }
+    public required string Type { get; set; }
+    public required string HeaderName { get; set; }
+    public required string RefreshTokenHeaderName { get; set; }
+    public required string TokenPrefix { get; set; }
+    public required string ContentType { get; set; }
+    public required string SecretKey { get; set; }
+    public required string TokenUserIdKey { get; set; }
+    public required string TokenCompanyIdKey { get; set; }
+    public required int TokenExpirationTimeInHours { get; set; }
+    public required int RefreshTokenAdditionalMinutes { get; set; }
 }

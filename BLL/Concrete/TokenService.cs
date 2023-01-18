@@ -62,7 +62,7 @@ public class TokenService : ITokenService
         var securityHelper = new SecurityHelper(_configSettings, _utilService);
         var accessTokenExpireDate =
             DateTime.UtcNow.AddHours(_configSettings.AuthSettings.TokenExpirationTimeInHours);
-        UserResponseDto userDto = _mapper.Map<UserResponseDto>(dto);
+        var userDto = _mapper.Map<UserResponseDto>(dto);
 
         var loginResponseDto = new LoginResponseDto
         {
@@ -84,7 +84,7 @@ public class TokenService : ITokenService
     {
         var data = await _unitOfWork.TokenRepository.GetAsync(m => m.TokenId == id);
 
-        _unitOfWork.TokenRepository.SoftDelete(data);
+        _unitOfWork.TokenRepository.SoftDelete(data!);
         await _unitOfWork.CommitAsync();
 
         return new SuccessResult(Messages.Success.Translate());
