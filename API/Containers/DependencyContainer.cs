@@ -186,6 +186,7 @@ public static class DependencyContainer
         services.AddScoped<IPermissionService, PermissionService>();
         services.AddScoped<ITokenRepository, TokenRepository>();
         services.AddScoped<ITokenService, TokenService>();
+        services.AddScoped<ISftpService, SftpService>();
         services.AddSingleton<UserHub>();
     }
 

@@ -11,4 +11,5 @@ public record ConfigSettings
     public HttpClientSettings FirstHttpClientSettings { get; set; } = default!;
     public CryptographySettings CryptographySettings { get; set; } = default!;
     public MailSettings MailSettings { get; set; } = default!;
+    public SftpSettings SftpSettings { get; set; } = default!;
 }
