@@ -53,6 +53,8 @@ builder.Services.RegisterApiVersioning();
 builder.Services.RegisterRateLimit();
 builder.Services.RegisterAntiForgeryToken();
 builder.Services.RegisterUnitOfWork();
+builder.Services.RegisterOutputCache();
+
 
 builder.Services.AddGraphQLServer()
     .AddQueryType<Query>()
@@ -103,7 +105,7 @@ app.UseMiddleware<ExceptionMiddleware>();
 app.UseMiddleware<AntiForgeryTokenValidator>();
 
 //app.UseMiddleware<ValidateBlackListMiddleware>();
-
+app.UseOutputCache();
 app.UseHttpsRedirection();
 
 app.Use((context, next) =>
