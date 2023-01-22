@@ -40,7 +40,7 @@ using CORE.Localization;
 using DAL.UnitOfWorks.Abstract;
 using DTO.Responses;
 using DTO.{entityName};
-using ENTITIES;
+using ENTITIES.Entities;
 
 namespace BLL.Concrete;
 
