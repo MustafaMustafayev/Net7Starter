@@ -337,4 +337,28 @@ public interface I{entityName}Repository : IGenericRepository<{entityName}>
 
         return text;
     }
+
+    public static string BuildTextForAutomapper(Entity entity)
+    {
+        var text = @"
+using AutoMapper;
+using DTO.{entityName};
+using ENTITIES.Entities;
+
+namespace BLL.Mappers;
+
+public class {entityName}Mapper : Profile
+{
+    public {entityName}Mapper()
+    {
+        CreateMap<{entityName}, {entityName}ToListDto>();
+        CreateMap<{entityName}ToAddDto, {entityName}>();
+        CreateMap<{entityName}ToUpdateDto, {entityName}>();
+    }
+}
+";
+
+        text = text.Replace("{entityName}", entity.Name);
+        return text;
+    }
 }

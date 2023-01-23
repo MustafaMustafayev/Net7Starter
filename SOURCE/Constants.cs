@@ -28,5 +28,8 @@ public static class Constants
     // ReSharper disable once InconsistentNaming
     public const string UnitOfWorkPath = "DAL\\UnitOfWorks\\Concrete\\";
 
+    // ReSharper disable once InconsistentNaming
+    public const string AutomapperPath = "BLL\\Mappers\\";
+
     #endregion
 }
