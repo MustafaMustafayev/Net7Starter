@@ -39,20 +39,15 @@ public class PermissionService : IPermissionService
         return new SuccessResult(Messages.Success.Translate());
     }
 
-    public async Task<IDataResult<PaginatedList<PermissionToListDto>>> GetAsPaginatedListAsync(int pageIndex,
-        int pageSize)
+    public async Task<IDataResult<PaginatedList<PermissionToListDto>>> GetAsPaginatedListAsync(int pageIndex, int pageSize)
     {
         var datas = _unitOfWork.PermissionRepository.GetAsNoTrackingList();
-        var response =
-            await PaginatedList<Permission>.CreateAsync(datas.OrderBy(m => m.PermissionId),
-                pageIndex, pageSize);
+        var response = await PaginatedList<Permission>.CreateAsync(datas.OrderBy(m => m.PermissionId), pageIndex, pageSize);
 
-        var responseDto = new PaginatedList<PermissionToListDto>(
-            _mapper.Map<List<PermissionToListDto>>(response.Datas),
+        var responseDto = new PaginatedList<PermissionToListDto>(_mapper.Map<List<PermissionToListDto>>(response.Datas),
             response.TotalRecordCount, response.PageIndex, response.TotalPageCount);
 
-        return new SuccessDataResult<PaginatedList<PermissionToListDto>>(responseDto,
-            Messages.Success.Translate());
+        return new SuccessDataResult<PaginatedList<PermissionToListDto>>(responseDto, Messages.Success.Translate());
     }
 
     public Task<IDataResult<List<PermissionToListDto>>> GetAsync()

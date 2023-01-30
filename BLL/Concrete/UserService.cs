@@ -28,7 +28,7 @@ public class UserService : IUserService
             return new ErrorResult(Messages.UserIsExist.Translate());
 
         dto.RoleId = dto.RoleId == 0 || !dto.RoleId.HasValue
-            ? (await _unitOfWork.RoleRepository.GetAsync(m => m.Key == ERole.viewer.ToString()))?.RoleId
+            ? (await _unitOfWork.RoleRepository.GetAsync(m => m.Key == ERole.Viewer.ToString()))?.RoleId
             : dto.RoleId;
         var data = _mapper.Map<User>(dto);
 
@@ -72,7 +72,7 @@ public class UserService : IUserService
             return new ErrorResult(Messages.UserIsExist.Translate());
 
         dto.RoleId = dto.RoleId == 0 || !dto.RoleId.HasValue
-            ? (await _unitOfWork.RoleRepository.GetAsync(m => m.Key == ERole.viewer.ToString()))?.RoleId
+            ? (await _unitOfWork.RoleRepository.GetAsync(m => m.Key == ERole.Viewer.ToString()))?.RoleId
             : dto.RoleId;
 
         var data = _mapper.Map<User>(dto);

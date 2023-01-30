@@ -123,7 +123,7 @@ public class SftpService : ISftpService
 
     private ConnectionInfo GetConnectionInfo()
     {
-        return new ConnectionInfo(_configSettings.SftpSettings.IP, _configSettings.SftpSettings.UserName,
+        return new ConnectionInfo(_configSettings.SftpSettings.Ip, _configSettings.SftpSettings.UserName,
             new PasswordAuthenticationMethod(_configSettings.SftpSettings.UserName, _configSettings.SftpSettings.Password));
     }
 }

@@ -20,12 +20,3 @@ public class AntiForgeryTokenValidator
         await _next.Invoke(httpContext);
     }
 }
-
-// Extension method used to add the middleware to the HTTP request pipeline.
-public static class AntiForgeryTokenValidatorExtensions
-{
-    public static IApplicationBuilder UseAntiForgeryTokenValidator(this IApplicationBuilder builder)
-    {
-        return builder.UseMiddleware<AntiForgeryTokenValidator>();
-    }
-}
