@@ -33,4 +33,13 @@ jobs:
       run: dotnet build $SOLUTION --configuration $BUILD_CONFIG
       
     - name: Test
-      run: dotnet test $SOLUTION --configuration $BUILD_CONFIG
+      run: dotnet test $SOLUTION --configuration $BUILD_CONFIG --logger "trx;LogFileName=test-results.trx" || true
+      
+    - name: Test Report
+      uses: dorny/test-reporter@v1
+      if: always()
+      with:
+        name: DotNET Tests
+        path: "**/test-results.trx"                            
+        reporter: dotnet-trx
+        fail-on-error: true
