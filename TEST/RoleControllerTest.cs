@@ -18,8 +18,7 @@ public class RoleControllerTest
         _controller = new RoleController(_mock.Object);
     }
 
-    [Fact]
-    public async Task Get_For_ReturnsAllItems()
+    [Fact] public async Task Get_ReturnsAllItems()
     {
         // Arrange
         _mock.Setup(m => m.GetAsync()).ReturnsAsync(new SuccessDataResult<List<RoleToListDto>>(new List<RoleToListDto>()));
@@ -34,7 +33,7 @@ public class RoleControllerTest
     }
 
     [Fact]
-    public async Task GetById_For_ReturnsOkResult()
+    public async Task GetById_ReturnsItem()
     {
         // Arrange
         _mock.Setup(m => m.GetAsync(1)).ReturnsAsync(new SuccessDataResult<RoleToListDto>(new RoleToListDto
@@ -52,7 +51,7 @@ public class RoleControllerTest
     }
 
     [Fact]
-    public async Task Add_For_ReturnsCreatedResponse()
+    public async Task Add_ReturnsSuccess()
     {
         // Arrange
         var roleToAdd = new RoleToAddDto
@@ -70,7 +69,7 @@ public class RoleControllerTest
     }
 
     [Fact]
-    public async Task Remove_For_RemovesOneItem()
+    public async Task Delete_ReturnsSuccess()
     {
         // Arrange
         _mock.Setup(m => m.SoftDeleteAsync(2)).ReturnsAsync(new SuccessResult());
