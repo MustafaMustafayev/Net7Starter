@@ -77,7 +77,6 @@ public class SftpService : ISftpService
     {
         var connectionInfo = GetConnectionInfo();
         using var sftp = new SftpClient(connectionInfo);
-
         sftp.Connect();
         if (!sftp.IsConnected) return;
 
@@ -88,11 +87,11 @@ public class SftpService : ISftpService
 
     public byte[] ReadImage(string filePath)
     {
-        byte[] imageBytes = { };
+        var imageBytes = Array.Empty<byte>();
+
         var connectionInfo = GetConnectionInfo();
         using var sftp = new SftpClient(connectionInfo);
         sftp.Connect();
-
         if (!sftp.IsConnected) return imageBytes;
 
         sftp.ChangeDirectory(filePath);
@@ -107,18 +106,20 @@ public class SftpService : ISftpService
 
     public byte[] CompressImage(int jpegQuality, byte[] data)
     {
+        if (!OperatingSystem.IsWindows())
+            throw new NotSupportedException("Functions inside CompressImage method only works on windows platform");
+
         using var inputStream = new MemoryStream(data);
         using var image = Image.FromStream(inputStream);
-        var jpegEncoder = ImageCodecInfo.GetImageDecoders()
-            .First(c => c.FormatID == ImageFormat.Jpeg.Guid);
+
+        var jpegEncoder = ImageCodecInfo.GetImageDecoders().First(c => c.FormatID == ImageFormat.Jpeg.Guid);
         var encoderParameters = new EncoderParameters(1);
         encoderParameters.Param[0] = new EncoderParameter(Encoder.Quality, jpegQuality);
-        byte[] outputBytes = null;
-        using (var outputStream = new MemoryStream())
-        {
-            image.Save(outputStream, jpegEncoder, encoderParameters);
-            return outputStream.ToArray();
-        }
+
+        using var outputStream = new MemoryStream();
+        image.Save(outputStream, jpegEncoder, encoderParameters);
+
+        return outputStream.ToArray();
     }
 
     private ConnectionInfo GetConnectionInfo()
