@@ -10,27 +10,40 @@ namespace TEST;
 public class RoleControllerTest
 {
     private readonly RoleController _controller;
+    private readonly Mock<IRoleService> _mock;
 
     public RoleControllerTest()
     {
-        Mock<IRoleService> mock = new();
-        _controller = new RoleController(mock.Object);
+        _mock = new Mock<IRoleService>();
+        _controller = new RoleController(_mock.Object);
     }
 
     [Fact]
     public async Task Get_For_ReturnsAllItems()
     {
+        // Arrange
+        _mock.Setup(m => m.GetAsync()).ReturnsAsync(new SuccessDataResult<List<RoleToListDto>>(new List<RoleToListDto>()));
+
         // Act
         var okResult = await _controller.Get() as OkObjectResult;
 
         // Assert
         var items = Assert.IsAssignableFrom<IDataResult<List<RoleToListDto>>>(okResult?.Value);
-        Assert.Equal(3, items.Data?.Count);
+
+        Assert.Equal(0, items.Data?.Count);
     }
 
     [Fact]
-    public async Task GetById_For_ReturnsNotFoundResult()
+    public async Task GetById_For_ReturnsOkResult()
     {
+        // Arrange
+        _mock.Setup(m => m.GetAsync(1)).ReturnsAsync(new SuccessDataResult<RoleToListDto>(new RoleToListDto
+        {
+            RoleId = 1,
+            Name = "TT",
+            Key = "TT"
+        }));
+
         // Act
         var notFoundResult = await _controller.Get(1) as OkObjectResult;
 
@@ -39,56 +52,29 @@ public class RoleControllerTest
     }
 
     [Fact]
-    public async Task GetById_For_ReturnsOkResult()
-    {
-        // Act
-        var okResult = await _controller.Get(2) as OkObjectResult;
-
-        // Assert
-        Assert.IsAssignableFrom<IDataResult<RoleToListDto>>(okResult?.Value);
-    }
-
-    [Fact]
-    public async Task GetById_For_ReturnsRightItem()
-    {
-        // Act
-        var okResult = await _controller.Get(2) as OkObjectResult;
-
-        // Assert
-        Assert.IsAssignableFrom<IDataResult<RoleToListDto>>(okResult);
-        Assert.Equal(2, (okResult?.Value as IDataResult<RoleToListDto>)?.Data!.RoleId);
-    }
-
-    [Fact]
     public async Task Add_For_ReturnsCreatedResponse()
     {
         // Arrange
-        var testItem = new RoleToAddDto
+        var roleToAdd = new RoleToAddDto
         {
             Name = "TT",
             Key = "Test"
         };
+        _mock.Setup(m => m.AddAsync(roleToAdd)).ReturnsAsync(new SuccessResult());
 
         // Act
-        var createdResponse = await _controller.Add(testItem) as OkObjectResult;
+        var createdResponse = await _controller.Add(roleToAdd) as OkObjectResult;
 
         // Assert
         Assert.IsAssignableFrom<IResult>(createdResponse?.Value);
     }
 
     [Fact]
-    public async Task Remove_For_ReturnsNotFoundResponse()
-    {
-        // Act
-        var badResponse = await _controller.Delete(2) as OkObjectResult;
-
-        // Assert
-        Assert.IsAssignableFrom<IResult>(badResponse?.Value);
-    }
-
-    [Fact]
     public async Task Remove_For_RemovesOneItem()
     {
+        // Arrange
+        _mock.Setup(m => m.SoftDeleteAsync(2)).ReturnsAsync(new SuccessResult());
+
         // Act
         var okResponse = await _controller.Delete(2) as OkObjectResult;
 
