@@ -1,5 +1,4 @@
-﻿using System.Linq.Expressions;
-using CORE.Abstract;
+﻿using CORE.Abstract;
 using DAL.CustomMigrations;
 using ENTITIES.Entities;
 using ENTITIES.Entities.Logging;
@@ -21,21 +20,20 @@ public class DataContext : DbContext
         _utilService = utilService;
     }
 
-    public DbSet<User> Users { get; set; }
+    public required DbSet<User> Users { get; set; }
 
-    public DbSet<Photo> Photos { get; set; }
+    public required DbSet<Photo> Photos { get; set; }
 
-    public DbSet<Organization> Organizations { get; set; }
+    public required DbSet<Organization> Organizations { get; set; }
+    public required DbSet<Role> Roles { get; set; }
+    public required DbSet<RequestLog> RequestLogs { get; set; }
 
-    public DbSet<Role> Roles { get; set; }
-    public DbSet<RequestLog> RequestLogs { get; set; }
+    public required DbSet<ResponseLog> ResponseLogs { get; set; }
 
-    public DbSet<ResponseLog> ResponseLogs { get; set; }
+    public required DbSet<Permission> Permissions { get; set; }
+    public required DbSet<Token> Tokens { get; set; }
 
-    public DbSet<Permission> Permissions { get; set; }
-    public DbSet<Token> Tokens { get; set; }
-
-    public DbSet<ENTITIES.Entities.Logging.NLog> NLogs { get; set; }
+    public required DbSet<ENTITIES.Entities.Logging.NLog> NLogs { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -58,29 +56,18 @@ public class DataContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        foreach (var entityType in modelBuilder.Model.GetEntityTypes())
-            if (typeof(Auditable).IsAssignableFrom(entityType.ClrType))
-            {
-                var parameter = Expression.Parameter(entityType.ClrType, "p");
-                var deletedCheck = Expression.Lambda(
-                    Expression.Equal(
-                        Expression.Property(parameter, "IsDeleted"),
-                        Expression.Constant(false)
-                    ), parameter);
-                modelBuilder.Entity(entityType.ClrType).HasQueryFilter(deletedCheck);
-            }
+        modelBuilder.AddGlobalFilter("IsDeleted", false);
 
         modelBuilder.Entity<Token>().HasQueryFilter(m => !m.IsDeleted);
 
-        DataSeed.Seed(modelBuilder);
+        RoleSeed.Seed(modelBuilder);
     }
 
     private void SetAuditProperties()
     {
         var entries = ChangeTracker
             .Entries()
-            .Where(e =>
-                e.Entity is Auditable && e.State is EntityState.Added or EntityState.Modified);
+            .Where(e => e.Entity is Auditable && e.State is EntityState.Added or EntityState.Modified);
 
         var tokenString = _httpContextAccessor.HttpContext?.Request.Headers["Authorization"].ToString();
         foreach (var entityEntry in entries)

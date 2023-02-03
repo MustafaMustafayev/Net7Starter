@@ -21,14 +21,12 @@ public class LogActionFilter : IAsyncActionFilter
         _configSettings = configSettings;
     }
 
-    public async Task OnActionExecutionAsync(ActionExecutingContext context,
-        ActionExecutionDelegate next)
+    public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
     {
         var httpContext = context.HttpContext;
 
         var traceIdentitier = httpContext?.TraceIdentifier;
-        var clientIp = httpContext?.Features.Get<IHttpConnectionFeature>()?.RemoteIpAddress
-            ?.ToString();
+        var clientIp = httpContext?.Features.Get<IHttpConnectionFeature>()?.RemoteIpAddress?.ToString();
         var uri = httpContext?.Request.Host + httpContext?.Request.Path;
 
         var token = string.Empty;

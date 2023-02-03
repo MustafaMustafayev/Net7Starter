@@ -107,7 +107,7 @@ public class SftpService : ISftpService
     public byte[] CompressImage(int jpegQuality, byte[] data)
     {
         if (!OperatingSystem.IsWindows())
-            throw new NotSupportedException("Functions inside CompressImage method only works on windows platform");
+            throw new NotSupportedException("CompressImage function only works on windows platform");
 
         using var inputStream = new MemoryStream(data);
         using var image = Image.FromStream(inputStream);

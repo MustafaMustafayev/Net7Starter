@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Antiforgery;
 
-namespace API.Middlewares;
+namespace API.Middlewares.AntiForgery;
 
 public class AntiForgeryTokenValidator
 {

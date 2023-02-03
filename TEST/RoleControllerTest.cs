@@ -18,7 +18,8 @@ public class RoleControllerTest
         _controller = new RoleController(_mock.Object);
     }
 
-    [Fact] public async Task Get_ReturnsAllItems()
+    [Fact]
+    public async Task Get_ReturnsAllItems()
     {
         // Arrange
         _mock.Setup(m => m.GetAsync()).ReturnsAsync(new SuccessDataResult<List<RoleToListDto>>(new List<RoleToListDto>()));

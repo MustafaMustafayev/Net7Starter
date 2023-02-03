@@ -28,15 +28,15 @@ public class UnitOfWork : IUnitOfWork
         TokenRepository = tokenRepository;
     }
 
-    public IUserRepository UserRepository { get; set; }
+    public IUserRepository UserRepository { get; }
 
-    public ILoggingRepository LoggingRepository { get; set; }
+    public ILoggingRepository LoggingRepository { get; }
 
-    public IRoleRepository RoleRepository { get; set; }
+    public IRoleRepository RoleRepository { get; }
 
-    public IOrganizationRepository OrganizationRepository { get; set; }
-    public IPermissionRepository PermissionRepository { get; set; }
-    public ITokenRepository TokenRepository { get; set; }
+    public IOrganizationRepository OrganizationRepository { get; }
+    public IPermissionRepository PermissionRepository { get; }
+    public ITokenRepository TokenRepository { get; }
 
     public async Task CommitAsync()
     {
