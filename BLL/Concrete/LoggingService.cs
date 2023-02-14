@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using BLL.Abstract;
 using DAL.UnitOfWorks.Abstract;
-using DTO.CustomLogging;
+using DTO.Logging;
 using ENTITIES.Entities.Logging;
 
 namespace BLL.Concrete;

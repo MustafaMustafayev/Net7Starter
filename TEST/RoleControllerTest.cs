@@ -1,5 +1,6 @@
 using API.Controllers;
 using BLL.Abstract;
+using DTO.Permission;
 using DTO.Responses;
 using DTO.Role;
 using Microsoft.AspNetCore.Mvc;
@@ -37,12 +38,7 @@ public class RoleControllerTest
     public async Task GetById_ReturnsItem()
     {
         // Arrange
-        _mock.Setup(m => m.GetAsync(1)).ReturnsAsync(new SuccessDataResult<RoleToListDto>(new RoleToListDto
-        {
-            RoleId = 1,
-            Name = "TT",
-            Key = "TT"
-        }));
+        _mock.Setup(m => m.GetAsync(1)).ReturnsAsync(new SuccessDataResult<RoleToListDto>(new RoleToListDto(1, "TT", "TT", new List<PermissionToListDto>())));
 
         // Act
         var notFoundResult = await _controller.Get(1) as OkObjectResult;
@@ -55,11 +51,7 @@ public class RoleControllerTest
     public async Task Add_ReturnsSuccess()
     {
         // Arrange
-        var roleToAdd = new RoleToAddDto
-        {
-            Name = "TT",
-            Key = "Test"
-        };
+        var roleToAdd = new RoleToAddDto("TT", "Test", new List<int>());
         _mock.Setup(m => m.AddAsync(roleToAdd)).ReturnsAsync(new SuccessResult());
 
         // Act

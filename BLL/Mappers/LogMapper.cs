@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using DTO.CustomLogging;
+using DTO.Logging;
 using ENTITIES.Entities.Logging;
 
 namespace BLL.Mappers;

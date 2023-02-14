@@ -77,7 +77,7 @@ public class DataContext : DbContext
                     // var originalValues = entityEntry.OriginalValues.ToObject();
                     // var currentValues = entityEntry.CurrentValues.ToObject();
                     ((Auditable)entityEntry.Entity).CreatedAt = DateTime.Now;
-                    ((Auditable)entityEntry.Entity).CreatedBy =
+                    ((Auditable)entityEntry.Entity).CreatedById =
                         _utilService.GetUserIdFromToken(tokenString);
                     break;
                 case EntityState.Modified:
