@@ -5,13 +5,13 @@ using SOURCE.Workers;
 namespace SOURCE.Builders;
 
 // ReSharper disable once UnusedType.Global
-public class ToUpdateDtoBuilder : ISourceBuilder, ITextBuilder
+public class DtosBuilder : ISourceBuilder, ITextBuilder
 {
     public void BuildSourceFile(List<Entity> entities)
     {
         entities.ForEach(model => SourceBuilder.Instance
             .AddSourceFile(Constants.DtoPath.Replace("{entityName}", model.Name),
-                $"{model.Name}ToUpdateDto.cs", BuildSourceText(model, null)));
+                $"{model.Name}Dtos.cs", BuildSourceText(model, null)));
     }
 
     public string BuildSourceText(Entity? entity, List<Entity>? entities)
@@ -19,11 +19,9 @@ public class ToUpdateDtoBuilder : ISourceBuilder, ITextBuilder
         var text = @"
 namespace DTO.{entityName};
 
-public record {entityName}ToUpdateDto
-{
-    public int {entityName}Id { get; set; }
-    ...
-}
+public record {entityName}ToAddDto();
+public record {entityName}ToUpdateDto(int {entityName}Id);
+public record {entityName}ToListDto(int {entityName}Id);
 ";
 
         text = text.Replace("{entityName}", entity!.Name);
