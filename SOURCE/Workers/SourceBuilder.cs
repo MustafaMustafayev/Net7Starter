@@ -32,26 +32,31 @@ public class SourceBuilder
         _sourceFiles.Add(new SourceFile { Path = filePath, Name = fileName, Text = text });
     }
 
-    public async Task<bool> BuildSourceFiles()
+    private async Task<bool> CreateAllSourceFilesAsync()
     {
-        var entities = await FileHelper.ReadJsonAsync();
-
-        var types = AppDomain.CurrentDomain.GetAssemblies()
-            .SelectMany(s => s.GetTypes()).Where(p => typeof(IBuilder).IsAssignableFrom(p) && p != typeof(IBuilder)).ToList();
-
-        foreach (var type in types)
-        {
-            var instance = (IBuilder)Activator.CreateInstance(type)!;
-            instance.BuildSourceCode(entities);
-        }
-
         if (!_sourceFiles.Any()) return true;
 
         foreach (var sourceFile in _sourceFiles)
             if (!await FileHelper.CreateFileAsync(sourceFile))
                 return false;
 
-
         return true;
+    }
+
+    private static void AddAllSourceFilesAsync(List<Entity> entities)
+    {
+        var types = AppDomain.CurrentDomain.GetAssemblies()
+            .SelectMany(s => s.GetTypes()).Where(p => typeof(ISourceBuilder).IsAssignableFrom(p) && p != typeof(ISourceBuilder)).ToList();
+
+        foreach (var instance in types.Select(type => (ISourceBuilder)Activator.CreateInstance(type)!))
+            instance.BuildSourceFile(entities);
+    }
+
+    public async Task<bool> BuildSourceFiles()
+    {
+        var entities = await FileHelper.ReadJsonAsync();
+
+        AddAllSourceFilesAsync(entities);
+        return await CreateAllSourceFilesAsync();
     }
 }

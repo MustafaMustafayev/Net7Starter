@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Antiforgery;
 
-namespace API.Middlewares;
+namespace API.Middlewares.AntiForgery;
 
 public class AntiForgeryTokenValidator
 {
@@ -18,14 +18,5 @@ public class AntiForgeryTokenValidator
             avaliableMethodTypes.Contains(httpContext.Request.Method.ToLower()))
             await antiforgery.ValidateRequestAsync(httpContext);
         await _next.Invoke(httpContext);
-    }
-}
-
-// Extension method used to add the middleware to the HTTP request pipeline.
-public static class AntiForgeryTokenValidatorExtensions
-{
-    public static IApplicationBuilder UseAntiForgeryTokenValidator(this IApplicationBuilder builder)
-    {
-        return builder.UseMiddleware<AntiForgeryTokenValidator>();
     }
 }

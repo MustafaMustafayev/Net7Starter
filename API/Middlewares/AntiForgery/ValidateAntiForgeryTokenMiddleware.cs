@@ -1,7 +1,7 @@
 ﻿using CORE.Constants;
 using Microsoft.AspNetCore.Antiforgery;
 
-namespace API.Middlewares;
+namespace API.Middlewares.AntiForgery;
 
 // You may need to install the Microsoft.AspNetCore.Http.Abstractions package into your project
 public class ValidateAntiForgeryTokenMiddleware
@@ -20,14 +20,5 @@ public class ValidateAntiForgeryTokenMiddleware
         if (Constants.AntiForgeryTokenMethodTypes.Contains(httpContext.Request.Method.ToLower()))
             await _antiForgery.ValidateRequestAsync(httpContext);
         await _next.Invoke(httpContext);
-    }
-}
-
-// Extension method used to add the middleware to the HTTP request pipeline.
-public static class ValidateAntiForgeryTokenMiddlewareExtensions
-{
-    public static IApplicationBuilder UseMiddlewareClassTemplate(this IApplicationBuilder builder)
-    {
-        return builder.UseMiddleware<ValidateAntiForgeryTokenMiddleware>();
     }
 }

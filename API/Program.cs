@@ -104,7 +104,6 @@ app.UseMiddleware<ExceptionMiddleware>();
 // anti forgery token implementation
 //app.UseMiddleware<AntiForgeryTokenValidator>();
 
-//app.UseMiddleware<ValidateBlackListMiddleware>();
 app.UseOutputCache();
 app.UseHttpsRedirection();
 

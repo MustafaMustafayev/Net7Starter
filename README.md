@@ -46,6 +46,9 @@
     │   │   ├── UserHub
     │   │   └── ...
     │   ├── Middlewares
+    │   │   ├── AntiForgery
+    │   │   │   ├── AntiForgeryTokenValidator
+    │   │   │   └── ValidateAntiForgeryTokenMiddleware
     │   │   ├── ExceptionMiddleware
     │   │   └── LocalizationMiddleware
     │   └── Services
@@ -83,23 +86,27 @@
     │
     ├── CORE
     │   ├── Abstract
+    │   │   └── ISftpService
     │   │   └── IUtilService
     │   ├── Concrete
+    │   │   └── SftpService
     │   │   └── UtilService
     │   ├── Constants
     │   │   ├── Constants
-    │   │   ├── LocalizationConstants
-    │   │   └── Messages
+    │   │   └── LocalizationConstants
     │   ├── Config
     │   │   ├── AuthSettings
     │   │   ├── ConfigSettings
     │   │   ├── ConnectionStrings
     │   │   ├── Controllable
+    │   │   ├── CryptographySettings
     │   │   ├── HttpClientSettings
     │   │   ├── HttpHeader
+    │   │   ├── MailSettings
     │   │   ├── RedisSettings
     │   │   ├── RequestSettings
     │   │   ├── SentrySettings
+    │   │   ├── SftpSettings
     │   │   └── SwaggerSettings
     │   ├── Helper
     │   │   ├── ExpressionHelper
@@ -171,5 +178,13 @@
     │   │   ├── UserType
     │   │   └── ..
     │   └── IEntity
+    │ 
+    │── ── ── ── ── ── ── ── ── ── ── ── ── ──
+    │
+    ├── SOURCE
+    │   ├── Builders
+    │   ├── Helpers
+    │   ├── Models
+    │   └── Workers
     │
     └── ── ── ── ── ── ── ── ── ── ── ── ── ──

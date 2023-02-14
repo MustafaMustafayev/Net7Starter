@@ -1,4 +1,4 @@
-﻿using DTO.CustomLogging;
+﻿using DTO.Logging;
 
 namespace BLL.Abstract;
 

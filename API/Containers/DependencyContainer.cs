@@ -31,14 +31,12 @@ public static class DependencyContainer
 {
     public static void RegisterNLogger(this IServiceCollection services)
     {
-        LogManager.LoadConfiguration(string.Concat(Directory.GetCurrentDirectory(),
-            Constants.NLogConfigPath));
+        LogManager.LoadConfiguration(string.Concat(Directory.GetCurrentDirectory(), Constants.NLogConfigPath));
 
         services.AddSingleton<ILoggerManager, LoggerManager>();
     }
 
-    public static void RegisterAuthentication(this IServiceCollection services,
-        ConfigSettings config)
+    public static void RegisterAuthentication(this IServiceCollection services, ConfigSettings config)
     {
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
@@ -46,9 +44,7 @@ public static class DependencyContainer
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = false,
-                    IssuerSigningKey =
-                        new SymmetricSecurityKey(
-                            Encoding.ASCII.GetBytes(config.AuthSettings.SecretKey)),
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(config.AuthSettings.SecretKey)),
                     ValidateIssuer = false,
                     ValidateAudience = false,
                     ValidateLifetime = true,
@@ -87,8 +83,7 @@ public static class DependencyContainer
             c.EnableAnnotations();
 
             c.SwaggerDoc(config.SwaggerSettings.Version,
-                new OpenApiInfo
-                    { Title = config.SwaggerSettings.Title, Version = config.SwaggerSettings.Version });
+                new OpenApiInfo { Title = config.SwaggerSettings.Title, Version = config.SwaggerSettings.Version });
 
             c.AddSecurityDefinition(config.AuthSettings.TokenPrefix, new OpenApiSecurityScheme
             {

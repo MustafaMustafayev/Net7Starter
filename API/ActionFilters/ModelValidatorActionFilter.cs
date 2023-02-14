@@ -16,9 +16,7 @@ public class ModelValidatorActionFilter : IActionFilter
     {
         if (context.ModelState.IsValid) return;
 
-        var result =
-            new ErrorDataResult<ModelStateDictionary>(context.ModelState,
-                Messages.InvalidModel.Translate());
+        var result = new ErrorDataResult<ModelStateDictionary>(context.ModelState, Messages.InvalidModel.Translate());
         context.Result = new BadRequestObjectResult(result);
     }
 }

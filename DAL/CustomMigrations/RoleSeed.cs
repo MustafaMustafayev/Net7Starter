@@ -13,13 +13,13 @@ public static class RoleSeed
             {
                 RoleId = 1,
                 Name = "Admin",
-                Key = ERole.admin.ToString()
+                Key = ERole.Admin.ToString()
             },
             new Role
             {
                 RoleId = 2,
                 Name = "Viewer",
-                Key = ERole.viewer.ToString()
+                Key = ERole.Viewer.ToString()
             }
         );
     }

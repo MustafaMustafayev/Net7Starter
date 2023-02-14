@@ -24,6 +24,8 @@ public class FileHelper
         var projectPath = Directory.GetParent(Environment.CurrentDirectory)!.Parent!.Parent!.Parent!.FullName;
         var filePath = Path.Combine(projectPath, sourceFile.Path, sourceFile.Name);
 
+        if (!Directory.Exists(Path.GetDirectoryName(filePath))) Directory.CreateDirectory(Path.GetDirectoryName(filePath)!);
+
         if (File.Exists(filePath))
         {
             Console.WriteLine($"I found your file and skipped creating this. {filePath}");

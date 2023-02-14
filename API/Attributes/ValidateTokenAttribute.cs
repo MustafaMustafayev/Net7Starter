@@ -16,8 +16,7 @@ public class ValidateTokenAttribute : Attribute, IAuthorizationFilter
     {
         if (Constants.AllowAnonymous.Contains(context.HttpContext.Request.Path)) return;
 
-        var configSettings =
-            (context.HttpContext.RequestServices.GetService(typeof(ConfigSettings)) as ConfigSettings)!;
+        var configSettings = (context.HttpContext.RequestServices.GetService(typeof(ConfigSettings)) as ConfigSettings)!;
         var tokenService = (context.HttpContext.RequestServices.GetService(typeof(ITokenService)) as TokenService)!;
         var utilService = (context.HttpContext.RequestServices.GetService(typeof(IUtilService)) as UtilService)!;
 
