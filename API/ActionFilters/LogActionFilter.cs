@@ -45,13 +45,13 @@ public class LogActionFilter : IAsyncActionFilter
         using var streamReader = new StreamReader(context.HttpContext.Request.Body);
         var bodyContent = await streamReader.ReadToEndAsync();
         context.HttpContext.Request.Body.Position = 0;
-        
+
         await next();
 
-        var requestLog = new RequestLogDto(traceIdentifier, clientIp!, uri,  
+        var requestLog = new RequestLogDto(traceIdentifier, clientIp!, uri,
             DateTime.Now, bodyContent, httpContext.Request.Method, token, userId,
             new ResponseLogDto(traceIdentifier, DateTime.Now, httpContext.Response.StatusCode.ToString(), token, userId));
-        
+
         await _loggingService.AddLogAsync(requestLog);
     }
 }

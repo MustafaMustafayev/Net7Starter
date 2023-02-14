@@ -9,7 +9,6 @@ public class TokenMapper : Profile
 {
     public TokenMapper()
     {
-        CreateMap<TokenToAddDto, Token>();
         CreateMap<Token, TokenToListDto>();
         CreateMap<LoginResponseDto, Token>()
             .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.User.UserId));
