@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
-using BLL.MediatR.OrganizationCQRS.Queries;
 using CORE.Localization;
 using DAL.UnitOfWorks.Abstract;
 using DTO.Organization;
 using DTO.Responses;
 using MediatR;
+using MEDIATRS.MediatR.OrganizationCQRS.Queries;
 
-namespace BLL.MediatR.OrganizationCQRS.Handlers;
+namespace MEDIATRS.MediatR.OrganizationCQRS.Handlers;
 
 public class GetOrganizationByIdHandler : IRequestHandler<GetOrganizationByIdQuery,
     IDataResult<OrganizationToListDto>>

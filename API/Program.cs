@@ -5,7 +5,6 @@ using API.Hubs;
 using API.Middlewares;
 using API.Services;
 using BLL.Mappers;
-using BLL.MediatR;
 using CORE.Config;
 using CORE.Constants;
 using DAL.DatabaseContext;
@@ -13,7 +12,6 @@ using DTO.Auth.Validators;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using GraphQL.Server.Ui.Voyager;
-using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -49,12 +47,14 @@ if (config.RedisSettings.IsEnabled)
 }
 
 builder.Services.RegisterRepositories();
+builder.Services.RegisterSignalRHubs();
+builder.Services.RegisterUnitOfWork();
 builder.Services.RegisterApiVersioning();
 builder.Services.RegisterRateLimit();
 builder.Services.RegisterAntiForgeryToken();
-builder.Services.RegisterUnitOfWork();
 builder.Services.RegisterOutputCache();
 
+builder.Services.RegisterMediatr();
 
 builder.Services.AddGraphQLServer()
     .AddQueryType<Query>()
@@ -63,7 +63,6 @@ builder.Services.AddGraphQLServer()
     .AddSorting()
     .AddFiltering();
 
-builder.Services.AddMediatR(typeof(MediatrAssemblyContainer).Assembly);
 
 builder.Services.AddHealthChecks();
 
