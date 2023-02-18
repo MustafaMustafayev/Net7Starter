@@ -2,7 +2,7 @@
 
 ### Code contributors
 
-![Alt](https://repobeats.axiom.co/api/embed/8a34edc6094601ed624424f8b121ad4937d0f8dd.svg "Repobeats analytics image")
+![Alt](https://repobeats.axiom.co/api/embed/f8c50b5c55ce520d8198a81cb6f63150cec32209.svg "Repobeats analytics image")
 
 > .NET 7.0 Web Api project with Entity framework 6 code first approach. In this template n-tier architecture, repository and unit of work pattern implemented,
 > database based logging implemented using action filters, request profiling added using MiniProfiler, unhandled exception handled by sentry,

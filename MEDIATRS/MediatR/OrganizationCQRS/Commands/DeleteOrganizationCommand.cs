@@ -1,6 +1,6 @@
 ﻿using DTO.Responses;
 using MediatR;
 
-namespace BLL.MediatR.OrganizationCQRS.Commands;
+namespace MEDIATRS.MediatR.OrganizationCQRS.Commands;
 
 public record DeleteOrganizationCommand(int Id) : IRequest<IResult>;

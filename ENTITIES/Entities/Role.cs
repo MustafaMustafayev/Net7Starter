@@ -1,6 +1,6 @@
 ﻿namespace ENTITIES.Entities;
 
-public class Role : Auditable, IEntity
+public class Role : IEntity
 {
     public int RoleId { get; set; }
     public required string Name { get; set; }

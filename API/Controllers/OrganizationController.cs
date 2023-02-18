@@ -1,10 +1,10 @@
 ﻿using API.ActionFilters;
 using API.Attributes;
-using BLL.MediatR.OrganizationCQRS.Commands;
-using BLL.MediatR.OrganizationCQRS.Queries;
 using DTO.Organization;
 using DTO.Responses;
 using MediatR;
+using MEDIATRS.MediatR.OrganizationCQRS.Commands;
+using MEDIATRS.MediatR.OrganizationCQRS.Queries;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

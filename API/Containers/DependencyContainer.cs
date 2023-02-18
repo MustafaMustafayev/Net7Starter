@@ -1,19 +1,17 @@
 ﻿using System.Text;
 using System.Threading.RateLimiting;
 using API.Hubs;
-using BLL.Abstract;
 using BLL.Concrete;
-using BLL.RabbitMq.Abstract;
-using BLL.RabbitMq.Concrete;
 using CORE.Abstract;
 using CORE.Concrete;
 using CORE.Config;
 using CORE.Constants;
 using CORE.Logging;
-using DAL.Abstract;
 using DAL.Concrete;
 using DAL.UnitOfWorks.Abstract;
 using DAL.UnitOfWorks.Concrete;
+using MediatR;
+using MEDIATRS.MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -165,23 +163,24 @@ public static class DependencyContainer
 
     public static void RegisterRepositories(this IServiceCollection services)
     {
-        services.AddScoped<IAuthRepository, AuthRepository>();
-        services.AddScoped<IAuthService, AuthService>();
-        services.AddScoped<IUserRepository, UserRepository>();
-        services.AddScoped<IUserService, UserService>();
-        services.AddScoped<ILoggingRepository, LoggingRepository>();
-        services.AddScoped<ILoggingService, LoggingService>();
+        services.Scan(scan => scan
+            .FromAssemblies(typeof(UserService).Assembly)
+            .AddClasses(classes => classes.AssignableTo(typeof(object)))
+            .AsImplementedInterfaces()
+            .WithScopedLifetime());
+
+        services.Scan(scan => scan
+            .FromAssemblies(typeof(UserRepository).Assembly)
+            .AddClasses(classes => classes.AssignableTo(typeof(object)))
+            .AsImplementedInterfaces()
+            .WithScopedLifetime());
+
+        // util service is in the core assembly, therefore we need to register it separately
         services.AddScoped<IUtilService, UtilService>();
-        services.AddScoped<IRoleRepository, RoleRepository>();
-        services.AddScoped<IRoleService, RoleService>();
-        services.AddScoped<IOrganizationRepository, OrganizationRepository>();
-        services.AddScoped<IConsumerService, ConsumerService>();
-        services.AddScoped<IProducerService, ProducerService>();
-        services.AddScoped<IPermissionRepository, PermissionRepository>();
-        services.AddScoped<IPermissionService, PermissionService>();
-        services.AddScoped<ITokenRepository, TokenRepository>();
-        services.AddScoped<ITokenService, TokenService>();
-        services.AddScoped<ISftpService, SftpService>();
+    }
+
+    public static void RegisterSignalRHubs(this IServiceCollection services)
+    {
         services.AddSingleton<UserHub>();
     }
 
@@ -215,6 +214,17 @@ public static class DependencyContainer
             config.FirstHttpClientSettings.Headers.ForEach(h =>
                 client.DefaultRequestHeaders.Add(h.Name, h.Value));
         });
+    }
+
+    public static void RegisterMediatr(this IServiceCollection services)
+    {
+        services.AddMediatR(typeof(MediatrAssemblyContainer).Assembly);
+        services.Scan(scan =>
+            scan.FromAssemblyOf<MediatrAssemblyContainer>()
+                .AddClasses(classes => classes.AssignableTo(typeof(IRequestHandler<,>)))
+                .AsImplementedInterfaces()
+                .WithScopedLifetime()
+        );
     }
 
     public static void RegisterMiniProfiler(this IServiceCollection services)

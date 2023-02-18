@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
-using BLL.MediatR.OrganizationCQRS.Commands;
 using CORE.Localization;
 using DAL.UnitOfWorks.Abstract;
 using DTO.Responses;
 using ENTITIES.Entities;
 using MediatR;
+using MEDIATRS.MediatR.OrganizationCQRS.Commands;
 
-namespace BLL.MediatR.OrganizationCQRS.Handlers;
+namespace MEDIATRS.MediatR.OrganizationCQRS.Handlers;
 
 public class AddOrganizationHandler : IRequestHandler<AddOrganizationCommand, IResult>
 {

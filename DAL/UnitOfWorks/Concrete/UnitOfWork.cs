@@ -29,11 +29,8 @@ public class UnitOfWork : IUnitOfWork
     }
 
     public IUserRepository UserRepository { get; }
-
     public ILoggingRepository LoggingRepository { get; }
-
     public IRoleRepository RoleRepository { get; }
-
     public IOrganizationRepository OrganizationRepository { get; }
     public IPermissionRepository PermissionRepository { get; }
     public ITokenRepository TokenRepository { get; }
