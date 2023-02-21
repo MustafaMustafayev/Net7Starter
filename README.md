@@ -17,7 +17,10 @@
 > encoding and decoding implemened,
 > sftp functions implemented,
 > source code generator for DAL, BLL, API layer implemented,
-> Database and application dockerized. Docker compose implemented with build step.
+> Database and application dockerized. Docker compose implemented with build step,
+> automated service registration implemented using Scrutor,
+> unit test implemented,
+> Mediatr seperated as a independent layer.
 
 ## Structure
 
