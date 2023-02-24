@@ -3,7 +3,6 @@
 public class Auditable
 {
     public int? CreatedById { get; set; }
-    public virtual User? CreatedBy { get; set; }
     public int? ModifiedBy { get; set; }
     public int? DeletedBy { get; set; }
     public DateTimeOffset CreatedAt { get; set; }
