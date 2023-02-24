@@ -60,7 +60,7 @@ public class DataContext : DbContext
 
         modelBuilder.Entity<Token>().HasQueryFilter(m => !m.IsDeleted);
 
-        RoleSeed.Seed(modelBuilder);
+        DataSeed.Seed(modelBuilder);
     }
 
     private void SetAuditProperties()
@@ -84,7 +84,7 @@ public class DataContext : DbContext
                 {
                     Entry((Auditable)entityEntry.Entity).Property(p => p.CreatedAt).IsModified =
                         false;
-                    Entry((Auditable)entityEntry.Entity).Property(p => p.CreatedBy).IsModified =
+                    Entry((Auditable)entityEntry.Entity).Property(p => p.CreatedById).IsModified =
                         false;
 
                     if (((Auditable)entityEntry.Entity).IsDeleted)
