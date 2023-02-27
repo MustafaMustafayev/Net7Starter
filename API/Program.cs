@@ -46,6 +46,8 @@ if (config.RedisSettings.IsEnabled)
     builder.Services.RegisterRedis(config);
 }
 
+if (config.ElasticSearchSettings.IsEnabled) builder.Services.RegisterElasticSearch(config);
+
 builder.Services.RegisterRepositories();
 builder.Services.RegisterSignalRHubs();
 builder.Services.RegisterUnitOfWork();
@@ -53,7 +55,6 @@ builder.Services.RegisterApiVersioning();
 builder.Services.RegisterRateLimit();
 builder.Services.RegisterAntiForgeryToken();
 builder.Services.RegisterOutputCache();
-
 builder.Services.RegisterMediatr();
 
 builder.Services.AddGraphQLServer()
