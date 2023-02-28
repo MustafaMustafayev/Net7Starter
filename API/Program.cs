@@ -1,4 +1,5 @@
-﻿using API.ActionFilters;
+﻿using System.Text.Json.Serialization;
+using API.ActionFilters;
 using API.Containers;
 using API.Graphql.Role;
 using API.Hubs;
@@ -24,7 +25,8 @@ builder.Configuration.GetSection("Config").Bind(config);
 
 builder.Services.AddSingleton(config);
 
-builder.Services.AddControllers(opt => opt.Filters.Add(typeof(ModelValidatorActionFilter)));
+builder.Services.AddControllers(opt => opt.Filters.Add(typeof(ModelValidatorActionFilter)))
+    .AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));;
 
 builder.Services.AddFluentValidationAutoValidation()
     .AddValidatorsFromAssemblyContaining<LoginDtoValidator>();
