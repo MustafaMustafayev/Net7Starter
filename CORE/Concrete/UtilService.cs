@@ -112,6 +112,7 @@ public class UtilService : IUtilService
         byte[] privatekeyByte = { };
         privatekeyByte = Encoding.UTF8.GetBytes(privatekey);
         byte[] _keybyte = { };
+        _keybyte = Encoding.UTF8.GetBytes(_key);
         SymmetricAlgorithm algorithm = DES.Create();
         var transform = algorithm.CreateDecryptor(_keybyte, privatekeyByte);
         var inputbuffer = Convert.FromBase64String(value);
