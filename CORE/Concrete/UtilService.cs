@@ -92,10 +92,14 @@ public class UtilService : IUtilService
 
     public string Encrypt(string value)
     {
-        var key = Convert.FromBase64String(_configSettings.CryptographySettings.KeyBase64);
-        var iv = Convert.FromBase64String(_configSettings.CryptographySettings.VBase64);
+        string _key = _configSettings.CryptographySettings.KeyBase64;
+        string privatekey = _configSettings.CryptographySettings.VBase64;
+        byte[] privatekeyByte = { };
+        privatekeyByte = Encoding.UTF8.GetBytes(privatekey);
+        byte[] _keybyte = { };
+        _keybyte = Encoding.UTF8.GetBytes(_key);
         SymmetricAlgorithm algorithm = DES.Create();
-        var transform = algorithm.CreateEncryptor(key, iv);
+        var transform = algorithm.CreateEncryptor(_keybyte, privatekeyByte);
         var inputbuffer = Encoding.Unicode.GetBytes(value);
         var outputBuffer = transform.TransformFinalBlock(inputbuffer, 0, inputbuffer.Length);
         return Convert.ToBase64String(outputBuffer);
@@ -103,10 +107,13 @@ public class UtilService : IUtilService
 
     public string Decrypt(string value)
     {
-        var key = Convert.FromBase64String(_configSettings.CryptographySettings.KeyBase64);
-        var iv = Convert.FromBase64String(_configSettings.CryptographySettings.VBase64);
+        string _key = _configSettings.CryptographySettings.KeyBase64;
+        string privatekey = _configSettings.CryptographySettings.VBase64;
+        byte[] privatekeyByte = { };
+        privatekeyByte = Encoding.UTF8.GetBytes(privatekey);
+        byte[] _keybyte = { };
         SymmetricAlgorithm algorithm = DES.Create();
-        var transform = algorithm.CreateDecryptor(key, iv);
+        var transform = algorithm.CreateDecryptor(_keybyte, privatekeyByte);
         var inputbuffer = Convert.FromBase64String(value);
         var outputBuffer = transform.TransformFinalBlock(inputbuffer, 0, inputbuffer.Length);
         return Encoding.Unicode.GetString(outputBuffer);
