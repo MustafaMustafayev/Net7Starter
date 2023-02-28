@@ -220,7 +220,8 @@ public static class DependencyContainer
 
     public static void RegisterMediatr(this IServiceCollection services)
     {
-        services.AddMediatR(typeof(MediatrAssemblyContainer).Assembly);
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<MediatrAssemblyContainer>());
+
         services.Scan(scan =>
             scan.FromAssemblyOf<MediatrAssemblyContainer>()
                 .AddClasses(classes => classes.AssignableTo(typeof(IRequestHandler<,>)))

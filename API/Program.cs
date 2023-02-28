@@ -29,7 +29,6 @@ builder.Services.AddSingleton(config);
 
 builder.Services.AddControllers(opt => opt.Filters.Add(typeof(ModelValidatorActionFilter)))
     .AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
-;
 
 builder.Services.AddFluentValidationAutoValidation()
     .AddValidatorsFromAssemblyContaining<LoginDtoValidator>();
