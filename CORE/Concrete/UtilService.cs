@@ -92,8 +92,8 @@ public class UtilService : IUtilService
 
     public string Encrypt(string value)
     {
-        string _key = _configSettings.CryptographySettings.KeyBase64;
-        string privatekey = _configSettings.CryptographySettings.VBase64;
+        var _key = _configSettings.CryptographySettings.KeyBase64;
+        var privatekey = _configSettings.CryptographySettings.VBase64;
         byte[] privatekeyByte = { };
         privatekeyByte = Encoding.UTF8.GetBytes(privatekey);
         byte[] _keybyte = { };
@@ -107,8 +107,8 @@ public class UtilService : IUtilService
 
     public string Decrypt(string value)
     {
-        string _key = _configSettings.CryptographySettings.KeyBase64;
-        string privatekey = _configSettings.CryptographySettings.VBase64;
+        var _key = _configSettings.CryptographySettings.KeyBase64;
+        var privatekey = _configSettings.CryptographySettings.VBase64;
         byte[] privatekeyByte = { };
         privatekeyByte = Encoding.UTF8.GetBytes(privatekey);
         byte[] _keybyte = { };

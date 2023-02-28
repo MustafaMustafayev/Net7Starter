@@ -1,4 +1,5 @@
-﻿using API.ActionFilters;
+﻿using System.Text.Json.Serialization;
+using API.ActionFilters;
 using API.Containers;
 using API.Graphql.Role;
 using API.Hubs;
@@ -13,9 +14,11 @@ using FluentValidation;
 using FluentValidation.AspNetCore;
 using GraphQL.Server.Ui.Voyager;
 using Microsoft.EntityFrameworkCore;
+using NLog.Web;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Host.UseNLog();
 builder.Services.RegisterNLogger();
 
 var config = new ConfigSettings();
@@ -24,7 +27,8 @@ builder.Configuration.GetSection("Config").Bind(config);
 
 builder.Services.AddSingleton(config);
 
-builder.Services.AddControllers(opt => opt.Filters.Add(typeof(ModelValidatorActionFilter)));
+builder.Services.AddControllers(opt => opt.Filters.Add(typeof(ModelValidatorActionFilter)))
+    .AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 
 builder.Services.AddFluentValidationAutoValidation()
     .AddValidatorsFromAssemblyContaining<LoginDtoValidator>();
@@ -46,6 +50,8 @@ if (config.RedisSettings.IsEnabled)
     builder.Services.RegisterRedis(config);
 }
 
+if (config.ElasticSearchSettings.IsEnabled) builder.Services.RegisterElasticSearch(config);
+
 builder.Services.RegisterRepositories();
 builder.Services.RegisterSignalRHubs();
 builder.Services.RegisterUnitOfWork();
@@ -53,7 +59,6 @@ builder.Services.RegisterApiVersioning();
 builder.Services.RegisterRateLimit();
 builder.Services.RegisterAntiForgeryToken();
 builder.Services.RegisterOutputCache();
-
 builder.Services.RegisterMediatr();
 
 builder.Services.AddGraphQLServer()
