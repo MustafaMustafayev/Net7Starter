@@ -6,10 +6,12 @@ using CORE.Abstract;
 using CORE.Concrete;
 using CORE.Config;
 using CORE.Constants;
+using CORE.ElasticSearch;
 using CORE.Logging;
 using DAL.Concrete;
 using DAL.UnitOfWorks.Abstract;
 using DAL.UnitOfWorks.Concrete;
+using DTO.User;
 using MediatR;
 using MEDIATRS.MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -225,6 +227,12 @@ public static class DependencyContainer
                 .AsImplementedInterfaces()
                 .WithScopedLifetime()
         );
+    }
+
+    public static void RegisterElasticSearch(this IServiceCollection services, ConfigSettings configs)
+    {
+        services.AddScoped<IElasticSearchService<UserToListDto>>(_ =>
+            new ElasticSearchService<UserToListDto>(configs.ElasticSearchSettings.Connection, configs.ElasticSearchSettings.DefaultIndex));
     }
 
     public static void RegisterMiniProfiler(this IServiceCollection services)
