@@ -14,9 +14,11 @@ using FluentValidation;
 using FluentValidation.AspNetCore;
 using GraphQL.Server.Ui.Voyager;
 using Microsoft.EntityFrameworkCore;
+using NLog.Web;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Host.UseNLog();
 builder.Services.RegisterNLogger();
 
 var config = new ConfigSettings();
@@ -26,7 +28,8 @@ builder.Configuration.GetSection("Config").Bind(config);
 builder.Services.AddSingleton(config);
 
 builder.Services.AddControllers(opt => opt.Filters.Add(typeof(ModelValidatorActionFilter)))
-    .AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));;
+    .AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
+;
 
 builder.Services.AddFluentValidationAutoValidation()
     .AddValidatorsFromAssemblyContaining<LoginDtoValidator>();
