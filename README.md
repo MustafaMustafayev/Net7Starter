@@ -20,7 +20,8 @@
 > Database and application dockerized. Docker compose implemented with build step,
 > automated service registration implemented using Scrutor,
 > unit test implemented,
-> Mediatr seperated as a independent layer.
+> Mediatr seperated as a independent layer,
+> Elasticsearch implemented.
 
 ## Structure
 
