@@ -1,4 +1,6 @@
-﻿namespace DTO.Responses;
+﻿using System.Text.Json.Serialization;
+
+namespace DTO.Responses;
 
 public record Result : IResult
 {
@@ -12,8 +14,8 @@ public record Result : IResult
     {
         Success = success;
     }
-
+    [JsonPropertyName("success")]
     public bool Success { get; }
-
+    [JsonPropertyName("message")]
     public string? Message { get; }
 }

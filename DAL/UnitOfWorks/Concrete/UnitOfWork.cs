@@ -34,7 +34,6 @@ public class UnitOfWork : IUnitOfWork
     public IOrganizationRepository OrganizationRepository { get; }
     public IPermissionRepository PermissionRepository { get; }
     public ITokenRepository TokenRepository { get; }
-
     public async Task CommitAsync()
     {
         await _dataContext.SaveChangesAsync();
