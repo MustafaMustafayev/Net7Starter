@@ -19,6 +19,7 @@ public class IServiceBuilder : ISourceBuilder, ITextBuilder
         var text = @"
 using DTO.{entityName};
 using DTO.Responses;
+using DAL.Utility;
 
 namespace BLL.Abstract;
 

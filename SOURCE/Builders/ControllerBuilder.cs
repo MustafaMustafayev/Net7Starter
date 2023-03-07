@@ -19,7 +19,7 @@ public class ControllerBuilder : ISourceBuilder, ITextBuilder
         var text = @"
 using API.ActionFilters;
 using API.Attributes;
-using API.Enums;
+using CORE.Config;
 using BLL.Abstract;
 using DTO.Responses;
 using DTO.{entityName};
@@ -38,12 +38,14 @@ namespace API.Controllers;
 public class {entityName}Controller : Controller
 {
     private readonly I{entityName}Service _{entityNameLower}Service;
-
-    public {entityName}Controller(I{entityName}Service {entityNameLower}Service)
+    private readonly ConfigSettings _configSettings;
+    public {entityName}Controller(I{entityName}Service {entityNameLower}Service, ConfigSettings configSettings)
     {
         _{entityNameLower}Service = {entityNameLower}Service;
+        _configSettings = configSettings;
     }
 
+    [SwaggerOperation(Summary = ""get paginated list"")]
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IDataResult<List<{entityName}ToListDto>>))]
     [HttpGet(""paginate"")]
     public async Task<IActionResult> GetAsPaginated()
@@ -55,6 +57,7 @@ public class {entityName}Controller : Controller
         return Ok(response);
     }
 
+    [SwaggerOperation(Summary = ""get list"")]
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IDataResult<List<{entityName}ToListDto>>))]
     [HttpGet]
     public async Task<IActionResult> Get()
@@ -63,6 +66,7 @@ public class {entityName}Controller : Controller
         return Ok(response);
     }
 
+    [SwaggerOperation(Summary = ""get data"")]
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IDataResult<{entityName}ToListDto>))]
     [HttpGet(""{id}"")]
     public async Task<IActionResult> Get([FromRoute] int id)
@@ -71,6 +75,7 @@ public class {entityName}Controller : Controller
         return Ok(response);
     }
 
+    [SwaggerOperation(Summary = ""create"")]
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
     [HttpPost]
     public async Task<IActionResult> Add([FromBody] {entityName}ToAddDto dto)
@@ -79,6 +84,7 @@ public class {entityName}Controller : Controller
         return Ok(response);
     }
 
+    [SwaggerOperation(Summary = ""update"")]
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
     [HttpPut(""{id}"")]
     public async Task<IActionResult> Update([FromRoute] int id, [FromBody] {entityName}ToUpdateDto dto)
@@ -87,6 +93,7 @@ public class {entityName}Controller : Controller
         return Ok(response);
     }
 
+    [SwaggerOperation(Summary = ""delete"")]
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
     [HttpDelete(""{id}"")]
     public async Task<IActionResult> Delete([FromRoute] int id)
