@@ -56,7 +56,7 @@ builder.Services.RegisterRepositories();
 builder.Services.RegisterSignalRHubs();
 builder.Services.RegisterUnitOfWork();
 builder.Services.RegisterApiVersioning();
-builder.Services.RegisterRateLimit();
+//builder.Services.RegisterRateLimit();
 builder.Services.RegisterAntiForgeryToken();
 builder.Services.RegisterOutputCache();
 builder.Services.RegisterMediatr();

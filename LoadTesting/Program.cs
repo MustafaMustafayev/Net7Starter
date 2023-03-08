@@ -3,7 +3,7 @@ using LoadTesting;
 
 Task.Run(async() =>
 {
-    await new RoleTest().RunById();
+    await new RoleTest().RunList();
 });
 
 Console.Read();
