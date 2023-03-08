@@ -23,7 +23,9 @@ services:
         POSTGRES_USER: postgres
         POSTGRES_DB: postgres
     ports:
-      - "5432:5432"
+        - "5432:5432"
+    volumes:
+        -  ../data:/var/lib/postgresql/data
   pgadmin:
     container_name: pgadmin4
     image: dpage/pgadmin4
