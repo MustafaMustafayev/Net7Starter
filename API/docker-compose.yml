@@ -21,11 +21,11 @@ services:
     environment: 
         POSTGRES_PASSWORD: postgres
         POSTGRES_USER: postgres
-        POSTGRES_DB: postgres
+        POSTGRES_DB: sde
     ports:
         - "5432:5432"
     volumes:
-        -  ../data:/var/lib/postgresql/data
+        -  ../postgres/data:/var/lib/postgresql/data
   pgadmin:
     container_name: pgadmin4
     image: dpage/pgadmin4
@@ -36,3 +36,5 @@ services:
       PGADMIN_LISTEN_PORT: 80
     ports:
       - "8009:80"
+    volumes:
+      - ../postgres/pgadmin:/var/lib/pgadmin

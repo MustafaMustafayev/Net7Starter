@@ -49,7 +49,7 @@ public class RoleTest : RootTest
         })
          .WithoutWarmUp()
          .WithLoadSimulations(
-             Simulation.RampingConstant(copies:10,during: TimeSpan.FromMinutes(1))
+             Simulation.KeepConstant(copies:10,during: TimeSpan.FromSeconds(120))
              );
         var result = NBomberRunner
              .RegisterScenarios(scenario)
