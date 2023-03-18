@@ -27,6 +27,15 @@ public abstract class RootTest
     protected string RefreshToken = "";
     private string login = "test@test.tst";
     private string password = "testtest";
+    public enum HttpMethods
+    {
+        GET,
+        POST,
+        PUT,
+        PATCH,
+        DELETE
+    }
+
 
     public RootTest()
     {
@@ -85,5 +94,72 @@ public abstract class RootTest
         }
 
         return request;
+    }
+
+    /// <summary>
+    /// Helper method for create step.
+    /// </summary>
+    /// <typeparam name="TResponse">Type used for deserialize object/</typeparam>
+    /// <param name="stepName">Step name</param>
+    /// <param name="context">Scenario context</param>
+    /// <param name="httpMethods">Http method</param>
+    /// <param name="url">Url to API</param>
+    /// <param name="payload">Payload for API</param>
+    /// <param name="validator">Method for validation data</param>
+    /// <returns></returns>
+    public async Task<Response<object>> CreateHttpStep<TResponse>(
+        string stepName,
+        IScenarioContext context,
+        HttpMethods httpMethods,
+        string url,
+        string payload,
+        Func<IScenarioContext, TResponse, bool>? validator = null
+        )
+        where TResponse : class
+    {
+        return await Step.Run("step_1", context, async () =>
+        {
+            try
+            {
+                var request = CreateRequest(httpMethods.ToString(), url, payload);
+                var response = await Http.Send(httpClient, request);
+
+                if (response.IsError)
+                {
+                    return Response.Fail(message: response.Message, statusCode: response.StatusCode);
+                }
+
+                string result = await response.Payload.Value.Content.ReadAsStringAsync();
+
+
+                var setting = new JsonSerializerSettings
+                {
+                    ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                    ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor
+                };
+
+                if (validator is not null)
+                {
+                    TResponse? data = JsonConvert.DeserializeObject<TResponse>(result, setting);
+
+                    if (data is null)
+                    {
+                        context.Logger.Error("Faild deseroalized object");
+                        return Response.Fail();
+                    }
+
+                    if (!validator(context, data))
+                    {
+                        return Response.Fail(message: "Data is invalid");
+                    }
+                }
+            } catch(Exception ex)
+            {
+                context.Logger.Error(ex.Message);
+                return Response.Fail();
+            }
+
+            return Response.Ok();
+        });
     }
 }
