@@ -18,6 +18,7 @@ public class ServiceBuilder : ISourceBuilder, ITextBuilder
         var text = @"
 using AutoMapper;
 using BLL.Abstract;
+using CORE.Abstract;
 using CORE.Localization;
 using DAL.UnitOfWorks.Abstract;
 using DTO.Responses;
@@ -31,11 +32,12 @@ public class {entityName}Service : I{entityName}Service
 {
     private readonly IMapper _mapper;
     private readonly IUnitOfWork _unitOfWork;
-
-    public {entityName}Service(IMapper mapper, IUnitOfWork unitOfWork)
+    private readonly IUtilService _utilService;
+    public {entityName}Service(IMapper mapper, IUnitOfWork unitOfWork, IUtilService utilService)
     {
         _mapper = mapper;
         _unitOfWork = unitOfWork;
+        _utilService = utilService;
     }
 
     public async Task<IResult> AddAsync({entityName}ToAddDto dto)
@@ -61,7 +63,9 @@ public class {entityName}Service : I{entityName}Service
     public async Task<IDataResult<PaginatedList<{entityName}ToListDto>>> GetAsPaginatedListAsync(int pageIndex, int pageSize)
     {
         var datas = _unitOfWork.{entityName}Repository.GetList();
-        var response = await PaginatedList<{entityName}>.CreateAsync(datas.OrderBy(m => m.{entityName}Id), pageIndex, pageSize);
+        var paginationDto = _utilService.GetPagination();
+
+        var response = await PaginatedList<{entityName}>.CreateAsync(datas.OrderBy(m => m.{entityName}Id), paginationDto.PageIndex, paginationDto.PageSize);
 
         var responseDto = new PaginatedList<{entityName}ToListDto>(_mapper.Map<List<{entityName}ToListDto>>(response.Datas), response.TotalRecordCount, response.PageIndex, pageSize);
 

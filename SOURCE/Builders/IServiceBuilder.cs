@@ -25,7 +25,7 @@ namespace BLL.Abstract;
 
 public interface I{entityName}Service
 {
-    Task<IDataResult<PaginatedList<{entityName}ToListDto>>> GetAsPaginatedListAsync(int pageIndex, int pageSize);
+    Task<IDataResult<PaginatedList<{entityName}ToListDto>>> GetAsPaginatedListAsync();
     Task<IDataResult<List<{entityName}ToListDto>>> GetAsync();
     Task<IDataResult<{entityName}ToListDto>> GetAsync(int id);
     Task<IResult> AddAsync({entityName}ToAddDto dto);

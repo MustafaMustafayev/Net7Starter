@@ -5,6 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using CORE.Abstract;
 using CORE.Config;
+using DTO.Helper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
@@ -159,5 +160,19 @@ public class UtilService : IUtilService
     public string GetContentType()
     {
         return _configSettings.AuthSettings.ContentType;
+    }
+
+    public PaginationDto GetPagination()
+    {
+        var pageIndex = Convert.ToInt32(_httpContextAccessor.HttpContext.Request.Headers[_configSettings.RequestSettings.PageIndex]);
+        var pageSize = Convert.ToInt32(_httpContextAccessor.HttpContext.Request.Headers[_configSettings.RequestSettings.PageSize]);
+
+        PaginationDto dto = new PaginationDto()
+        {
+            PageIndex = pageIndex,
+            PageSize = pageSize
+        };
+
+        return dto;
     }
 }

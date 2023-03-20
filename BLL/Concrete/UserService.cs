@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BLL.Abstract;
+using CORE.Abstract;
 using CORE.Enums;
 using CORE.Helper;
 using CORE.Localization;
@@ -15,11 +16,12 @@ public class UserService : IUserService
 {
     private readonly IMapper _mapper;
     private readonly IUnitOfWork _unitOfWork;
-
-    public UserService(IUnitOfWork unitOfWork, IMapper mapper)
+    private readonly IUtilService _utilService;
+    public UserService(IUnitOfWork unitOfWork, IMapper mapper, IUtilService utilService)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
+        _utilService = utilService;
     }
 
     public async Task<IResult> AddAsync(UserToAddDto dto)
@@ -84,13 +86,12 @@ public class UserService : IUserService
         return new SuccessResult(Messages.Success.Translate());
     }
 
-    public async Task<IDataResult<PaginatedList<UserToListDto>>> GetAsPaginatedListAsync(
-        int pageIndex, int pageSize)
+    public async Task<IDataResult<PaginatedList<UserToListDto>>> GetAsPaginatedListAsync()
     {
         var datas = _unitOfWork.UserRepository.GetList();
-        var response =
-            await PaginatedList<User>.CreateAsync(datas.OrderBy(m => m.UserId), pageIndex,
-                pageSize);
+        var paginationDto = _utilService.GetPagination();
+
+        var response = await PaginatedList<User>.CreateAsync(datas.OrderBy(m => m.UserId), paginationDto.PageIndex, paginationDto.PageSize);
 
         var responseDto = new PaginatedList<UserToListDto>(
             _mapper.Map<List<UserToListDto>>(response.Datas),

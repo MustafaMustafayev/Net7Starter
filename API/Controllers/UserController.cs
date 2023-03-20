@@ -19,16 +19,14 @@ namespace API.Controllers;
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class UserController : Controller
 {
-    private readonly ConfigSettings _configSettings;
     private readonly IWebHostEnvironment _environment;
     private readonly IUserService _userService;
     private readonly IUtilService _utilService;
 
-    public UserController(IUserService userService, ConfigSettings configSettings, IWebHostEnvironment environment,
+    public UserController(IUserService userService, IWebHostEnvironment environment,
         IUtilService utilService)
     {
         _userService = userService;
-        _configSettings = configSettings;
         _environment = environment;
         _utilService = utilService;
     }
@@ -40,12 +38,7 @@ public class UserController : Controller
     [ServiceFilter(typeof(LogActionFilter))]
     public async Task<IActionResult> GetAsPaginated()
     {
-        var pageIndex =
-            Convert.ToInt32(HttpContext.Request.Headers[_configSettings.RequestSettings.PageIndex]);
-        var pageSize =
-            Convert.ToInt32(HttpContext.Request.Headers[_configSettings.RequestSettings.PageSize]);
-        var response = await _userService.GetAsPaginatedListAsync(pageIndex, pageSize);
-
+        var response = await _userService.GetAsPaginatedListAsync();
         return Ok(response);
     }
 

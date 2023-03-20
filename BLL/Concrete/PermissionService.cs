@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BLL.Abstract;
+using CORE.Abstract;
 using CORE.Localization;
 using DAL.UnitOfWorks.Abstract;
 using DAL.Utility;
@@ -13,11 +14,12 @@ public class PermissionService : IPermissionService
 {
     private readonly IMapper _mapper;
     private readonly IUnitOfWork _unitOfWork;
-
-    public PermissionService(IUnitOfWork unitOfWork, IMapper mapper)
+    private readonly IUtilService _utilService;
+    public PermissionService(IUnitOfWork unitOfWork, IMapper mapper, IUtilService utilService)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
+        _utilService = utilService; 
     }
 
     public async Task<IResult> AddAsync(PermissionToAddDto dto)
@@ -39,10 +41,11 @@ public class PermissionService : IPermissionService
         return new SuccessResult(Messages.Success.Translate());
     }
 
-    public async Task<IDataResult<PaginatedList<PermissionToListDto>>> GetAsPaginatedListAsync(int pageIndex, int pageSize)
+    public async Task<IDataResult<PaginatedList<PermissionToListDto>>> GetAsPaginatedListAsync()
     {
         var datas = _unitOfWork.PermissionRepository.GetAsNoTrackingList();
-        var response = await PaginatedList<Permission>.CreateAsync(datas.OrderBy(m => m.PermissionId), pageIndex, pageSize);
+        var paginationDto = _utilService.GetPagination();
+        var response = await PaginatedList<Permission>.CreateAsync(datas.OrderBy(m => m.PermissionId), paginationDto.PageIndex, paginationDto.PageSize);
 
         var responseDto = new PaginatedList<PermissionToListDto>(_mapper.Map<List<PermissionToListDto>>(response.Datas),
             response.TotalRecordCount, response.PageIndex, response.TotalPageCount);

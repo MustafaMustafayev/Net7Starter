@@ -1,7 +1,6 @@
 ﻿using API.ActionFilters;
 using API.Attributes;
 using BLL.Abstract;
-using CORE.Config;
 using DTO.Permission;
 using DTO.Responses;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -17,13 +16,11 @@ namespace API.Controllers;
 [ValidateToken]
 public class PermissionController : Controller
 {
-    private readonly ConfigSettings _configSettings;
     private readonly IPermissionService _permissionService;
 
-    public PermissionController(IPermissionService permissionService, ConfigSettings configSettings)
+    public PermissionController(IPermissionService permissionService)
     {
         _permissionService = permissionService;
-        _configSettings = configSettings;
     }
 
     [SwaggerOperation(Summary = "get permissions as paginated list")]
@@ -31,12 +28,7 @@ public class PermissionController : Controller
     [HttpGet("paginate")]
     public async Task<IActionResult> GetAsPaginated()
     {
-        var pageIndex =
-            Convert.ToInt32(HttpContext.Request.Headers[_configSettings.RequestSettings.PageIndex]);
-        var pageSize =
-            Convert.ToInt32(HttpContext.Request.Headers[_configSettings.RequestSettings.PageSize]);
-        var response = await _permissionService.GetAsPaginatedListAsync(pageIndex, pageSize);
-
+        var response = await _permissionService.GetAsPaginatedListAsync();
         return Ok(response);
     }
 

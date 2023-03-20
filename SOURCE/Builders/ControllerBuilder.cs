@@ -19,7 +19,6 @@ public class ControllerBuilder : ISourceBuilder, ITextBuilder
         var text = @"
 using API.ActionFilters;
 using API.Attributes;
-using CORE.Config;
 using BLL.Abstract;
 using DTO.Responses;
 using DTO.{entityName};
@@ -38,11 +37,9 @@ namespace API.Controllers;
 public class {entityName}Controller : Controller
 {
     private readonly I{entityName}Service _{entityNameLower}Service;
-    private readonly ConfigSettings _configSettings;
-    public {entityName}Controller(I{entityName}Service {entityNameLower}Service, ConfigSettings configSettings)
+    public {entityName}Controller(I{entityName}Service {entityNameLower}Service)
     {
         _{entityNameLower}Service = {entityNameLower}Service;
-        _configSettings = configSettings;
     }
 
     [SwaggerOperation(Summary = ""get paginated list"")]
@@ -50,10 +47,7 @@ public class {entityName}Controller : Controller
     [HttpGet(""paginate"")]
     public async Task<IActionResult> GetAsPaginated()
     {
-        var pageIndex = Convert.ToInt32(HttpContext.Request.Headers[_configSettings.RequestSettings.PageIndex]);
-        var pageSize = Convert.ToInt32(HttpContext.Request.Headers[_configSettings.RequestSettings.PageSize]);
-        var response = await _{entityNameLower}Service.GetAsPaginatedListAsync(pageIndex, pageSize);
-
+        var response = await _{entityNameLower}Service.GetAsPaginatedListAsync();
         return Ok(response);
     }
 

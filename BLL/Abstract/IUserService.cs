@@ -8,8 +8,7 @@ public interface IUserService
 {
     Task<IDataResult<List<UserToListDto>>> GetAsync();
 
-    Task<IDataResult<PaginatedList<UserToListDto>>> GetAsPaginatedListAsync(int pageIndex,
-        int pageSize);
+    Task<IDataResult<PaginatedList<UserToListDto>>> GetAsPaginatedListAsync();
 
     Task<IDataResult<UserToListDto>> GetAsync(int id);
 
