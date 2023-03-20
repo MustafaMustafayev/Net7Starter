@@ -15,7 +15,7 @@ public record Result : IResult
         Success = success;
     }
     [JsonPropertyName("success")]
-    public bool Success { get; }
+    public bool Success { get; set; }
     [JsonPropertyName("message")]
-    public string? Message { get; }
+    public string? Message { get; set; }
 }

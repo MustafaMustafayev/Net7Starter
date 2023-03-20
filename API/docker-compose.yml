@@ -1,0 +1,40 @@
+version: '3.4'
+
+services:
+  #api:
+  #  image: ${DOCKER_REGISTRY-}api
+  #  container_name: 'aspcore'
+  #  build:
+  #      context: .
+  #      dockerfile: API/Dockerfile
+  #  environment:
+  #      - ASPNETCORE_ENVIRONMENT=Development
+  #  depends_on: 
+  #      - postgres
+  #  ports:
+  #      - "8081:80"
+  #      - "8082:443"
+  postgres:
+    container_name: 'postgres'
+    image: postgres
+    restart: always
+    environment: 
+        POSTGRES_PASSWORD: postgres
+        POSTGRES_USER: postgres
+        POSTGRES_DB: sde
+    ports:
+        - "5432:5432"
+    volumes:
+        -  ../postgres/data:/var/lib/postgresql/data
+  pgadmin:
+    container_name: pgadmin4
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: postgres
+      PGADMIN_LISTEN_PORT: 80
+    ports:
+      - "8009:80"
+    volumes:
+      - ../postgres/pgadmin:/var/lib/pgadmin
