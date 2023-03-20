@@ -23,6 +23,7 @@ using DAL.UnitOfWorks.Abstract;
 using DTO.Responses;
 using DTO.{entityName};
 using ENTITIES.Entities;
+using DAL.Utility;
 
 namespace BLL.Concrete;
 
@@ -59,10 +60,10 @@ public class {entityName}Service : I{entityName}Service
 
     public async Task<IDataResult<PaginatedList<{entityName}ToListDto>>> GetAsPaginatedListAsync(int pageIndex, int pageSize)
     {
-        var datas = _unitOfWork.{entityName}Repository.GetAsNoTrackingList();
+        var datas = _unitOfWork.{entityName}Repository.GetList();
         var response = await PaginatedList<{entityName}>.CreateAsync(datas.OrderBy(m => m.{entityName}Id), pageIndex, pageSize);
 
-        var responseDto = new PaginatedList<{entityName}ToListDto>(_mapper.Map<List<{entityName}ToListDto>>(response.Datas), response.TotalRecordCount, response.PageIndex, response.TotalPageCount);
+        var responseDto = new PaginatedList<{entityName}ToListDto>(_mapper.Map<List<{entityName}ToListDto>>(response.Datas), response.TotalRecordCount, response.PageIndex, pageSize);
 
         return new SuccessDataResult<PaginatedList<{entityName}ToListDto>>(responseDto, Messages.Success.Translate());
     }
