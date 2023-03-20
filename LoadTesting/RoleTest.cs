@@ -57,27 +57,6 @@ public class RoleTest : RootTest
                 "api/Role/1",
                 String.Empty
             );
-
-            //var request = CreateRequest("GET", "api/Role/1", String.Empty);
-            //var response = await Http.Send(httpClient, request);
-
-            //if (response.IsError)
-            //{
-            //    return Response.Fail(message: response.Message, statusCode: response.StatusCode);
-            //}
-
-            //string result = await response.Payload.Value.Content.ReadAsStringAsync();
-
-            //var setting = new JsonSerializerSettings
-            //{
-            //    ContractResolver = new CamelCasePropertyNamesContractResolver(),
-            //    ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor
-            //};
-
-            //var data = JsonConvert.DeserializeObject<SuccessDataResult<RoleToListDto>>(result, setting);
-
-            //if (data is null || data.Data is null) return Response.Fail();
-
             return Response.Ok();
         })
          .WithoutWarmUp()
