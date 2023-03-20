@@ -100,7 +100,7 @@ public class AuthController : Controller
         if (string.IsNullOrEmpty(HttpContext.Request.Headers.Authorization))
             return Unauthorized(new ErrorResult(Messages.CanNotFoundUserIdInYourAccessToken.Translate()));
 
-        var loginByTokenResponse = await _authService.LoginByTokenAsync(HttpContext.Request.Headers.Authorization!);
+        var loginByTokenResponse = await _authService.LoginByTokenAsync();
         if (!loginByTokenResponse.Success) return BadRequest(loginByTokenResponse.Data);
 
         var response = await _tokenService.CreateTokenAsync(loginByTokenResponse.Data!);

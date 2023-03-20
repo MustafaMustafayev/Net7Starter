@@ -5,6 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using CORE.Abstract;
 using CORE.Config;
+using Microsoft.AspNetCore.Http;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 
@@ -13,10 +14,12 @@ namespace CORE.Concrete;
 public class UtilService : IUtilService
 {
     private readonly ConfigSettings _configSettings;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public UtilService(ConfigSettings configSettings)
+    public UtilService(ConfigSettings configSettings, IHttpContextAccessor httpContextAccessor)
     {
         _configSettings = configSettings;
+        _httpContextAccessor = httpContextAccessor;
     }
 
     public HttpContent GetHttpContentObject(object obj)
@@ -24,8 +27,10 @@ public class UtilService : IUtilService
         return new StringContent(JsonConvert.SerializeObject(obj), Encoding.UTF8, GetContentType());
     }
 
-    public int? GetUserIdFromToken(string? tokenString)
+    public int? GetUserIdFromToken()
     {
+        string tokenString = _httpContextAccessor.HttpContext.Request.Headers[_configSettings.AuthSettings.HeaderName];
+
         if (string.IsNullOrEmpty(tokenString)) return null;
         if (!tokenString.Contains($"{_configSettings.AuthSettings.TokenPrefix} ")) return null;
 
@@ -34,8 +39,10 @@ public class UtilService : IUtilService
         return Convert.ToInt32(userId);
     }
 
-    public int? GetCompanyIdFromToken(string? tokenString)
+    public int? GetCompanyIdFromToken()
     {
+        string tokenString = _httpContextAccessor.HttpContext.Request.Headers[_configSettings.AuthSettings.HeaderName];
+
         if (string.IsNullOrEmpty(tokenString)) return null;
         if (!tokenString.Contains($"{_configSettings.AuthSettings.TokenPrefix} ")) return null;
 
@@ -48,8 +55,10 @@ public class UtilService : IUtilService
         return Convert.ToInt32(companyIdClaim.Value);
     }
 
-    public bool IsValidToken(string tokenString)
+    public bool IsValidToken()
     {
+        string tokenString = _httpContextAccessor.HttpContext.Request.Headers[_configSettings.AuthSettings.HeaderName];
+
         if (string.IsNullOrEmpty(tokenString) || tokenString.Length < 7) return false;
 
         var tokenHandler = new JwtSecurityTokenHandler();

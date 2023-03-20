@@ -67,7 +67,7 @@ public class SftpService : ISftpService
         {
             formFile.CopyTo(ms);
             var fileBytes = ms.ToArray();
-            sftp.WriteAllBytes(fileName, fileBytes);
+            sftp.WriteAllBytes(filePath + "/" + fileName, fileBytes);
         }
 
         sftp.Disconnect();

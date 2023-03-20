@@ -37,7 +37,7 @@ public class LogActionFilter : IAsyncActionFilter
         {
             token = httpContext.Request.Headers[authHeaderName].ToString();
             userId = !string.IsNullOrEmpty(token)
-                ? _utilService.GetUserIdFromToken(httpContext.Request.Headers[authHeaderName].ToString())
+                ? _utilService.GetUserIdFromToken()
                 : null;
         }
 

@@ -40,9 +40,9 @@ public class AuthService : IAuthService
             Messages.Success.Translate());
     }
 
-    public async Task<IDataResult<UserToListDto>> LoginByTokenAsync(string token)
+    public async Task<IDataResult<UserToListDto>> LoginByTokenAsync()
     {
-        var userId = _utilService.GetUserIdFromToken(token);
+        var userId = _utilService.GetUserIdFromToken();
         if (userId is null)
             return new ErrorDataResult<UserToListDto>(Messages.CanNotFoundUserIdInYourAccessToken
                 .Translate());

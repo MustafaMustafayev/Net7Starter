@@ -3,10 +3,10 @@
 public interface IUtilService
 {
     HttpContent GetHttpContentObject(object obj);
-    public bool IsValidToken(string tokenString);
+    public bool IsValidToken();
 
-    public int? GetUserIdFromToken(string? tokenString);
-    public int? GetCompanyIdFromToken(string? tokenString);
+    public int? GetUserIdFromToken();
+    public int? GetCompanyIdFromToken();
     public string GenerateRefreshToken();
     public string GetTokenStringFromHeader(string jwtToken);
     public string Encrypt(string value);

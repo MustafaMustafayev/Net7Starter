@@ -69,7 +69,6 @@ public class DataContext : DbContext
             .Entries()
             .Where(e => e.Entity is Auditable && e.State is EntityState.Added or EntityState.Modified);
 
-        var tokenString = _httpContextAccessor.HttpContext?.Request.Headers["Authorization"].ToString();
         foreach (var entityEntry in entries)
             switch (entityEntry.State)
             {
@@ -78,7 +77,7 @@ public class DataContext : DbContext
                     // var currentValues = entityEntry.CurrentValues.ToObject();
                     ((Auditable)entityEntry.Entity).CreatedAt = DateTime.Now;
                     ((Auditable)entityEntry.Entity).CreatedById =
-                        _utilService.GetUserIdFromToken(tokenString);
+                        _utilService.GetUserIdFromToken();
                     break;
                 case EntityState.Modified:
                 {
@@ -96,13 +95,13 @@ public class DataContext : DbContext
 
                         ((Auditable)entityEntry.Entity).DeletedAt = DateTime.Now;
                         ((Auditable)entityEntry.Entity).DeletedBy =
-                            _utilService.GetUserIdFromToken(tokenString);
+                            _utilService.GetUserIdFromToken();
                     }
                     else
                     {
                         ((Auditable)entityEntry.Entity).ModifiedAt = DateTime.Now;
                         ((Auditable)entityEntry.Entity).ModifiedBy =
-                            _utilService.GetUserIdFromToken(tokenString);
+                            _utilService.GetUserIdFromToken();
                     }
 
                     break;

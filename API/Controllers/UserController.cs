@@ -3,7 +3,6 @@ using API.Attributes;
 using BLL.Abstract;
 using CORE.Abstract;
 using CORE.Config;
-using CORE.Constants;
 using CORE.Localization;
 using DTO.Responses;
 using DTO.User;
@@ -67,7 +66,7 @@ public class UserController : Controller
     [HttpGet("profile")]
     public async Task<IActionResult> GetProfileInfo()
     {
-        var userId = _utilService.GetUserIdFromToken(HttpContext.Request.Headers[Constants.AuthHeader]);
+        var userId = _utilService.GetUserIdFromToken();
         if (userId is null) return Unauthorized(new ErrorResult(Messages.CanNotFoundUserIdInYourAccessToken.Translate()));
 
         var response = await _userService.GetAsync(userId.Value);
@@ -137,7 +136,7 @@ public class UserController : Controller
             await file.CopyToAsync(fileStream);
         }
 
-        var userId = _utilService.GetUserIdFromToken(HttpContext.Request.Headers[Constants.AuthHeader]);
+        var userId = _utilService.GetUserIdFromToken();
         if (userId is null) return Unauthorized(new ErrorResult(Messages.CanNotFoundUserIdInYourAccessToken.Translate()));
 
         var response = await _userService.UpdateProfilePhotoAsync(userId.Value, filePath);
@@ -151,7 +150,7 @@ public class UserController : Controller
     [HttpDelete("image")]
     public async Task<IActionResult> DeleteImage()
     {
-        var userId = _utilService.GetUserIdFromToken(HttpContext.Request.Headers[Constants.AuthHeader]);
+        var userId = _utilService.GetUserIdFromToken();
         if (userId is null) return Unauthorized(new ErrorResult(Messages.CanNotFoundUserIdInYourAccessToken.Translate()));
 
         var response = await _userService.DeleteProfilePhotoAsync(userId.Value);
