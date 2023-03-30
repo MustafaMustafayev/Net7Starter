@@ -26,7 +26,7 @@
         <None Remove="Token\Validators\" />
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="FluentValidation.AspNetCore" Version="11.2.2" />
+        <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\ENTITIES\ENTITIES.csproj" />

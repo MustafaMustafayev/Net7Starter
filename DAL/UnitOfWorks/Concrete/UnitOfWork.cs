@@ -17,7 +17,8 @@ public class UnitOfWork : IUnitOfWork
         IRoleRepository roleRepository,
         IOrganizationRepository organizationRepository,
         IPermissionRepository permissionRepository,
-        ITokenRepository tokenRepository)
+        ITokenRepository tokenRepository,
+        IFileRepository fileRepository)
     {
         _dataContext = dataContext;
         UserRepository = userRepository;
@@ -26,6 +27,7 @@ public class UnitOfWork : IUnitOfWork
         OrganizationRepository = organizationRepository;
         PermissionRepository = permissionRepository;
         TokenRepository = tokenRepository;
+        FileRepository = fileRepository;
     }
 
     public IUserRepository UserRepository { get; }
@@ -34,6 +36,8 @@ public class UnitOfWork : IUnitOfWork
     public IOrganizationRepository OrganizationRepository { get; }
     public IPermissionRepository PermissionRepository { get; }
     public ITokenRepository TokenRepository { get; }
+    public IFileRepository FileRepository { get; }
+
     public async Task CommitAsync()
     {
         await _dataContext.SaveChangesAsync();

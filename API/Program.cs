@@ -139,7 +139,7 @@ app.UseAuthentication();
 
 app.UseHealthChecks("/hc");
 
-app.UseRateLimiter();
+/app.UseRateLimiter();
 
 app.MapControllers();
 

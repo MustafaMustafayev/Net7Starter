@@ -133,7 +133,7 @@
     <data name="EmailDoesNotExist" xml:space="preserve">
     <value>Qeyd edilmiş elektron poçt ünvanı ilə qeydiyyat edilməyib</value>
   </data>
-    <data name="ForbidFileExtension" xml:space="preserve">
+    <data name="ThisFileTypeIsNotAllowed" xml:space="preserve">
     <value>Fayl uzantısı sistem tərəfindən dəstəklənmir</value>
   </data>
     <data name="GeneralError" xml:space="preserve">
