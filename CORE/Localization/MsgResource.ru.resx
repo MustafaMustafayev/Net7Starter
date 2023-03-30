@@ -157,7 +157,7 @@
     <data name="UserIsExist" xml:space="preserve">
     <value>Пользователь доступен</value>
   </data>
-    <data name="ForbidFileExtension" xml:space="preserve">
+    <data name="ThisFileTypeIsNotAllowed" xml:space="preserve">
     <value>Ошибка file extension</value>
   </data>
 </root>

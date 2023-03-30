@@ -15,5 +15,5 @@ public enum Messages
     CanNotFoundUserIdInYourAccessToken,
     FileIsLargeThan2Mb,
     FileIsNotFound,
-    ForbidFileExtension
+    ThisFileTypeIsNotAllowed
 }

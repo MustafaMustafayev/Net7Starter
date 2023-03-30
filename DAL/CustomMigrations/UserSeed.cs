@@ -1,7 +1,4 @@
-﻿
-
-using CORE.Enums;
-using CORE.Helper;
+﻿using CORE.Helper;
 using ENTITIES.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,8 +8,8 @@ public class UserSeed
 {
     public static void Seed(ModelBuilder modelBuilder)
     {
-        string salt = SecurityHelper.GenerateSalt();
-        string pass = SecurityHelper.HashPassword("testtest", salt);
+        var salt = SecurityHelper.GenerateSalt();
+        var pass = SecurityHelper.HashPassword("testtest", salt);
         modelBuilder.Entity<User>().HasData(
             new User
             {

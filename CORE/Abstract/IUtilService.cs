@@ -4,7 +4,6 @@ namespace CORE.Abstract;
 
 public interface IUtilService
 {
-    HttpContent GetHttpContentObject(object obj);
     public bool IsValidToken();
     public PaginationDto GetPagination();
     public int? GetUserIdFromToken();
@@ -14,4 +13,6 @@ public interface IUtilService
     public string Encrypt(string value);
     public string Decrypt(string value);
     public Task SendMail(string email, string message);
+    public string CreateGuid();
+    string GetEnvFolderPath(string folderName);
 }

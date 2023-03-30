@@ -2,7 +2,6 @@
 using API.Attributes;
 using BLL.Abstract;
 using CORE.Abstract;
-using CORE.Config;
 using CORE.Localization;
 using DTO.Responses;
 using DTO.User;
@@ -11,7 +10,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using IResult = DTO.Responses.IResult;
-using Path = System.IO.Path;
 
 namespace API.Controllers;
 
@@ -107,46 +105,6 @@ public class UserController : Controller
     public async Task<IActionResult> Delete([FromRoute] int id)
     {
         var response = await _userService.SoftDeleteAsync(id);
-        return Ok(response);
-    }
-
-    [SwaggerOperation(Summary = "upload user image")]
-    [SwaggerResponse(StatusCodes.Status200OK, type: typeof(string))]
-    [HttpPost("image")]
-    public async Task<IActionResult> Upload([FromForm] IFormFile file)
-    {
-        var originalFileName = file.FileName;
-        var fileExtension = file.FileName[(file.FileName.LastIndexOf('.') + 1)..];
-        var guid = Guid.NewGuid();
-        var folderName = "users";
-        var uploads = Path.Combine(_environment.WebRootPath, folderName);
-        var fileName = guid + "." + fileExtension;
-        var filePath = $"{folderName}/{fileName}";
-
-        if (file.Length <= 0) return Ok(fileName);
-        using (var fileStream = new FileStream(Path.Combine(uploads, fileName), FileMode.Create))
-        {
-            await file.CopyToAsync(fileStream);
-        }
-
-        var userId = _utilService.GetUserIdFromToken();
-        if (userId is null) return Unauthorized(new ErrorResult(Messages.CanNotFoundUserIdInYourAccessToken.Translate()));
-
-        var response = await _userService.UpdateProfilePhotoAsync(userId.Value, filePath);
-        return Ok(response);
-    }
-
-
-    [ServiceFilter(typeof(LogActionFilter))]
-    [SwaggerOperation(Summary = "delete image")]
-    [SwaggerResponse(StatusCodes.Status200OK, type: typeof(void))]
-    [HttpDelete("image")]
-    public async Task<IActionResult> DeleteImage()
-    {
-        var userId = _utilService.GetUserIdFromToken();
-        if (userId is null) return Unauthorized(new ErrorResult(Messages.CanNotFoundUserIdInYourAccessToken.Translate()));
-
-        var response = await _userService.DeleteProfilePhotoAsync(userId.Value);
         return Ok(response);
     }
 }

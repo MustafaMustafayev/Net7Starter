@@ -1,9 +1,7 @@
-﻿
-namespace DTO.Helper
+﻿namespace DTO.Helper;
+
+public record PaginationDto
 {
-    public record PaginationDto
-    {
-        public int PageIndex { get; set; }
-        public int PageSize { get; set; }
-    }
+    public int PageIndex { get; set; }
+    public int PageSize { get; set; }
 }
