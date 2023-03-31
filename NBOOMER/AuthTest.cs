@@ -15,7 +15,7 @@ public class AuthTest : RootTest
                     context,
                     HttpMethod.Post,
                     "api/Auth/login",
-                    "{'email': 'test@test.tst','password': 'testtest'}",
+                    "{\"email\": \"test@test.tst\",\"password\": \"testtest\"}",
                     (context, data) => data.Success
                 );
 
