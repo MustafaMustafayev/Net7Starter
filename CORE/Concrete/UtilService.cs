@@ -6,50 +6,47 @@ using System.Text;
 using CORE.Abstract;
 using CORE.Config;
 using DTO.Helper;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json;
 
 namespace CORE.Concrete;
 
 public class UtilService : IUtilService
 {
-    private readonly ConfigSettings _configSettings;
-    private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly ConfigSettings _config;
+    private readonly IHttpContextAccessor _context;
+    private readonly IWebHostEnvironment _environment;
 
-    public UtilService(ConfigSettings configSettings, IHttpContextAccessor httpContextAccessor)
+    public UtilService(ConfigSettings config, IHttpContextAccessor context, IWebHostEnvironment environment)
     {
-        _configSettings = configSettings;
-        _httpContextAccessor = httpContextAccessor;
-    }
-
-    public HttpContent GetHttpContentObject(object obj)
-    {
-        return new StringContent(JsonConvert.SerializeObject(obj), Encoding.UTF8, GetContentType());
+        _config = config;
+        _context = context;
+        _environment = environment;
     }
 
     public int? GetUserIdFromToken()
     {
-        string tokenString = _httpContextAccessor.HttpContext.Request.Headers[_configSettings.AuthSettings.HeaderName];
+        var tokenString = _context.HttpContext?.Request.Headers[_config.AuthSettings.HeaderName].ToString();
 
         if (string.IsNullOrEmpty(tokenString)) return null;
-        if (!tokenString.Contains($"{_configSettings.AuthSettings.TokenPrefix} ")) return null;
+        if (!tokenString.Contains($"{_config.AuthSettings.TokenPrefix} ")) return null;
 
         var token = new JwtSecurityToken(tokenString[7..]);
-        var userId = Decrypt(token.Claims.First(c => c.Type == _configSettings.AuthSettings.TokenUserIdKey).Value);
+        var userId = Decrypt(token.Claims.First(c => c.Type == _config.AuthSettings.TokenUserIdKey).Value);
         return Convert.ToInt32(userId);
     }
 
     public int? GetCompanyIdFromToken()
     {
-        string tokenString = _httpContextAccessor.HttpContext.Request.Headers[_configSettings.AuthSettings.HeaderName];
+        var tokenString = _context.HttpContext?.Request.Headers[_config.AuthSettings.HeaderName].ToString();
 
         if (string.IsNullOrEmpty(tokenString)) return null;
-        if (!tokenString.Contains($"{_configSettings.AuthSettings.TokenPrefix} ")) return null;
+        if (!tokenString.Contains($"{_config.AuthSettings.TokenPrefix} ")) return null;
 
         var token = new JwtSecurityToken(tokenString[7..]);
         var companyIdClaim =
-            token.Claims.First(c => c.Type == _configSettings.AuthSettings.TokenCompanyIdKey);
+            token.Claims.First(c => c.Type == _config.AuthSettings.TokenCompanyIdKey);
 
         if (companyIdClaim is null || string.IsNullOrEmpty(companyIdClaim.Value)) return null;
 
@@ -58,12 +55,12 @@ public class UtilService : IUtilService
 
     public bool IsValidToken()
     {
-        string tokenString = _httpContextAccessor.HttpContext.Request.Headers[_configSettings.AuthSettings.HeaderName];
+        var tokenString = _context.HttpContext?.Request.Headers[_config.AuthSettings.HeaderName].ToString();
 
         if (string.IsNullOrEmpty(tokenString) || tokenString.Length < 7) return false;
 
         var tokenHandler = new JwtSecurityTokenHandler();
-        var secretKey = Encoding.ASCII.GetBytes(_configSettings.AuthSettings.SecretKey);
+        var secretKey = Encoding.ASCII.GetBytes(_config.AuthSettings.SecretKey);
         try
         {
             tokenHandler.ValidateToken(tokenString[7..], new TokenValidationParameters
@@ -102,8 +99,8 @@ public class UtilService : IUtilService
 
     public string Encrypt(string value)
     {
-        var _key = _configSettings.CryptographySettings.KeyBase64;
-        var privatekey = _configSettings.CryptographySettings.VBase64;
+        var _key = _config.CryptographySettings.KeyBase64;
+        var privatekey = _config.CryptographySettings.VBase64;
         byte[] privatekeyByte = { };
         privatekeyByte = Encoding.UTF8.GetBytes(privatekey);
         byte[] _keybyte = { };
@@ -117,8 +114,8 @@ public class UtilService : IUtilService
 
     public string Decrypt(string value)
     {
-        var _key = _configSettings.CryptographySettings.KeyBase64;
-        var privatekey = _configSettings.CryptographySettings.VBase64;
+        var _key = _config.CryptographySettings.KeyBase64;
+        var privatekey = _config.CryptographySettings.VBase64;
         byte[] privatekeyByte = { };
         privatekeyByte = Encoding.UTF8.GetBytes(privatekey);
         byte[] _keybyte = { };
@@ -134,22 +131,22 @@ public class UtilService : IUtilService
     {
         if (!string.IsNullOrEmpty(email) && email.Contains('@'))
         {
-            var fromAddress = new MailAddress(_configSettings.MailSettings.Address, _configSettings.MailSettings.DisplayName);
+            var fromAddress = new MailAddress(_config.MailSettings.Address, _config.MailSettings.DisplayName);
             var toAddress = new MailAddress(email, email);
 
             var smtp = new SmtpClient
             {
-                Host = _configSettings.MailSettings.Host,
-                Port = int.Parse(_configSettings.MailSettings.Port),
+                Host = _config.MailSettings.Host,
+                Port = int.Parse(_config.MailSettings.Port),
                 EnableSsl = false,
                 DeliveryMethod = SmtpDeliveryMethod.Network,
                 UseDefaultCredentials = false,
-                Credentials = new NetworkCredential(fromAddress.Address, _configSettings.MailSettings.MailKey)
+                Credentials = new NetworkCredential(fromAddress.Address, _config.MailSettings.MailKey)
             };
 
             using var data = new MailMessage(fromAddress, toAddress)
             {
-                Subject = _configSettings.MailSettings.Subject,
+                Subject = _config.MailSettings.Subject,
                 Body = message
             };
 
@@ -157,22 +154,27 @@ public class UtilService : IUtilService
         }
     }
 
-    public string GetContentType()
-    {
-        return _configSettings.AuthSettings.ContentType;
-    }
-
     public PaginationDto GetPagination()
     {
-        var pageIndex = Convert.ToInt32(_httpContextAccessor.HttpContext.Request.Headers[_configSettings.RequestSettings.PageIndex]);
-        var pageSize = Convert.ToInt32(_httpContextAccessor.HttpContext.Request.Headers[_configSettings.RequestSettings.PageSize]);
+        var pageIndex = Convert.ToInt32(_context.HttpContext?.Request.Headers[_config.RequestSettings.PageIndex]);
+        var pageSize = Convert.ToInt32(_context.HttpContext?.Request.Headers[_config.RequestSettings.PageSize]);
 
-        PaginationDto dto = new PaginationDto()
+        var dto = new PaginationDto
         {
             PageIndex = pageIndex,
             PageSize = pageSize
         };
 
         return dto;
+    }
+
+    public string CreateGuid()
+    {
+        return Guid.NewGuid().ToString();
+    }
+
+    public string GetEnvFolderPath(string folderName)
+    {
+        return Path.Combine(_environment.WebRootPath, folderName);
     }
 }

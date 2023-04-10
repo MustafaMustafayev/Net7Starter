@@ -18,14 +18,14 @@ services:
     container_name: 'postgres'
     image: postgres
     restart: always
-    environment: 
-        POSTGRES_PASSWORD: postgres
-        POSTGRES_USER: postgres
-        POSTGRES_DB: sde
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: sde
     ports:
-        - "5432:5432"
+      - "5432:5432"
     volumes:
-        -  ../postgres/data:/var/lib/postgresql/data
+      - ../postgres/data:/var/lib/postgresql/data
   pgadmin:
     container_name: pgadmin4
     image: dpage/pgadmin4

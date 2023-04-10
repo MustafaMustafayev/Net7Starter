@@ -4,6 +4,7 @@ using ENTITIES.Entities;
 using ENTITIES.Entities.Logging;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using File = ENTITIES.Entities.File;
 
 namespace DAL.DatabaseContext;
 
@@ -21,9 +22,7 @@ public class DataContext : DbContext
     }
 
     public required DbSet<User> Users { get; set; }
-
-    public required DbSet<Photo> Photos { get; set; }
-
+    public required DbSet<File> Files { get; set; }
     public required DbSet<Organization> Organizations { get; set; }
     public required DbSet<Role> Roles { get; set; }
     public required DbSet<RequestLog> RequestLogs { get; set; }

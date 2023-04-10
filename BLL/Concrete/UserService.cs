@@ -17,6 +17,7 @@ public class UserService : IUserService
     private readonly IMapper _mapper;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IUtilService _utilService;
+
     public UserService(IUnitOfWork unitOfWork, IMapper mapper, IUtilService utilService)
     {
         _unitOfWork = unitOfWork;
@@ -101,25 +102,12 @@ public class UserService : IUserService
             Messages.Success.Translate());
     }
 
-    public async Task<IResult> UpdateProfilePhotoAsync(int id, string photoFileName)
+    public async Task<IResult> UpdateImageAsync(int id, int? imageId)
     {
         var data = await _unitOfWork.UserRepository.GetAsync(m => m.UserId == id);
         if (data == null) return new ErrorResult(Messages.InvalidUserCredentials.Translate());
 
-        data.ImagePath = photoFileName;
-
-        _unitOfWork.UserRepository.Update(_mapper.Map<User>(data));
-        await _unitOfWork.CommitAsync();
-
-        return new SuccessResult(Messages.Success.Translate());
-    }
-
-    public async Task<IResult> DeleteProfilePhotoAsync(int id)
-    {
-        var data = await _unitOfWork.UserRepository.GetAsync(m => m.UserId == id);
-        if (data == null) return new ErrorResult(Messages.InvalidUserCredentials.Translate());
-
-        data.ImagePath = null;
+        data.ImageId = imageId;
 
         _unitOfWork.UserRepository.Update(_mapper.Map<User>(data));
         await _unitOfWork.CommitAsync();

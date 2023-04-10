@@ -15,11 +15,12 @@ public class PermissionService : IPermissionService
     private readonly IMapper _mapper;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IUtilService _utilService;
+
     public PermissionService(IUnitOfWork unitOfWork, IMapper mapper, IUtilService utilService)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
-        _utilService = utilService; 
+        _utilService = utilService;
     }
 
     public async Task<IResult> AddAsync(PermissionToAddDto dto)

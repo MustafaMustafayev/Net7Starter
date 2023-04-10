@@ -11,5 +11,6 @@ public class User : Auditable
     public string? LastVerificationCode { get; set; }
     public int? RoleId { get; set; }
     public virtual Role? Role { get; set; }
-    public string? ImagePath { get; set; }
+    public int? ImageId { get; set; }
+    public virtual File? Image { get; set; }
 }
