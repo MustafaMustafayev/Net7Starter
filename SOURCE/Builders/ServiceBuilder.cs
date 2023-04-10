@@ -60,14 +60,14 @@ public class {entityName}Service : I{entityName}Service
         return new SuccessResult(Messages.Success.Translate());
     }
 
-    public async Task<IDataResult<PaginatedList<{entityName}ToListDto>>> GetAsPaginatedListAsync(int pageIndex, int pageSize)
+    public async Task<IDataResult<PaginatedList<{entityName}ToListDto>>> GetAsPaginatedListAsync()
     {
         var datas = _unitOfWork.{entityName}Repository.GetList();
         var paginationDto = _utilService.GetPagination();
 
         var response = await PaginatedList<{entityName}>.CreateAsync(datas.OrderBy(m => m.{entityName}Id), paginationDto.PageIndex, paginationDto.PageSize);
 
-        var responseDto = new PaginatedList<{entityName}ToListDto>(_mapper.Map<List<{entityName}ToListDto>>(response.Datas), response.TotalRecordCount, response.PageIndex, pageSize);
+        var responseDto = new PaginatedList<{entityName}ToListDto>(_mapper.Map<List<{entityName}ToListDto>>(response.Datas), response.TotalRecordCount, response.PageIndex, paginationDto.PageSize);
 
         return new SuccessDataResult<PaginatedList<{entityName}ToListDto>>(responseDto, Messages.Success.Translate());
     }
