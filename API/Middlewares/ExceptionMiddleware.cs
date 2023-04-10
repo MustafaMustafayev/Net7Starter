@@ -47,12 +47,6 @@ public class ExceptionMiddleware
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
 
-        // var message = exception switch
-        // {
-        //     AccessViolationException => "Access violation error from the custom middleware",
-        //     _ => "Internal Server Error from the custom middleware."
-        // };
-
         var response = new ErrorResult(Messages.GeneralError.Translate());
         await context.Response.WriteAsync(JsonSerializer.Serialize(response));
     }
