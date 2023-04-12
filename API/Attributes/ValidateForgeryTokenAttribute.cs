@@ -1,7 +1,5 @@
-﻿using System.Net;
-using System.Web.Helpers;
-using System.Web.Http.Controllers;
-using System.Web.Http.Filters;
+﻿/*
+using System.Net;
 
 namespace API.Attributes;
 
@@ -36,3 +34,4 @@ public sealed class ValidateForgeryTokenAttribute : FilterAttribute, IAuthorizat
         return taskCompletionSource.Task;
     }
 }
+*/
