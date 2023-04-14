@@ -177,4 +177,17 @@ public class UtilService : IUtilService
     {
         return Path.Combine(_environment.WebRootPath, folderName);
     }
+
+    public string GetRoleFromToken(string? tokenString)
+    {
+        if (string.IsNullOrEmpty(tokenString)) return null;
+        if (!tokenString.Contains($"{_config.AuthSettings.TokenPrefix} ")) return null;
+
+        var token = new JwtSecurityToken(tokenString[7..]);
+        var roleIdClaim = token.Claims.First(c => c.Type == _config.AuthSettings.Role);
+
+        if (roleIdClaim is null || string.IsNullOrEmpty(roleIdClaim.Value)) return null;
+
+        return roleIdClaim.Value;
+    }
 }
