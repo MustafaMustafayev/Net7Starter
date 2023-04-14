@@ -4,6 +4,7 @@ public record AuthSettings
 {
     public required string Type { get; set; }
     public required string HeaderName { get; set; }
+    public required string Role { get; set; }
     public required string RefreshTokenHeaderName { get; set; }
     public required string TokenPrefix { get; set; }
     public required string ContentType { get; set; }
