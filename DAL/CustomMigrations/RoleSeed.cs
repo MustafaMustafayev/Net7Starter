@@ -1,5 +1,5 @@
-﻿using CORE.Enums;
-using ENTITIES.Entities;
+﻿using ENTITIES.Entities;
+using ENTITIES.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace DAL.CustomMigrations;
@@ -13,13 +13,13 @@ public static class RoleSeed
             {
                 RoleId = 1,
                 Name = "Admin",
-                Key = ERole.Admin.ToString()
+                Key = UserType.Admin.ToString()
             },
             new Role
             {
                 RoleId = 2,
                 Name = "Viewer",
-                Key = ERole.Viewer.ToString()
+                Key = UserType.Viewer.ToString()
             }
         );
     }
