@@ -8,11 +8,11 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace API.Attributes;
 
-public class Rbacribute : AuthorizeAttribute, IAuthorizationFilter
+public class RbacAttribute : AuthorizeAttribute, IAuthorizationFilter
 {
     private readonly UserType[] _role;
 
-    public Rbacribute(params UserType[] role)
+    public RbacAttribute(params UserType[] role)
     {
         _role = role;
     }
