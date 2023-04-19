@@ -117,6 +117,53 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity>
         return entity;
     }
 
+    public async Task<int> CountAsync(Expression<Func<TEntity, bool>> filter, bool ignoreQueryFilters = false)
+    {
+        return ignoreQueryFilters
+            ? await _ctx.Set<TEntity>().IgnoreQueryFilters().CountAsync(filter)
+            : await _ctx.Set<TEntity>().CountAsync(filter);
+    }
+
+    public async Task<bool> AnyAsync(Expression<Func<TEntity, bool>> filter, bool ignoreQueryFilters = false)
+    {
+        return ignoreQueryFilters
+            ? await _ctx.Set<TEntity>().IgnoreQueryFilters().AnyAsync(filter)
+            : await _ctx.Set<TEntity>().AnyAsync(filter);
+    }
+
+    public async Task<bool> AllAsync(Expression<Func<TEntity, bool>> filter, bool ignoreQueryFilters = false)
+    {
+        return ignoreQueryFilters
+            ? await _ctx.Set<TEntity>().IgnoreQueryFilters().AllAsync(filter)
+            : await _ctx.Set<TEntity>().AllAsync(filter);
+    }
+
+    public async Task<TEntity?> FindAsync(int id)
+    {
+        return await _ctx.Set<TEntity>().FindAsync(id);
+    }
+
+    public async Task<TEntity?> SingleOrDefaultAsync(Expression<Func<TEntity, bool>> filter, bool ignoreQueryFilters = false)
+    {
+        return ignoreQueryFilters
+            ? await _ctx.Set<TEntity>().IgnoreQueryFilters().SingleOrDefaultAsync(filter)
+            : await _ctx.Set<TEntity>().SingleOrDefaultAsync(filter);
+    }
+
+    public async Task<TEntity?> SingleAsync(Expression<Func<TEntity, bool>> filter, bool ignoreQueryFilters = false)
+    {
+        return ignoreQueryFilters
+            ? await _ctx.Set<TEntity>().IgnoreQueryFilters().SingleAsync(filter)
+            : await _ctx.Set<TEntity>().SingleAsync(filter);
+    }
+
+    public async Task<TEntity?> FirstAsync(Expression<Func<TEntity, bool>> filter, bool ignoreQueryFilters = false)
+    {
+        return ignoreQueryFilters
+            ? await _ctx.Set<TEntity>().IgnoreQueryFilters().FirstAsync(filter)
+            : await _ctx.Set<TEntity>().FirstAsync(filter);
+    }
+
     // public async Task<IQueryable> GetListAsync(Expression<Func<TEntity, bool>>? filter = null, bool ignoreQueryFilters = false)
     // {
     //     return filter is null
