@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace API.ActionFilters;
+namespace API.Filters;
 
 public class ModelValidatorActionFilter : IActionFilter
 {

@@ -99,14 +99,12 @@ public class UtilService : IUtilService
 
     public string Encrypt(string value)
     {
-        var _key = _config.CryptographySettings.KeyBase64;
+        var key = _config.CryptographySettings.KeyBase64;
         var privatekey = _config.CryptographySettings.VBase64;
-        byte[] privatekeyByte = { };
-        privatekeyByte = Encoding.UTF8.GetBytes(privatekey);
-        byte[] _keybyte = { };
-        _keybyte = Encoding.UTF8.GetBytes(_key);
+        var privatekeyByte = Encoding.UTF8.GetBytes(privatekey);
+        var keybyte = Encoding.UTF8.GetBytes(key);
         SymmetricAlgorithm algorithm = DES.Create();
-        var transform = algorithm.CreateEncryptor(_keybyte, privatekeyByte);
+        var transform = algorithm.CreateEncryptor(keybyte, privatekeyByte);
         var inputbuffer = Encoding.Unicode.GetBytes(value);
         var outputBuffer = transform.TransformFinalBlock(inputbuffer, 0, inputbuffer.Length);
         return Convert.ToBase64String(outputBuffer);
@@ -114,14 +112,12 @@ public class UtilService : IUtilService
 
     public string Decrypt(string value)
     {
-        var _key = _config.CryptographySettings.KeyBase64;
+        var key = _config.CryptographySettings.KeyBase64;
         var privatekey = _config.CryptographySettings.VBase64;
-        byte[] privatekeyByte = { };
-        privatekeyByte = Encoding.UTF8.GetBytes(privatekey);
-        byte[] _keybyte = { };
-        _keybyte = Encoding.UTF8.GetBytes(_key);
+        var privatekeyByte = Encoding.UTF8.GetBytes(privatekey);
+        var keybyte = Encoding.UTF8.GetBytes(key);
         SymmetricAlgorithm algorithm = DES.Create();
-        var transform = algorithm.CreateDecryptor(_keybyte, privatekeyByte);
+        var transform = algorithm.CreateDecryptor(keybyte, privatekeyByte);
         var inputbuffer = Convert.FromBase64String(value);
         var outputBuffer = transform.TransformFinalBlock(inputbuffer, 0, inputbuffer.Length);
         return Encoding.Unicode.GetString(outputBuffer);
@@ -178,7 +174,7 @@ public class UtilService : IUtilService
         return Path.Combine(_environment.WebRootPath, folderName);
     }
 
-    public string GetRoleFromToken(string? tokenString)
+    public string? GetRoleFromToken(string? tokenString)
     {
         if (string.IsNullOrEmpty(tokenString)) return null;
         if (!tokenString.Contains($"{_config.AuthSettings.TokenPrefix} ")) return null;

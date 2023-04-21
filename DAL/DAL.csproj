@@ -16,19 +16,30 @@
         <None Remove="stylecop.json"/>
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.3">
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.5">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.3">
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.5">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.3"/>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="7.0.3"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="7.0.5"/>
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\CORE\CORE.csproj"/>
         <ProjectReference Include="..\ENTITIES\ENTITIES.csproj"/>
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Remove="UnitOfWorks\Concrete\UnitOfWorkGenerated.cs"/>
+        <Compile Remove="Concrete\TestRepository.cs"/>
+        <Compile Remove="Abstract\ITestRepository.cs"/>
+        <Compile Remove="Abstract\IFirstRepository.cs"/>
+        <Compile Remove="Concrete\FirstRepository.cs"/>
+    </ItemGroup>
+    <ItemGroup>
+        <Folder Include="UnitOfWorks\Abstract\"/>
+        <Folder Include="UnitOfWorks\Concrete\"/>
     </ItemGroup>
 </Project>

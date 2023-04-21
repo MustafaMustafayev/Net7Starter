@@ -1,4 +1,4 @@
-﻿using API.ActionFilters;
+﻿using API.Filters;
 using BLL.Abstract;
 using CORE.Abstract;
 using CORE.Config;

@@ -13,7 +13,7 @@
         <None Remove="StyleCop.Analyzers"/>
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0"/>
+        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1"/>
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\CORE\CORE.csproj"/>

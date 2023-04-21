@@ -32,7 +32,11 @@
         <ProjectReference Include="..\ENTITIES\ENTITIES.csproj"/>
     </ItemGroup>
     <ItemGroup>
+        <Folder Include="First\"/>
         <Folder Include="Permission\"/>
         <Folder Include="Token\"/>
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Remove="First\FirstDtos.cs"/>
     </ItemGroup>
 </Project>

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using ENTITIES.Entities.Generic;
 
 namespace ENTITIES.Entities;
 

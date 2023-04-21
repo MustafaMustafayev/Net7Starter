@@ -9,7 +9,7 @@ public interface IUtilService
     public int? GetUserIdFromToken();
     public int? GetCompanyIdFromToken();
     public string GenerateRefreshToken();
-    public string GetRoleFromToken(string jwtToken);
+    public string? GetRoleFromToken(string jwtToken);
     public string GetTokenStringFromHeader(string jwtToken);
     public string Encrypt(string value);
     public string Decrypt(string value);

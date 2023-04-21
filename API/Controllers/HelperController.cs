@@ -1,5 +1,5 @@
-﻿using API.ActionFilters;
-using API.Attributes;
+﻿using API.Attributes;
+using API.Filters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

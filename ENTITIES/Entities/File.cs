@@ -1,4 +1,6 @@
-﻿namespace ENTITIES.Entities;
+﻿using ENTITIES.Entities.Generic;
+
+namespace ENTITIES.Entities;
 
 public class File : Auditable, IEntity
 {

@@ -5,7 +5,7 @@ using DTO.Logging;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace API.ActionFilters;
+namespace API.Filters;
 
 public class LogActionFilter : IAsyncActionFilter
 {

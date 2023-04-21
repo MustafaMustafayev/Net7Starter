@@ -1,7 +1,7 @@
 ﻿using CORE.Abstract;
 using DAL.CustomMigrations;
 using ENTITIES.Entities;
-using ENTITIES.Entities.Logging;
+using ENTITIES.Entities.Generic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using File = ENTITIES.Entities.File;

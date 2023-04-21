@@ -1,5 +1,5 @@
-﻿using API.ActionFilters;
-using API.Attributes;
+﻿using API.Attributes;
+using API.Filters;
 using DTO.Responses;
 using ENTITIES.Entities.Redis;
 using Microsoft.AspNetCore.Authentication.JwtBearer;

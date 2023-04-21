@@ -1,6 +1,8 @@
-﻿namespace ENTITIES.Entities;
+﻿using ENTITIES.Entities.Generic;
 
-public class User : Auditable
+namespace ENTITIES.Entities;
+
+public class User : Auditable, IEntity
 {
     public int UserId { get; set; }
     public required string Username { get; set; }

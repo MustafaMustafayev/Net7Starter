@@ -2,7 +2,7 @@
 using BLL.Abstract;
 using DAL.UnitOfWorks.Abstract;
 using DTO.Logging;
-using ENTITIES.Entities.Logging;
+using ENTITIES.Entities;
 
 namespace BLL.Concrete;
 
@@ -20,7 +20,7 @@ public class LoggingService : ILoggingService
     public async Task AddLogAsync(RequestLogDto dto)
     {
         var data = _mapper.Map<RequestLog>(dto);
-        await _unitOfWork.LoggingRepository.AddLogAsync(data);
+        await _unitOfWork.RequestLogRepository.AddAsync(data);
         await _unitOfWork.CommitAsync();
     }
 }

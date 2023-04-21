@@ -3,7 +3,6 @@
 // ReSharper disable InconsistentNaming
 public static class Constants
 {
-    public const string TestFilePath = "C:\\Users\\hemidmu\\Desktop\\SourceGenerator-master\\ClassLibrary\\";
     public const string DataFileName = "data.json";
 
     #region PATHS
@@ -25,6 +24,8 @@ public static class Constants
     public const string AutomapperPath = "BLL\\Mappers\\";
 
     public const string DtoPath = "DTO\\{entityName}\\";
+
+    public const string EntitiesPath = "ENTITIES\\Entities\\";
 
     #endregion
 }

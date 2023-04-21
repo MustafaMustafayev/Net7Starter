@@ -1,6 +1,7 @@
 ﻿using System.Linq.Expressions;
 using DAL.DatabaseContext;
 using DAL.GenericRepositories.Abstract;
+using ENTITIES.Entities.Generic;
 using Microsoft.EntityFrameworkCore;
 
 namespace DAL.GenericRepositories.Concrete;
@@ -39,15 +40,16 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity>
 
     public void SoftDelete(TEntity entity)
     {
-        var property = entity.GetType().GetProperty("IsDeleted");
+        var property = entity.GetType().GetProperty(nameof(Auditable.IsDeleted));
 
         if (property is null)
             throw new ArgumentException(
-                $"The property with type: {entity.GetType()} can not be SoftDeleted, " +
-                "because it doesn't contains IsDeleted property, and did not implemented AuditableEntity class.");
+                @$"The property with type: {entity.GetType()} can not be SoftDeleted, 
+                        because it doesn't contains {nameof(Auditable.IsDeleted)} property, 
+                        and did not implemented {typeof(Auditable)}.");
 
         if (((bool?)property.GetValue(entity)!).Value)
-            throw new Exception("This entity was already deleted");
+            throw new Exception("This entity was already deleted.");
 
         property.SetValue(entity, true);
 

@@ -1,5 +1,5 @@
 ﻿using System.Linq.Expressions;
-using ENTITIES.Entities;
+using ENTITIES.Entities.Generic;
 using Microsoft.EntityFrameworkCore;
 
 namespace DAL.DatabaseContext;
