@@ -38,8 +38,8 @@ namespace DAL.UnitOfWorks.Abstract;
 
 public interface IUnitOfWork : IAsyncDisposable, IDisposable
 {{
-    public Task CommitAsync();
 {properties}
+    public Task CommitAsync();
 }}
 ";
 
