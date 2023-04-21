@@ -9,23 +9,23 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <None Remove="Newtonsoft.Json" />
-        <None Remove="Microsoft.AspNetCore.Cryptography.KeyDerivation" />
-        <None Remove="Microsoft.AspNetCore.Authentication.JwtBearer" />
-        <None Remove="StyleCop.Analyzers" />
-        <None Remove="Middlewares\TokenMiddleware\" />
+        <None Remove="Newtonsoft.Json"/>
+        <None Remove="Microsoft.AspNetCore.Cryptography.KeyDerivation"/>
+        <None Remove="Microsoft.AspNetCore.Authentication.JwtBearer"/>
+        <None Remove="StyleCop.Analyzers"/>
+        <None Remove="Middlewares\TokenMiddleware\"/>
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.5" />
-        <PackageReference Include="NEST" Version="7.17.5" />
-        <PackageReference Include="NLog.Web.AspNetCore" Version="5.2.3" />
-        <PackageReference Include="SSH.NET" Version="2020.0.2" />
-        <PackageReference Include="System.Drawing.Common" Version="7.0.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.5"/>
+        <PackageReference Include="NEST" Version="7.17.5"/>
+        <PackageReference Include="NLog.Web.AspNetCore" Version="5.2.3"/>
+        <PackageReference Include="SSH.NET" Version="2020.0.2"/>
+        <PackageReference Include="System.Drawing.Common" Version="7.0.0"/>
     </ItemGroup>
     <ItemGroup>
-        <ProjectReference Include="..\DTO\DTO.csproj" />
+        <ProjectReference Include="..\DTO\DTO.csproj"/>
     </ItemGroup>
     <ItemGroup>
-        <Folder Include="ElasticSearch" />
+        <Folder Include="ElasticSearch"/>
     </ItemGroup>
 </Project>

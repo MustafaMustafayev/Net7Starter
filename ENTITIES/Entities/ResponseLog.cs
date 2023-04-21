@@ -1,8 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using ENTITIES.Entities.Generic;
 
-namespace ENTITIES.Entities.Logging;
+namespace ENTITIES.Entities;
 
-public class ResponseLog
+public class ResponseLog : IEntity
 {
     [Key] public int ResponseLogId { get; set; }
 

@@ -1,4 +1,4 @@
-﻿namespace ENTITIES.Entities;
+﻿namespace ENTITIES.Entities.Generic;
 
 public class Auditable
 {

@@ -9,14 +9,18 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <None Remove="StyleCop.Analyzers" />
+        <None Remove="StyleCop.Analyzers"/>
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Redis.OM" Version="0.5.0" />
+        <PackageReference Include="Redis.OM" Version="0.5.0"/>
     </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="Enums" />
+        <Folder Include="Enums"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Compile Remove="Entities\First.cs"/>
     </ItemGroup>
 </Project>

@@ -26,11 +26,11 @@ public class FileHelper
 
         if (!Directory.Exists(Path.GetDirectoryName(filePath))) Directory.CreateDirectory(Path.GetDirectoryName(filePath)!);
 
-        if (File.Exists(filePath))
+        /*if (File.Exists(filePath))
         {
             Console.WriteLine($"I found your file and skipped creating this. {filePath}");
             return true;
-        }
+        }*/
 
         await using var fs = File.Create(filePath);
 
@@ -48,4 +48,12 @@ public class FileHelper
     //         await outputFile.WriteLineAsync(jsonString);
     //     }
     // }
+
+    public static string[] GetFileNames(string folderPath)
+    {
+        folderPath = Path.Combine(Directory.GetParent(Environment.CurrentDirectory)!.Parent!.Parent!.Parent!.FullName, folderPath);
+        var files = Directory.GetFiles(folderPath);
+
+        return files.Select(Path.GetFileNameWithoutExtension).ToArray()!;
+    }
 }

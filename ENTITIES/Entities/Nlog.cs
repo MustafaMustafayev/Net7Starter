@@ -1,8 +1,10 @@
-﻿namespace ENTITIES.Entities.Logging;
+﻿using ENTITIES.Entities.Generic;
 
-public class NLog : IEntity
+namespace ENTITIES.Entities;
+
+public class Nlog : IEntity
 {
-    public int NLogId { get; set; }
+    public int NlogId { get; set; }
 
     public string? Application { get; set; }
 

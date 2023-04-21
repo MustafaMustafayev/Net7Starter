@@ -1,4 +1,5 @@
-﻿using DAL.Abstract;
+
+using DAL.Abstract;
 using DAL.DatabaseContext;
 using DAL.UnitOfWorks.Abstract;
 
@@ -12,31 +13,38 @@ public class UnitOfWork : IUnitOfWork
 
     public UnitOfWork(
         DataContext dataContext,
-        IUserRepository userRepository,
-        ILoggingRepository loggingRepository,
-        IRoleRepository roleRepository,
+        IFileRepository fileRepository,
+        INlogRepository nlogRepository,
         IOrganizationRepository organizationRepository,
         IPermissionRepository permissionRepository,
+        IRequestLogRepository requestLogRepository,
+        IResponseLogRepository responseLogRepository,
+        IRoleRepository roleRepository,
         ITokenRepository tokenRepository,
-        IFileRepository fileRepository)
+        IUserRepository userRepository
+    )
     {
         _dataContext = dataContext;
-        UserRepository = userRepository;
-        LoggingRepository = loggingRepository;
-        RoleRepository = roleRepository;
+        FileRepository = fileRepository;
+        NlogRepository = nlogRepository;
         OrganizationRepository = organizationRepository;
         PermissionRepository = permissionRepository;
+        RequestLogRepository = requestLogRepository;
+        ResponseLogRepository = responseLogRepository;
+        RoleRepository = roleRepository;
         TokenRepository = tokenRepository;
-        FileRepository = fileRepository;
+        UserRepository = userRepository;
     }
 
-    public IUserRepository UserRepository { get; }
-    public ILoggingRepository LoggingRepository { get; }
-    public IRoleRepository RoleRepository { get; }
-    public IOrganizationRepository OrganizationRepository { get; }
-    public IPermissionRepository PermissionRepository { get; }
-    public ITokenRepository TokenRepository { get; }
-    public IFileRepository FileRepository { get; }
+    public IFileRepository FileRepository { get; set; }
+    public INlogRepository NlogRepository { get; set; }
+    public IOrganizationRepository OrganizationRepository { get; set; }
+    public IPermissionRepository PermissionRepository { get; set; }
+    public IRequestLogRepository RequestLogRepository { get; set; }
+    public IResponseLogRepository ResponseLogRepository { get; set; }
+    public IRoleRepository RoleRepository { get; set; }
+    public ITokenRepository TokenRepository { get; set; }
+    public IUserRepository UserRepository { get; set; }
 
     public async Task CommitAsync()
     {

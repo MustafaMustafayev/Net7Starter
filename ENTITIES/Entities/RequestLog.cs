@@ -1,9 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using ENTITIES.Entities.Generic;
 
-namespace ENTITIES.Entities.Logging;
+namespace ENTITIES.Entities;
 
-public class RequestLog
+public class RequestLog : IEntity
 {
     [Key] public int RequestLogId { get; set; }
 

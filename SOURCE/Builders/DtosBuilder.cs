@@ -20,7 +20,7 @@ public class DtosBuilder : ISourceBuilder, ITextBuilder
 namespace DTO.{entityName};
 
 public record {entityName}ToAddDto();
-public record {entityName}ToUpdateDto();
+public record {entityName}ToUpdateDto(int {entityName}Id);
 public record {entityName}ToListDto(int {entityName}Id);
 ";
 

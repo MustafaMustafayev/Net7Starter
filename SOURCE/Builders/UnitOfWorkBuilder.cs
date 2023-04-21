@@ -11,7 +11,16 @@ public class UnitOfWorkBuilder : ISourceBuilder, ITextBuilder
 {
     public void BuildSourceFile(List<Entity> entities)
     {
-        SourceBuilder.Instance.AddSourceFile(Constants.UnitOfWorkPath, "UnitOfWork.cs", BuildSourceText(null, entities));
+        var newEntities = entities.ToList();
+        var currentEntityNames = FileHelper.GetFileNames(Constants.EntitiesPath);
+
+        foreach (var entityName in currentEntityNames)
+        {
+            if (newEntities.Any(e => e.Name == entityName)) continue;
+            newEntities.Add(new Entity { Name = entityName });
+        }
+
+        SourceBuilder.Instance.AddSourceFile(Constants.UnitOfWorkPath, "UnitOfWork.cs", BuildSourceText(null, newEntities));
     }
 
     public string BuildSourceText(Entity? entity, List<Entity>? entities)
