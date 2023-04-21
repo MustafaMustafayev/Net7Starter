@@ -32,8 +32,6 @@ public class DataContext : DbContext
     public required DbSet<Permission> Permissions { get; set; }
     public required DbSet<Token> Tokens { get; set; }
 
-    public required DbSet<ENTITIES.Entities.Logging.NLog> NLogs { get; set; }
-
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseLazyLoadingProxies();
