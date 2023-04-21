@@ -18,7 +18,7 @@ using NLog.Web;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//builder.Host.UseNLog();
+builder.Host.UseNLog();
 builder.Services.RegisterNLogger();
 
 var config = new ConfigSettings();
