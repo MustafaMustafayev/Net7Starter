@@ -198,7 +198,10 @@ public static class DependencyContainer
 
     public static void RegisterOutputCache(this IServiceCollection services)
     {
-        services.AddOutputCache(options => { options.AddBasePolicy(builder => { builder.Expire(TimeSpan.FromMinutes(2)); }); });
+        services.AddOutputCache(options =>
+        {
+            options.AddBasePolicy(builder => { builder.Expire(TimeSpan.FromMinutes(2)); });
+        });
     }
 
     public static void RegisterRedis(this IServiceCollection services, ConfigSettings config)
@@ -233,7 +236,8 @@ public static class DependencyContainer
     public static void RegisterElasticSearch(this IServiceCollection services, ConfigSettings configs)
     {
         services.AddScoped<IElasticSearchService<UserToListDto>>(_ =>
-            new ElasticSearchService<UserToListDto>(configs.ElasticSearchSettings.Connection, configs.ElasticSearchSettings.DefaultIndex));
+            new ElasticSearchService<UserToListDto>(configs.ElasticSearchSettings.Connection,
+                configs.ElasticSearchSettings.DefaultIndex));
     }
 
     public static void RegisterMiniProfiler(this IServiceCollection services)

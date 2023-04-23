@@ -69,7 +69,8 @@ public class ElasticSearchService<TIndexModel> : IElasticSearchService<TIndexMod
     /// <summary>
     ///     Example: var documents = await SearchDocumentsAsync(d => d.Text, "some query");
     /// </summary>
-    public async Task<IEnumerable<TIndexModel>> SearchDocumentsAsync(Expression<Func<TIndexModel, object>> field, string query)
+    public async Task<IEnumerable<TIndexModel>> SearchDocumentsAsync(Expression<Func<TIndexModel, object>> field,
+        string query)
     {
         var searchResponse = await _client.SearchAsync<TIndexModel>(s => s
             .Query(q => q

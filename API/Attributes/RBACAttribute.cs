@@ -2,30 +2,32 @@
 using CORE.Concrete;
 using CORE.Config;
 using CORE.Enums;
-using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace API.Attributes
+namespace API.Attributes;
+
+public class RBACAttribute : AuthorizeAttribute, IAuthorizationFilter
 {
-    public class RBACAttribute : AuthorizeAttribute, IAuthorizationFilter
+    private readonly ERole[] _role;
+
+    public RBACAttribute(params ERole[] role)
     {
-        private readonly ERole[] _role;
-        public RBACAttribute(params ERole[] role)
-        {
-            _role = role;
-        }
-        public void OnAuthorization(AuthorizationFilterContext context)
-        {
-            var configSettings = (context.HttpContext.RequestServices.GetService(typeof(ConfigSettings)) as ConfigSettings)!;
-            var utilService = (context.HttpContext.RequestServices.GetService(typeof(IUtilService)) as UtilService)!;
+        _role = role;
+    }
 
-            string? jwtToken = context.HttpContext.Request.Headers[configSettings.AuthSettings.HeaderName];
+    public void OnAuthorization(AuthorizationFilterContext context)
+    {
+        var configSettings =
+            (context.HttpContext.RequestServices.GetService(typeof(ConfigSettings)) as ConfigSettings)!;
+        var utilService = (context.HttpContext.RequestServices.GetService(typeof(IUtilService)) as UtilService)!;
 
-            var validationResult = utilService.GetRoleFromToken(jwtToken);
+        string? jwtToken = context.HttpContext.Request.Headers[configSettings.AuthSettings.HeaderName];
 
-            if (!_role.Any(m => m.ToString() == validationResult))
-                context.Result = new ForbidResult();
-        }
+        var validationResult = utilService.GetRoleFromToken(jwtToken);
+
+        if (!_role.Any(m => m.ToString() == validationResult))
+            context.Result = new ForbidResult();
     }
 }

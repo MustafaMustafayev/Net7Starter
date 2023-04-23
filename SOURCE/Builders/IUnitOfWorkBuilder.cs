@@ -12,7 +12,8 @@ public class IUnitOfWorkBuilder : ISourceBuilder, ITextBuilder
 {
     public void BuildSourceFile(List<Entity> entities)
     {
-        SourceBuilder.Instance.AddSourceFile(Constants.IUnitOfWorkPath, "IUnitOfWork.cs", BuildSourceText(null, entities));
+        SourceBuilder.Instance.AddSourceFile(Constants.IUnitOfWorkPath, "IUnitOfWork.cs",
+            BuildSourceText(null, entities));
     }
 
     public string BuildSourceText(Entity? entity, List<Entity>? entities)

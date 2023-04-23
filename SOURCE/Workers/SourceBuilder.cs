@@ -46,7 +46,8 @@ public class SourceBuilder
     private static void AddAllSourceFilesAsync(List<Entity> entities)
     {
         var types = AppDomain.CurrentDomain.GetAssemblies()
-            .SelectMany(s => s.GetTypes()).Where(p => typeof(ISourceBuilder).IsAssignableFrom(p) && p != typeof(ISourceBuilder)).ToList();
+            .SelectMany(s => s.GetTypes())
+            .Where(p => typeof(ISourceBuilder).IsAssignableFrom(p) && p != typeof(ISourceBuilder)).ToList();
 
         foreach (var instance in types.Select(type => (ISourceBuilder)Activator.CreateInstance(type)!))
             instance.BuildSourceFile(entities);

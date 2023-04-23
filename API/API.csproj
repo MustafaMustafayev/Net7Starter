@@ -19,6 +19,10 @@
         <PackageReference Include="HotChocolate.Abstractions" Version="13.0.5" />
         <PackageReference Include="HotChocolate.AspNetCore" Version="13.0.5" />
         <PackageReference Include="HotChocolate.Data.EntityFramework" Version="13.0.5" />
+        <PackageReference Include="JetBrains.ReSharper.CommandLineTools" Version="2022.3.1">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
         <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.0.0" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.4">
             <PrivateAssets>all</PrivateAssets>

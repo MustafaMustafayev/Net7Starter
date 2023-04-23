@@ -50,7 +50,8 @@ public class LogActionFilter : IAsyncActionFilter
 
         var requestLog = new RequestLogDto(traceIdentifier, clientIp!, uri,
             DateTime.Now, bodyContent, httpContext.Request.Method, token, userId,
-            new ResponseLogDto(traceIdentifier, DateTime.Now, httpContext.Response.StatusCode.ToString(), token, userId));
+            new ResponseLogDto(traceIdentifier, DateTime.Now, httpContext.Response.StatusCode.ToString(), token,
+                userId));
 
         await _loggingService.AddLogAsync(requestLog);
     }

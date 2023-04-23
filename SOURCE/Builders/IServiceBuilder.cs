@@ -11,7 +11,8 @@ public class IServiceBuilder : ISourceBuilder, ITextBuilder
     public void BuildSourceFile(List<Entity> entities)
     {
         entities.ForEach(model =>
-            SourceBuilder.Instance.AddSourceFile(Constants.IServicePath, $"I{model.Name}Service.cs", BuildSourceText(model, null)));
+            SourceBuilder.Instance.AddSourceFile(Constants.IServicePath, $"I{model.Name}Service.cs",
+                BuildSourceText(model, null)));
     }
 
     public string BuildSourceText(Entity? entity, List<Entity>? entities)

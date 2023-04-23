@@ -92,7 +92,8 @@ public class UserService : IUserService
         var datas = _unitOfWork.UserRepository.GetList();
         var paginationDto = _utilService.GetPagination();
 
-        var response = await PaginatedList<User>.CreateAsync(datas.OrderBy(m => m.UserId), paginationDto.PageIndex, paginationDto.PageSize);
+        var response = await PaginatedList<User>.CreateAsync(datas.OrderBy(m => m.UserId), paginationDto.PageIndex,
+            paginationDto.PageSize);
 
         var responseDto = new PaginatedList<UserToListDto>(
             _mapper.Map<List<UserToListDto>>(response.Datas),

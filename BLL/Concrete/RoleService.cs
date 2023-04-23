@@ -53,7 +53,8 @@ public class RoleService : IRoleService
 
     public Task<IDataResult<IQueryable<Role>>> GraphQlGetAsync()
     {
-        return Task.FromResult<IDataResult<IQueryable<Role>>>(new SuccessDataResult<IQueryable<Role>>(_unitOfWork.RoleRepository.GetList()!,
+        return Task.FromResult<IDataResult<IQueryable<Role>>>(new SuccessDataResult<IQueryable<Role>>(
+            _unitOfWork.RoleRepository.GetList()!,
             Messages.Success.Translate()));
     }
 

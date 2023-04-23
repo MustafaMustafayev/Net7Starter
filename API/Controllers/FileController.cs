@@ -51,11 +51,13 @@ public class FileController : Controller
         await FileHelper.WriteFile(file, $"{hashName}{extension}", path);
 
         // add to database
-        var fileId = await _fileService.AddAsync(new FileToAddDto(originalName, hashName, extension, file.Length, path));
+        var fileId =
+            await _fileService.AddAsync(new FileToAddDto(originalName, hashName, extension, file.Length, path));
 
         // join with model
         var userId = _utilService.GetUserIdFromToken();
-        if (userId is null) return Unauthorized(new ErrorDataResult<string>(Messages.CanNotFoundUserIdInYourAccessToken.Translate()));
+        if (userId is null)
+            return Unauthorized(new ErrorDataResult<string>(Messages.CanNotFoundUserIdInYourAccessToken.Translate()));
 
         await _userService.UpdateImageAsync(userId.Value, fileId.Data);
 
@@ -68,7 +70,8 @@ public class FileController : Controller
     public async Task<IActionResult> Delete([FromQuery] string hashName)
     {
         // validation
-        if (string.IsNullOrEmpty(hashName.Trim())) return BadRequest(new ErrorResult(Messages.InvalidModel.Translate()));
+        if (string.IsNullOrEmpty(hashName.Trim()))
+            return BadRequest(new ErrorResult(Messages.InvalidModel.Translate()));
 
         // get file from database
         var file = await _fileService.GetAsync(hashName);
@@ -82,7 +85,8 @@ public class FileController : Controller
 
         // join with model
         var userId = _utilService.GetUserIdFromToken();
-        if (userId is null) return Unauthorized(new ErrorDataResult<string>(Messages.CanNotFoundUserIdInYourAccessToken.Translate()));
+        if (userId is null)
+            return Unauthorized(new ErrorDataResult<string>(Messages.CanNotFoundUserIdInYourAccessToken.Translate()));
 
         await _userService.UpdateImageAsync(userId.Value, null);
 
@@ -96,7 +100,8 @@ public class FileController : Controller
     public async Task<IActionResult> Download([FromQuery] string hashName)
     {
         // validation
-        if (string.IsNullOrEmpty(hashName.Trim())) return BadRequest(new ErrorResult(Messages.InvalidModel.Translate()));
+        if (string.IsNullOrEmpty(hashName.Trim()))
+            return BadRequest(new ErrorResult(Messages.InvalidModel.Translate()));
 
         // get file from database
         var file = await _fileService.GetAsync(hashName);
@@ -112,7 +117,8 @@ public class FileController : Controller
     public async Task<IActionResult> Get([FromQuery] string hashName)
     {
         // validation
-        if (string.IsNullOrEmpty(hashName.Trim())) return BadRequest(new ErrorResult(Messages.InvalidModel.Translate()));
+        if (string.IsNullOrEmpty(hashName.Trim()))
+            return BadRequest(new ErrorResult(Messages.InvalidModel.Translate()));
 
         // get file from database
         var file = await _fileService.GetAsync(hashName);

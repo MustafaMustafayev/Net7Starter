@@ -11,7 +11,8 @@ public class ControllerBuilder : ISourceBuilder, ITextBuilder
     public void BuildSourceFile(List<Entity> entities)
     {
         entities.ForEach(model =>
-            SourceBuilder.Instance.AddSourceFile(Constants.ControllerPath, $"{model.Name}Controller.cs", BuildSourceText(model, null)));
+            SourceBuilder.Instance.AddSourceFile(Constants.ControllerPath, $"{model.Name}Controller.cs",
+                BuildSourceText(model, null)));
     }
 
     public string BuildSourceText(Entity? entity, List<Entity>? entities)
