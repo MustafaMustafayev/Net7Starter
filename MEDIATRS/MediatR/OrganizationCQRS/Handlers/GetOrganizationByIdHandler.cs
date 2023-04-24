@@ -24,7 +24,7 @@ public class GetOrganizationByIdHandler : IRequestHandler<GetOrganizationByIdQue
         CancellationToken cancellationToken)
     {
         var data =
-            await _unitOfWork.OrganizationRepository.GetAsync(e => e.OrganizationId == request.Id);
+            await _unitOfWork.OrganizationRepository.GetAsync(e => e.Id == request.Id);
         var result = _mapper.Map<OrganizationToListDto>(data);
 
         return new SuccessDataResult<OrganizationToListDto>(result, Messages.Success.Translate());

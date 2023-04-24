@@ -5,7 +5,6 @@ namespace ENTITIES.Entities;
 
 public class Organization : Auditable, IEntity
 {
-    public int OrganizationId { get; set; }
     public required string FullName { get; set; }
     public required string ShortName { get; set; }
     public required string Address { get; set; }

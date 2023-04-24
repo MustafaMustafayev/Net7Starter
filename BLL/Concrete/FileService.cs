@@ -26,7 +26,7 @@ public class FileService : IFileService
         var added = await _unitOfWork.FileRepository.AddAsync(data);
         await _unitOfWork.CommitAsync();
 
-        return new SuccessDataResult<int>(added.FileId, Messages.Success.Translate());
+        return new SuccessDataResult<int>(added.Id, Messages.Success.Translate());
     }
 
     public async Task<IResult> SoftDeleteAsync(string hashName)

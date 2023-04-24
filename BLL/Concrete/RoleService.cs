@@ -25,7 +25,7 @@ public class RoleService : IRoleService
         var data = _mapper.Map<Role>(dto);
 
         var permissions =
-            await _unitOfWork.PermissionRepository.GetListAsync(m => dto.PermissionIds!.Contains(m.PermissionId));
+            await _unitOfWork.PermissionRepository.GetListAsync(m => dto.PermissionIds!.Contains(m.Id));
         data.Permissions = permissions;
 
         await _unitOfWork.RoleRepository.AddAsync(data);
@@ -36,7 +36,7 @@ public class RoleService : IRoleService
 
     public async Task<IResult> SoftDeleteAsync(int id)
     {
-        var data = await _unitOfWork.RoleRepository.GetAsync(m => m.RoleId == id);
+        var data = await _unitOfWork.RoleRepository.GetAsync(m => m.Id == id);
 
         _unitOfWork.RoleRepository.SoftDelete(data!);
         await _unitOfWork.CommitAsync();
@@ -59,7 +59,7 @@ public class RoleService : IRoleService
 
     public async Task<IDataResult<RoleToListDto>> GetAsync(int id)
     {
-        var data = _mapper.Map<RoleToListDto>(await _unitOfWork.RoleRepository.GetAsync(m => m.RoleId == id));
+        var data = _mapper.Map<RoleToListDto>(await _unitOfWork.RoleRepository.GetAsync(m => m.Id == id));
 
         return new SuccessDataResult<RoleToListDto>(data, Messages.Success.Translate());
     }
@@ -67,10 +67,10 @@ public class RoleService : IRoleService
     public async Task<IResult> UpdateAsync(int id, RoleToUpdateDto dto)
     {
         var data = _mapper.Map<Role>(dto);
-        data.RoleId = id;
+        data.Id = id;
 
         var permissions =
-            await _unitOfWork.PermissionRepository.GetListAsync(m => dto.PermissionIds!.Contains(m.PermissionId));
+            await _unitOfWork.PermissionRepository.GetListAsync(m => dto.PermissionIds!.Contains(m.Id));
         data.Permissions = permissions;
 
         _unitOfWork.RoleRepository.UpdateRole(data);
@@ -82,7 +82,7 @@ public class RoleService : IRoleService
     public async Task<IDataResult<List<PermissionToListDto>>> GetPermissionsAsync(int id)
     {
         var datas = _mapper.Map<List<PermissionToListDto>>(
-            (await _unitOfWork.RoleRepository.GetAsync(m => m.RoleId == id))!.Permissions);
+            (await _unitOfWork.RoleRepository.GetAsync(m => m.Id == id))!.Permissions);
 
         return new SuccessDataResult<List<PermissionToListDto>>(datas,
             Messages.Success.Translate());
