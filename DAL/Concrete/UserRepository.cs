@@ -25,7 +25,7 @@ public class UserRepository : GenericRepository<User>, IUserRepository
 
     public async Task<bool> IsUserExistAsync(string userName, int? userId)
     {
-        return await _dataContext.Users.AnyAsync(m => m.Username == userName && m.UserId != userId);
+        return await _dataContext.Users.AnyAsync(m => m.Username == userName && m.Id != userId);
     }
 
     public Task UpdateUserAsync(User user)

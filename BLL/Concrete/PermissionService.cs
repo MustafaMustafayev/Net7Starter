@@ -35,7 +35,7 @@ public class PermissionService : IPermissionService
 
     public async Task<IResult> SoftDeleteAsync(int id)
     {
-        var data = await _unitOfWork.PermissionRepository.GetAsync(m => m.PermissionId == id);
+        var data = await _unitOfWork.PermissionRepository.GetAsync(m => m.Id == id);
         _unitOfWork.PermissionRepository.SoftDelete(data!);
         await _unitOfWork.CommitAsync();
 
@@ -46,7 +46,7 @@ public class PermissionService : IPermissionService
     {
         var datas = _unitOfWork.PermissionRepository.GetAsNoTrackingList();
         var paginationDto = _utilService.GetPagination();
-        var response = await PaginatedList<Permission>.CreateAsync(datas.OrderBy(m => m.PermissionId), paginationDto.PageIndex, paginationDto.PageSize);
+        var response = await PaginatedList<Permission>.CreateAsync(datas.OrderBy(m => m.Id), paginationDto.PageIndex, paginationDto.PageSize);
 
         var responseDto = new PaginatedList<PermissionToListDto>(_mapper.Map<List<PermissionToListDto>>(response.Datas),
             response.TotalRecordCount, response.PageIndex, response.TotalPageCount);
@@ -66,7 +66,7 @@ public class PermissionService : IPermissionService
     public async Task<IDataResult<PermissionToListDto>> GetAsync(int id)
     {
         var datas = _mapper.Map<PermissionToListDto>(
-            await _unitOfWork.PermissionRepository.GetAsNoTrackingAsync(m => m.PermissionId == id));
+            await _unitOfWork.PermissionRepository.GetAsNoTrackingAsync(m => m.Id == id));
 
         return new SuccessDataResult<PermissionToListDto>(datas, Messages.Success.Translate());
     }
@@ -74,7 +74,7 @@ public class PermissionService : IPermissionService
     public async Task<IResult> UpdateAsync(int permissionId, PermissionToUpdateDto dto)
     {
         var data = _mapper.Map<Permission>(dto);
-        data.PermissionId = permissionId;
+        data.Id = permissionId;
 
         _unitOfWork.PermissionRepository.Update(data);
         await _unitOfWork.CommitAsync();

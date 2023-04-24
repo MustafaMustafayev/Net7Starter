@@ -47,7 +47,7 @@ public class AuthService : IAuthService
             return new ErrorDataResult<UserToListDto>(Messages.CanNotFoundUserIdInYourAccessToken
                 .Translate());
 
-        var data = await _unitOfWork.UserRepository.GetAsync(m => m.UserId == userId);
+        var data = await _unitOfWork.UserRepository.GetAsync(m => m.Id == userId);
         if (data == null)
             return new ErrorDataResult<UserToListDto>(Messages.InvalidUserCredentials.Translate());
 

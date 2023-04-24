@@ -31,7 +31,7 @@ public class UserService : IUserService
             return new ErrorResult(Messages.UserIsExist.Translate());
 
         dto.RoleId = dto.RoleId == 0 || !dto.RoleId.HasValue
-            ? (await _unitOfWork.RoleRepository.GetAsync(m => m.Key == UserType.Viewer.ToString()))?.RoleId
+            ? (await _unitOfWork.RoleRepository.GetAsync(m => m.Key == UserType.Viewer.ToString()))?.Id
             : dto.RoleId;
         var data = _mapper.Map<User>(dto);
 
@@ -46,7 +46,7 @@ public class UserService : IUserService
 
     public async Task<IResult> SoftDeleteAsync(int id)
     {
-        var data = await _unitOfWork.UserRepository.GetAsync(m => m.UserId == id);
+        var data = await _unitOfWork.UserRepository.GetAsync(m => m.Id == id);
 
         _unitOfWork.UserRepository.SoftDelete(data!);
         await _unitOfWork.CommitAsync();
@@ -64,7 +64,7 @@ public class UserService : IUserService
 
     public async Task<IDataResult<UserToListDto>> GetAsync(int id)
     {
-        var data = _mapper.Map<UserToListDto>(await _unitOfWork.UserRepository.GetAsync(m => m.UserId == id));
+        var data = _mapper.Map<UserToListDto>(await _unitOfWork.UserRepository.GetAsync(m => m.Id == id));
 
         return new SuccessDataResult<UserToListDto>(data, Messages.Success.Translate());
     }
@@ -75,11 +75,11 @@ public class UserService : IUserService
             return new ErrorResult(Messages.UserIsExist.Translate());
 
         dto.RoleId = dto.RoleId == 0 || !dto.RoleId.HasValue
-            ? (await _unitOfWork.RoleRepository.GetAsync(m => m.Key == UserType.Viewer.ToString()))?.RoleId
+            ? (await _unitOfWork.RoleRepository.GetAsync(m => m.Key == UserType.Viewer.ToString()))?.Id
             : dto.RoleId;
 
         var data = _mapper.Map<User>(dto);
-        data.UserId = id;
+        data.Id = id;
 
         await _unitOfWork.UserRepository.UpdateUserAsync(data);
         await _unitOfWork.CommitAsync();
@@ -92,7 +92,7 @@ public class UserService : IUserService
         var datas = _unitOfWork.UserRepository.GetList();
         var paginationDto = _utilService.GetPagination();
 
-        var response = await PaginatedList<User>.CreateAsync(datas.OrderBy(m => m.UserId), paginationDto.PageIndex, paginationDto.PageSize);
+        var response = await PaginatedList<User>.CreateAsync(datas.OrderBy(m => m.Id), paginationDto.PageIndex, paginationDto.PageSize);
 
         var responseDto = new PaginatedList<UserToListDto>(
             _mapper.Map<List<UserToListDto>>(response.Datas),
@@ -104,7 +104,7 @@ public class UserService : IUserService
 
     public async Task<IResult> UpdateImageAsync(int id, int? imageId)
     {
-        var data = await _unitOfWork.UserRepository.GetAsync(m => m.UserId == id);
+        var data = await _unitOfWork.UserRepository.GetAsync(m => m.Id == id);
         if (data == null) return new ErrorResult(Messages.InvalidUserCredentials.Translate());
 
         data.ImageId = imageId;

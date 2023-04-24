@@ -2,6 +2,7 @@
 
 public class Auditable
 {
+    public int Id { get; set; }
     public int? CreatedById { get; set; }
     public int? ModifiedBy { get; set; }
     public int? DeletedBy { get; set; }

@@ -23,7 +23,7 @@ public class UpdateOrganizationHandler : IRequestHandler<UpdateOrganizationComma
         CancellationToken cancellationToken)
     {
         var mapped = _mapper.Map<Organization>(request.Organization);
-        mapped.OrganizationId = request.OrganizationId;
+        mapped.Id = request.OrganizationId;
 
         _unitOfWork.OrganizationRepository.Update(mapped);
         await _unitOfWork.CommitAsync();
