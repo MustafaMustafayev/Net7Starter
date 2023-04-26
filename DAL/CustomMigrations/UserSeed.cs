@@ -13,7 +13,7 @@ public class UserSeed
         modelBuilder.Entity<User>().HasData(
             new User
             {
-                Id = 1,
+                UserId = 1,
                 Username = "Test",
                 Email = "test@test.tst",
                 Password = pass,

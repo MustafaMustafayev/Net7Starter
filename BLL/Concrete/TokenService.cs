@@ -62,7 +62,7 @@ public class TokenService : ITokenService
         var securityHelper = new SecurityHelper(_configSettings, _utilService);
         var accessTokenExpireDate =
             DateTime.UtcNow.AddHours(_configSettings.AuthSettings.TokenExpirationTimeInHours);
-        var userDto = _mapper.Map<UserResponseDto>(dto);
+        var userDto = _mapper.Map<UserToListDto>(dto);
 
         var loginResponseDto = new LoginResponseDto
         {

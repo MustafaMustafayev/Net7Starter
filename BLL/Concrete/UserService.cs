@@ -54,6 +54,17 @@ public class UserService : IUserService
         return new SuccessResult(Messages.Success.Translate());
     }
 
+    public async Task<IResult> AddProfileAsync(int userId, int? fileId)
+    {
+        var user = await _unitOfWork.UserRepository.GetAsNoTrackingAsync(u => u.UserId == userId);
+        user!.ProfileFileId = fileId;
+
+        await _unitOfWork.UserRepository.UpdateUserAsync(user);
+        await _unitOfWork.CommitAsync();
+
+        return new SuccessResult();
+    }
+
     public async Task<IDataResult<List<UserToListDto>>> GetAsync()
     {
         var datas = await _unitOfWork.UserRepository.GetListAsync();
@@ -74,12 +85,17 @@ public class UserService : IUserService
         if (await _unitOfWork.UserRepository.IsUserExistAsync(dto.Username, id))
             return new ErrorResult(Messages.UserIsExist.Translate());
 
-        dto.RoleId = dto.RoleId == 0 || !dto.RoleId.HasValue
+        dto.RoleId = dto.RoleId is 0 or null
             ? (await _unitOfWork.RoleRepository.GetAsync(m => m.Key == UserType.Viewer.ToString()))?.Id
             : dto.RoleId;
 
+        var old = await _unitOfWork.UserRepository.GetAsNoTrackingAsync(u => u.UserId == id);
+        if (old is null) return new ErrorResult(Messages.UserIsNotExist.Translate());
+
         var data = _mapper.Map<User>(dto);
+
         data.Id = id;
+        data.ProfileFileId = old!.ProfileFileId;
 
         await _unitOfWork.UserRepository.UpdateUserAsync(data);
         await _unitOfWork.CommitAsync();
@@ -100,18 +116,5 @@ public class UserService : IUserService
 
         return new SuccessDataResult<PaginatedList<UserToListDto>>(responseDto,
             Messages.Success.Translate());
-    }
-
-    public async Task<IResult> UpdateImageAsync(int id, int? imageId)
-    {
-        var data = await _unitOfWork.UserRepository.GetAsync(m => m.Id == id);
-        if (data == null) return new ErrorResult(Messages.InvalidUserCredentials.Translate());
-
-        data.ImageId = imageId;
-
-        _unitOfWork.UserRepository.Update(_mapper.Map<User>(data));
-        await _unitOfWork.CommitAsync();
-
-        return new SuccessResult(Messages.Success.Translate());
     }
 }
