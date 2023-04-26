@@ -4,20 +4,21 @@ namespace DAL.Utility;
 
 public class PaginatedList<T> : PaginationInfo
 {
-    public PaginatedList(List<T> items, int count, int pageIndex, int pageSize)
+    public PaginatedList(List<T> items, int totalCount, int pageIndex, int pageSize)
     {
         if (pageIndex != 0)
         {
             PageIndex = pageIndex;
-            TotalPageCount = (int)Math.Ceiling(count / (double)pageSize);
+            TotalRecordCount = totalCount;
+            TotalPageCount = pageSize == 0 ? 1 : (totalCount + pageSize - 1) / pageSize;
         }
         else
         {
             PageIndex = 1;
+            TotalRecordCount = items.Count;
             TotalPageCount = 1;
         }
 
-        TotalRecordCount = count;
         Datas = items;
     }
 
