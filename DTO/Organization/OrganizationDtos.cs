@@ -1,6 +1,7 @@
 ﻿namespace DTO.Organization;
 
-public record OrganizationToAddDto(
+public record OrganizationToAddDto
+(
     string FullName,
     string ShortName,
     string Address,
@@ -11,7 +12,8 @@ public record OrganizationToAddDto(
     string Rekvizit
 );
 
-public record OrganizationToListDto(
+public record OrganizationToListDto
+(
     int OrganizationId,
     string FullName,
     string ShortName,
@@ -23,7 +25,9 @@ public record OrganizationToListDto(
     string Rekvizit
 );
 
-public record OrganizationToUpdateDto(string FullName,
+public record OrganizationToUpdateDto
+(
+    string FullName,
     string ShortName,
     string Address,
     int? ParentId,

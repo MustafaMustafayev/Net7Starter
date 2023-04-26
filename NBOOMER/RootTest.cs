@@ -38,7 +38,7 @@ public abstract class RootTest
 
     public async Task Login()
     {
-        var login = new LoginDto { Email = "test@test.tst", Password = "testtest" };
+        var login = new LoginDto("test@test.tst", "testtest");
         using var httpResponse = await HttpClient.PostAsJsonAsync(new Uri(BaseUrl + "api/Auth/login"), login);
 
         var result = await httpResponse.Content.ReadAsStringAsync();

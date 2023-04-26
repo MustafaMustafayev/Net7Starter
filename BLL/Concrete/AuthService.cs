@@ -28,11 +28,11 @@ public class AuthService : IAuthService
         return await _unitOfWork.UserRepository.GetUserSaltAsync(userEmail);
     }
 
-    public async Task<IDataResult<UserToListDto>> LoginAsync(LoginDto dto)
+    public async Task<IDataResult<UserToListDto>> LoginAsync(LoginDto dtos)
     {
         var data =
             await _unitOfWork.UserRepository.GetAsync(m =>
-                m.Email == dto.Email && m.Password == dto.Password);
+                m.Email == dtos.Email && m.Password == dtos.Password);
         if (data == null)
             return new ErrorDataResult<UserToListDto>(Messages.InvalidUserCredentials.Translate());
 

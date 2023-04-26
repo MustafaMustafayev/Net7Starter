@@ -30,15 +30,18 @@ public class UserService : IUserService
         if (await _unitOfWork.UserRepository.IsUserExistAsync(dto.Username, null))
             return new ErrorResult(Messages.UserIsExist.Translate());
 
-        dto.RoleId = dto.RoleId == 0 || !dto.RoleId.HasValue
-            ? (await _unitOfWork.RoleRepository.GetAsync(m => m.Key == UserType.Viewer.ToString()))?.Id
-            : dto.RoleId;
+        dto = dto with
+        {
+            RoleId = dto.RoleId == 0 || !dto.RoleId.HasValue
+                ? (await _unitOfWork.RoleRepository.GetAsync(m => m.Key == UserType.Viewer.ToString()))?.Id
+                : dto.RoleId
+        };
         var data = _mapper.Map<User>(dto);
 
         data.Salt = SecurityHelper.GenerateSalt();
         data.Password = SecurityHelper.HashPassword(data.Password, data.Salt);
 
-        var added = await _unitOfWork.UserRepository.AddAsync(data);
+        await _unitOfWork.UserRepository.AddAsync(data);
         await _unitOfWork.CommitAsync();
 
         return new SuccessResult(Messages.Success.Translate());
@@ -85,9 +88,12 @@ public class UserService : IUserService
         if (await _unitOfWork.UserRepository.IsUserExistAsync(dto.Username, id))
             return new ErrorResult(Messages.UserIsExist.Translate());
 
-        dto.RoleId = dto.RoleId is 0 or null
-            ? (await _unitOfWork.RoleRepository.GetAsync(m => m.Key == UserType.Viewer.ToString()))?.Id
-            : dto.RoleId;
+        dto = dto with
+        {
+            RoleId = dto.RoleId is 0 or null
+                ? (await _unitOfWork.RoleRepository.GetAsync(m => m.Key == UserType.Viewer.ToString()))?.Id
+                : dto.RoleId
+        };
 
         var old = await _unitOfWork.UserRepository.GetAsNoTrackingAsync(u => u.UserId == id);
         if (old is null) return new ErrorResult(Messages.UserIsNotExist.Translate());

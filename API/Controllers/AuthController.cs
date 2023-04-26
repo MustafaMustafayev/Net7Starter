@@ -45,7 +45,7 @@ public class AuthController : Controller
         if (string.IsNullOrEmpty(userSalt))
             return Ok(new ErrorDataResult<Result>(Messages.InvalidUserCredentials.Translate()));
 
-        request.Password = SecurityHelper.HashPassword(request.Password, userSalt);
+        request = request with { Password = SecurityHelper.HashPassword(request.Password, userSalt) };
 
         var loginResult = await _authService.LoginAsync(request);
         if (!loginResult.Success) return Unauthorized(loginResult);
