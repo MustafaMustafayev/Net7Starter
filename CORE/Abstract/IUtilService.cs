@@ -1,4 +1,5 @@
 ﻿using DTO.Helper;
+using ENTITIES.Enums;
 
 namespace CORE.Abstract;
 
@@ -15,5 +16,5 @@ public interface IUtilService
     public string Decrypt(string value);
     public Task SendMail(string email, string message);
     public string CreateGuid();
-    string GetEnvFolderPath(string folderName);
+    public string GetFolderName(FileType type);
 }

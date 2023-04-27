@@ -31,7 +31,7 @@ builder.Services.AddControllers(opt => opt.Filters.Add(typeof(ModelValidatorActi
     .AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 
 builder.Services.AddFluentValidationAutoValidation()
-    .AddValidatorsFromAssemblyContaining<LoginDtoValidator>();
+    .AddValidatorsFromAssemblyContaining<ResetPasswordDtoValidator>();
 
 if (config.SentrySettings.IsEnabled) builder.WebHost.UseSentry();
 

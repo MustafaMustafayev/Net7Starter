@@ -7,16 +7,16 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
-COPY ["Project.API/Project.API.csproj", "Project.API/"]
-COPY ["Project.BLL/Project.BLL.csproj", "Project.BLL/"]
-COPY ["Project.Core/Project.Core.csproj", "Project.Core/"]
-COPY ["Project.DAL/Project.DAL.csproj", "Project.DAL/"]
-COPY ["Project.Entity/Project.Entity.csproj", "Project.Entity/"]
-COPY ["Project.DTO/Project.DTO.csproj", "Project.DTO/"]
-RUN dotnet restore "Project.API/Project.API.csproj"
+COPY ["API/API.csproj", "API/"]
+COPY ["BLL/BLL.csproj", "BLL/"]
+COPY ["CORE/CORE.csproj", "CORE/"]
+COPY ["DAL/DAL.csproj", "DAL/"]
+COPY ["ENTITIES/ENTITIES.csproj", "ENTITIES/"]
+COPY ["DTO/DTO.csproj", "DTO/"]
+RUN dotnet restore "API/API.csproj"
 COPY . .
-WORKDIR "/src/Project.API"
-RUN dotnet build "Project.API.csproj" -c Release -o /app/build
+WORKDIR "/src/API"
+RUN dotnet build "API.csproj" -c Release -o /app/build
 
 FROM build AS publish
 RUN dotnet publish "Project.API.csproj" -c Release -o /app/publish
@@ -24,4 +24,4 @@ RUN dotnet publish "Project.API.csproj" -c Release -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Project.API.dll"]
+ENTRYPOINT ["dotnet", "API.dll"]

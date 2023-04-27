@@ -9,38 +9,37 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <None Remove="StyleCop.Analyzers" />
-        <None Remove="DTOs\CustomLoggingDTOs\" />
-        <None Remove="DTOs\RoleDTOs\" />
-        <None Remove="DTOs\OrganizationDTOs\" />
-        <None Remove="DTOs\AuthDTOs\AuthValidators\" />
-        <None Remove="FluentValidation.AspNetCore" />
-        <None Remove="DTOs\OrganizationDTOs\OrganizationValidators\" />
-        <None Remove="DTOs\RoleDTOs\RoleValidators\" />
-        <None Remove="DTOs\UserDTOs\UserValidators\" />
-        <None Remove="Permission\" />
-        <None Remove="Token\" />
-        <None Remove="CustomLogging\Validators\" />
-        <None Remove="Permission\Validators\" />
-        <None Remove="Responses\Validators\" />
-        <None Remove="Token\Validators\" />
+        <None Remove="StyleCop.Analyzers"/>
+        <None Remove="DTOs\CustomLoggingDTOs\"/>
+        <None Remove="DTOs\RoleDTOs\"/>
+        <None Remove="DTOs\OrganizationDTOs\"/>
+        <None Remove="DTOs\AuthDTOs\AuthValidators\"/>
+        <None Remove="FluentValidation.AspNetCore"/>
+        <None Remove="DTOs\OrganizationDTOs\OrganizationValidators\"/>
+        <None Remove="DTOs\RoleDTOs\RoleValidators\"/>
+        <None Remove="DTOs\UserDTOs\UserValidators\"/>
+        <None Remove="Permission\"/>
+        <None Remove="Token\"/>
+        <None Remove="CustomLogging\Validators\"/>
+        <None Remove="Permission\Validators\"/>
+        <None Remove="Responses\Validators\"/>
+        <None Remove="Token\Validators\"/>
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
+        <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0"/>
         <PackageReference Include="JetBrains.ReSharper.CommandLineTools" Version="2023.1.0">
-          <PrivateAssets>all</PrivateAssets>
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
     </ItemGroup>
     <ItemGroup>
-        <ProjectReference Include="..\ENTITIES\ENTITIES.csproj" />
+        <ProjectReference Include="..\ENTITIES\ENTITIES.csproj"/>
     </ItemGroup>
     <ItemGroup>
-        <Folder Include="First\" />
-        <Folder Include="Permission\" />
-        <Folder Include="Token\" />
+        <Folder Include="Permission\"/>
+        <Folder Include="Token\"/>
     </ItemGroup>
     <ItemGroup>
-        <Compile Remove="First\FirstDtos.cs" />
+        <Compile Remove="First\FirstDtos.cs"/>
     </ItemGroup>
 </Project>

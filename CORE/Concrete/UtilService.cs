@@ -6,6 +6,7 @@ using System.Text;
 using CORE.Abstract;
 using CORE.Config;
 using DTO.Helper;
+using ENTITIES.Enums;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.IdentityModel.Tokens;
@@ -169,11 +170,6 @@ public class UtilService : IUtilService
         return Guid.NewGuid().ToString();
     }
 
-    public string GetEnvFolderPath(string folderName)
-    {
-        return Path.Combine(_environment.WebRootPath, folderName);
-    }
-
     public string? GetRoleFromToken(string? tokenString)
     {
         if (string.IsNullOrEmpty(tokenString)) return null;
@@ -185,5 +181,19 @@ public class UtilService : IUtilService
         if (roleIdClaim is null || string.IsNullOrEmpty(roleIdClaim.Value)) return null;
 
         return roleIdClaim.Value;
+    }
+
+    public string GetFolderName(FileType type)
+    {
+        return type switch
+        {
+            FileType.UserProfile => "files\\images\\user_profile",
+            _ => "files/error"
+        };
+    }
+
+    public string GetEnvFolderPath(string folderName)
+    {
+        return Path.Combine(_environment.WebRootPath, folderName);
     }
 }

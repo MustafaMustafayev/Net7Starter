@@ -62,18 +62,15 @@ public class TokenService : ITokenService
         var securityHelper = new SecurityHelper(_configSettings, _utilService);
         var accessTokenExpireDate =
             DateTime.UtcNow.AddHours(_configSettings.AuthSettings.TokenExpirationTimeInHours);
-        var userDto = _mapper.Map<UserResponseDto>(dto);
+        var userDto = _mapper.Map<UserToListDto>(dto);
 
-        var loginResponseDto = new LoginResponseDto
-        {
-            User = userDto,
-            AccessToken = securityHelper.CreateTokenForUser(dto, accessTokenExpireDate),
-            AccessTokenExpireDate = accessTokenExpireDate,
-            RefreshToken = _utilService.GenerateRefreshToken(),
-            RefreshTokenExpireDate =
-                accessTokenExpireDate.AddMinutes(_configSettings.AuthSettings
-                    .RefreshTokenAdditionalMinutes)
-        };
+        var loginResponseDto = new LoginResponseDto(
+            userDto,
+            securityHelper.CreateTokenForUser(dto, accessTokenExpireDate),
+            accessTokenExpireDate,
+            _utilService.GenerateRefreshToken(),
+            accessTokenExpireDate.AddMinutes(_configSettings.AuthSettings.RefreshTokenAdditionalMinutes)
+        );
 
         await AddAsync(loginResponseDto);
 
