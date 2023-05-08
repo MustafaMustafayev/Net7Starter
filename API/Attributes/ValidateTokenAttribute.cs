@@ -23,8 +23,7 @@ public class ValidateTokenAttribute : Attribute, IAuthorizationFilter
         string? jwtToken = context.HttpContext.Request.Headers[configSettings.AuthSettings.HeaderName];
         string? refreshToken = context.HttpContext.Request.Headers[configSettings.AuthSettings.RefreshTokenHeaderName];
 
-        var validationResult = tokenService
-            .CheckValidationAsync(utilService.GetTokenStringFromHeader(jwtToken), refreshToken!).Result;
+        var validationResult = tokenService.CheckValidationAsync(utilService.GetTokenStringFromHeader(jwtToken), refreshToken!).Result;
 
         if (!validationResult.Success)
             context.Result = new UnauthorizedObjectResult(validationResult);
