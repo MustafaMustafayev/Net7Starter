@@ -52,7 +52,7 @@ public class {entityName}Service : I{entityName}Service
 
     public async Task<IResult> SoftDeleteAsync(int id)
     {
-        var data = await _unitOfWork.{entityName}Repository.GetAsync(m => m.{entityName}Id == id);
+        var data = await _unitOfWork.{entityName}Repository.GetAsync(m => m.Id == id);
 
         _unitOfWork.{entityName}Repository.SoftDelete(data);
         await _unitOfWork.CommitAsync();
@@ -65,7 +65,7 @@ public class {entityName}Service : I{entityName}Service
         var datas = _unitOfWork.{entityName}Repository.GetList();
         var paginationDto = _utilService.GetPagination();
 
-        var response = await PaginatedList<{entityName}>.CreateAsync(datas.OrderBy(m => m.{entityName}Id), paginationDto.PageIndex, paginationDto.PageSize);
+        var response = await PaginatedList<{entityName}>.CreateAsync(datas.OrderBy(m => m.Id), paginationDto.PageIndex, paginationDto.PageSize);
 
         var responseDto = new PaginatedList<{entityName}ToListDto>(_mapper.Map<List<{entityName}ToListDto>>(response.Datas), response.TotalRecordCount, response.PageIndex, paginationDto.PageSize);
 
@@ -81,7 +81,7 @@ public class {entityName}Service : I{entityName}Service
 
     public async Task<IDataResult<{entityName}ToListDto>> GetAsync(int id)
     {
-        var data = _mapper.Map<{entityName}ToListDto>(await _unitOfWork.{entityName}Repository.GetAsync(m => m.{entityName}Id == id));
+        var data = _mapper.Map<{entityName}ToListDto>(await _unitOfWork.{entityName}Repository.GetAsync(m => m.Id == id));
 
         return new SuccessDataResult<{entityName}ToListDto>(data, Messages.Success.Translate());
     }
@@ -89,7 +89,7 @@ public class {entityName}Service : I{entityName}Service
     public async Task<IResult> UpdateAsync(int id, {entityName}ToUpdateDto dto)
     {
         var data = _mapper.Map<{entityName}>(dto);
-        data.{entityName}Id = id;
+        data.Id = id;
 
         _unitOfWork.{entityName}Repository.Update(data);
         await _unitOfWork.CommitAsync();

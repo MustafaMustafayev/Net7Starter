@@ -17,7 +17,7 @@ public class ControllerBuilder : ISourceBuilder, ITextBuilder
     public string BuildSourceText(Entity? entity, List<Entity>? entities)
     {
         var text = @"
-using API.ActionFilters;
+using API.Filters;
 using API.Attributes;
 using BLL.Abstract;
 using DTO.Responses;

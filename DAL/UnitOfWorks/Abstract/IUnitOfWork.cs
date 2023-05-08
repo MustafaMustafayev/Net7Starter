@@ -1,3 +1,4 @@
+
 using DAL.Abstract;
 
 namespace DAL.UnitOfWorks.Abstract;
@@ -13,5 +14,6 @@ public interface IUnitOfWork : IAsyncDisposable, IDisposable
     public IRoleRepository RoleRepository { get; set; }
     public ITokenRepository TokenRepository { get; set; }
     public IUserRepository UserRepository { get; set; }
+
     public Task CommitAsync();
 }
