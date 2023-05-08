@@ -52,7 +52,7 @@ public class SecurityHelper
     {
         var claims = new List<Claim>
         {
-            new(_configSettings.AuthSettings.TokenUserIdKey, _utilService.Encrypt(userDto.UserId.ToString())),
+            new(_configSettings.AuthSettings.TokenUserIdKey, _utilService.Encrypt(userDto.Id.ToString())),
             new(ClaimTypes.Name, userDto.Username),
             new(_configSettings.AuthSettings.Role, userDto.Role!.Name),
             new(ClaimTypes.Expiration, expirationDate.ToString(CultureInfo.InvariantCulture))

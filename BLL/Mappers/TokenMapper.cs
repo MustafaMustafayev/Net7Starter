@@ -11,6 +11,7 @@ public class TokenMapper : Profile
     {
         CreateMap<Token, TokenToListDto>();
         CreateMap<LoginResponseDto, Token>()
-            .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.User.UserId));
+            .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.User.Id))
+            .ForMember(dest => dest.User, opt => opt.Ignore());
     }
 }

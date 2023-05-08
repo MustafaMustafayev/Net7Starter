@@ -20,7 +20,7 @@ public class LoggingService : ILoggingService
     public async Task AddLogAsync(RequestLogDto dto)
     {
         var data = _mapper.Map<RequestLog>(dto);
-        await _unitOfWork.RequestLogRepository.AddAsync(data);
+        await _unitOfWork.RequestLogRepository.AddRequestLogAsync(data);
         await _unitOfWork.CommitAsync();
     }
 }

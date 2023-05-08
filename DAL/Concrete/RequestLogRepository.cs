@@ -14,4 +14,9 @@ public class RequestLogRepository : GenericRepository<RequestLog>, IRequestLogRe
     {
         _dataContext = dataContext;
     }
+
+    public async Task AddRequestLogAsync(RequestLog entity)
+    {
+        await _dataContext.RequestLogs.AddAsync(entity);
+    }
 }

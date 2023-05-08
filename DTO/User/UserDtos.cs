@@ -18,11 +18,11 @@ public record UserToAddDto
 
 public record UserToListDto
 (
-    int UserId,
+    int Id,
     string Username,
     string Email,
     string ContactNumber,
-    RoleToListDto? Role,
+    RoleToFkDto? Role,
     string? ProfileFileHashName
 );
 

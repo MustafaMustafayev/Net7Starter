@@ -6,4 +6,5 @@ namespace DAL.Abstract;
 public interface IRoleRepository : IGenericRepository<Role>
 {
     Role UpdateRole(Role role);
+    Task ClearRolePermissionsAync(int roleId);
 }

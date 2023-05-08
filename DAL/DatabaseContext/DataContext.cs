@@ -44,11 +44,8 @@ public class DataContext : DbContext
     }
 
     /* migration commands
-      dotnet ef --startup-project ../API migrations add test --context DataContext
+      dotnet ef --startup-project ../API migrations add initial --context DataContext
       dotnet ef --startup-project ../API database update --context DataContext
-      
-      dotnet ef migrations add Initial --startup-project API  --project DAL
-      dotnet ef database update Initial --startup-project API  --project DAL
     */
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

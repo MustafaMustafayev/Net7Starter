@@ -1,4 +1,5 @@
-﻿using API.Filters;
+﻿using API.Attributes;
+using API.Filters;
 using BLL.Abstract;
 using CORE.Abstract;
 using CORE.Config;
@@ -66,6 +67,7 @@ public class AuthController : Controller
 
     [SwaggerOperation(Summary = "refesh access token")]
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IDataResult<LoginResponseDto>))]
+    [ValidateToken]
     [HttpGet("refresh")]
     public async Task<IActionResult> Refresh()
     {
@@ -73,11 +75,13 @@ public class AuthController : Controller
         string refreshToken = HttpContext.Request.Headers[_configSettings.AuthSettings.RefreshTokenHeaderName]!;
 
         var tokenResponse = await _tokenService.GetAsync(jwtToken, refreshToken);
-
-        await _tokenService.SoftDeleteAsync(tokenResponse.Data!.TokenId);
-        var response = await _tokenService.CreateTokenAsync(tokenResponse.Data.User);
-
-        return Ok(response);
+        if (tokenResponse.Success)
+        {
+            await _tokenService.SoftDeleteAsync(tokenResponse.Data!.TokenId);
+            var response = await _tokenService.CreateTokenAsync(tokenResponse.Data.User);
+            return Ok(response);
+        }
+        return Unauthorized();
     }
 
     [SwaggerOperation(Summary = "reset password")]
@@ -91,8 +95,8 @@ public class AuthController : Controller
 
     [SwaggerOperation(Summary = "login by token")]
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IDataResult<LoginResponseDto>))]
+    [ValidateToken]
     [HttpGet("loginByToken")]
-    [AllowAnonymous]
     public async Task<IActionResult> LoginByToken()
     {
         if (string.IsNullOrEmpty(HttpContext.Request.Headers.Authorization))

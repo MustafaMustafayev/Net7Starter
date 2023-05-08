@@ -5,7 +5,7 @@ namespace DAL.Abstract;
 
 public interface IUserRepository : IGenericRepository<User>
 {
-    Task<bool> IsUserExistAsync(string userName, int? userId);
+    Task<bool> IsUserExistAsync(string email, int? userId);
 
     Task<string?> GetUserSaltAsync(string userEmail);
 

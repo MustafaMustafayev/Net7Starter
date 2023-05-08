@@ -18,8 +18,7 @@ public class TokenRepository : GenericRepository<Token>, ITokenRepository
 
     public async Task<bool> IsValid(string accessToken, string refreshToken)
     {
-        return await _dataContext.Tokens.AnyAsync(m =>
-            m.AccessToken == accessToken && m.RefreshToken == refreshToken);
+        return await _dataContext.Tokens.AnyAsync(m => m.AccessToken == accessToken);
     }
 
     public async Task<List<Token>> GetActiveTokensAsync(string accessToken)

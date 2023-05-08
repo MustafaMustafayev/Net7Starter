@@ -4,7 +4,7 @@ namespace DTO.File;
 
 public record FileToListDto
 (
-    int FileId,
+    int Id,
     string OriginalName,
     string HashName,
     string Extension,

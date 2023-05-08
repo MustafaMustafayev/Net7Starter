@@ -44,15 +44,13 @@ public class AuthService : IAuthService
     {
         var userId = _utilService.GetUserIdFromToken();
         if (userId is null)
-            return new ErrorDataResult<UserToListDto>(Messages.CanNotFoundUserIdInYourAccessToken
-                .Translate());
+            return new ErrorDataResult<UserToListDto>(Messages.CanNotFoundUserIdInYourAccessToken.Translate());
 
         var data = await _unitOfWork.UserRepository.GetAsync(m => m.Id == userId);
         if (data == null)
             return new ErrorDataResult<UserToListDto>(Messages.InvalidUserCredentials.Translate());
 
-        return new SuccessDataResult<UserToListDto>(_mapper.Map<UserToListDto>(data),
-            Messages.Success.Translate());
+        return new SuccessDataResult<UserToListDto>(_mapper.Map<UserToListDto>(data), Messages.Success.Translate());
     }
 
     public IResult SendVerificationCodeToEmailAsync(string email)

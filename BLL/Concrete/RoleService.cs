@@ -69,10 +69,10 @@ public class RoleService : IRoleService
         var data = _mapper.Map<Role>(dto);
         data.Id = id;
 
-        var permissions =
-            await _unitOfWork.PermissionRepository.GetListAsync(m => dto.PermissionIds!.Contains(m.Id));
-        data.Permissions = permissions;
+        await _unitOfWork.RoleRepository.ClearRolePermissionsAync(id);
 
+        var permissions = await _unitOfWork.PermissionRepository.GetListAsync(m => dto.PermissionIds!.Contains(m.Id));
+        data.Permissions = permissions;
         _unitOfWork.RoleRepository.UpdateRole(data);
         await _unitOfWork.CommitAsync();
 

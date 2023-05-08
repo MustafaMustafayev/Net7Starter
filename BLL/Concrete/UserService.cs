@@ -27,7 +27,7 @@ public class UserService : IUserService
 
     public async Task<IResult> AddAsync(UserToAddDto dto)
     {
-        if (await _unitOfWork.UserRepository.IsUserExistAsync(dto.Username, null))
+        if (await _unitOfWork.UserRepository.IsUserExistAsync(dto.Email, null))
             return new ErrorResult(Messages.UserIsExist.Translate());
 
         dto = dto with
@@ -59,7 +59,7 @@ public class UserService : IUserService
 
     public async Task<IResult> AddProfileAsync(int userId, int? fileId)
     {
-        var user = await _unitOfWork.UserRepository.GetAsNoTrackingAsync(u => u.UserId == userId);
+        User user = await _unitOfWork.UserRepository.GetAsNoTrackingAsync(u => u.Id == userId);
         user!.ProfileFileId = fileId;
 
         await _unitOfWork.UserRepository.UpdateUserAsync(user);
@@ -85,7 +85,7 @@ public class UserService : IUserService
 
     public async Task<IResult> UpdateAsync(int id, UserToUpdateDto dto)
     {
-        if (await _unitOfWork.UserRepository.IsUserExistAsync(dto.Username, id))
+        if (await _unitOfWork.UserRepository.IsUserExistAsync(dto.Email, id))
             return new ErrorResult(Messages.UserIsExist.Translate());
 
         dto = dto with
@@ -95,7 +95,7 @@ public class UserService : IUserService
                 : dto.RoleId
         };
 
-        var old = await _unitOfWork.UserRepository.GetAsNoTrackingAsync(u => u.UserId == id);
+        var old = await _unitOfWork.UserRepository.GetAsNoTrackingAsync(u => u.Id == id);
         if (old is null) return new ErrorResult(Messages.UserIsNotExist.Translate());
 
         var data = _mapper.Map<User>(dto);

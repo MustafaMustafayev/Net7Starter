@@ -14,7 +14,7 @@ public record OrganizationToAddDto
 
 public record OrganizationToListDto
 (
-    int OrganizationId,
+    int Id,
     string FullName,
     string ShortName,
     string Address,

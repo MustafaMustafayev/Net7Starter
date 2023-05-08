@@ -5,4 +5,5 @@ namespace DAL.Abstract;
 
 public interface IRequestLogRepository : IGenericRepository<RequestLog>
 {
+    Task AddRequestLogAsync(RequestLog entity);
 }
