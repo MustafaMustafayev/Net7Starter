@@ -6,6 +6,7 @@ using CORE.Helper;
 using CORE.Localization;
 using DTO.File;
 using DTO.Responses;
+using ENTITIES.Enums;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -20,71 +21,95 @@ namespace API.Controllers;
 [ValidateToken]
 public class FileController : Controller
 {
+    private readonly IWebHostEnvironment _environment;
     private readonly IFileService _fileService;
     private readonly IUserService _userService;
     private readonly IUtilService _utilService;
 
-    public FileController(IFileService fileService, IUtilService utilService, IUserService userService)
+    public FileController(
+        IWebHostEnvironment environment,
+        IUserService userService,
+        IFileService fileService,
+        IUtilService utilService
+    )
     {
+        _environment = environment;
+        _userService = userService;
         _fileService = fileService;
         _utilService = utilService;
-        _userService = userService;
     }
 
     [SwaggerOperation(Summary = "upload file")]
     [Produces(typeof(IDataResult<string>))]
-    [HttpPost("user/image")]
-    public async Task<IActionResult> Upload([FromForm] IFormFile file)
+    [HttpPost]
+    public async Task<IActionResult> Upload(IFormFile file, [FromQuery] FileType type)
     {
-        var extension = Path.GetExtension(file.FileName);
-        var originalName = Path.GetFileName(file.FileName);
-        var hashName = _utilService.CreateGuid();
-
         // validation
+        var userId = _utilService.GetUserIdFromToken();
         if (file.Length > Constants.AllowedLength)
             return BadRequest(new ErrorDataResult<string>(Messages.FileIsLargeThan2Mb.Translate()));
-        if (!Constants.AllowedFileExtensions.Contains(extension))
-            return BadRequest(new ErrorDataResult<string>(Messages.ThisFileTypeIsNotAllowed.Translate()));
+
+        switch (type)
+        {
+            case FileType.UserProfile when userId is null:
+                return BadRequest(new ErrorDataResult<string>(Messages.CanNotFoundUserIdInYourAccessToken.Translate()));
+        }
 
         // create file
-        var path = _utilService.GetEnvFolderPath("files");
-        await FileHelper.WriteFile(file, $"{hashName}{extension}", path);
+        var originalFileName = Path.GetFileName(file.FileName);
+        var hashFileName = Guid.NewGuid().ToString();
+        var fileExtension = Path.GetExtension(file.FileName);
+
+        var path = Path.Combine(_environment.WebRootPath, _utilService.GetFolderName(type));
+        await FileHelper.WriteFile(file, $"{hashFileName}{fileExtension}", path);
 
         // add to database
-        var fileId = await _fileService.AddAsync(new FileToAddDto(originalName, hashName, extension, file.Length, path));
+        var fileId = await _fileService.AddAsync(new FileToAddDto(originalFileName, hashFileName, fileExtension, file.Length, path, type));
 
         // join with model
-        var userId = _utilService.GetUserIdFromToken();
-        if (userId is null) return Unauthorized(new ErrorDataResult<string>(Messages.CanNotFoundUserIdInYourAccessToken.Translate()));
+        switch (type)
+        {
+            case FileType.UserProfile:
+                await _userService.AddProfileAsync(userId!.Value, fileId.Data);
+                break;
+            default:
+                return BadRequest(new ErrorDataResult<string>(Messages.InvalidModel.Translate()));
+        }
 
-        await _userService.UpdateImageAsync(userId.Value, fileId.Data);
-
-        return Ok(new SuccessDataResult<string>(hashName, Messages.Success.Translate()));
+        return Ok(new SuccessDataResult<string>(hashFileName, Messages.Success.Translate()));
     }
 
     [SwaggerOperation(Summary = "delete file")]
     [Produces(typeof(IResult))]
-    [HttpDelete("user/image")]
-    public async Task<IActionResult> Delete([FromQuery] string hashName)
+    [HttpDelete]
+    public async Task<IActionResult> Delete([FromQuery] string hashName, [FromQuery] FileType type)
     {
         // validation
+        var userId = _utilService.GetUserIdFromToken();
         if (string.IsNullOrEmpty(hashName.Trim())) return BadRequest(new ErrorResult(Messages.InvalidModel.Translate()));
 
-        // get file from database
-        var file = await _fileService.GetAsync(hashName);
+        switch (type)
+        {
+            case FileType.UserProfile when userId is null:
+                return BadRequest(new ErrorDataResult<string>(Messages.InvalidModel.Translate()));
+        }
 
         // delete file
-        var path = _utilService.GetEnvFolderPath(Path.Combine("files", $"{hashName}{file.Data!.Extension}"));
+        var path = Path.Combine(_environment.WebRootPath, _utilService.GetFolderName(type), hashName);
         FileHelper.DeleteFile(path);
 
         // remove from database
         await _fileService.SoftDeleteAsync(hashName);
 
         // join with model
-        var userId = _utilService.GetUserIdFromToken();
-        if (userId is null) return Unauthorized(new ErrorDataResult<string>(Messages.CanNotFoundUserIdInYourAccessToken.Translate()));
-
-        await _userService.UpdateImageAsync(userId.Value, null);
+        switch (type)
+        {
+            case FileType.UserProfile:
+                await _userService.AddProfileAsync(userId!.Value, null);
+                break;
+            default:
+                return BadRequest(new ErrorDataResult<string>(Messages.InvalidModel.Translate()));
+        }
 
         return Ok(new SuccessResult(Messages.Success.Translate()));
     }
@@ -93,32 +118,27 @@ public class FileController : Controller
     [SwaggerOperation(Summary = "download file")]
     [Produces(typeof(void))]
     [HttpGet("download")]
-    public async Task<IActionResult> Download([FromQuery] string hashName)
+    public async Task<IActionResult> Download([FromQuery] string hashName, [FromQuery] FileType type)
     {
-        // validation
-        if (string.IsNullOrEmpty(hashName.Trim())) return BadRequest(new ErrorResult(Messages.InvalidModel.Translate()));
-
         // get file from database
         var file = await _fileService.GetAsync(hashName);
 
         // read file as stream
-        var path = _utilService.GetEnvFolderPath(Path.Combine("files", $"{hashName}{file.Data!.Extension}"));
+        var path = Path.Combine(_environment.WebRootPath, _utilService.GetFolderName(type), $"{hashName}{file.Data!.Extension}");
+
         return PhysicalFile(path, "APPLICATION/octet-stream", Path.GetFileName(hashName));
     }
 
     [HttpGet]
     [SwaggerOperation(Summary = "get file")]
     [Produces(typeof(void))]
-    public async Task<IActionResult> Get([FromQuery] string hashName)
+    public async Task<IActionResult> Get([FromQuery] string hashName, [FromQuery] FileType type)
     {
-        // validation
-        if (string.IsNullOrEmpty(hashName.Trim())) return BadRequest(new ErrorResult(Messages.InvalidModel.Translate()));
-
         // get file from database
         var file = await _fileService.GetAsync(hashName);
 
         // read file as stream
-        var path = _utilService.GetEnvFolderPath(Path.Combine("files", $"{hashName}{file.Data!.Extension}"));
+        var path = Path.Combine(_environment.WebRootPath, _utilService.GetFolderName(type), $"{hashName}{file.Data!.Extension}");
         var fileStream = System.IO.File.OpenRead(path);
 
         if (fileStream is null) return BadRequest(new ErrorResult(Messages.FileIsNotFound.Translate()));
