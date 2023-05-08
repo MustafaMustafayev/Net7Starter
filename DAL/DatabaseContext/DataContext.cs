@@ -26,9 +26,7 @@ public class DataContext : DbContext
     public required DbSet<Organization> Organizations { get; set; }
     public required DbSet<Role> Roles { get; set; }
     public required DbSet<RequestLog> RequestLogs { get; set; }
-
     public required DbSet<ResponseLog> ResponseLogs { get; set; }
-
     public required DbSet<Permission> Permissions { get; set; }
     public required DbSet<Token> Tokens { get; set; }
 
