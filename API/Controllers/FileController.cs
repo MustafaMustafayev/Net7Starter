@@ -42,7 +42,7 @@ public class FileController : Controller
     [SwaggerOperation(Summary = "upload file")]
     [Produces(typeof(IDataResult<string>))]
     [HttpPost]
-    public async Task<IActionResult> Upload([FromForm]IFormFile file, [FromQuery] FileType type)
+    public async Task<IActionResult> Upload(IFormFile file, [FromQuery] FileType type)
     {
         // validation
         var userId = _utilService.GetUserIdFromToken();
@@ -126,7 +126,7 @@ public class FileController : Controller
         // read file as stream
         var path = Path.Combine(_environment.WebRootPath, _utilService.GetFolderName(type), $"{hashName}{file.Data!.Extension}");
 
-        return PhysicalFile(path, "APPLICATION/octet-stream", Path.GetFileName(file.Data.OriginalName));
+        return PhysicalFile(path, "APPLICATION/octet-stream", Path.GetFileName(hashName));
     }
 
     [HttpGet]
