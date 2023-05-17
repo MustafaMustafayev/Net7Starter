@@ -33,7 +33,7 @@ public class UserService : IUserService
         dto = dto with
         {
             RoleId = dto.RoleId == 0 || !dto.RoleId.HasValue
-                ? (await _unitOfWork.RoleRepository.GetAsync(m => m.Key == UserType.Viewer.ToString()))?.Id
+                ? (await _unitOfWork.RoleRepository.GetAsync(m => m.Key == UserType.Guest.ToString()))?.Id
                 : dto.RoleId
         };
         var data = _mapper.Map<User>(dto);
@@ -59,7 +59,7 @@ public class UserService : IUserService
 
     public async Task<IResult> AddProfileAsync(int userId, int? fileId)
     {
-        User user = await _unitOfWork.UserRepository.GetAsNoTrackingAsync(u => u.Id == userId);
+        var user = await _unitOfWork.UserRepository.GetAsNoTrackingAsync(u => u.Id == userId);
         user!.ProfileFileId = fileId;
 
         await _unitOfWork.UserRepository.UpdateUserAsync(user);
@@ -91,7 +91,7 @@ public class UserService : IUserService
         dto = dto with
         {
             RoleId = dto.RoleId is 0 or null
-                ? (await _unitOfWork.RoleRepository.GetAsync(m => m.Key == UserType.Viewer.ToString()))?.Id
+                ? (await _unitOfWork.RoleRepository.GetAsync(m => m.Key == UserType.Guest.ToString()))?.Id
                 : dto.RoleId
         };
 

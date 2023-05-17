@@ -2,14 +2,13 @@
 using DTO.File;
 using File = ENTITIES.Entities.File;
 
-namespace BLL.Mappers
+namespace BLL.Mappers;
+
+public class FileMapper : Profile
 {
-    public class FileMapper : Profile
+    public FileMapper()
     {
-        public FileMapper()
-        {
-            CreateMap<FileToAddDto, File>();
-            CreateMap<File, FileToListDto>();
-        }
+        CreateMap<FileToAddDto, File>();
+        CreateMap<File, FileToListDto>();
     }
 }
