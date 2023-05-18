@@ -81,6 +81,7 @@ public class AuthController : Controller
             var response = await _tokenService.CreateTokenAsync(tokenResponse.Data.User);
             return Ok(response);
         }
+
         return Unauthorized();
     }
 

@@ -20,5 +20,4 @@ public interface IRoleService
     Task<IResult> UpdateAsync(int id, RoleToUpdateDto dto);
 
     Task<IResult> SoftDeleteAsync(int id);
-
 }
