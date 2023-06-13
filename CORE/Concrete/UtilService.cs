@@ -104,7 +104,7 @@ public class UtilService : IUtilService
         var privatekey = _config.CryptographySettings.VBase64;
         var privatekeyByte = Encoding.UTF8.GetBytes(privatekey);
         var keybyte = Encoding.UTF8.GetBytes(key);
-        SymmetricAlgorithm algorithm = DES.Create();
+        SymmetricAlgorithm algorithm = Aes.Create();
         var transform = algorithm.CreateEncryptor(keybyte, privatekeyByte);
         var inputbuffer = Encoding.Unicode.GetBytes(value);
         var outputBuffer = transform.TransformFinalBlock(inputbuffer, 0, inputbuffer.Length);
@@ -117,7 +117,7 @@ public class UtilService : IUtilService
         var privatekey = _config.CryptographySettings.VBase64;
         var privatekeyByte = Encoding.UTF8.GetBytes(privatekey);
         var keybyte = Encoding.UTF8.GetBytes(key);
-        SymmetricAlgorithm algorithm = DES.Create();
+        SymmetricAlgorithm algorithm = Aes.Create();
         var transform = algorithm.CreateDecryptor(keybyte, privatekeyByte);
         var inputbuffer = Convert.FromBase64String(value);
         var outputBuffer = transform.TransformFinalBlock(inputbuffer, 0, inputbuffer.Length);
