@@ -6,11 +6,11 @@ using CORE.Abstract;
 using CORE.Concrete;
 using CORE.Config;
 using CORE.Constants;
-using CORE.ElasticSearch;
 using CORE.Logging;
-using DAL.Concrete;
-using DAL.UnitOfWorks.Abstract;
-using DAL.UnitOfWorks.Concrete;
+using DAL.ElasticSearch;
+using DAL.EntityFramework.Concrete;
+using DAL.EntityFramework.UnitOfWork;
+using DAL.MongoDb;
 using DTO.User;
 using MediatR;
 using MEDIATRS.MediatR;
@@ -204,6 +204,11 @@ public static class DependencyContainer
     public static void RegisterRedis(this IServiceCollection services, ConfigSettings config)
     {
         services.AddSingleton(new RedisConnectionProvider(config.RedisSettings.Connection));
+    }
+
+    public static void RegisterMongoDb(this IServiceCollection services, ConfigSettings config)
+    {
+        services.AddSingleton<IMongoDbService>(_ => new MongoDbService(config.MongoDbSettings.Connection, config.MongoDbSettings.DefaultDatabase));
     }
 
     public static void RegisterHttpClients(this IServiceCollection services, ConfigSettings config)

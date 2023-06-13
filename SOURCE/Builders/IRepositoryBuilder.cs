@@ -20,7 +20,7 @@ public class IRepositoryBuilder : ISourceBuilder, ITextBuilder
 using DAL.GenericRepositories.Abstract;
 using ENTITIES.Entities;
 
-namespace DAL.Abstract;
+namespace DAL.EntityFramework.Abstract;
 
 public interface I{entityName}Repository : IGenericRepository<{entityName}>
 {

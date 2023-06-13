@@ -1,5 +1,5 @@
 ﻿using CORE.Localization;
-using DAL.UnitOfWorks.Abstract;
+using DAL.EntityFramework.UnitOfWork;
 using DTO.Responses;
 using MediatR;
 using MEDIATRS.MediatR.OrganizationCQRS.Commands;

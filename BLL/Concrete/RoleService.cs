@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using BLL.Abstract;
 using CORE.Localization;
-using DAL.UnitOfWorks.Abstract;
+using DAL.EntityFramework.UnitOfWork;
 using DTO.Permission;
 using DTO.Responses;
 using DTO.Role;

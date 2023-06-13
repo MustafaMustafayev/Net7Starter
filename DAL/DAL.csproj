@@ -43,7 +43,6 @@
         <Compile Remove="Concrete\FirstRepository.cs"/>
     </ItemGroup>
     <ItemGroup>
-        <Folder Include="UnitOfWorks\Abstract\"/>
-        <Folder Include="UnitOfWorks\Concrete\"/>
+        <Folder Include="EntityFramework\"/>
     </ItemGroup>
 </Project>

@@ -8,7 +8,7 @@ using API.Services;
 using BLL.Mappers;
 using CORE.Config;
 using CORE.Constants;
-using DAL.DatabaseContext;
+using DAL.EntityFramework.DatabaseContext;
 using DTO.Auth.Validators;
 using FluentValidation;
 using FluentValidation.AspNetCore;
@@ -51,6 +51,7 @@ if (config.RedisSettings.IsEnabled)
 }
 
 if (config.ElasticSearchSettings.IsEnabled) builder.Services.RegisterElasticSearch(config);
+if (config.MongoDbSettings.IsEnabled) builder.Services.RegisterMongoDb(config);
 
 builder.Services.RegisterRepositories();
 builder.Services.RegisterSignalRHubs();

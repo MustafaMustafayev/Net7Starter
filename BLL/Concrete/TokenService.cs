@@ -4,7 +4,7 @@ using CORE.Abstract;
 using CORE.Config;
 using CORE.Helper;
 using CORE.Localization;
-using DAL.UnitOfWorks.Abstract;
+using DAL.EntityFramework.UnitOfWork;
 using DTO.Auth;
 using DTO.Responses;
 using DTO.Token;
