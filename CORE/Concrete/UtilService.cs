@@ -26,7 +26,7 @@ public class UtilService : IUtilService
         _environment = environment;
     }
 
-    private string? GetTokenString()
+    public string? GetTokenString()
     {
         return _context.HttpContext?.Request.Headers[_config.AuthSettings.HeaderName].ToString();
     }
