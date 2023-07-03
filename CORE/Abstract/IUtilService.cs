@@ -5,6 +5,7 @@ namespace CORE.Abstract;
 
 public interface IUtilService
 {
+    public string? GetTokenString();
     public bool IsValidToken();
     public PaginationDto GetPagination();
     public int? GetUserIdFromToken();

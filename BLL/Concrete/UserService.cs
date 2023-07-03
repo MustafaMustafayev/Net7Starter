@@ -52,6 +52,10 @@ public class UserService : IUserService
         var data = await _unitOfWork.UserRepository.GetAsync(m => m.Id == id);
 
         _unitOfWork.UserRepository.SoftDelete(data!);
+
+        var tokens = await _unitOfWork.TokenRepository.GetListAsync(m => m.UserId == id);
+        tokens.ForEach(m => m.IsDeleted = true);
+
         await _unitOfWork.CommitAsync();
 
         return new SuccessResult(Messages.Success.Translate());

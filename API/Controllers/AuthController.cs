@@ -116,9 +116,7 @@ public class AuthController : Controller
     [HttpPost("logout")]
     public async Task<IActionResult> Logout()
     {
-        var accessToken =
-            _utilService.GetTokenStringFromHeader(
-                HttpContext.Request.Headers[_configSettings.AuthSettings.HeaderName]!);
+        var accessToken = _utilService.GetTokenStringFromHeader(_utilService.GetTokenString()!);
         var response = await _authService.LogoutAsync(accessToken);
 
         return Ok(response);
