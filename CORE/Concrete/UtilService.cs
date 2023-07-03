@@ -26,28 +26,34 @@ public class UtilService : IUtilService
         _environment = environment;
     }
 
-    public int? GetUserIdFromToken()
+    private string? GetTokenString()
     {
-        var tokenString = _context.HttpContext?.Request.Headers[_config.AuthSettings.HeaderName].ToString();
+        return _context.HttpContext?.Request.Headers[_config.AuthSettings.HeaderName].ToString();
+    }
+
+    private JwtSecurityToken? GetJwtSecurityToken()
+    {
+        var tokenString = GetTokenString();
 
         if (string.IsNullOrEmpty(tokenString)) return null;
         if (!tokenString.Contains($"{_config.AuthSettings.TokenPrefix} ")) return null;
 
         var token = new JwtSecurityToken(tokenString[7..]);
+
+        return token;
+    }
+
+    public int? GetUserIdFromToken()
+    {
+        var token = GetJwtSecurityToken(); ;
         var userId = Decrypt(token.Claims.First(c => c.Type == _config.AuthSettings.TokenUserIdKey).Value);
         return Convert.ToInt32(userId);
     }
 
     public int? GetCompanyIdFromToken()
     {
-        var tokenString = _context.HttpContext?.Request.Headers[_config.AuthSettings.HeaderName].ToString();
-
-        if (string.IsNullOrEmpty(tokenString)) return null;
-        if (!tokenString.Contains($"{_config.AuthSettings.TokenPrefix} ")) return null;
-
-        var token = new JwtSecurityToken(tokenString[7..]);
-        var companyIdClaim =
-            token.Claims.First(c => c.Type == _config.AuthSettings.TokenCompanyIdKey);
+        var token = GetJwtSecurityToken(); ;
+        var companyIdClaim = token.Claims.First(c => c.Type == _config.AuthSettings.TokenCompanyIdKey);
 
         if (companyIdClaim is null || string.IsNullOrEmpty(companyIdClaim.Value)) return null;
 
@@ -56,7 +62,7 @@ public class UtilService : IUtilService
 
     public bool IsValidToken()
     {
-        var tokenString = _context.HttpContext?.Request.Headers[_config.AuthSettings.HeaderName].ToString();
+        var tokenString = GetTokenString();
 
         if (string.IsNullOrEmpty(tokenString) || tokenString.Length < 7) return false;
 
@@ -172,10 +178,8 @@ public class UtilService : IUtilService
 
     public string? GetRoleFromToken(string? tokenString)
     {
-        if (string.IsNullOrEmpty(tokenString)) return null;
-        if (!tokenString.Contains($"{_config.AuthSettings.TokenPrefix} ")) return null;
+        var token = GetJwtSecurityToken();
 
-        var token = new JwtSecurityToken(tokenString[7..]);
         var roleIdClaim = token.Claims.First(c => c.Type == _config.AuthSettings.Role);
 
         if (roleIdClaim is null || string.IsNullOrEmpty(roleIdClaim.Value)) return null;
