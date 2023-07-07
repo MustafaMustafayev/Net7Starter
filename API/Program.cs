@@ -52,6 +52,8 @@ if (config.RedisSettings.IsEnabled)
 
 if (config.ElasticSearchSettings.IsEnabled) builder.Services.RegisterElasticSearch(config);
 
+builder.Services.Configure<IISServerOptions>(options => options.MaxRequestBodySize = 60 * 1024 * 1024); //60mb
+
 builder.Services.RegisterRepositories();
 builder.Services.RegisterSignalRHubs();
 builder.Services.RegisterUnitOfWork();
