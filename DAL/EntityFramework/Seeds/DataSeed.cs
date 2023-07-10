@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace DAL.EntityFramework.CustomMigrations;
+namespace DAL.EntityFramework.Seeds;
 
 public static class DataSeed
 {

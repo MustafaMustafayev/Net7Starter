@@ -8,7 +8,7 @@ using API.Services;
 using BLL.Mappers;
 using CORE.Config;
 using CORE.Constants;
-using DAL.EntityFramework.DatabaseContext;
+using DAL.EntityFramework.Context;
 using DTO.Auth.Validators;
 using FluentValidation;
 using FluentValidation.AspNetCore;
@@ -71,7 +71,6 @@ builder.Services.AddGraphQLServer()
     .AddSorting()
     .AddFiltering();
 
-
 builder.Services.AddHealthChecks();
 
 builder.Services.RegisterAuthentication(config);
@@ -99,7 +98,7 @@ var app = builder.Build();
 if (config.SwaggerSettings.IsEnabled) app.UseSwagger();
 
 if (config.SwaggerSettings.IsEnabled)
-    app.UseSwaggerUI(c => c.InjectStylesheet($"/swagger_ui/{config.SwaggerSettings.Theme}.css"));
+    app.UseSwaggerUI(c => c.InjectStylesheet(config.SwaggerSettings.Theme));
 
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 

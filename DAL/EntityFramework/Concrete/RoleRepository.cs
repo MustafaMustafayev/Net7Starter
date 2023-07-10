@@ -1,5 +1,5 @@
 ﻿using DAL.EntityFramework.Abstract;
-using DAL.EntityFramework.DatabaseContext;
+using DAL.EntityFramework.Context;
 using DAL.EntityFramework.GenericRepository;
 using ENTITIES.Entities;
 using Microsoft.EntityFrameworkCore;

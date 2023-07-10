@@ -2,7 +2,7 @@
 using ENTITIES.Entities.Generic;
 using Microsoft.EntityFrameworkCore;
 
-namespace DAL.EntityFramework.DatabaseContext;
+namespace DAL.EntityFramework.Context;
 
 public static class ContextExtensions
 {

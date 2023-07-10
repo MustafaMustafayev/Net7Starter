@@ -7,10 +7,10 @@ public class MongoDbService : IMongoDbService
     private readonly IMongoClient _client;
     private IMongoDatabase _database;
 
-    public MongoDbService(string connection, string defaultDatabase)
+    public MongoDbService(string connection, string database)
     {
         _client = new MongoClient(connection);
-        _database = _client.GetDatabase(defaultDatabase);
+        _database = _client.GetDatabase(database);
     }
 
     public void ChangeDatabase(string database)

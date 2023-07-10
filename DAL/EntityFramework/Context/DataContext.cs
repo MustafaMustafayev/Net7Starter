@@ -1,12 +1,12 @@
 ﻿using CORE.Abstract;
-using DAL.EntityFramework.CustomMigrations;
+using DAL.EntityFramework.Seeds;
 using ENTITIES.Entities;
 using ENTITIES.Entities.Generic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using File = ENTITIES.Entities.File;
 
-namespace DAL.EntityFramework.DatabaseContext;
+namespace DAL.EntityFramework.Context;
 
 public class DataContext : DbContext
 {

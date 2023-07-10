@@ -9,22 +9,22 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <None Remove="StyleCop.Analyzers"/>
+        <None Remove="StyleCop.Analyzers" />
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="JetBrains.ReSharper.CommandLineTools" Version="2023.1.0">
+        <PackageReference Include="JetBrains.ReSharper.CommandLineTools" Version="2023.1.3">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Redis.OM" Version="0.5.0"/>
+        <PackageReference Include="Redis.OM" Version="0.5.2" />
     </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="Enums"/>
+        <Folder Include="Enums" />
     </ItemGroup>
 
     <ItemGroup>
-        <Compile Remove="Entities\First.cs"/>
+        <Compile Remove="Entities\First.cs" />
     </ItemGroup>
 </Project>

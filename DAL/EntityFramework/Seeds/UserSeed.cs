@@ -2,7 +2,7 @@
 using ENTITIES.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace DAL.EntityFramework.CustomMigrations;
+namespace DAL.EntityFramework.Seeds;
 
 public class UserSeed
 {

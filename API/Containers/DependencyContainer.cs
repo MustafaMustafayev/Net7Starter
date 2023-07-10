@@ -188,7 +188,7 @@ public static class DependencyContainer
 
     public static void RegisterAntiForgeryToken(this IServiceCollection services)
     {
-        services.AddAntiforgery(options => { options.HeaderName = "X-XSRF-TOKEN"; });
+        services.AddAntiforgery(options =>  options.HeaderName = "X-XSRF-TOKEN");
     }
 
     public static void RegisterUnitOfWork(this IServiceCollection services)
@@ -198,7 +198,7 @@ public static class DependencyContainer
 
     public static void RegisterOutputCache(this IServiceCollection services)
     {
-        services.AddOutputCache(options => { options.AddBasePolicy(builder => { builder.Expire(TimeSpan.FromMinutes(2)); }); });
+        services.AddOutputCache(options =>  options.AddBasePolicy(builder =>  builder.Expire(TimeSpan.FromMinutes(2))) );
     }
 
     public static void RegisterRedis(this IServiceCollection services, ConfigSettings config)
@@ -208,7 +208,13 @@ public static class DependencyContainer
 
     public static void RegisterMongoDb(this IServiceCollection services, ConfigSettings config)
     {
-        services.AddSingleton<IMongoDbService>(_ => new MongoDbService(config.MongoDbSettings.Connection, config.MongoDbSettings.DefaultDatabase));
+        services.AddSingleton<IMongoDbService>(_ => new MongoDbService(config.MongoDbSettings.Connection, config.MongoDbSettings.Database));
+    }
+
+    public static void RegisterElasticSearch(this IServiceCollection services, ConfigSettings configs)
+    {
+        services.AddScoped<IElasticSearchService<UserToListDto>>(_ =>
+            new ElasticSearchService<UserToListDto>(configs.ElasticSearchSettings.Connection, configs.ElasticSearchSettings.DefaultIndex));
     }
 
     public static void RegisterHttpClients(this IServiceCollection services, ConfigSettings config)
@@ -233,12 +239,6 @@ public static class DependencyContainer
                 .AsImplementedInterfaces()
                 .WithScopedLifetime()
         );
-    }
-
-    public static void RegisterElasticSearch(this IServiceCollection services, ConfigSettings configs)
-    {
-        services.AddScoped<IElasticSearchService<UserToListDto>>(_ =>
-            new ElasticSearchService<UserToListDto>(configs.ElasticSearchSettings.Connection, configs.ElasticSearchSettings.DefaultIndex));
     }
 
     public static void RegisterMiniProfiler(this IServiceCollection services)
