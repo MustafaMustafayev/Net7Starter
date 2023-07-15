@@ -34,7 +34,7 @@ public class UtilService : IUtilService
     public int? GetUserIdFromToken()
     {
         var token = GetJwtSecurityToken();
-        ;
+        if(token == null) return null;
         var userId = Decrypt(token.Claims.First(c => c.Type == _config.AuthSettings.TokenUserIdKey).Value);
         return Convert.ToInt32(userId);
     }
@@ -42,7 +42,8 @@ public class UtilService : IUtilService
     public int? GetCompanyIdFromToken()
     {
         var token = GetJwtSecurityToken();
-        ;
+        if (token == null) return null;
+
         var companyIdClaim = token.Claims.First(c => c.Type == _config.AuthSettings.TokenCompanyIdKey);
 
         if (companyIdClaim is null || string.IsNullOrEmpty(companyIdClaim.Value)) return null;
@@ -169,6 +170,7 @@ public class UtilService : IUtilService
     public string? GetRoleFromToken(string? tokenString)
     {
         var token = GetJwtSecurityToken();
+        if (token == null) return null;
 
         var roleIdClaim = token.Claims.First(c => c.Type == _config.AuthSettings.Role);
 
