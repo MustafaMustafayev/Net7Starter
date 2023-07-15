@@ -51,7 +51,7 @@ if (config.RedisSettings.IsEnabled)
 }
 
 if (config.ElasticSearchSettings.IsEnabled) builder.Services.RegisterElasticSearch(config);
-if (config.MongoDbSettings.IsEnabled) builder.Services.RegisterMongoDb(config);
+if (config.MongoDbSettings.IsEnabled) builder.Services.RegisterMongoDb();
 
 builder.Services.Configure<IISServerOptions>(options => options.MaxRequestBodySize = 60 * 1024 * 1024); //60mb
 
@@ -76,8 +76,7 @@ builder.Services.AddHealthChecks();
 builder.Services.RegisterAuthentication(config);
 
 builder.Services.AddCors(o =>
-    o.AddPolicy(Constants.EnableAllCorsName,
-        b => b.AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin()));
+    o.AddPolicy(Constants.EnableAllCorsName, b => b.AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin()));
 
 builder.Services.AddScoped<LogActionFilter>();
 
@@ -108,7 +107,7 @@ app.UseMiddleware<LocalizationMiddleware>();
 app.UseMiddleware<ExceptionMiddleware>();
 
 // anti forgery token implementation
-//app.UseMiddleware<AntiForgeryTokenValidator>();
+// app.UseMiddleware<AntiForgeryTokenValidator>();
 
 app.UseOutputCache();
 app.UseHttpsRedirection();

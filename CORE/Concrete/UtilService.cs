@@ -31,28 +31,18 @@ public class UtilService : IUtilService
         return _context.HttpContext?.Request.Headers[_config.AuthSettings.HeaderName].ToString();
     }
 
-    private JwtSecurityToken? GetJwtSecurityToken()
-    {
-        var tokenString = GetTokenString();
-
-        if (string.IsNullOrEmpty(tokenString)) return null;
-        if (!tokenString.Contains($"{_config.AuthSettings.TokenPrefix} ")) return null;
-
-        var token = new JwtSecurityToken(tokenString[7..]);
-
-        return token;
-    }
-
     public int? GetUserIdFromToken()
     {
-        var token = GetJwtSecurityToken(); ;
+        var token = GetJwtSecurityToken();
+        ;
         var userId = Decrypt(token.Claims.First(c => c.Type == _config.AuthSettings.TokenUserIdKey).Value);
         return Convert.ToInt32(userId);
     }
 
     public int? GetCompanyIdFromToken()
     {
-        var token = GetJwtSecurityToken(); ;
+        var token = GetJwtSecurityToken();
+        ;
         var companyIdClaim = token.Claims.First(c => c.Type == _config.AuthSettings.TokenCompanyIdKey);
 
         if (companyIdClaim is null || string.IsNullOrEmpty(companyIdClaim.Value)) return null;
@@ -194,6 +184,18 @@ public class UtilService : IUtilService
             FileType.UserProfile => "files\\images\\user_profile",
             _ => "files/error"
         };
+    }
+
+    private JwtSecurityToken? GetJwtSecurityToken()
+    {
+        var tokenString = GetTokenString();
+
+        if (string.IsNullOrEmpty(tokenString)) return null;
+        if (!tokenString.Contains($"{_config.AuthSettings.TokenPrefix} ")) return null;
+
+        var token = new JwtSecurityToken(tokenString[7..]);
+
+        return token;
     }
 
     public string GetEnvFolderPath(string folderName)

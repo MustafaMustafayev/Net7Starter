@@ -1,4 +1,6 @@
-﻿using MongoDB.Driver;
+﻿using System.Linq.Expressions;
+using CORE.Config;
+using MongoDB.Driver;
 
 namespace DAL.MongoDb;
 
@@ -7,10 +9,10 @@ public class MongoDbService : IMongoDbService
     private readonly IMongoClient _client;
     private IMongoDatabase _database;
 
-    public MongoDbService(string connection, string database)
+    public MongoDbService(ConfigSettings configSettings)
     {
-        _client = new MongoClient(connection);
-        _database = _client.GetDatabase(database);
+        _client = new MongoClient(configSettings.MongoDbSettings.Connection);
+        _database = _client.GetDatabase(configSettings.MongoDbSettings.Database);
     }
 
     public void ChangeDatabase(string database)
@@ -36,6 +38,13 @@ public class MongoDbService : IMongoDbService
         var filter = Builders<T>.Filter.Eq("_id", id);
         var document = await collection.Find(filter).FirstOrDefaultAsync();
         return document;
+    }
+
+    public async Task<IEnumerable<T>> GetByFilter<T>(string collectionName, Expression<Func<T, bool>> filterExpression)
+    {
+        var collection = GetCollection<T>(collectionName);
+        var documents = await collection.Find(filterExpression).ToListAsync();
+        return documents;
     }
 
     public async Task Insert<T>(string collectionName, T document)
