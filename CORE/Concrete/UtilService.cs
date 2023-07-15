@@ -34,7 +34,7 @@ public class UtilService : IUtilService
     public int? GetUserIdFromToken()
     {
         var token = GetJwtSecurityToken();
-        if(token == null) return null;
+        if (token == null) return null;
         var userId = Decrypt(token.Claims.First(c => c.Type == _config.AuthSettings.TokenUserIdKey).Value);
         return Convert.ToInt32(userId);
     }
@@ -42,7 +42,7 @@ public class UtilService : IUtilService
     public int? GetCompanyIdFromToken()
     {
         var token = GetJwtSecurityToken();
-        if (token == null) return null;
+        if (token is null) return null;
 
         var companyIdClaim = token.Claims.First(c => c.Type == _config.AuthSettings.TokenCompanyIdKey);
 
@@ -188,20 +188,16 @@ public class UtilService : IUtilService
         };
     }
 
+    public string GetEnvFolderPath(string folderName)
+    {
+        return Path.Combine(_environment.WebRootPath, folderName);
+    }
+
     private JwtSecurityToken? GetJwtSecurityToken()
     {
         var tokenString = GetTokenString();
 
         if (string.IsNullOrEmpty(tokenString)) return null;
-        if (!tokenString.Contains($"{_config.AuthSettings.TokenPrefix} ")) return null;
-
-        var token = new JwtSecurityToken(tokenString[7..]);
-
-        return token;
-    }
-
-    public string GetEnvFolderPath(string folderName)
-    {
-        return Path.Combine(_environment.WebRootPath, folderName);
+        return !tokenString.Contains($"{_config.AuthSettings.TokenPrefix} ") ? null : new JwtSecurityToken(tokenString[7..]);
     }
 }

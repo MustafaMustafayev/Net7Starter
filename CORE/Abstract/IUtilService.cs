@@ -18,4 +18,5 @@ public interface IUtilService
     public Task SendMail(string email, string message);
     public string CreateGuid();
     public string GetFolderName(FileType type);
+    string GetEnvFolderPath(string folderName);
 }
