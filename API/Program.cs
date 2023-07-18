@@ -8,7 +8,7 @@ using API.Services;
 using BLL.Mappers;
 using CORE.Config;
 using CORE.Constants;
-using DAL.DatabaseContext;
+using DAL.EntityFramework.Context;
 using DTO.Auth.Validators;
 using FluentValidation;
 using FluentValidation.AspNetCore;
@@ -51,6 +51,7 @@ if (config.RedisSettings.IsEnabled)
 }
 
 if (config.ElasticSearchSettings.IsEnabled) builder.Services.RegisterElasticSearch(config);
+if (config.MongoDbSettings.IsEnabled) builder.Services.RegisterMongoDb();
 
 builder.Services.Configure<IISServerOptions>(options => options.MaxRequestBodySize = 60 * 1024 * 1024); //60mb
 
@@ -70,14 +71,12 @@ builder.Services.AddGraphQLServer()
     .AddSorting()
     .AddFiltering();
 
-
 builder.Services.AddHealthChecks();
 
 builder.Services.RegisterAuthentication(config);
 
 builder.Services.AddCors(o =>
-    o.AddPolicy(Constants.EnableAllCorsName,
-        b => b.AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin()));
+    o.AddPolicy(Constants.EnableAllCorsName, b => b.AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin()));
 
 builder.Services.AddScoped<LogActionFilter>();
 
@@ -98,7 +97,7 @@ var app = builder.Build();
 if (config.SwaggerSettings.IsEnabled) app.UseSwagger();
 
 if (config.SwaggerSettings.IsEnabled)
-    app.UseSwaggerUI(c => c.InjectStylesheet($"/swagger_ui/{config.SwaggerSettings.Theme}.css"));
+    app.UseSwaggerUI(c => c.InjectStylesheet(config.SwaggerSettings.Theme));
 
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
@@ -108,7 +107,7 @@ app.UseMiddleware<LocalizationMiddleware>();
 app.UseMiddleware<ExceptionMiddleware>();
 
 // anti forgery token implementation
-//app.UseMiddleware<AntiForgeryTokenValidator>();
+// app.UseMiddleware<AntiForgeryTokenValidator>();
 
 app.UseOutputCache();
 app.UseHttpsRedirection();

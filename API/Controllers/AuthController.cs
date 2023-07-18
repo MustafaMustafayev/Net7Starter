@@ -5,6 +5,7 @@ using CORE.Abstract;
 using CORE.Config;
 using CORE.Helper;
 using CORE.Localization;
+using DAL.MongoDb;
 using DTO.Auth;
 using DTO.Responses;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -22,17 +23,22 @@ public class AuthController : Controller
 {
     private readonly IAuthService _authService;
     private readonly ConfigSettings _configSettings;
+    private readonly IMongoDbService _mongoDbService;
     private readonly ITokenService _tokenService;
     private readonly IUtilService _utilService;
 
-    public AuthController(IAuthService authService, ConfigSettings configSettings,
+    public AuthController(
+        IAuthService authService,
+        ConfigSettings configSettings,
         IUtilService utilService,
-        ITokenService tokenService)
+        ITokenService tokenService,
+        IMongoDbService mongoDbService)
     {
         _authService = authService;
         _configSettings = configSettings;
         _utilService = utilService;
         _tokenService = tokenService;
+        _mongoDbService = mongoDbService;
     }
 
     [SwaggerOperation(Summary = "login")]

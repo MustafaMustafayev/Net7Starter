@@ -34,7 +34,7 @@ public class IUnitOfWorkBuilder : ISourceBuilder, ITextBuilder
         var text = $@"
 using DAL.Abstract;
 
-namespace DAL.UnitOfWorks.Abstract;
+namespace DAL.EntityFramework.UnitOfWorks.Abstract;
 
 public interface IUnitOfWork : IAsyncDisposable, IDisposable
 {{

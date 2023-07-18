@@ -21,7 +21,7 @@ using DAL.DatabaseContext;
 using DAL.GenericRepositories.Concrete;
 using ENTITIES.Entities;
 
-namespace DAL.Concrete;
+namespace DAL.EntityFramework.Concrete;
 
 public class {entityName}Repository : GenericRepository<{entityName}>, I{entityName}Repository
 {

@@ -17,15 +17,12 @@ namespace API.Controllers;
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class UserController : Controller
 {
-    private readonly IWebHostEnvironment _environment;
     private readonly IUserService _userService;
     private readonly IUtilService _utilService;
 
-    public UserController(IUserService userService, IWebHostEnvironment environment,
-        IUtilService utilService)
+    public UserController(IUserService userService, IUtilService utilService)
     {
         _userService = userService;
-        _environment = environment;
         _utilService = utilService;
     }
 

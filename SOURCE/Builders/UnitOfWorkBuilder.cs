@@ -57,7 +57,7 @@ using DAL.Abstract;
 using DAL.DatabaseContext;
 using DAL.UnitOfWorks.Abstract;
 
-namespace DAL.UnitOfWorks.Concrete;
+namespace DAL.EntityFramework.UnitOfWorks.Concrete;
 
 public class UnitOfWork : IUnitOfWork
 {{
