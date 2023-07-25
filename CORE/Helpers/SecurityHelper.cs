@@ -9,7 +9,7 @@ using DTO.User;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.IdentityModel.Tokens;
 
-namespace CORE.Helper;
+namespace CORE.Helpers;
 
 public class SecurityHelper
 {

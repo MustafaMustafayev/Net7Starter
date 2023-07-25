@@ -3,7 +3,7 @@ using DTO.Responses;
 using Microsoft.AspNetCore.Http;
 using IResult = DTO.Responses.IResult;
 
-namespace CORE.Helper;
+namespace CORE.Helpers;
 
 public static class FileHelper
 {

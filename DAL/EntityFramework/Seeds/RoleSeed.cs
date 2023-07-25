@@ -1,4 +1,4 @@
-﻿using CORE.Helper;
+﻿using CORE.Helpers;
 using ENTITIES.Entities;
 using ENTITIES.Enums;
 using Microsoft.EntityFrameworkCore;

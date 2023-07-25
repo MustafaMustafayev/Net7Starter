@@ -3,7 +3,7 @@ using API.Filters;
 using BLL.Abstract;
 using CORE.Abstract;
 using CORE.Config;
-using CORE.Helper;
+using CORE.Helpers;
 using CORE.Localization;
 using DAL.MongoDb;
 using DTO.Auth;
