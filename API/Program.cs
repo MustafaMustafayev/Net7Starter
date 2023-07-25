@@ -23,7 +23,7 @@ builder.Services.RegisterNLogger();
 
 var config = new ConfigSettings();
 
-builder.Configuration.GetSection("Config").Bind(config);
+builder.Configuration.GetSection(nameof(ConfigSettings)).Bind(config);
 
 builder.Services.AddSingleton(config);
 
