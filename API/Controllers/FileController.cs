@@ -21,19 +21,16 @@ namespace API.Controllers;
 [ValidateToken]
 public class FileController : Controller
 {
-    private readonly IWebHostEnvironment _environment;
     private readonly IFileService _fileService;
     private readonly IUserService _userService;
     private readonly IUtilService _utilService;
 
     public FileController(
-        IWebHostEnvironment environment,
         IUserService userService,
         IFileService fileService,
         IUtilService utilService
     )
     {
-        _environment = environment;
         _userService = userService;
         _fileService = fileService;
         _utilService = utilService;
@@ -60,7 +57,7 @@ public class FileController : Controller
         var hashFileName = Guid.NewGuid().ToString();
         var fileExtension = Path.GetExtension(file.FileName);
 
-        var path = Path.Combine(_environment.WebRootPath, _utilService.GetFolderName(type));
+        var path = _utilService.GetEnvFolderPath(_utilService.GetFolderName(type));
         await FileHelper.WriteFile(file, $"{hashFileName}{fileExtension}", path);
 
         // add to database
@@ -95,7 +92,7 @@ public class FileController : Controller
         }
 
         // delete file
-        var path = Path.Combine(_environment.WebRootPath, _utilService.GetFolderName(type), hashName);
+        var path = Path.Combine(_utilService.GetEnvFolderPath(_utilService.GetFolderName(type)), hashName);
         FileHelper.DeleteFile(path);
 
         // remove from database
@@ -124,7 +121,7 @@ public class FileController : Controller
         var file = await _fileService.GetAsync(hashName);
 
         // read file as stream
-        var path = Path.Combine(_environment.WebRootPath, _utilService.GetFolderName(type), $"{hashName}{file.Data!.Extension}");
+        var path = Path.Combine(_utilService.GetEnvFolderPath(_utilService.GetFolderName(type)), $"{hashName}{file.Data!.Extension}");
 
         return PhysicalFile(path, "APPLICATION/octet-stream", Path.GetFileName(hashName));
     }
@@ -138,7 +135,7 @@ public class FileController : Controller
         var file = await _fileService.GetAsync(hashName);
 
         // read file as stream
-        var path = Path.Combine(_environment.WebRootPath, _utilService.GetFolderName(type), $"{hashName}{file.Data!.Extension}");
+        var path = Path.Combine(_utilService.GetEnvFolderPath(_utilService.GetFolderName(type)), $"{hashName}{file.Data!.Extension}");
         var fileStream = System.IO.File.OpenRead(path);
 
         if (fileStream is null) return BadRequest(new ErrorResult(Messages.FileIsNotFound.Translate()));

@@ -14,19 +14,19 @@ namespace LoadTesting;
 
 public abstract class RootTest
 {
-    protected const string BaseUrl = "https://localhost:7086/";
-    protected readonly HttpClient HttpClient;
-    protected string? AccessToken;
-    protected bool IsAuthenticate;
-    protected string? RefreshToken;
+    private const string BaseUrl = "https://localhost:7086/";
+    private readonly HttpClient _httpClient;
+    private string? _accessToken;
+    private bool _isAuthenticate;
+    private string? _refreshToken;
 
-    public RootTest()
+    protected RootTest()
     {
-        HttpClient = new HttpClient();
-        HttpClient.BaseAddress = new Uri(BaseUrl);
+        _httpClient = new HttpClient();
+        _httpClient.BaseAddress = new Uri(BaseUrl);
 
-        HttpClient.DefaultRequestHeaders.Accept.Clear();
-        HttpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+        _httpClient.DefaultRequestHeaders.Accept.Clear();
+        _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
         HttpClient.DefaultProxy = new WebProxy
         {
@@ -36,10 +36,10 @@ public abstract class RootTest
         Login().Wait();
     }
 
-    public async Task Login()
+    private async Task Login()
     {
         var login = new LoginDto("test@test.tst", "testtest");
-        using var httpResponse = await HttpClient.PostAsJsonAsync(new Uri(BaseUrl + "api/Auth/login"), login);
+        using var httpResponse = await _httpClient.PostAsJsonAsync(new Uri(BaseUrl + "api/Auth/login"), login);
 
         var result = await httpResponse.Content.ReadAsStringAsync();
 
@@ -53,21 +53,21 @@ public abstract class RootTest
 
         if (token?.Data?.AccessToken is null || !token.Success) throw new UnauthorizedAccessException();
 
-        IsAuthenticate = true;
-        AccessToken = token.Data.AccessToken;
-        RefreshToken = token.Data.RefreshToken;
+        _isAuthenticate = true;
+        _accessToken = token.Data.AccessToken;
+        _refreshToken = token.Data.RefreshToken;
     }
 
-    public HttpRequestMessage CreateRequest(string type, string url, string? jsonBody)
+    private HttpRequestMessage CreateRequest(string type, string url, string? jsonBody)
     {
         var request = Http.CreateRequest(type, BaseUrl + url)
             .WithHeader("Content-Type", "application/json")
             .WithHeader("Accept", "application/json");
 
-        if (IsAuthenticate)
+        if (_isAuthenticate)
         {
-            request.WithHeader("Authorization", "Bearer " + AccessToken);
-            request.WithHeader("RefreshToken", RefreshToken);
+            request.WithHeader("Authorization", "Bearer " + _accessToken);
+            request.WithHeader("RefreshToken", _refreshToken);
         }
 
         if (jsonBody is not null) request.WithBody(new StringContent(jsonBody, Encoding.UTF8, "application/json"));
@@ -86,7 +86,7 @@ public abstract class RootTest
     /// <param name="payload">Payload for API</param>
     /// <param name="validator">Method for validation data</param>
     /// <returns></returns>
-    public async Task<Response<object>> CreateHttpStep<TResponse>(
+    protected async Task<Response<object>> CreateHttpStep<TResponse>(
         string stepName,
         IScenarioContext context,
         HttpMethod httpMethod,
@@ -101,7 +101,7 @@ public abstract class RootTest
             try
             {
                 var request = CreateRequest(httpMethod.ToString(), url, payload);
-                var response = await Http.Send(HttpClient, request);
+                var response = await Http.Send(_httpClient, request);
 
                 if (response.IsError) return Response.Fail(message: response.Message, statusCode: response.StatusCode);
 

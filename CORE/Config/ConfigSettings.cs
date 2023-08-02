@@ -8,6 +8,7 @@ public record ConfigSettings
     public SwaggerSettings SwaggerSettings { get; set; } = default!;
     public RedisSettings RedisSettings { get; set; } = default!;
     public ElasticSearchSettings ElasticSearchSettings { get; set; } = default!;
+    public MongoDbSettings MongoDbSettings { get; set; } = default!;
     public SentrySettings SentrySettings { get; set; } = default!;
     public HttpClientSettings FirstHttpClientSettings { get; set; } = default!;
     public CryptographySettings CryptographySettings { get; set; } = default!;

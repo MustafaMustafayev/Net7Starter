@@ -6,7 +6,7 @@ namespace LoadTesting;
 
 public class RoleTest : RootTest
 {
-    public async Task RunList()
+    public Task RunList()
     {
         var scenario = Scenario.Create("http_role_list_test", async context =>
             {
@@ -27,9 +27,10 @@ public class RoleTest : RootTest
         var result = NBomberRunner
             .RegisterScenarios(scenario)
             .Run();
+        return Task.CompletedTask;
     }
 
-    public async Task RunById()
+    public Task RunById()
     {
         var scenario = Scenario.Create("http_role_by_id_test", async context =>
             {
@@ -49,5 +50,6 @@ public class RoleTest : RootTest
         var result = NBomberRunner
             .RegisterScenarios(scenario)
             .Run();
+        return Task.CompletedTask;
     }
 }

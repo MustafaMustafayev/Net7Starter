@@ -22,7 +22,8 @@
 > unit test implemented,
 > load test implemented,
 > Mediatr seperated as a independent layer,
-> Elasticsearch implemented.
+> Elasticsearch implemented,
+> MongoDb implemented.
 
 ## Structure
 

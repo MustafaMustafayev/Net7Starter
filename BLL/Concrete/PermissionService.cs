@@ -2,8 +2,8 @@
 using BLL.Abstract;
 using CORE.Abstract;
 using CORE.Localization;
-using DAL.UnitOfWorks.Abstract;
-using DAL.Utility;
+using DAL.EntityFramework.UnitOfWork;
+using DAL.EntityFramework.Utility;
 using DTO.Permission;
 using DTO.Responses;
 using ENTITIES.Entities;
