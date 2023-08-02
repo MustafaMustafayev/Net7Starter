@@ -15,7 +15,7 @@ public interface IUtilService
     public string GetTokenStringFromHeader(string jwtToken);
     public string Encrypt(string value);
     public string Decrypt(string value);
-    public Task SendMail(string email, string message);
+    public Task SendMailAsync(string email, string message);
     public string CreateGuid();
     public string GetFolderName(FileType type);
 }
