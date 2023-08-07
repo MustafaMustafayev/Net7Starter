@@ -121,7 +121,7 @@ public class UtilService : IUtilService
         return Encoding.Unicode.GetString(outputBuffer);
     }
 
-    public async Task SendMail(string email, string message)
+    public async Task SendMailAsync(string email, string message)
     {
         if (!string.IsNullOrEmpty(email) && email.Contains('@'))
         {
