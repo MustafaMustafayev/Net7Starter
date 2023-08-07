@@ -77,7 +77,9 @@ public class AuthController : Controller
     [HttpGet("refresh")]
     public async Task<IActionResult> Refresh()
     {
-        var jwtToken = _utilService.GetTokenStringFromHeader(HttpContext.Request.Headers[_configSettings.AuthSettings.HeaderName]!);
+        var jwtToken =
+            _utilService.GetTokenStringFromHeader(
+                HttpContext.Request.Headers[_configSettings.AuthSettings.HeaderName]!);
         string refreshToken = HttpContext.Request.Headers[_configSettings.AuthSettings.RefreshTokenHeaderName]!;
 
         var tokenResponse = await _tokenService.GetAsync(jwtToken, refreshToken);

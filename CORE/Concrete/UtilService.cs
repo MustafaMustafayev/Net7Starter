@@ -198,6 +198,8 @@ public class UtilService : IUtilService
         var tokenString = GetTokenString();
 
         if (string.IsNullOrEmpty(tokenString)) return null;
-        return !tokenString.Contains($"{_config.AuthSettings.TokenPrefix} ") ? null : new JwtSecurityToken(tokenString[7..]);
+        return !tokenString.Contains($"{_config.AuthSettings.TokenPrefix} ")
+            ? null
+            : new JwtSecurityToken(tokenString[7..]);
     }
 }

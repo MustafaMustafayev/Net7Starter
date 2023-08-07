@@ -14,12 +14,13 @@ using FluentValidation;
 using FluentValidation.AspNetCore;
 using GraphQL.Server.Ui.Voyager;
 using Microsoft.EntityFrameworkCore;
-using NLog.Web;
+using WatchDog;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Host.UseNLog();
-builder.Services.RegisterNLogger();
+builder.Logging.AddWatchDogLogger();
+builder.Services.RegisterLogger();
+builder.Services.RegisterWatchDog();
 
 var config = new ConfigSettings();
 
@@ -118,7 +119,8 @@ app.Use((context, next) =>
     return next();
 });
 
-app.Use(async (context, next) =>
+// this will cause unexpected behaviour on watchdog site
+/*app.Use(async (context, next) =>
 {
     context.Response.Headers.Add("X-Content-Type-Options", "nosniff");
     context.Response.Headers.Add("Content-Security-Policy", "default-src 'self'");
@@ -126,7 +128,7 @@ app.Use(async (context, next) =>
     context.Response.Headers.Add("X-Frame-Options", "Deny");
     context.Response.Headers.Add("Referrer-Policy", "no-referrer");
     await next.Invoke();
-});
+});*/
 
 if (config.SentrySettings.IsEnabled) app.UseSentryTracing();
 
@@ -151,6 +153,18 @@ app.MapGraphQL((PathString)"/graphql");
 app.UseGraphQLVoyager("/graphql-voyager", new VoyagerOptions
 {
     GraphQLEndPoint = "/graphql"
+});
+
+app.UseWatchDogExceptionLogger();
+
+app.UseWatchDog(opt =>
+{
+    opt.WatchPageUsername = "admin";
+    opt.WatchPagePassword = "admin";
+    //Optional
+    //opt.Blacklist = "Test/testPost, api/auth/login"; //Prevent logging for specified endpoints
+    //opt.Serializer = WatchDogSerializerEnum.Newtonsoft; //If your project use a global json converter
+    //opt.CorsPolicy = "MyCorsPolicy";
 });
 
 app.Run();

@@ -61,7 +61,8 @@ public class FileController : Controller
         await FileHelper.WriteFile(file, $"{hashFileName}{fileExtension}", path);
 
         // add to database
-        var fileId = await _fileService.AddAsync(new FileToAddDto(originalFileName, hashFileName, fileExtension, file.Length, path, type));
+        var fileId = await _fileService.AddAsync(new FileToAddDto(originalFileName, hashFileName, fileExtension,
+            file.Length, path, type));
 
         // join with model
         switch (type)
@@ -83,7 +84,8 @@ public class FileController : Controller
     {
         // validation
         var userId = _utilService.GetUserIdFromToken();
-        if (string.IsNullOrEmpty(hashName.Trim())) return BadRequest(new ErrorResult(Messages.InvalidModel.Translate()));
+        if (string.IsNullOrEmpty(hashName.Trim()))
+            return BadRequest(new ErrorResult(Messages.InvalidModel.Translate()));
 
         switch (type)
         {
@@ -121,7 +123,8 @@ public class FileController : Controller
         var file = await _fileService.GetAsync(hashName);
 
         // read file as stream
-        var path = Path.Combine(_utilService.GetEnvFolderPath(_utilService.GetFolderName(type)), $"{hashName}{file.Data!.Extension}");
+        var path = Path.Combine(_utilService.GetEnvFolderPath(_utilService.GetFolderName(type)),
+            $"{hashName}{file.Data!.Extension}");
 
         return PhysicalFile(path, "APPLICATION/octet-stream", Path.GetFileName(hashName));
     }
@@ -135,7 +138,8 @@ public class FileController : Controller
         var file = await _fileService.GetAsync(hashName);
 
         // read file as stream
-        var path = Path.Combine(_utilService.GetEnvFolderPath(_utilService.GetFolderName(type)), $"{hashName}{file.Data!.Extension}");
+        var path = Path.Combine(_utilService.GetEnvFolderPath(_utilService.GetFolderName(type)),
+            $"{hashName}{file.Data!.Extension}");
         var fileStream = System.IO.File.OpenRead(path);
 
         if (fileStream is null) return BadRequest(new ErrorResult(Messages.FileIsNotFound.Translate()));

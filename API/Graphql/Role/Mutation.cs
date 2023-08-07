@@ -13,7 +13,7 @@ query GetRoles{
   }
 }
 
-mutation AddRole{ 
+mutation AddRole{
   addRole(item: {name: "sdsds", key: "TYPE1"}) { # mutation name
     roleId,
     name

@@ -144,7 +144,8 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity>
         return await _ctx.Set<TEntity>().FindAsync(id);
     }
 
-    public async Task<TEntity?> SingleOrDefaultAsync(Expression<Func<TEntity, bool>> filter, bool ignoreQueryFilters = false)
+    public async Task<TEntity?> SingleOrDefaultAsync(Expression<Func<TEntity, bool>> filter,
+        bool ignoreQueryFilters = false)
     {
         return ignoreQueryFilters
             ? await _ctx.Set<TEntity>().IgnoreQueryFilters().SingleOrDefaultAsync(filter)
