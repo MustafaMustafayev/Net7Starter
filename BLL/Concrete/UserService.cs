@@ -105,7 +105,7 @@ public class UserService : IUserService
         var data = _mapper.Map<User>(dto);
 
         data.Id = id;
-        data.ProfileFileId = old!.ProfileFileId;
+        data.ProfileFileId = old.ProfileFileId;
 
         await _unitOfWork.UserRepository.UpdateUserAsync(data);
         await _unitOfWork.CommitAsync();

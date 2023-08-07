@@ -1,4 +1,6 @@
-﻿namespace DTO.Organization;
+﻿using DTO.File;
+
+namespace DTO.Organization;
 
 public record OrganizationToAddDto
 (
@@ -22,7 +24,8 @@ public record OrganizationToListDto
     string PhoneNumber,
     string Tin,
     string Email,
-    string Rekvizit
+    string Rekvizit,
+    FileToListDto? LogoFile
 );
 
 public record OrganizationToUpdateDto

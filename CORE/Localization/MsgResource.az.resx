@@ -160,4 +160,7 @@
     <data name="UserIsExist" xml:space="preserve">
     <value>İstifadəçi mövcuddur</value>
   </data>
+    <data name="DataNotFound" xml:space="preserve">
+        <value>Göndərilmiş sorğuya uyğun məlumat yoxdur</value>
+    </data>
 </root>

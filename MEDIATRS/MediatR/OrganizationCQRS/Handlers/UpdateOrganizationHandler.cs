@@ -22,8 +22,13 @@ public class UpdateOrganizationHandler : IRequestHandler<UpdateOrganizationComma
     public async Task<IResult> Handle(UpdateOrganizationCommand request,
         CancellationToken cancellationToken)
     {
+        var old = await _unitOfWork.OrganizationRepository.GetAsNoTrackingAsync(u => u.Id == request.OrganizationId);
+        if (old is null) return new ErrorResult(Messages.DataNotFound.Translate());
+
         var mapped = _mapper.Map<Organization>(request.Organization);
+
         mapped.Id = request.OrganizationId;
+        mapped.LogoFileId = old.LogoFileId;
 
         _unitOfWork.OrganizationRepository.Update(mapped);
         await _unitOfWork.CommitAsync();

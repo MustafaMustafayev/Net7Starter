@@ -13,6 +13,7 @@ public enum Messages
     VerificationCodeSent,
     InvalidVerificationCode,
     CanNotFoundUserIdInYourAccessToken,
+    DataNotFound,
     FileIsLargeThan2Mb,
     FileIsNotFound,
     ThisFileTypeIsNotAllowed

@@ -183,7 +183,8 @@ public class UtilService : IUtilService
     {
         return type switch
         {
-            FileType.UserProfile => "files\\images\\user_profile",
+            FileType.UserProfile => @"files\images\user_profile",
+            FileType.OrganizationLogo => @"files\images\organization_logo",
             _ => "files/error"
         };
     }

@@ -2,5 +2,6 @@
 
 public enum FileType
 {
-    UserProfile
+    UserProfile,
+    OrganizationLogo
 }
