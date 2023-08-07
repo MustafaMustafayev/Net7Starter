@@ -3,34 +3,49 @@ using DTO.Responses;
 using Microsoft.AspNetCore.Http;
 using IResult = DTO.Responses.IResult;
 
-namespace CORE.Helpers;
-
-public static class FileHelper
+namespace CORE.Helpers
 {
-    public static async Task WriteFile(IFormFile file, string name, string path)
+    public static class FileHelper
     {
-        if (!Directory.Exists(path)) Directory.CreateDirectory(path);
+        public static async Task WriteFile(IFormFile file, string name, string path)
+        {
+            if (!Directory.Exists(path)) Directory.CreateDirectory(path);
 
-        await using var fileStream = new FileStream(Path.Combine(path, name), FileMode.Create);
-        await file.CopyToAsync(fileStream);
-    }
+            await using var fileStream = new FileStream(Path.Combine(path, name), FileMode.Create);
+            await file.CopyToAsync(fileStream);
+        }
 
-    public static async Task<IDataResult<string>> ReadFileAsByte64(string name, string path)
-    {
-        var filePath = Path.Combine(path, name);
-        if (File.Exists(filePath))
-            return new SuccessDataResult<string>(
-                data: Convert.ToBase64String(await File.ReadAllBytesAsync(filePath)));
+        public static async Task<string?> ReadFileAsByte64(string name, string path)
+        {
+            var filePath = Path.Combine(path, name);
+            return File.Exists(filePath) ? Convert.ToBase64String(await File.ReadAllBytesAsync(filePath)) : null;
+        }
 
-        return new ErrorDataResult<string>(Messages.FileIsNotFound.Translate());
-    }
+        public static bool DeleteFile(string filePath)
+        {
+            if (!File.Exists(filePath)) return false;
 
-    public static IResult DeleteFile(string filePath)
-    {
-        if (!File.Exists(filePath)) return new SuccessResult();
+            File.Delete(filePath);
 
-        File.Delete(filePath);
+            return true;
+        }
 
-        return new SuccessResult();
+        public static async Task<IFormFile?> ReadFileAsIFormFile(string name, string path)
+        {
+            var filePath = Path.Combine(path, name);
+            if (!File.Exists(filePath)) return null; // or throw an exception based on your use case
+            
+            var fileInfo = new FileInfo(filePath);
+            var memoryStream = new MemoryStream();
+
+            await using (var stream = fileInfo.OpenRead())
+            {
+                await stream.CopyToAsync(memoryStream);
+            }
+
+            memoryStream.Position = 0;
+
+            return new FormFile(memoryStream, 0, memoryStream.Length, null, fileInfo.Name);
+        }
     }
 }
