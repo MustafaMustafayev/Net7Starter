@@ -19,7 +19,8 @@ public class RbacAttribute : AuthorizeAttribute, IAuthorizationFilter
 
     public void OnAuthorization(AuthorizationFilterContext context)
     {
-        var configSettings = (context.HttpContext.RequestServices.GetService(typeof(ConfigSettings)) as ConfigSettings)!;
+        var configSettings =
+            (context.HttpContext.RequestServices.GetService(typeof(ConfigSettings)) as ConfigSettings)!;
         var utilService = (context.HttpContext.RequestServices.GetService(typeof(IUtilService)) as UtilService)!;
 
         string? jwtToken = context.HttpContext.Request.Headers[configSettings.AuthSettings.HeaderName];

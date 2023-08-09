@@ -4,7 +4,7 @@ using System.Xml.Serialization;
 using Newtonsoft.Json;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
-namespace CORE.Helper;
+namespace CORE.Helpers;
 
 public static class ObjectSerializer
 {

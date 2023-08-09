@@ -160,4 +160,7 @@
     <data name="ThisFileTypeIsNotAllowed" xml:space="preserve">
     <value>Ошибка file extension</value>
   </data>
+    <data name="DataNotFound" xml:space="preserve">
+        <value>Нет информации, соответствующей отправленному запросу</value>
+    </data>
 </root>

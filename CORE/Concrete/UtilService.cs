@@ -183,7 +183,8 @@ public class UtilService : IUtilService
     {
         return type switch
         {
-            FileType.UserProfile => "files\\images\\user_profile",
+            FileType.UserProfile => @"files\images\user_profile",
+            FileType.OrganizationLogo => @"files\images\organization_logo",
             _ => "files/error"
         };
     }
@@ -198,6 +199,8 @@ public class UtilService : IUtilService
         var tokenString = GetTokenString();
 
         if (string.IsNullOrEmpty(tokenString)) return null;
-        return !tokenString.Contains($"{_config.AuthSettings.TokenPrefix} ") ? null : new JwtSecurityToken(tokenString[7..]);
+        return !tokenString.Contains($"{_config.AuthSettings.TokenPrefix} ")
+            ? null
+            : new JwtSecurityToken(tokenString[7..]);
     }
 }

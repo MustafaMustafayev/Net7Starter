@@ -10,7 +10,8 @@ public class RepositoryBuilder : ISourceBuilder, ITextBuilder
     public void BuildSourceFile(List<Entity> entities)
     {
         entities.ForEach(model =>
-            SourceBuilder.Instance.AddSourceFile(Constants.RepositoryPath, $"{model.Name}Repository.cs", BuildSourceText(model, null)));
+            SourceBuilder.Instance.AddSourceFile(Constants.RepositoryPath, $"{model.Name}Repository.cs",
+                BuildSourceText(model, null)));
     }
 
     public string BuildSourceText(Entity? entity, List<Entity>? entities)

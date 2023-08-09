@@ -14,4 +14,6 @@ public class Organization : Auditable, IEntity
     [StringLength(10)] public required string Tin { get; set; }
     [EmailAddress] public required string Email { get; set; }
     public required string Rekvizit { get; set; }
+    public int? LogoFileId { get; set; }
+    public virtual File? LogoFile { get; set; }
 }

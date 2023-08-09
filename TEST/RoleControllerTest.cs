@@ -23,7 +23,8 @@ public class RoleControllerTest
     public async Task Get_ReturnsAllItems()
     {
         // Arrange
-        _mock.Setup(m => m.GetAsync()).ReturnsAsync(new SuccessDataResult<List<RoleToListDto>>(new List<RoleToListDto>()));
+        _mock.Setup(m => m.GetAsync())
+            .ReturnsAsync(new SuccessDataResult<List<RoleToListDto>>(new List<RoleToListDto>()));
 
         // Act
         var okResult = await _controller.Get() as OkObjectResult;
@@ -38,7 +39,10 @@ public class RoleControllerTest
     public async Task GetById_ReturnsItem()
     {
         // Arrange
-        _mock.Setup(m => m.GetAsync(1)).ReturnsAsync(new SuccessDataResult<RoleToListDto>(new RoleToListDto(1, "TT", "TT", new List<PermissionToListDto>())));
+        _mock.Setup(m => m.GetAsync(1))
+            .ReturnsAsync(
+                new SuccessDataResult<RoleToListDto>(new RoleToListDto(1, "TT", "TT",
+                    new List<PermissionToListDto>())));
 
         // Act
         var notFoundResult = await _controller.Get(1) as OkObjectResult;

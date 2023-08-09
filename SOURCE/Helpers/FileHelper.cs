@@ -14,7 +14,8 @@ public class FileHelper
         using var r = new StreamReader(filePath);
 
         var json = await r.ReadToEndAsync();
-        var data = JsonSerializer.Deserialize<List<Entity>>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true })!;
+        var data = JsonSerializer.Deserialize<List<Entity>>(json,
+            new JsonSerializerOptions { PropertyNameCaseInsensitive = true })!;
 
         return data;
     }
@@ -24,7 +25,8 @@ public class FileHelper
         var projectPath = Directory.GetParent(Environment.CurrentDirectory)!.Parent!.Parent!.Parent!.FullName;
         var filePath = Path.Combine(projectPath, sourceFile.Path, sourceFile.Name);
 
-        if (!Directory.Exists(Path.GetDirectoryName(filePath))) Directory.CreateDirectory(Path.GetDirectoryName(filePath)!);
+        if (!Directory.Exists(Path.GetDirectoryName(filePath)))
+            Directory.CreateDirectory(Path.GetDirectoryName(filePath)!);
 
         /*if (File.Exists(filePath))
         {
@@ -51,7 +53,8 @@ public class FileHelper
 
     public static string[] GetFileNames(string folderPath)
     {
-        folderPath = Path.Combine(Directory.GetParent(Environment.CurrentDirectory)!.Parent!.Parent!.Parent!.FullName, folderPath);
+        folderPath = Path.Combine(Directory.GetParent(Environment.CurrentDirectory)!.Parent!.Parent!.Parent!.FullName,
+            folderPath);
         var files = Directory.GetFiles(folderPath);
 
         return files.Select(Path.GetFileNameWithoutExtension).ToArray()!;

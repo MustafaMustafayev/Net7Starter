@@ -160,4 +160,7 @@
     <data name="ThisFileTypeIsNotAllowed" xml:space="preserve">
     <value>Unsupported file extension</value>
   </data>
+    <data name="DataNotFound" xml:space="preserve">
+        <value>There is no information matching the submitted request</value>
+    </data>
 </root>

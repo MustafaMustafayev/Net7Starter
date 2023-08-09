@@ -1,8 +1,7 @@
 ﻿using API.Attributes;
 using BLL.Abstract;
 using CORE.Abstract;
-using CORE.Constants;
-using CORE.Helper;
+using CORE.Helpers;
 using CORE.Localization;
 using DTO.File;
 using DTO.Responses;
@@ -39,39 +38,20 @@ public class FileController : Controller
     [SwaggerOperation(Summary = "upload file")]
     [Produces(typeof(IDataResult<string>))]
     [HttpPost]
-    public async Task<IActionResult> Upload(IFormFile file, [FromQuery] FileType type)
+    public async Task<IActionResult> Upload([FromBody] FileUploadRequestDto dto)
     {
-        // validation
-        var userId = _utilService.GetUserIdFromToken();
-        if (file.Length > Constants.AllowedLength)
-            return BadRequest(new ErrorDataResult<string>(Messages.FileIsLargeThan2Mb.Translate()));
-
-        switch (type)
-        {
-            case FileType.UserProfile when userId is null:
-                return BadRequest(new ErrorDataResult<string>(Messages.CanNotFoundUserIdInYourAccessToken.Translate()));
-        }
-
         // create file
-        var originalFileName = Path.GetFileName(file.FileName);
+        var originalFileName = Path.GetFileName(dto.File.FileName);
         var hashFileName = Guid.NewGuid().ToString();
-        var fileExtension = Path.GetExtension(file.FileName);
+        var fileExtension = Path.GetExtension(dto.File.FileName);
 
-        var path = _utilService.GetEnvFolderPath(_utilService.GetFolderName(type));
-        await FileHelper.WriteFile(file, $"{hashFileName}{fileExtension}", path);
+        var path = _utilService.GetEnvFolderPath(_utilService.GetFolderName(dto.Type));
+        await FileHelper.WriteFile(dto.File, $"{hashFileName}{fileExtension}", path);
 
         // add to database
-        var fileId = await _fileService.AddAsync(new FileToAddDto(originalFileName, hashFileName, fileExtension, file.Length, path, type));
-
-        // join with model
-        switch (type)
-        {
-            case FileType.UserProfile:
-                await _userService.AddProfileAsync(userId!.Value, fileId.Data);
-                break;
-            default:
-                return BadRequest(new ErrorDataResult<string>(Messages.InvalidModel.Translate()));
-        }
+        var result = await _fileService.AddFileAsync(
+            new FileToAddDto(originalFileName, hashFileName, fileExtension, dto.File.Length, path, dto.Type), dto);
+        if (!result.Success) return BadRequest(new ErrorDataResult<string>(Messages.InvalidModel.Translate()));
 
         return Ok(new SuccessDataResult<string>(hashFileName, Messages.Success.Translate()));
     }
@@ -79,36 +59,15 @@ public class FileController : Controller
     [SwaggerOperation(Summary = "delete file")]
     [Produces(typeof(IResult))]
     [HttpDelete]
-    public async Task<IActionResult> Delete([FromQuery] string hashName, [FromQuery] FileType type)
+    public async Task<IActionResult> Delete([FromBody] FileRemoveRequestDto dto)
     {
-        // validation
-        var userId = _utilService.GetUserIdFromToken();
-        if (string.IsNullOrEmpty(hashName.Trim())) return BadRequest(new ErrorResult(Messages.InvalidModel.Translate()));
-
-        switch (type)
-        {
-            case FileType.UserProfile when userId is null:
-                return BadRequest(new ErrorDataResult<string>(Messages.InvalidModel.Translate()));
-        }
-
         // delete file
-        var path = Path.Combine(_utilService.GetEnvFolderPath(_utilService.GetFolderName(type)), hashName);
+        var path = Path.Combine(_utilService.GetEnvFolderPath(_utilService.GetFolderName(dto.Type)), dto.HashName);
         FileHelper.DeleteFile(path);
 
         // remove from database
-        await _fileService.SoftDeleteAsync(hashName);
-
-        // join with model
-        switch (type)
-        {
-            case FileType.UserProfile:
-                await _userService.AddProfileAsync(userId!.Value, null);
-                break;
-            default:
-                return BadRequest(new ErrorDataResult<string>(Messages.InvalidModel.Translate()));
-        }
-
-        return Ok(new SuccessResult(Messages.Success.Translate()));
+        var result = await _fileService.RemoveFileAsync(dto);
+        return Ok(result);
     }
 
 
@@ -121,7 +80,8 @@ public class FileController : Controller
         var file = await _fileService.GetAsync(hashName);
 
         // read file as stream
-        var path = Path.Combine(_utilService.GetEnvFolderPath(_utilService.GetFolderName(type)), $"{hashName}{file.Data!.Extension}");
+        var path = Path.Combine(_utilService.GetEnvFolderPath(_utilService.GetFolderName(type)),
+            $"{hashName}{file.Data!.Extension}");
 
         return PhysicalFile(path, "APPLICATION/octet-stream", Path.GetFileName(hashName));
     }
@@ -135,7 +95,8 @@ public class FileController : Controller
         var file = await _fileService.GetAsync(hashName);
 
         // read file as stream
-        var path = Path.Combine(_utilService.GetEnvFolderPath(_utilService.GetFolderName(type)), $"{hashName}{file.Data!.Extension}");
+        var path = Path.Combine(_utilService.GetEnvFolderPath(_utilService.GetFolderName(type)),
+            $"{hashName}{file.Data!.Extension}");
         var fileStream = System.IO.File.OpenRead(path);
 
         if (fileStream is null) return BadRequest(new ErrorResult(Messages.FileIsNotFound.Translate()));

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace CORE.Helper;
+namespace CORE.Helpers;
 
 public abstract class EnumHelper
 {

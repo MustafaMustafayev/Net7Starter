@@ -55,7 +55,8 @@ public class UserController : Controller
     public async Task<IActionResult> GetProfileInfo()
     {
         var userId = _utilService.GetUserIdFromToken();
-        if (userId is null) return Unauthorized(new ErrorResult(Messages.CanNotFoundUserIdInYourAccessToken.Translate()));
+        if (userId is null)
+            return Unauthorized(new ErrorResult(Messages.CanNotFoundUserIdInYourAccessToken.Translate()));
 
         var response = await _userService.GetAsync(userId.Value);
         return Ok(response);

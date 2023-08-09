@@ -5,7 +5,6 @@ using BLL.Concrete;
 using CORE.Abstract;
 using CORE.Concrete;
 using CORE.Config;
-using CORE.Constants;
 using CORE.Logging;
 using DAL.ElasticSearch;
 using DAL.EntityFramework.Concrete;
@@ -20,19 +19,18 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using NLog;
 using Redis.OM;
 using StackExchange.Profiling;
 using StackExchange.Profiling.SqlFormatters;
+using WatchDog;
+using WatchDog.src.Enums;
 
 namespace API.Containers;
 
 public static class DependencyContainer
 {
-    public static void RegisterNLogger(this IServiceCollection services)
+    public static void RegisterLogger(this IServiceCollection services)
     {
-        LogManager.LoadConfiguration(string.Concat(Directory.GetCurrentDirectory(), Constants.NLogConfigPath));
-
         services.AddSingleton<ILoggerManager, LoggerManager>();
     }
 
@@ -214,7 +212,8 @@ public static class DependencyContainer
     public static void RegisterElasticSearch(this IServiceCollection services, ConfigSettings configs)
     {
         services.AddScoped<IElasticSearchService<UserToListDto>>(_ =>
-            new ElasticSearchService<UserToListDto>(configs.ElasticSearchSettings.Connection, configs.ElasticSearchSettings.DefaultIndex));
+            new ElasticSearchService<UserToListDto>(configs.ElasticSearchSettings.Connection,
+                configs.ElasticSearchSettings.DefaultIndex));
     }
 
     public static void RegisterHttpClients(this IServiceCollection services, ConfigSettings config)
@@ -259,5 +258,16 @@ public static class DependencyContainer
             //(options.Storage as MemoryCacheStorage)!.CacheDuration = TimeSpan.FromMinutes(60);
             options.SqlFormatter = new InlineFormatter();
         }).AddEntityFramework();
+    }
+
+    public static void RegisterWatchDog(this IServiceCollection services)
+    {
+        services.AddWatchDogServices(opt =>
+        {
+            opt.IsAutoClear = true;
+            opt.ClearTimeSchedule = WatchDogAutoClearScheduleEnum.Weekly;
+            //opt.SetExternalDbConnString = "Server=localhost;Database=testDb;User Id=postgres;Password=root;"; 
+            //opt.DbDriverOption = WatchDogSqlDriverEnum.PostgreSql; 
+        });
     }
 }

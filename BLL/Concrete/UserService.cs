@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using BLL.Abstract;
 using CORE.Abstract;
-using CORE.Helper;
+using CORE.Helpers;
 using CORE.Localization;
 using DAL.EntityFramework.UnitOfWork;
 using DAL.EntityFramework.Utility;
@@ -105,7 +105,7 @@ public class UserService : IUserService
         var data = _mapper.Map<User>(dto);
 
         data.Id = id;
-        data.ProfileFileId = old!.ProfileFileId;
+        data.ProfileFileId = old.ProfileFileId;
 
         await _unitOfWork.UserRepository.UpdateUserAsync(data);
         await _unitOfWork.CommitAsync();
@@ -118,7 +118,8 @@ public class UserService : IUserService
         var datas = _unitOfWork.UserRepository.GetList();
         var paginationDto = _utilService.GetPagination();
 
-        var response = await PaginatedList<User>.CreateAsync(datas.OrderBy(m => m.Id), paginationDto.PageIndex, paginationDto.PageSize);
+        var response = await PaginatedList<User>.CreateAsync(datas.OrderBy(m => m.Id), paginationDto.PageIndex,
+            paginationDto.PageSize);
 
         var responseDto = new PaginatedList<UserToListDto>(
             _mapper.Map<List<UserToListDto>>(response.Datas),

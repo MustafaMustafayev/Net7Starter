@@ -1,28 +1,26 @@
-﻿using NLog;
+﻿using WatchDog;
 
 namespace CORE.Logging;
 
 public class LoggerManager : ILoggerManager
 {
-    private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
-
     public void LogDebug(string message)
     {
-        Logger.Debug(message);
+        WatchLogger.Log(message, "Debug");
     }
 
     public void LogError(string message)
     {
-        Logger.Error(message);
+        WatchLogger.LogError(message);
     }
 
     public void LogInfo(string message)
     {
-        Logger.Info(message);
+        WatchLogger.Log(message);
     }
 
     public void LogWarn(string message)
     {
-        Logger.Warn(message);
+        WatchLogger.LogWarning(message);
     }
 }

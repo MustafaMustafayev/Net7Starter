@@ -23,9 +23,9 @@
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.9"/>
         <PackageReference Include="MongoDB.Driver" Version="2.20.0"/>
         <PackageReference Include="NEST" Version="7.17.5"/>
-        <PackageReference Include="NLog.Web.AspNetCore" Version="5.3.2"/>
         <PackageReference Include="SSH.NET" Version="2020.0.2"/>
         <PackageReference Include="System.Drawing.Common" Version="7.0.0"/>
+        <PackageReference Include="WatchDog.NET" Version="1.4.10"/>
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\DTO\DTO.csproj"/>
