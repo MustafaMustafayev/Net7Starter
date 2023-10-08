@@ -19,7 +19,9 @@ using WatchDog;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Logging.AddWatchDogLogger();
+
 builder.Services.RegisterLogger();
+
 builder.Services.RegisterWatchDog();
 
 var config = new ConfigSettings();
@@ -43,7 +45,7 @@ builder.Services.AddDbContext<DataContext>(options =>
 
 builder.Services.AddHttpContextAccessor();
 
-builder.Services.RegisterHttpClients(config);
+builder.Services.RegisterRefitClients(config);
 
 if (config.RedisSettings.IsEnabled)
 {
@@ -54,7 +56,8 @@ if (config.RedisSettings.IsEnabled)
 if (config.ElasticSearchSettings.IsEnabled) builder.Services.RegisterElasticSearch(config);
 if (config.MongoDbSettings.IsEnabled) builder.Services.RegisterMongoDb();
 
-builder.Services.Configure<IISServerOptions>(options => options.MaxRequestBodySize = 60 * 1024 * 1024); //60mb
+// configure max request body size as 60 MB
+builder.Services.Configure<IISServerOptions>(options => options.MaxRequestBodySize = 60 * 1024 * 1024);
 
 builder.Services.RegisterRepositories();
 builder.Services.RegisterSignalRHubs();
@@ -76,8 +79,11 @@ builder.Services.AddHealthChecks();
 
 builder.Services.RegisterAuthentication(config);
 
-builder.Services.AddCors(o =>
-    o.AddPolicy(Constants.EnableAllCorsName, b => b.AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin()));
+builder.Services.AddCors(o => o
+    .AddPolicy(Constants.EnableAllCorsName, b => b
+        .AllowAnyMethod()
+        .AllowAnyHeader()
+        .AllowAnyOrigin()));
 
 builder.Services.AddScoped<LogActionFilter>();
 
@@ -107,6 +113,7 @@ app.UseCors(Constants.EnableAllCorsName);
 app.UseMiddleware<LocalizationMiddleware>();
 app.UseMiddleware<ExceptionMiddleware>();
 
+// todo will change in .net 8
 // anti forgery token implementation
 // app.UseMiddleware<AntiForgeryTokenValidator>();
 
@@ -119,7 +126,7 @@ app.Use((context, next) =>
     return next();
 });
 
-// this will cause unexpected behaviour on watchdog site
+// this will cause unexpected behaviour on watchdog's site
 /*app.Use(async (context, next) =>
 {
     context.Response.Headers.Add("X-Content-Type-Options", "nosniff");

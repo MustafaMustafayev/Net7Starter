@@ -1,3 +1,3 @@
-﻿namespace MEDIATRS.MediatR;
+﻿namespace MEDIATRS;
 
 public record MediatrAssemblyContainer;

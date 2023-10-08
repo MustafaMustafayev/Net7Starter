@@ -2,9 +2,9 @@
 using DAL.EntityFramework.UnitOfWork;
 using DTO.Responses;
 using MediatR;
-using MEDIATRS.MediatR.OrganizationCQRS.Commands;
+using MEDIATRS.OrganizationCQRS.Commands;
 
-namespace MEDIATRS.MediatR.OrganizationCQRS.Handlers;
+namespace MEDIATRS.OrganizationCQRS.Handlers;
 
 public class DeleteOrganizationHandler : IRequestHandler<DeleteOrganizationCommand, IResult>
 {

@@ -4,9 +4,9 @@ using DAL.EntityFramework.UnitOfWork;
 using DTO.Organization;
 using DTO.Responses;
 using MediatR;
-using MEDIATRS.MediatR.OrganizationCQRS.Queries;
+using MEDIATRS.OrganizationCQRS.Queries;
 
-namespace MEDIATRS.MediatR.OrganizationCQRS.Handlers;
+namespace MEDIATRS.OrganizationCQRS.Handlers;
 
 public class
     GetOrganizationListHandler : IRequestHandler<GetOrganizationListQuery,

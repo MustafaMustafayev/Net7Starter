@@ -1,6 +1,7 @@
 ﻿using API.Attributes;
 using BLL.Abstract;
 using CORE.Abstract;
+using CORE.Constants;
 using CORE.Helpers;
 using CORE.Localization;
 using DTO.File;
@@ -21,16 +22,13 @@ namespace API.Controllers;
 public class FileController : Controller
 {
     private readonly IFileService _fileService;
-    private readonly IUserService _userService;
     private readonly IUtilService _utilService;
 
     public FileController(
-        IUserService userService,
         IFileService fileService,
         IUtilService utilService
     )
     {
-        _userService = userService;
         _fileService = fileService;
         _utilService = utilService;
     }
@@ -44,6 +42,10 @@ public class FileController : Controller
         var originalFileName = Path.GetFileName(dto.File.FileName);
         var hashFileName = Guid.NewGuid().ToString();
         var fileExtension = Path.GetExtension(dto.File.FileName);
+
+        // check extension
+        if (!Constants.AllowedFileExtensions.Contains(fileExtension))
+            return BadRequest(new ErrorDataResult<string>(Messages.ThisFileTypeIsNotAllowed.Translate()));
 
         var path = _utilService.GetEnvFolderPath(_utilService.GetFolderName(dto.Type));
         await FileHelper.WriteFile(dto.File, $"{hashFileName}{fileExtension}", path);

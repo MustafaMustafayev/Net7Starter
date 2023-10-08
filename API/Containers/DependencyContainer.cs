@@ -2,6 +2,7 @@
 using System.Threading.RateLimiting;
 using API.Hubs;
 using BLL.Concrete;
+using BLL.External.Clients;
 using CORE.Abstract;
 using CORE.Concrete;
 using CORE.Config;
@@ -12,7 +13,7 @@ using DAL.EntityFramework.UnitOfWork;
 using DAL.MongoDb;
 using DTO.User;
 using MediatR;
-using MEDIATRS.MediatR;
+using MEDIATRS;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -20,6 +21,7 @@ using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Redis.OM;
+using Refit;
 using StackExchange.Profiling;
 using StackExchange.Profiling.SqlFormatters;
 using WatchDog;
@@ -209,23 +211,11 @@ public static class DependencyContainer
         services.AddSingleton<IMongoDbService, MongoDbService>();
     }
 
-    public static void RegisterElasticSearch(this IServiceCollection services, ConfigSettings configs)
+    public static void RegisterElasticSearch(this IServiceCollection services, ConfigSettings config)
     {
         services.AddScoped<IElasticSearchService<UserToListDto>>(_ =>
-            new ElasticSearchService<UserToListDto>(configs.ElasticSearchSettings.Connection,
-                configs.ElasticSearchSettings.DefaultIndex));
-    }
-
-    public static void RegisterHttpClients(this IServiceCollection services, ConfigSettings config)
-    {
-        services.AddHttpClient(config.FirstHttpClientSettings.Name, client =>
-        {
-            client.BaseAddress = new Uri(config.FirstHttpClientSettings.BaseUrl);
-            client.Timeout = new TimeSpan(0, 0, config.FirstHttpClientSettings.TimeoutInSeconds);
-            client.DefaultRequestHeaders.Clear();
-            config.FirstHttpClientSettings.Headers.ForEach(h =>
-                client.DefaultRequestHeaders.Add(h.Name, h.Value));
-        });
+            new ElasticSearchService<UserToListDto>(config.ElasticSearchSettings.Connection,
+                config.ElasticSearchSettings.DefaultIndex));
     }
 
     public static void RegisterMediatr(this IServiceCollection services)
@@ -269,5 +259,15 @@ public static class DependencyContainer
             //opt.SetExternalDbConnString = "Server=localhost;Database=testDb;User Id=postgres;Password=root;"; 
             //opt.DbDriverOption = WatchDogSqlDriverEnum.PostgreSql; 
         });
+    }
+
+    public static void RegisterRefitClients(this IServiceCollection services, ConfigSettings config)
+    {
+        services
+            .AddRefitClient<IStudentClient>()
+            .ConfigureHttpClient(c => c.BaseAddress = new Uri(config.StudentClientSettings.BaseUrl));
+        // Add additional IHttpClientBuilder chained methods as required here:
+        // .AddHttpMessageHandler<MyHandler>()
+        // .SetHandlerLifetime(TimeSpan.FromMinutes(2));
     }
 }
