@@ -3,7 +3,8 @@
 // ReSharper disable InconsistentNaming
 public static class Constants
 {
-    public const string DataFileName = "data.json";
+    public const string EntitiesFileName = "entities.json";
+    public const string OpenApiFileName = "openapi.json";
 
     #region PATHS
 

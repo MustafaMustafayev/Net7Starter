@@ -1,26 +1,25 @@
 ﻿using BLL.External.Dtos;
-using Refit;
+using RestEase;
 
 namespace BLL.External.Clients;
 
-[Headers("Content-Type: application/json")]
+[Header("Content-Type", "application/json")]
 public interface IStudentClient
 {
     [Get("/api/student")]
     Task<IEnumerable<StudentToListDto>> GetAsync(
-        [Authorize] string token,
-        [Query] bool isActive,
-        [Header("x-mobile")] bool isMobile);
+        [Header("Authorization")] string token,
+        [Query] bool isActive);
 
     [Get("/api/student/{id}")]
-    Task<StudentToListDto> GetAsync(int id);
+    Task<StudentToListDto> GetAsync([Path] int id);
 
     [Post("/api/student")]
     Task CreateAsync([Body] StudentToAddDto dto);
 
     [Put("/api/student/{id}")]
-    Task UpdateAsync(int id, [Body] StudentToUpdateDto dto);
+    Task UpdateAsync([Path] int id, [Body] StudentToUpdateDto dto);
 
     [Delete("/api/student/{id}")]
-    Task DeleteAsync(int id);
+    Task DeleteAsync([Path] int id);
 }

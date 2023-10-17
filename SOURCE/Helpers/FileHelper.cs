@@ -9,7 +9,7 @@ public class FileHelper
     public static async Task<List<Entity>> ReadJsonAsync()
     {
         var projectPath = Directory.GetParent(Environment.CurrentDirectory)!.Parent!.Parent!.FullName;
-        var filePath = Path.Combine(projectPath, Constants.DataFileName);
+        var filePath = Path.Combine(projectPath, Constants.EntitiesFileName);
 
         using var r = new StreamReader(filePath);
 

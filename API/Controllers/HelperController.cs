@@ -1,29 +1,31 @@
 ﻿using API.Attributes;
 using API.Filters;
 using BLL.External.Clients;
+using GraphQL;
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using AuthorizeAttribute = Microsoft.AspNetCore.Authorization.AuthorizeAttribute;
 
 namespace API.Controllers;
 
 [Route("api/[controller]")]
 [ServiceFilter(typeof(LogActionFilter))]
-[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-[ValidateToken]
+//[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+//[ValidateToken]
 public class HelperController : Controller
 {
     private readonly IAntiforgery _antiForgery;
     private readonly IStudentClient _studentClient;
 
-    public HelperController(IStudentClient studentClient, IAntiforgery antiForgery)
+    public HelperController(IAntiforgery antiForgery, IStudentClient studentClient)
     {
         _studentClient = studentClient;
         _antiForgery = antiForgery;
     }
 
     [HttpGet("test/studentapi/")]
+    [AllowAnonymous]
     public async Task<IActionResult> Get()
     {
         var response = await _studentClient.GetAsync(24);
