@@ -21,8 +21,7 @@ using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Redis.OM;
-using RestEase;
-using RestEase.HttpClientFactory;
+using Refit;
 using StackExchange.Profiling;
 using StackExchange.Profiling.SqlFormatters;
 using WatchDog;
@@ -264,24 +263,9 @@ public static class DependencyContainer
 
     public static void RegisterRefitClients(this IServiceCollection services, ConfigSettings config)
     {
-
-        services.AddHttpClient("test", client =>
-        {
-            client.BaseAddress = new Uri(config.StudentClientSettings.BaseUrl);
-        }).UseWithRestEaseClient<IStudentClient>();
-
-        /* services
-           .AddRestEaseClient<IStudentClient>(config.StudentClientSettings.BaseUrl, new()
-           {
-               RestClientConfigurer = client =>
-            client.RequestPathParamSerializer = new StringEnumRequestPathParamSerializer(),
-           }); */
-
-        /*
-        services.AddRestEaseClient<ISomeApi>("https://api.example.com");
-        */
-
-
+        services
+            .AddRefitClient<IStudentClient>()
+            .ConfigureHttpClient(c => c.BaseAddress = new Uri(config.StudentClientSettings.BaseUrl));
         // Add additional IHttpClientBuilder chained methods as required here:
         // .AddHttpMessageHandler<MyHandler>()
         // .SetHandlerLifetime(TimeSpan.FromMinutes(2));
