@@ -15,18 +15,18 @@ namespace API.Controllers;
 public class HelperController : Controller
 {
     private readonly IAntiforgery _antiForgery;
-    private readonly IStudentClient _studentClient;
+    private readonly IPetStoreClient _petStoreClient;
 
-    public HelperController(IStudentClient studentClient, IAntiforgery antiForgery)
+    public HelperController(IPetStoreClient petStoreClient, IAntiforgery antiForgery)
     {
-        _studentClient = studentClient;
+        _petStoreClient = petStoreClient;
         _antiForgery = antiForgery;
     }
 
     [HttpGet("test/studentapi/")]
     public async Task<IActionResult> Get()
     {
-        var response = await _studentClient.GetAsync(24);
+        var response = await _petStoreClient.GetOrderById(24);
         return Ok(response);
     }
 

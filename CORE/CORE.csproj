@@ -12,7 +12,6 @@
         <None Remove="Newtonsoft.Json"/>
         <None Remove="Microsoft.AspNetCore.Cryptography.KeyDerivation"/>
         <None Remove="Microsoft.AspNetCore.Authentication.JwtBearer"/>
-        <None Remove="StyleCop.Analyzers"/>
         <None Remove="Middlewares\TokenMiddleware\"/>
     </ItemGroup>
     <ItemGroup>

@@ -264,8 +264,8 @@ public static class DependencyContainer
     public static void RegisterRefitClients(this IServiceCollection services, ConfigSettings config)
     {
         services
-            .AddRefitClient<IStudentClient>()
-            .ConfigureHttpClient(c => c.BaseAddress = new Uri(config.StudentClientSettings.BaseUrl));
+            .AddRefitClient<IPetStoreClient>()
+            .ConfigureHttpClient(c => c.BaseAddress = new Uri(config.PetStoreClientSettings.BaseUrl));
         // Add additional IHttpClientBuilder chained methods as required here:
         // .AddHttpMessageHandler<MyHandler>()
         // .SetHandlerLifetime(TimeSpan.FromMinutes(2));

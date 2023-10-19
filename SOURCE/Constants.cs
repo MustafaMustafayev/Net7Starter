@@ -4,6 +4,7 @@
 public static class Constants
 {
     public const string DataFileName = "data.json";
+    public const string OpenApiFileName = "openapi.json";
 
     #region PATHS
 
@@ -13,7 +14,7 @@ public static class Constants
 
     public const string IServicePath = "BLL\\Abstract\\";
 
-    public const string IUnitOfWorkPath = "DAL\\EntityFramework\\UnitOfWorks\\Abstract\\";
+    public const string IUnitOfWorkPath = "DAL\\EntityFramework\\UnitOfWork\\Abstract\\";
 
     public const string RepositoryPath = "DAL\\EntityFramework\\Concrete\\";
 
