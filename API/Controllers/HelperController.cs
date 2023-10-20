@@ -15,18 +15,17 @@ namespace API.Controllers;
 [ValidateToken]
 public class HelperController : Controller
 {
-    private readonly ConfigSettings _configSettings;
+    private readonly IPetStoreClient _petStoreClient;
 
-    public HelperController(ConfigSettings configSettings)
+    public HelperController(IPetStoreClient petStoreClient)
     {
-        _configSettings = configSettings;
+        _petStoreClient = petStoreClient;
     }
 
     [HttpGet("test")]
     public async Task<IActionResult> Get()
     {
-        var client = RestService.For<IPetStoreClient>(_configSettings.PetStoreClientSettings.BaseUrl);
-        var response = await client.GetOrderById(24);
+        var response = await _petStoreClient.GetOrderById(24);
         return Ok(response);
     }
 }
