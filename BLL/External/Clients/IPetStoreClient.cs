@@ -1,10 +1,9 @@
-﻿using System.CodeDom.Compiler;
-using Refit;
+﻿using Refit;
 using StackExchange.Redis;
 
 namespace BLL.External.Clients;
 
-[GeneratedCode("Refitter", "0.8.2.0")]
+// [GeneratedCode("Refitter", "0.8.2.0")]
 public interface IPetStoreClient
 {
     [Post("/store/order")]
