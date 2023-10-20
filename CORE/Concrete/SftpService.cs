@@ -32,7 +32,7 @@ public class SftpService : ISftpService
 
             var realPath = ("/" + path).Replace("//", "/");
             sftp.ChangeDirectory(realPath);
-            List<SftpFile> directories = sftp.ListDirectory(realPath).ToList();
+            ICollection<ISftpFile> directories = sftp.ListDirectory(realPath).ToList();
             directoryInfos.AddRange(from sftpFile in directories
                 let fileName = sftpFile.Name
                 let fileParts = fileName.Split('.')

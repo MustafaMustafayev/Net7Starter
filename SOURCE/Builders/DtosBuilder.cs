@@ -16,13 +16,15 @@ public class DtosBuilder : ISourceBuilder, ITextBuilder
 
     public string BuildSourceText(Entity? entity, List<Entity>? entities)
     {
-        var text = @"
-namespace DTO.{entityName};
+        var text = """
 
-public record {entityName}ToAddDto();
-public record {entityName}ToUpdateDto();
-public record {entityName}ToListDto(int Id);
-";
+                   namespace DTO.{entityName};
+
+                   public record {entityName}ToAddDto();
+                   public record {entityName}ToUpdateDto();
+                   public record {entityName}ToListDto(int Id);
+
+                   """;
 
         text = text.Replace("{entityName}", entity!.Name);
         return text;

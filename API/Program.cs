@@ -97,7 +97,11 @@ builder.Services.RegisterMiniProfiler();
 
 builder.Services.AddSignalR();
 
+builder.Services.AddAntiforgery();
+
 var app = builder.Build();
+
+// app.UseAntiforgery();
 
 // if (app.Environment.IsDevelopment())
 
@@ -112,10 +116,6 @@ app.UseCors(Constants.EnableAllCorsName);
 
 app.UseMiddleware<LocalizationMiddleware>();
 app.UseMiddleware<ExceptionMiddleware>();
-
-// todo will change in .net 8
-// anti forgery token implementation
-// app.UseMiddleware<AntiForgeryTokenValidator>();
 
 app.UseOutputCache();
 app.UseHttpsRedirection();

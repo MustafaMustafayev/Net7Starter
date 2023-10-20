@@ -3,16 +3,9 @@ using CORE.Constants;
 
 namespace API.Middlewares;
 
-public class LocalizationMiddleware
+public class LocalizationMiddleware : IMiddleware
 {
-    private readonly RequestDelegate _next;
-
-    public LocalizationMiddleware(RequestDelegate context)
-    {
-        _next = context;
-    }
-
-    public async Task Invoke(HttpContext context)
+    public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
         var requestLang = context.Request.Headers[LocalizationConstants.LangHeaderName].ToString();
 
@@ -33,6 +26,6 @@ public class LocalizationMiddleware
 
         LocalizationConstants.CurrentLang = requestLang ?? LocalizationConstants.DefaultLang;
 
-        await _next.Invoke(context);
+        await next.Invoke(context);
     }
 }

@@ -17,16 +17,18 @@ public class IRepositoryBuilder : ISourceBuilder, ITextBuilder
 
     public string BuildSourceText(Entity? entity, List<Entity>? entities)
     {
-        var text = @"
-using DAL.GenericRepositories.Abstract;
-using ENTITIES.Entities;
+        var text = """
 
-namespace DAL.EntityFramework.Abstract;
+                   using DAL.GenericRepositories.Abstract;
+                   using ENTITIES.Entities;
 
-public interface I{entityName}Repository : IGenericRepository<{entityName}>
-{
-}
-";
+                   namespace DAL.EntityFramework.Abstract;
+
+                   public interface I{entityName}Repository : IGenericRepository<{entityName}>
+                   {
+                   }
+
+                   """;
         text = text.Replace("{entityName}", entity!.Name);
 
         return text;

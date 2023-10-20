@@ -1,9 +1,8 @@
-﻿namespace BLL.External.Dtos
+﻿namespace BLL.External.Dtos;
+
+public class ApiResponse
 {
-    public class ApiResponse
-    {
-        int Code { get; set; }
-        string Type { get; set; }
-        string Message { get; set; }
-    }
+    private int Code { get; set; }
+    private string Type { get; set; }
+    private string Message { get; set; }
 }

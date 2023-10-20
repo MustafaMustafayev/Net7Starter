@@ -16,23 +16,25 @@ public class AutomapperBuilder : ISourceBuilder, ITextBuilder
 
     public string BuildSourceText(Entity? entity, List<Entity>? entities)
     {
-        var text = @"
-using AutoMapper;
-using DTO.{entityName};
-using ENTITIES.Entities;
+        var text = """
 
-namespace BLL.Mappers;
+                   using AutoMapper;
+                   using DTO.{entityName};
+                   using ENTITIES.Entities;
 
-public class {entityName}Mapper : Profile
-{
-    public {entityName}Mapper()
-    {
-        CreateMap<{entityName}, {entityName}ToListDto>();
-        CreateMap<{entityName}ToAddDto, {entityName}>();
-        CreateMap<{entityName}ToUpdateDto, {entityName}>();
-    }
-}
-";
+                   namespace BLL.Mappers;
+
+                   public class {entityName}Mapper : Profile
+                   {
+                       public {entityName}Mapper()
+                       {
+                           CreateMap<{entityName}, {entityName}ToListDto>();
+                           CreateMap<{entityName}ToAddDto, {entityName}>();
+                           CreateMap<{entityName}ToUpdateDto, {entityName}>();
+                       }
+                   }
+
+                   """;
 
         text = text.Replace("{entityName}", entity!.Name);
         return text;

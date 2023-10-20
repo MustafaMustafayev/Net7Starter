@@ -1,26 +1,20 @@
 ﻿using Refitter.Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace SOURCE.Workers
+namespace SOURCE.Workers;
+
+public class RefitBuilder
 {
-    public class RefitBuilder
+    public async Task<string> BuildClientsAsync(string openApiJsonOrYamlPath)
     {
-        public async Task<string> BuildClientsAsync(string openApiJsonOrYamlPath)
+        var settings = new RefitGeneratorSettings
         {
-            var settings = new RefitGeneratorSettings
-            {
-                OpenApiPath = openApiJsonOrYamlPath
-            };
+            OpenApiPath = openApiJsonOrYamlPath
+        };
 
-            var generator = await RefitGenerator.CreateAsync(settings);
+        var generator = await RefitGenerator.CreateAsync(settings);
 
-            var generatedCode = generator.Generate();
+        var generatedCode = generator.Generate();
 
-            return generatedCode;
-        }
+        return generatedCode;
     }
 }

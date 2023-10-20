@@ -8,27 +8,24 @@ using Sentry;
 
 namespace API.Middlewares;
 
-public class ExceptionMiddleware
+public class ExceptionMiddleware : IMiddleware
 {
     private readonly ConfigSettings _config;
     private readonly IWebHostEnvironment _env;
     private readonly ILoggerManager _logger;
-    private readonly RequestDelegate _next;
 
-    public ExceptionMiddleware(RequestDelegate next, ILoggerManager logger, IWebHostEnvironment env,
-        ConfigSettings config)
+    public ExceptionMiddleware(ILoggerManager logger, IWebHostEnvironment env, ConfigSettings config)
     {
         _config = config;
         _logger = logger;
         _env = env;
-        _next = next;
     }
 
-    public async Task InvokeAsync(HttpContext httpContext)
+    public async Task InvokeAsync(HttpContext httpContext, RequestDelegate next)
     {
         try
         {
-            await _next(httpContext);
+            await next(httpContext);
         }
         catch (Exception ex)
         {

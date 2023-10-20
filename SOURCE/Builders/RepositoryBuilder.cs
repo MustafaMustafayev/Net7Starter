@@ -16,25 +16,27 @@ public class RepositoryBuilder : ISourceBuilder, ITextBuilder
 
     public string BuildSourceText(Entity? entity, List<Entity>? entities)
     {
-        var text = @"
-using DAL.Abstract;
-using DAL.DatabaseContext;
-using DAL.GenericRepositories.Concrete;
-using ENTITIES.Entities;
+        var text = """
 
-namespace DAL.EntityFramework.Concrete;
+                   using DAL.Abstract;
+                   using DAL.DatabaseContext;
+                   using DAL.GenericRepositories.Concrete;
+                   using ENTITIES.Entities;
 
-public class {entityName}Repository : GenericRepository<{entityName}>, I{entityName}Repository
-{
-    private readonly DataContext _dataContext;
+                   namespace DAL.EntityFramework.Concrete;
 
-    public {entityName}Repository(DataContext dataContext)
-        : base(dataContext)
-    {
-        _dataContext = dataContext;
-    }
-}
-";
+                   public class {entityName}Repository : GenericRepository<{entityName}>, I{entityName}Repository
+                   {
+                       private readonly DataContext _dataContext;
+                   
+                       public {entityName}Repository(DataContext dataContext)
+                           : base(dataContext)
+                       {
+                           _dataContext = dataContext;
+                       }
+                   }
+
+                   """;
         text = text.Replace("{entityName}", entity!.Name);
 
         return text;

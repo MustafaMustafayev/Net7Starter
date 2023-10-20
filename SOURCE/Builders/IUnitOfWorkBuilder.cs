@@ -32,17 +32,19 @@ public class IUnitOfWorkBuilder : ISourceBuilder, ITextBuilder
             properties.AppendLine($"    public I{e.Name}Repository {e.Name}Repository {{ get; set; }}"));
 
 
-        var text = $@"
-using DAL.Abstract;
+        var text = $$"""
 
-namespace DAL.EntityFramework.UnitOfWorks.Abstract;
+                     using DAL.Abstract;
 
-public interface IUnitOfWork : IAsyncDisposable, IDisposable
-{{
-{properties}
-    public Task CommitAsync();
-}}
-";
+                     namespace DAL.EntityFramework.UnitOfWorks.Abstract;
+
+                     public interface IUnitOfWork : IAsyncDisposable, IDisposable
+                     {
+                     {{properties}}
+                         public Task CommitAsync();
+                     }
+
+                     """;
 
         return text;
     }

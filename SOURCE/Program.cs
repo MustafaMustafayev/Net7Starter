@@ -43,7 +43,7 @@ async Task ClientBuilderDialogAsync()
 
     if (string.IsNullOrEmpty(openApiJsonUrl?.Trim())) openApiJsonUrl = Constants.OpenApiFileName;
 
-    RefitBuilder refitBuilder = new RefitBuilder();
+    var refitBuilder = new RefitBuilder();
     // Relative or absolute path to .json or .yaml local file or a URL to a .json or .yaml file
     var generatedCode = await refitBuilder.BuildClientsAsync(openApiJsonUrl);
 

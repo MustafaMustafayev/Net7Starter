@@ -53,63 +53,65 @@ public class UnitOfWorkBuilder : ISourceBuilder, ITextBuilder
             properties.AppendLine($"    public I{e.Name}Repository {e.Name}Repository {{ get; set; }}"));
 
 
-        var text = $@"
-using DAL.Abstract;
-using DAL.DatabaseContext;
-using DAL.UnitOfWorks.Abstract;
+        var text = $$"""
 
-namespace DAL.EntityFramework.UnitOfWorks.Concrete;
+                     using DAL.Abstract;
+                     using DAL.DatabaseContext;
+                     using DAL.UnitOfWorks.Abstract;
 
-public class UnitOfWork : IUnitOfWork
-{{
-    private readonly DataContext _dataContext;
+                     namespace DAL.EntityFramework.UnitOfWorks.Concrete;
 
-    private bool _isDisposed;
+                     public class UnitOfWork : IUnitOfWork
+                     {
+                         private readonly DataContext _dataContext;
+                     
+                         private bool _isDisposed;
+                     
+                         public UnitOfWork(
+                             DataContext dataContext,
+                     {{constructorArguments}}
+                         )
+                         {
+                             _dataContext = dataContext;
+                     {{constructorSetters}}
+                         }
 
-    public UnitOfWork(
-        DataContext dataContext,
-{constructorArguments}
-    )
-    {{
-        _dataContext = dataContext;
-{constructorSetters}
-    }}
+                     {{properties}}
+                         public async Task CommitAsync()
+                         {
+                             await _dataContext.SaveChangesAsync();
+                         }
+                     
+                         public async ValueTask DisposeAsync()
+                         {
+                             if (!_isDisposed)
+                             {
+                                 _isDisposed = true;
+                                 await DisposeAsync(true);
+                                 GC.SuppressFinalize(this);
+                             }
+                         }
+                     
+                         public void Dispose()
+                         {
+                             if (_isDisposed) return;
+                             _isDisposed = true;
+                             Dispose(true);
+                             GC.SuppressFinalize(this);
+                         }
+                     
+                         protected virtual void Dispose(bool disposing)
+                         {
+                             if (disposing) _dataContext.Dispose();
+                         }
+                     
+                         private async ValueTask DisposeAsync(bool disposing)
+                         {
+                             if (disposing) await _dataContext.DisposeAsync();
+                         }
+                     }
 
-{properties}
-    public async Task CommitAsync()
-    {{
-        await _dataContext.SaveChangesAsync();
-    }}
-
-    public async ValueTask DisposeAsync()
-    {{
-        if (!_isDisposed)
-        {{
-            _isDisposed = true;
-            await DisposeAsync(true);
-            GC.SuppressFinalize(this);
-        }}
-    }}
-
-    public void Dispose()
-    {{
-        if (_isDisposed) return;
-        _isDisposed = true;
-        Dispose(true);
-        GC.SuppressFinalize(this);
-    }}
-
-    protected virtual void Dispose(bool disposing)
-    {{
-        if (disposing) _dataContext.Dispose();
-    }}
-
-    private async ValueTask DisposeAsync(bool disposing)
-    {{
-        if (disposing) await _dataContext.DisposeAsync();
-    }}
-}}
-";
+                     """;
 
         return text;
     }
