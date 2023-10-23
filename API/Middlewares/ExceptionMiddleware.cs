@@ -1,31 +1,34 @@
-﻿using CORE.Config;
+﻿using System.Net;
+using System.Text.Json;
+using CORE.Config;
 using CORE.Localization;
 using CORE.Logging;
 using DTO.Responses;
 using Sentry;
-using System.Net;
-using System.Text.Json;
 
 namespace API.Middlewares;
 
-public class ExceptionMiddleware : IMiddleware
+public class ExceptionMiddleware
 {
     private readonly ConfigSettings _config;
     private readonly IWebHostEnvironment _env;
     private readonly ILoggerManager _logger;
+    private readonly RequestDelegate _next;
 
-    public ExceptionMiddleware(ILoggerManager logger, IWebHostEnvironment env, ConfigSettings config)
+    public ExceptionMiddleware(RequestDelegate next, ILoggerManager logger, IWebHostEnvironment env,
+        ConfigSettings config)
     {
         _config = config;
         _logger = logger;
         _env = env;
+        _next = next;
     }
 
-    public async Task InvokeAsync(HttpContext httpContext, RequestDelegate next)
+    public async Task InvokeAsync(HttpContext httpContext)
     {
         try
         {
-            await next(httpContext);
+            await _next(httpContext);
         }
         catch (Exception ex)
         {

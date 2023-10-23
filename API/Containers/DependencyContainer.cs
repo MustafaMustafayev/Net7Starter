@@ -1,6 +1,5 @@
 ﻿using API.Hubs;
 using BLL.Concrete;
-using BLL.External.Clients;
 using CORE.Abstract;
 using CORE.Concrete;
 using CORE.Config;
@@ -263,9 +262,9 @@ public static class DependencyContainer
 
     public static void RegisterRefitClients(this IServiceCollection services, ConfigSettings config)
     {
-        services
-            .AddRefitClient<IPetStoreClient>()
-            .ConfigureHttpClient(c => c.BaseAddress = new Uri(config.PetStoreClientSettings.BaseUrl));
+        //services
+        //    .AddRefitClient<IPetStoreClient>()
+        //    .ConfigureHttpClient(c => c.BaseAddress = new Uri(config.PetStoreClientSettings.BaseUrl));
         // Add additional IHttpClientBuilder chained methods as required here:
         // .AddHttpMessageHandler<MyHandler>()
         // .SetHandlerLifetime(TimeSpan.FromMinutes(2));
