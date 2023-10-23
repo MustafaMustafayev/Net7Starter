@@ -22,7 +22,7 @@ public class EntityConfigurationBuilder : ISourceBuilder
     public string BuildSourceText(Entity? entity, List<Entity>? entities)
     {
         var text = """
-                   using ENTITIES.Entities;
+                   using ENTITIES.Entities{entityPath};
                    using Microsoft.EntityFrameworkCore;
                    using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -38,7 +38,7 @@ public class EntityConfigurationBuilder : ISourceBuilder
 
                    """;
         text = text.Replace("{entityName}", entity!.Name);
-
+        text = text.Replace("{entityPath}", !string.IsNullOrEmpty(entity!.Path) ? $".{entity.Path}" : string.Empty);
         return text;
     }
 }

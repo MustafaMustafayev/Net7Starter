@@ -20,7 +20,7 @@ public class RepositoryBuilder : ISourceBuilder
                    using DAL.EntityFramework.Abstract;
                    using DAL.EntityFramework.Context;
                    using DAL.EntityFramework.GenericRepository;
-                   using ENTITIES.Entities;
+                   using ENTITIES.Entities{entityPath};
 
                    namespace DAL.EntityFramework.Concrete;
 
@@ -37,7 +37,7 @@ public class RepositoryBuilder : ISourceBuilder
 
                    """;
         text = text.Replace("{entityName}", entity!.Name);
-
+        text = text.Replace("{entityPath}", !string.IsNullOrEmpty(entity!.Path) ? $".{entity.Path}" : string.Empty);
         return text;
     }
 }

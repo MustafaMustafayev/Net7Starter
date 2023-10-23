@@ -19,7 +19,7 @@ public class AutomapperBuilder : ISourceBuilder
         var text = """
                    using AutoMapper;
                    using DTO.{entityName};
-                   using ENTITIES.Entities;
+                   using ENTITIES.Entities{entityPath};
 
                    namespace BLL.Mappers;
 
@@ -36,6 +36,7 @@ public class AutomapperBuilder : ISourceBuilder
                    """;
 
         text = text.Replace("{entityName}", entity!.Name);
+        text = text.Replace("{entityPath}", !string.IsNullOrEmpty(entity!.Path) ? $".{entity.Path}" : string.Empty);
         return text;
     }
 }

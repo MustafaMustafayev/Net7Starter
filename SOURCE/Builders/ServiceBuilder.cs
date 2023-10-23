@@ -23,7 +23,7 @@ public class ServiceBuilder : ISourceBuilder
                    using CORE.Localization;
                    using DTO.Responses;
                    using DTO.{entityName};
-                   using ENTITIES.Entities;
+                   using ENTITIES.Entities{entityPath};
                    using DAL.EntityFramework.Utility;
                    using DAL.EntityFramework.UnitOfWork;
 
@@ -102,6 +102,7 @@ public class ServiceBuilder : ISourceBuilder
                    """;
 
         text = text.Replace("{entityName}", entity!.Name);
+        text = text.Replace("{entityPath}", !string.IsNullOrEmpty(entity!.Path) ? $".{entity.Path}" : string.Empty);
         return text;
     }
 }
