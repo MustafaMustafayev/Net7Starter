@@ -13,6 +13,8 @@ using DTO.Auth.Validators;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using GraphQL.Server.Ui.Voyager;
+using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
 using WatchDog;
 
@@ -75,7 +77,7 @@ builder.Services.AddGraphQLServer()
     .AddSorting()
     .AddFiltering();
 
-builder.Services.AddHealthChecks();
+builder.Services.AddHealthChecks().AddNpgSql(config.ConnectionStrings.AppDb);
 
 builder.Services.RegisterAuthentication(config);
 
@@ -147,9 +149,14 @@ app.UseAuthentication();
 
 // app.UseMiniProfiler();
 
-app.UseHealthChecks("/hc");
-
 app.UseRateLimiter();
+
+app.MapHealthChecks(
+    "/health",
+    new HealthCheckOptions
+    {
+        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+    });
 
 app.MapControllers();
 

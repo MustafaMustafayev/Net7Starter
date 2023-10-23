@@ -10,51 +10,53 @@
         <LangVersion>default</LangVersion>
     </PropertyGroup>
 
-    <PropertyGroup Condition=" '$(RunConfiguration)' == 'API - Production' "/>
-    <PropertyGroup Condition=" '$(RunConfiguration)' == 'API - Development' "/>
+    <PropertyGroup Condition=" '$(RunConfiguration)' == 'API - Production' " />
+    <PropertyGroup Condition=" '$(RunConfiguration)' == 'API - Development' " />
     <ItemGroup>
-        <Compile Remove="wwwroot\users\**"/>
-        <Content Remove="wwwroot\users\**"/>
-        <EmbeddedResource Remove="wwwroot\users\**"/>
-        <None Remove="wwwroot\users\**"/>
+        <Compile Remove="wwwroot\users\**" />
+        <Content Remove="wwwroot\users\**" />
+        <EmbeddedResource Remove="wwwroot\users\**" />
+        <None Remove="wwwroot\users\**" />
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="8.0.0"/>
-        <PackageReference Include="GraphQL.Server.Transports.AspNetCore" Version="7.6.0"/>
-        <PackageReference Include="GraphQL.Server.Ui.Voyager" Version="7.6.0"/>
-        <PackageReference Include="HotChocolate.Abstractions" Version="13.5.1"/>
-        <PackageReference Include="HotChocolate.AspNetCore" Version="13.5.1"/>
-        <PackageReference Include="HotChocolate.Data.EntityFramework" Version="13.5.1"/>
-        <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.1.0"/>
+        <PackageReference Include="AspNetCore.HealthChecks.NpgSql" Version="7.1.0" />
+        <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="7.1.0" />
+        <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="8.0.0" />
+        <PackageReference Include="GraphQL.Server.Transports.AspNetCore" Version="7.6.0" />
+        <PackageReference Include="GraphQL.Server.Ui.Voyager" Version="7.6.0" />
+        <PackageReference Include="HotChocolate.Abstractions" Version="13.5.1" />
+        <PackageReference Include="HotChocolate.AspNetCore" Version="13.5.1" />
+        <PackageReference Include="HotChocolate.Data.EntityFramework" Version="13.5.1" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.1.0" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.12">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="MiniProfiler.EntityFrameworkCore" Version="4.3.8"/>
-        <PackageReference Include="MongoDB.Driver" Version="2.22.0"/>
-        <PackageReference Include="NLog.Database" Version="5.2.5"/>
-        <PackageReference Include="Redis.OM" Version="0.5.3"/>
-        <PackageReference Include="Refit" Version="7.0.0"/>
-        <PackageReference Include="Refit.HttpClientFactory" Version="7.0.0"/>
-        <PackageReference Include="Scrutor" Version="4.2.2"/>
-        <PackageReference Include="Sentry.AspNetCore" Version="3.40.1"/>
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0"/>
-        <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.5.0"/>
-        <PackageReference Include="MiniProfiler.AspNetCore.Mvc" Version="4.3.8"/>
-        <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0"/>
-        <PackageReference Include="WatchDog.NET" Version="1.4.10"/>
+        <PackageReference Include="MiniProfiler.EntityFrameworkCore" Version="4.3.8" />
+        <PackageReference Include="MongoDB.Driver" Version="2.22.0" />
+        <PackageReference Include="NLog.Database" Version="5.2.5" />
+        <PackageReference Include="Redis.OM" Version="0.5.3" />
+        <PackageReference Include="Refit" Version="7.0.0" />
+        <PackageReference Include="Refit.HttpClientFactory" Version="7.0.0" />
+        <PackageReference Include="Scrutor" Version="4.2.2" />
+        <PackageReference Include="Sentry.AspNetCore" Version="3.40.1" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+        <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.5.0" />
+        <PackageReference Include="MiniProfiler.AspNetCore.Mvc" Version="4.3.8" />
+        <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
+        <PackageReference Include="WatchDog.NET" Version="1.4.10" />
     </ItemGroup>
 
     <ItemGroup>
-        <None Remove="Microsoft.EntityFrameworkCore.Design"/>
-        <None Remove="Swashbuckle.AspNetCore.Annotations"/>
-        <None Remove="Controllers\"/>
-        <None Remove="MiniProfiler.AspNetCore.Mvc"/>
-        <None Remove="FluentValidation.AspNetCore"/>
-        <None Remove="Middlewares\"/>
+        <None Remove="Microsoft.EntityFrameworkCore.Design" />
+        <None Remove="Swashbuckle.AspNetCore.Annotations" />
+        <None Remove="Controllers\" />
+        <None Remove="MiniProfiler.AspNetCore.Mvc" />
+        <None Remove="FluentValidation.AspNetCore" />
+        <None Remove="Middlewares\" />
     </ItemGroup>
     <ItemGroup>
-        <Folder Include="wwwroot\files\"/>
+        <Folder Include="wwwroot\files\" />
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\BLL\BLL.csproj">
@@ -66,9 +68,9 @@
         <ProjectReference Include="..\DTO\DTO.csproj">
             <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
         </ProjectReference>
-        <ProjectReference Include="..\MEDIATRS\MEDIATRS.csproj"/>
+        <ProjectReference Include="..\MEDIATRS\MEDIATRS.csproj" />
     </ItemGroup>
     <ItemGroup>
-        <Content Remove="wwwroot\files\**"/>
+        <Content Remove="wwwroot\files\**" />
     </ItemGroup>
 </Project>
