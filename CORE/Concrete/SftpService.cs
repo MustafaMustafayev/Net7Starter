@@ -1,11 +1,11 @@
-﻿using System.Drawing;
-using System.Drawing.Imaging;
-using CORE.Abstract;
+﻿using CORE.Abstract;
 using CORE.Config;
 using DTO.Sftp;
 using Microsoft.AspNetCore.Http;
 using Renci.SshNet;
 using Renci.SshNet.Sftp;
+using System.Drawing;
+using System.Drawing.Imaging;
 using ConnectionInfo = Renci.SshNet.ConnectionInfo;
 
 namespace CORE.Concrete;
@@ -34,22 +34,22 @@ public class SftpService : ISftpService
             sftp.ChangeDirectory(realPath);
             ICollection<ISftpFile> directories = sftp.ListDirectory(realPath).ToList();
             directoryInfos.AddRange(from sftpFile in directories
-                let fileName = sftpFile.Name
-                let fileParts = fileName.Split('.')
-                where fileName != "." && fileName != ".."
-                let isAvaliable = sftpFile.IsDirectory || fileParts[^1] == "mp4"
-                where isAvaliable
-                let subDirectory = sftpFile.FullName.StartsWith("/") && sftpFile.FullName.Length > 0
-                    ? sftpFile.FullName.Remove(0, 1)
-                    : sftpFile.FullName
-                select new DirectoryInformation
-                {
-                    Name = sftpFile.Name,
-                    Length = sftpFile.Length.ToString(),
-                    Path = subDirectory,
-                    CreatedAt = sftpFile.LastWriteTime.ToString("dd-MMM-yyyy HH:mm"),
-                    IsDirectory = sftpFile.IsDirectory
-                });
+                                    let fileName = sftpFile.Name
+                                    let fileParts = fileName.Split('.')
+                                    where fileName != "." && fileName != ".."
+                                    let isAvaliable = sftpFile.IsDirectory || fileParts[^1] == "mp4"
+                                    where isAvaliable
+                                    let subDirectory = sftpFile.FullName.StartsWith("/") && sftpFile.FullName.Length > 0
+                                        ? sftpFile.FullName.Remove(0, 1)
+                                        : sftpFile.FullName
+                                    select new DirectoryInformation
+                                    {
+                                        Name = sftpFile.Name,
+                                        Length = sftpFile.Length.ToString(),
+                                        Path = subDirectory,
+                                        CreatedAt = sftpFile.LastWriteTime.ToString("dd-MMM-yyyy HH:mm"),
+                                        IsDirectory = sftpFile.IsDirectory
+                                    });
         }
 
         return directoryInfos.OrderBy(m => m.Name).ThenBy(m => !m.IsDirectory).ToList();

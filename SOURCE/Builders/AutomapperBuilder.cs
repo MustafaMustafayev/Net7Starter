@@ -5,7 +5,7 @@ using SOURCE.Workers;
 namespace SOURCE.Builders;
 
 // ReSharper disable once UnusedType.Global
-public class AutomapperBuilder : ISourceBuilder, ITextBuilder
+public class AutomapperBuilder : ISourceBuilder
 {
     public void BuildSourceFile(List<Entity> entities)
     {
@@ -17,7 +17,6 @@ public class AutomapperBuilder : ISourceBuilder, ITextBuilder
     public string BuildSourceText(Entity? entity, List<Entity>? entities)
     {
         var text = """
-
                    using AutoMapper;
                    using DTO.{entityName};
                    using ENTITIES.Entities;

@@ -1,5 +1,5 @@
-﻿using System.Globalization;
-using CORE.Constants;
+﻿using CORE.Constants;
+using System.Globalization;
 
 namespace API.Middlewares;
 

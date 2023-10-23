@@ -1,15 +1,15 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Net;
-using System.Net.Mail;
-using System.Security.Cryptography;
-using System.Text;
-using CORE.Abstract;
+﻿using CORE.Abstract;
 using CORE.Config;
 using DTO.Helper;
 using ENTITIES.Enums;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Net;
+using System.Net.Mail;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace CORE.Concrete;
 

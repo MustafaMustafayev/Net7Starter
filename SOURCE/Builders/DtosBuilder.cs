@@ -5,7 +5,7 @@ using SOURCE.Workers;
 namespace SOURCE.Builders;
 
 // ReSharper disable once UnusedType.Global
-public class DtosBuilder : ISourceBuilder, ITextBuilder
+public class DtosBuilder : ISourceBuilder
 {
     public void BuildSourceFile(List<Entity> entities)
     {
@@ -17,7 +17,6 @@ public class DtosBuilder : ISourceBuilder, ITextBuilder
     public string BuildSourceText(Entity? entity, List<Entity>? entities)
     {
         var text = """
-
                    namespace DTO.{entityName};
 
                    public record {entityName}ToAddDto();

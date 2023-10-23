@@ -6,7 +6,7 @@ using SOURCE.Workers;
 namespace SOURCE.Builders;
 
 // ReSharper disable once UnusedType.Global
-public class ControllerBuilder : ISourceBuilder, ITextBuilder
+public class ControllerBuilder : ISourceBuilder
 {
     public void BuildSourceFile(List<Entity> entities)
     {
@@ -18,7 +18,6 @@ public class ControllerBuilder : ISourceBuilder, ITextBuilder
     public string BuildSourceText(Entity? entity, List<Entity>? entities)
     {
         var text = """
-
                    using API.Filters;
                    using API.Attributes;
                    using BLL.Abstract;

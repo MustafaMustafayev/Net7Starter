@@ -1,10 +1,8 @@
 ﻿using API.Attributes;
 using API.Filters;
 using BLL.External.Clients;
-using CORE.Config;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
-using Refit;
 using AuthorizeAttribute = Microsoft.AspNetCore.Authorization.AuthorizeAttribute;
 
 namespace API.Controllers;

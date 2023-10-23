@@ -6,7 +6,7 @@ namespace SOURCE.Builders;
 
 // ReSharper disable once InconsistentNaming
 // ReSharper disable once UnusedType.Global
-public class IServiceBuilder : ISourceBuilder, ITextBuilder
+public class IServiceBuilder : ISourceBuilder
 {
     public void BuildSourceFile(List<Entity> entities)
     {
@@ -18,10 +18,9 @@ public class IServiceBuilder : ISourceBuilder, ITextBuilder
     public string BuildSourceText(Entity? entity, List<Entity>? entities)
     {
         var text = """
-
                    using DTO.{entityName};
                    using DTO.Responses;
-                   using DAL.Utility;
+                   using DAL.EntityFramework.Utility;
 
                    namespace BLL.Abstract;
 

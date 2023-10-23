@@ -1,13 +1,13 @@
-﻿using System.Text;
-using SOURCE.Builders.Abstract;
+﻿using SOURCE.Builders.Abstract;
 using SOURCE.Helpers;
 using SOURCE.Models;
 using SOURCE.Workers;
+using System.Text;
 
 namespace SOURCE.Builders;
 
 // ReSharper disable once UnusedType.Global
-public class UnitOfWorkBuilder : ISourceBuilder, ITextBuilder
+public class UnitOfWorkBuilder : ISourceBuilder
 {
     public void BuildSourceFile(List<Entity> entities)
     {
@@ -54,12 +54,10 @@ public class UnitOfWorkBuilder : ISourceBuilder, ITextBuilder
 
 
         var text = $$"""
+                     using DAL.EntityFramework.Abstract;
+                     using DAL.EntityFramework.Context;
 
-                     using DAL.Abstract;
-                     using DAL.DatabaseContext;
-                     using DAL.UnitOfWorks.Abstract;
-
-                     namespace DAL.EntityFramework.UnitOfWorks.Concrete;
+                     namespace DAL.EntityFramework.UnitOfWork.Concrete;
 
                      public class UnitOfWork : IUnitOfWork
                      {

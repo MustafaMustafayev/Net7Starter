@@ -5,7 +5,7 @@ using SOURCE.Workers;
 namespace SOURCE.Builders;
 
 // ReSharper disable once UnusedType.Global
-public class ServiceBuilder : ISourceBuilder, ITextBuilder
+public class ServiceBuilder : ISourceBuilder
 {
     public void BuildSourceFile(List<Entity> entities)
     {
@@ -17,16 +17,15 @@ public class ServiceBuilder : ISourceBuilder, ITextBuilder
     public string BuildSourceText(Entity? entity, List<Entity>? entities)
     {
         var text = """
-
                    using AutoMapper;
                    using BLL.Abstract;
                    using CORE.Abstract;
                    using CORE.Localization;
-                   using DAL.UnitOfWorks.Abstract;
                    using DTO.Responses;
                    using DTO.{entityName};
                    using ENTITIES.Entities;
-                   using DAL.Utility;
+                   using DAL.EntityFramework.Utility;
+                   using DAL.EntityFramework.UnitOfWork;
 
                    namespace BLL.Concrete;
 

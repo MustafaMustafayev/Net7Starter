@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using BLL.Abstract;
 using CORE.Localization;
-using DAL.EntityFramework.UnitOfWork;
 using DTO.File;
 using DTO.Responses;
 using ENTITIES.Enums;

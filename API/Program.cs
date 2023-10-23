@@ -1,5 +1,4 @@
-﻿using System.Text.Json.Serialization;
-using API.Containers;
+﻿using API.Containers;
 using API.Filters;
 using API.Graphql.Role;
 using API.Hubs;
@@ -16,6 +15,7 @@ using GraphQL.Server.Ui.Voyager;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
 using WatchDog;
 
 var builder = WebApplication.CreateBuilder(args);

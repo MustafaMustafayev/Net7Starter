@@ -1,6 +1,6 @@
-﻿using System.Linq.Expressions;
-using Elasticsearch.Net;
+﻿using Elasticsearch.Net;
 using Nest;
+using System.Linq.Expressions;
 
 namespace DAL.ElasticSearch;
 

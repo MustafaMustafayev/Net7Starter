@@ -1,6 +1,6 @@
 using DAL.EntityFramework.Abstract;
 
-namespace DAL.EntityFramework.UnitOfWork;
+namespace DAL.EntityFramework.UnitOfWork.Abstract;
 
 public interface IUnitOfWork : IAsyncDisposable, IDisposable
 {

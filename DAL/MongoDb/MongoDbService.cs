@@ -1,6 +1,6 @@
-﻿using System.Linq.Expressions;
-using CORE.Config;
+﻿using CORE.Config;
 using MongoDB.Driver;
+using System.Linq.Expressions;
 
 namespace DAL.MongoDb;
 

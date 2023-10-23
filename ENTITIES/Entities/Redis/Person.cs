@@ -5,7 +5,7 @@ namespace ENTITIES.Entities.Redis;
 [Document(StorageType = StorageType.Json, Prefixes = new[] { "Person" })]
 public class Person
 {
-    [RedisIdField] [Indexed] public string? Id { get; set; }
+    [RedisIdField][Indexed] public string? Id { get; set; }
 
     [Indexed] public string? FirstName { get; set; }
 

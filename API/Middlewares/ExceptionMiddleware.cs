@@ -1,10 +1,10 @@
-﻿using System.Net;
-using System.Text.Json;
-using CORE.Config;
+﻿using CORE.Config;
 using CORE.Localization;
 using CORE.Logging;
 using DTO.Responses;
 using Sentry;
+using System.Net;
+using System.Text.Json;
 
 namespace API.Middlewares;
 
