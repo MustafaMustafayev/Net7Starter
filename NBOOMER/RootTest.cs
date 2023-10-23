@@ -1,14 +1,14 @@
-﻿using System.Net;
-using System.Net.Http.Headers;
-using System.Net.Http.Json;
-using System.Text;
-using DTO.Auth;
+﻿using DTO.Auth;
 using DTO.Responses;
 using NBomber.Contracts;
 using NBomber.CSharp;
 using NBomber.Http.CSharp;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using System.Net;
+using System.Net.Http.Headers;
+using System.Net.Http.Json;
+using System.Text;
 
 namespace LoadTesting;
 

@@ -1,5 +1,4 @@
-﻿using System.Text.Json.Serialization;
-using API.Containers;
+﻿using API.Containers;
 using API.Filters;
 using API.Graphql.Role;
 using API.Hubs;
@@ -13,13 +12,18 @@ using DTO.Auth.Validators;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using GraphQL.Server.Ui.Voyager;
+using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
 using WatchDog;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Logging.AddWatchDogLogger();
+
 builder.Services.RegisterLogger();
+
 builder.Services.RegisterWatchDog();
 
 var config = new ConfigSettings();
@@ -43,7 +47,7 @@ builder.Services.AddDbContext<DataContext>(options =>
 
 builder.Services.AddHttpContextAccessor();
 
-builder.Services.RegisterHttpClients(config);
+builder.Services.RegisterRefitClients(config);
 
 if (config.RedisSettings.IsEnabled)
 {
@@ -54,7 +58,8 @@ if (config.RedisSettings.IsEnabled)
 if (config.ElasticSearchSettings.IsEnabled) builder.Services.RegisterElasticSearch(config);
 if (config.MongoDbSettings.IsEnabled) builder.Services.RegisterMongoDb();
 
-builder.Services.Configure<IISServerOptions>(options => options.MaxRequestBodySize = 60 * 1024 * 1024); //60mb
+// configure max request body size as 60 MB
+builder.Services.Configure<IISServerOptions>(options => options.MaxRequestBodySize = 60 * 1024 * 1024);
 
 builder.Services.RegisterRepositories();
 builder.Services.RegisterSignalRHubs();
@@ -72,12 +77,15 @@ builder.Services.AddGraphQLServer()
     .AddSorting()
     .AddFiltering();
 
-builder.Services.AddHealthChecks();
+builder.Services.AddHealthChecks().AddNpgSql(config.ConnectionStrings.AppDb);
 
 builder.Services.RegisterAuthentication(config);
 
-builder.Services.AddCors(o =>
-    o.AddPolicy(Constants.EnableAllCorsName, b => b.AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin()));
+builder.Services.AddCors(o => o
+    .AddPolicy(Constants.EnableAllCorsName, b => b
+        .AllowAnyMethod()
+        .AllowAnyHeader()
+        .AllowAnyOrigin()));
 
 builder.Services.AddScoped<LogActionFilter>();
 
@@ -91,7 +99,11 @@ builder.Services.RegisterMiniProfiler();
 
 builder.Services.AddSignalR();
 
+builder.Services.AddAntiforgery();
+
 var app = builder.Build();
+
+// app.UseAntiforgery();
 
 // if (app.Environment.IsDevelopment())
 
@@ -107,9 +119,6 @@ app.UseCors(Constants.EnableAllCorsName);
 app.UseMiddleware<LocalizationMiddleware>();
 app.UseMiddleware<ExceptionMiddleware>();
 
-// anti forgery token implementation
-// app.UseMiddleware<AntiForgeryTokenValidator>();
-
 app.UseOutputCache();
 app.UseHttpsRedirection();
 
@@ -119,7 +128,7 @@ app.Use((context, next) =>
     return next();
 });
 
-// this will cause unexpected behaviour on watchdog site
+// this will cause unexpected behaviour on watchdog's site
 /*app.Use(async (context, next) =>
 {
     context.Response.Headers.Add("X-Content-Type-Options", "nosniff");
@@ -140,9 +149,14 @@ app.UseAuthentication();
 
 // app.UseMiniProfiler();
 
-app.UseHealthChecks("/hc");
-
 app.UseRateLimiter();
+
+app.MapHealthChecks(
+    "/health",
+    new HealthCheckOptions
+    {
+        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+    });
 
 app.MapControllers();
 

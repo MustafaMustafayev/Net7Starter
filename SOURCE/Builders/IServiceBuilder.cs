@@ -6,7 +6,7 @@ namespace SOURCE.Builders;
 
 // ReSharper disable once InconsistentNaming
 // ReSharper disable once UnusedType.Global
-public class IServiceBuilder : ISourceBuilder, ITextBuilder
+public class IServiceBuilder : ISourceBuilder
 {
     public void BuildSourceFile(List<Entity> entities)
     {
@@ -17,23 +17,24 @@ public class IServiceBuilder : ISourceBuilder, ITextBuilder
 
     public string BuildSourceText(Entity? entity, List<Entity>? entities)
     {
-        var text = @"
-using DTO.{entityName};
-using DTO.Responses;
-using DAL.Utility;
+        var text = """
+                   using DTO.{entityName};
+                   using DTO.Responses;
+                   using DAL.EntityFramework.Utility;
 
-namespace BLL.Abstract;
+                   namespace BLL.Abstract;
 
-public interface I{entityName}Service
-{
-    Task<IDataResult<PaginatedList<{entityName}ToListDto>>> GetAsPaginatedListAsync();
-    Task<IDataResult<List<{entityName}ToListDto>>> GetAsync();
-    Task<IDataResult<{entityName}ToListDto>> GetAsync(int id);
-    Task<IResult> AddAsync({entityName}ToAddDto dto);
-    Task<IResult> UpdateAsync(int id, {entityName}ToUpdateDto dto);
-    Task<IResult> SoftDeleteAsync(int id);
-}
-";
+                   public interface I{entityName}Service
+                   {
+                       Task<IDataResult<PaginatedList<{entityName}ToListDto>>> GetAsPaginatedListAsync();
+                       Task<IDataResult<List<{entityName}ToListDto>>> GetAsync();
+                       Task<IDataResult<{entityName}ToListDto>> GetAsync(int id);
+                       Task<IResult> AddAsync({entityName}ToAddDto dto);
+                       Task<IResult> UpdateAsync(int id, {entityName}ToUpdateDto dto);
+                       Task<IResult> SoftDeleteAsync(int id);
+                   }
+
+                   """;
 
         text = text.Replace("{entityName}", entity!.Name);
         return text;

@@ -1,13 +1,13 @@
-﻿using System.Text;
-using SOURCE.Builders.Abstract;
+﻿using SOURCE.Builders.Abstract;
 using SOURCE.Helpers;
 using SOURCE.Models;
 using SOURCE.Workers;
+using System.Text;
 
 namespace SOURCE.Builders;
 
 // ReSharper disable once UnusedType.Global
-public class UnitOfWorkBuilder : ISourceBuilder, ITextBuilder
+public class UnitOfWorkBuilder : ISourceBuilder
 {
     public void BuildSourceFile(List<Entity> entities)
     {
@@ -53,63 +53,63 @@ public class UnitOfWorkBuilder : ISourceBuilder, ITextBuilder
             properties.AppendLine($"    public I{e.Name}Repository {e.Name}Repository {{ get; set; }}"));
 
 
-        var text = $@"
-using DAL.Abstract;
-using DAL.DatabaseContext;
-using DAL.UnitOfWorks.Abstract;
+        var text = $$"""
+                     using DAL.EntityFramework.Abstract;
+                     using DAL.EntityFramework.Context;
 
-namespace DAL.EntityFramework.UnitOfWorks.Concrete;
+                     namespace DAL.EntityFramework.UnitOfWork;
 
-public class UnitOfWork : IUnitOfWork
-{{
-    private readonly DataContext _dataContext;
+                     public class UnitOfWork : IUnitOfWork
+                     {
+                         private readonly DataContext _dataContext;
+                     
+                         private bool _isDisposed;
+                     
+                         public UnitOfWork(
+                             DataContext dataContext,
+                     {{constructorArguments}}
+                         )
+                         {
+                             _dataContext = dataContext;
+                     {{constructorSetters}}
+                         }
 
-    private bool _isDisposed;
+                     {{properties}}
+                         public async Task CommitAsync()
+                         {
+                             await _dataContext.SaveChangesAsync();
+                         }
+                     
+                         public async ValueTask DisposeAsync()
+                         {
+                             if (!_isDisposed)
+                             {
+                                 _isDisposed = true;
+                                 await DisposeAsync(true);
+                                 GC.SuppressFinalize(this);
+                             }
+                         }
+                     
+                         public void Dispose()
+                         {
+                             if (_isDisposed) return;
+                             _isDisposed = true;
+                             Dispose(true);
+                             GC.SuppressFinalize(this);
+                         }
+                     
+                         protected virtual void Dispose(bool disposing)
+                         {
+                             if (disposing) _dataContext.Dispose();
+                         }
+                     
+                         private async ValueTask DisposeAsync(bool disposing)
+                         {
+                             if (disposing) await _dataContext.DisposeAsync();
+                         }
+                     }
 
-    public UnitOfWork(
-        DataContext dataContext,
-{constructorArguments}
-    )
-    {{
-        _dataContext = dataContext;
-{constructorSetters}
-    }}
-
-{properties}
-    public async Task CommitAsync()
-    {{
-        await _dataContext.SaveChangesAsync();
-    }}
-
-    public async ValueTask DisposeAsync()
-    {{
-        if (!_isDisposed)
-        {{
-            _isDisposed = true;
-            await DisposeAsync(true);
-            GC.SuppressFinalize(this);
-        }}
-    }}
-
-    public void Dispose()
-    {{
-        if (_isDisposed) return;
-        _isDisposed = true;
-        Dispose(true);
-        GC.SuppressFinalize(this);
-    }}
-
-    protected virtual void Dispose(bool disposing)
-    {{
-        if (disposing) _dataContext.Dispose();
-    }}
-
-    private async ValueTask DisposeAsync(bool disposing)
-    {{
-        if (disposing) await _dataContext.DisposeAsync();
-    }}
-}}
-";
+                     """;
 
         return text;
     }

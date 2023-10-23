@@ -5,7 +5,7 @@ using SOURCE.Workers;
 namespace SOURCE.Builders;
 
 // ReSharper disable once UnusedType.Global
-public class RepositoryBuilder : ISourceBuilder, ITextBuilder
+public class RepositoryBuilder : ISourceBuilder
 {
     public void BuildSourceFile(List<Entity> entities)
     {
@@ -16,25 +16,26 @@ public class RepositoryBuilder : ISourceBuilder, ITextBuilder
 
     public string BuildSourceText(Entity? entity, List<Entity>? entities)
     {
-        var text = @"
-using DAL.Abstract;
-using DAL.DatabaseContext;
-using DAL.GenericRepositories.Concrete;
-using ENTITIES.Entities;
+        var text = """
+                   using DAL.EntityFramework.Abstract;
+                   using DAL.EntityFramework.Context;
+                   using DAL.EntityFramework.GenericRepository;
+                   using ENTITIES.Entities;
 
-namespace DAL.EntityFramework.Concrete;
+                   namespace DAL.EntityFramework.Concrete;
 
-public class {entityName}Repository : GenericRepository<{entityName}>, I{entityName}Repository
-{
-    private readonly DataContext _dataContext;
+                   public class {entityName}Repository : GenericRepository<{entityName}>, I{entityName}Repository
+                   {
+                       private readonly DataContext _dataContext;
+                   
+                       public {entityName}Repository(DataContext dataContext)
+                           : base(dataContext)
+                       {
+                           _dataContext = dataContext;
+                       }
+                   }
 
-    public {entityName}Repository(DataContext dataContext)
-        : base(dataContext)
-    {
-        _dataContext = dataContext;
-    }
-}
-";
+                   """;
         text = text.Replace("{entityName}", entity!.Name);
 
         return text;

@@ -1,10 +1,10 @@
-﻿using System.Security.Claims;
-using CORE.Config;
+﻿using CORE.Config;
 using CORE.Constants;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.SignalR;
+using System.Security.Claims;
 
 namespace API.Hubs;
 

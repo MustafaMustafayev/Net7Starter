@@ -1,8 +1,8 @@
 ﻿using API.Attributes;
 using API.Filters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using AuthorizeAttribute = Microsoft.AspNetCore.Authorization.AuthorizeAttribute;
 
 namespace API.Controllers;
 
@@ -12,4 +12,17 @@ namespace API.Controllers;
 [ValidateToken]
 public class HelperController : Controller
 {
+    //private readonly IPetStoreClient _petStoreClient;
+
+    //public HelperController(IPetStoreClient petStoreClient)
+    //{
+    //    _petStoreClient = petStoreClient;
+    //}
+
+    [HttpGet("test")]
+    public async Task<IActionResult> Get()
+    {
+        //var response = await _petStoreClient.GetOrderById(24);
+        return Ok("response");
+    }
 }

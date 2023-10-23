@@ -6,7 +6,7 @@ namespace SOURCE.Builders;
 
 // ReSharper disable once InconsistentNaming
 // ReSharper disable once UnusedType.Global
-public class IRepositoryBuilder : ISourceBuilder, ITextBuilder
+public class IRepositoryBuilder : ISourceBuilder
 {
     public void BuildSourceFile(List<Entity> entities)
     {
@@ -17,16 +17,17 @@ public class IRepositoryBuilder : ISourceBuilder, ITextBuilder
 
     public string BuildSourceText(Entity? entity, List<Entity>? entities)
     {
-        var text = @"
-using DAL.GenericRepositories.Abstract;
-using ENTITIES.Entities;
+        var text = """
+                   using DAL.EntityFramework.GenericRepository;
+                   using ENTITIES.Entities;
 
-namespace DAL.EntityFramework.Abstract;
+                   namespace DAL.EntityFramework.Abstract;
 
-public interface I{entityName}Repository : IGenericRepository<{entityName}>
-{
-}
-";
+                   public interface I{entityName}Repository : IGenericRepository<{entityName}>
+                   {
+                   }
+
+                   """;
         text = text.Replace("{entityName}", entity!.Name);
 
         return text;

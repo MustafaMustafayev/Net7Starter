@@ -72,32 +72,32 @@ public class DataContext : DbContext
                         _utilService.GetUserIdFromToken();
                     break;
                 case EntityState.Modified:
-                {
-                    Entry((Auditable)entityEntry.Entity).Property(p => p.CreatedAt).IsModified =
-                        false;
-                    Entry((Auditable)entityEntry.Entity).Property(p => p.CreatedById).IsModified =
-                        false;
-
-                    if (((Auditable)entityEntry.Entity).IsDeleted)
                     {
-                        Entry((Auditable)entityEntry.Entity).Property(p => p.ModifiedBy)
-                            .IsModified = false;
-                        Entry((Auditable)entityEntry.Entity).Property(p => p.ModifiedAt)
-                            .IsModified = false;
+                        Entry((Auditable)entityEntry.Entity).Property(p => p.CreatedAt).IsModified =
+                            false;
+                        Entry((Auditable)entityEntry.Entity).Property(p => p.CreatedById).IsModified =
+                            false;
 
-                        ((Auditable)entityEntry.Entity).DeletedAt = DateTime.Now;
-                        ((Auditable)entityEntry.Entity).DeletedBy =
-                            _utilService.GetUserIdFromToken();
-                    }
-                    else
-                    {
-                        ((Auditable)entityEntry.Entity).ModifiedAt = DateTime.Now;
-                        ((Auditable)entityEntry.Entity).ModifiedBy =
-                            _utilService.GetUserIdFromToken();
-                    }
+                        if (((Auditable)entityEntry.Entity).IsDeleted)
+                        {
+                            Entry((Auditable)entityEntry.Entity).Property(p => p.ModifiedBy)
+                                .IsModified = false;
+                            Entry((Auditable)entityEntry.Entity).Property(p => p.ModifiedAt)
+                                .IsModified = false;
 
-                    break;
-                }
+                            ((Auditable)entityEntry.Entity).DeletedAt = DateTime.Now;
+                            ((Auditable)entityEntry.Entity).DeletedBy =
+                                _utilService.GetUserIdFromToken();
+                        }
+                        else
+                        {
+                            ((Auditable)entityEntry.Entity).ModifiedAt = DateTime.Now;
+                            ((Auditable)entityEntry.Entity).ModifiedBy =
+                                _utilService.GetUserIdFromToken();
+                        }
+
+                        break;
+                    }
                 case EntityState.Detached:
                     break;
                 case EntityState.Unchanged:

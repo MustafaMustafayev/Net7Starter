@@ -1,6 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using ENTITIES.Entities.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using ENTITIES.Entities.Generic;
 
 namespace ENTITIES.Entities;
 

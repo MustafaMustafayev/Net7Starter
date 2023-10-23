@@ -4,9 +4,9 @@ using DAL.EntityFramework.UnitOfWork;
 using DTO.Responses;
 using ENTITIES.Entities;
 using MediatR;
-using MEDIATRS.MediatR.OrganizationCQRS.Commands;
+using MEDIATRS.OrganizationCQRS.Commands;
 
-namespace MEDIATRS.MediatR.OrganizationCQRS.Handlers;
+namespace MEDIATRS.OrganizationCQRS.Handlers;
 
 public class UpdateOrganizationHandler : IRequestHandler<UpdateOrganizationCommand, IResult>
 {

@@ -1,14 +1,14 @@
-﻿using System.Text;
-using SOURCE.Builders.Abstract;
+﻿using SOURCE.Builders.Abstract;
 using SOURCE.Helpers;
 using SOURCE.Models;
 using SOURCE.Workers;
+using System.Text;
 
 namespace SOURCE.Builders;
 
 // ReSharper disable once InconsistentNaming
 // ReSharper disable once UnusedType.Global
-public class IUnitOfWorkBuilder : ISourceBuilder, ITextBuilder
+public class IUnitOfWorkBuilder : ISourceBuilder
 {
     public void BuildSourceFile(List<Entity> entities)
     {
@@ -32,17 +32,18 @@ public class IUnitOfWorkBuilder : ISourceBuilder, ITextBuilder
             properties.AppendLine($"    public I{e.Name}Repository {e.Name}Repository {{ get; set; }}"));
 
 
-        var text = $@"
-using DAL.Abstract;
+        var text = $$"""
+                     using DAL.EntityFramework.Abstract;
 
-namespace DAL.EntityFramework.UnitOfWorks.Abstract;
+                     namespace DAL.EntityFramework.UnitOfWork;
 
-public interface IUnitOfWork : IAsyncDisposable, IDisposable
-{{
-{properties}
-    public Task CommitAsync();
-}}
-";
+                     public interface IUnitOfWork : IAsyncDisposable, IDisposable
+                     {
+                     {{properties}}
+                         public Task CommitAsync();
+                     }
+
+                     """;
 
         return text;
     }
