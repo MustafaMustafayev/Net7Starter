@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CORE.Localization;
+using DAL.EntityFramework.UnitOfWork;
 using DTO.Organization;
 using DTO.Responses;
 using MediatR;

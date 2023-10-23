@@ -57,7 +57,7 @@ public class UnitOfWorkBuilder : ISourceBuilder
                      using DAL.EntityFramework.Abstract;
                      using DAL.EntityFramework.Context;
 
-                     namespace DAL.EntityFramework.UnitOfWork.Concrete;
+                     namespace DAL.EntityFramework.UnitOfWork;
 
                      public class UnitOfWork : IUnitOfWork
                      {

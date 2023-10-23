@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BLL.Abstract;
+using DAL.EntityFramework.UnitOfWork;
 using DTO.Logging;
 using ENTITIES.Entities;
 

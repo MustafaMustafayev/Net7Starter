@@ -7,6 +7,7 @@ using CORE.Config;
 using CORE.Logging;
 using DAL.ElasticSearch;
 using DAL.EntityFramework.Concrete;
+using DAL.EntityFramework.UnitOfWork;
 using DAL.MongoDb;
 using DTO.User;
 using MediatR;
