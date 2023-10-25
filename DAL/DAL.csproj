@@ -9,11 +9,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <None Remove="Npgsql.EntityFrameworkCore.PostgreSQL"/>
-        <None Remove="StyleCop.Analyzers"/>
-        <None Remove="Microsoft.EntityFrameworkCore.Proxies"/>
-        <None Remove="Microsoft.AspNetCore.Http"/>
-        <None Remove="stylecop.json"/>
+        <None Remove="Npgsql.EntityFrameworkCore.PostgreSQL" />
+        <None Remove="StyleCop.Analyzers" />
+        <None Remove="Microsoft.EntityFrameworkCore.Proxies" />
+        <None Remove="Microsoft.AspNetCore.Http" />
+        <None Remove="stylecop.json" />
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.12">
@@ -24,22 +24,22 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="MongoDB.Driver" Version="2.22.0"/>
-        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.11"/>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="7.0.12"/>
+        <PackageReference Include="MongoDB.Driver" Version="2.22.0" />
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.11" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="7.0.12" />
     </ItemGroup>
     <ItemGroup>
-        <ProjectReference Include="..\CORE\CORE.csproj"/>
-        <ProjectReference Include="..\ENTITIES\ENTITIES.csproj"/>
+        <ProjectReference Include="..\CORE\CORE.csproj" />
+        <ProjectReference Include="..\ENTITIES\ENTITIES.csproj" />
     </ItemGroup>
     <ItemGroup>
-        <Compile Remove="UnitOfWorks\Concrete\UnitOfWorkGenerated.cs"/>
-        <Compile Remove="Concrete\TestRepository.cs"/>
-        <Compile Remove="Abstract\ITestRepository.cs"/>
-        <Compile Remove="Abstract\IFirstRepository.cs"/>
-        <Compile Remove="Concrete\FirstRepository.cs"/>
+        <Compile Remove="UnitOfWorks\Concrete\UnitOfWorkGenerated.cs" />
+        <Compile Remove="Concrete\TestRepository.cs" />
+        <Compile Remove="Abstract\ITestRepository.cs" />
+        <Compile Remove="Abstract\IFirstRepository.cs" />
+        <Compile Remove="Concrete\FirstRepository.cs" />
     </ItemGroup>
     <ItemGroup>
-        <Folder Include="EntityFramework\"/>
+      <Folder Include="EntityFramework\Configurations\" />
     </ItemGroup>
 </Project>
