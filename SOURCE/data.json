@@ -1,1 +1,1 @@
-﻿[  {    "name": "Department"  }]
+﻿[  {    "name": "Department",    "configure": true,    "path": "Structures"  },  {    "name": "Department1",    "configure": true  }]

@@ -5,36 +5,38 @@ using SOURCE.Workers;
 namespace SOURCE.Builders;
 
 // ReSharper disable once UnusedType.Global
-public class AutomapperBuilder : ISourceBuilder
+public class EntityConfigurationBuilder : ISourceBuilder
 {
     public void BuildSourceFile(List<Entity> entities)
     {
         entities.ForEach(model =>
-            SourceBuilder.Instance.AddSourceFile(Constants.AutomapperPath, $"{model.Name}Mapper.cs",
-                BuildSourceText(model, null)));
+        {
+            if (model.Configure)
+            {
+                SourceBuilder.Instance.AddSourceFile(Constants.EntityConfigurationPath, $"{model.Name}Configuration.cs",
+                    BuildSourceText(model, null));
+            }
+        });
     }
 
     public string BuildSourceText(Entity? entity, List<Entity>? entities)
     {
         var text = """
-                   using AutoMapper;
-                   using DTO.{entityName};
                    using ENTITIES.Entities{entityPath};
+                   using Microsoft.EntityFrameworkCore;
+                   using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-                   namespace BLL.Mappers;
+                   namespace DAL.EntityFramework.Configurations;
 
-                   public class {entityName}Mapper : Profile
+                   public class UserConfiguration : IEntityTypeConfiguration<{entityName}>
                    {
-                       public {entityName}Mapper()
+                       public void Configure(EntityTypeBuilder<{entityName}> builder)
                        {
-                           CreateMap<{entityName}, {entityName}ToListDto>();
-                           CreateMap<{entityName}ToAddDto, {entityName}>();
-                           CreateMap<{entityName}ToUpdateDto, {entityName}>();
+                           
                        }
                    }
 
                    """;
-
         text = text.Replace("{entityName}", entity!.Name);
         text = text.Replace("{entityPath}", !string.IsNullOrEmpty(entity!.Path) ? $".{entity.Path}" : string.Empty);
         return text;

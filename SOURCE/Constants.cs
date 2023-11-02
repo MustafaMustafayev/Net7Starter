@@ -28,5 +28,6 @@ public static class Constants
 
     public const string EntitiesPath = "ENTITIES\\Entities\\";
 
+    public const string EntityConfigurationPath = "DAL\\EntityFramework\\Configurations";
     #endregion
 }
