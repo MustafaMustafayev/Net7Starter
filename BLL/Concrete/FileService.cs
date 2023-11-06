@@ -26,7 +26,6 @@ public class FileService : IFileService
     {
         var fileId = await AddAsync(dto);
 
-        // join with model
         switch (dto.Type)
         {
             case FileType.UserProfile:
@@ -47,7 +46,6 @@ public class FileService : IFileService
     {
         await SoftDeleteAsync(dto.HashName);
 
-        // join with model
         switch (dto.Type)
         {
             case FileType.UserProfile:
