@@ -88,7 +88,7 @@ public class UtilService : IUtilService
         return Convert.ToBase64String(randomNumber);
     }
 
-    public string GetTokenStringFromHeader(string? jwtToken)
+    public string TrimToken(string? jwtToken)
     {
         if (string.IsNullOrEmpty(jwtToken) || jwtToken.Length < 7) throw new Exception();
 

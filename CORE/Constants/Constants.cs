@@ -9,7 +9,4 @@ public static class Constants
 
     public static readonly string[] AllowedFileExtensions =
         { ".pdf", ".doc", ".docx", ".xls", ".xlsx", ".jpeg", ".jpg", ".png" };
-
-    public static readonly string[] AllowAnonymous = { "api/login", "api/register" };
-    public static readonly string[] AntiForgeryTokenMethodTypes = { "post", "put", "delete", "patch" };
 }

@@ -69,6 +69,7 @@
             <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
         </ProjectReference>
         <ProjectReference Include="..\MEDIATRS\MEDIATRS.csproj" />
+        <ProjectReference Include="..\REFITS\REFITS.csproj" />
     </ItemGroup>
     <ItemGroup>
         <Content Remove="wwwroot\files\**" />

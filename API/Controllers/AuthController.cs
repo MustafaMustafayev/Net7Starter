@@ -78,7 +78,7 @@ public class AuthController : Controller
     public async Task<IActionResult> Refresh()
     {
         var jwtToken =
-            _utilService.GetTokenStringFromHeader(
+            _utilService.TrimToken(
                 HttpContext.Request.Headers[_configSettings.AuthSettings.HeaderName]!);
         string refreshToken = HttpContext.Request.Headers[_configSettings.AuthSettings.RefreshTokenHeaderName]!;
 
@@ -124,7 +124,7 @@ public class AuthController : Controller
     [HttpPost("logout")]
     public async Task<IActionResult> Logout()
     {
-        var accessToken = _utilService.GetTokenStringFromHeader(_utilService.GetTokenString()!);
+        var accessToken = _utilService.TrimToken(_utilService.GetTokenString()!);
         var response = await _authService.LogoutAsync(accessToken);
 
         return Ok(response);

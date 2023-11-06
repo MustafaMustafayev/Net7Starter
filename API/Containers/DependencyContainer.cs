@@ -19,6 +19,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Redis.OM;
 using Refit;
+using REFITS.Clients;
 using StackExchange.Profiling;
 using StackExchange.Profiling.SqlFormatters;
 using System.Text;
@@ -185,11 +186,6 @@ public static class DependencyContainer
         services.AddSingleton<UserHub>();
     }
 
-    public static void RegisterAntiForgeryToken(this IServiceCollection services)
-    {
-        services.AddAntiforgery(options => options.HeaderName = "X-XSRF-TOKEN");
-    }
-
     public static void RegisterUnitOfWork(this IServiceCollection services)
     {
         services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -262,10 +258,10 @@ public static class DependencyContainer
 
     public static void RegisterRefitClients(this IServiceCollection services, ConfigSettings config)
     {
-        //services
-        //    .AddRefitClient<IPetStoreClient>()
-        //    .ConfigureHttpClient(c => c.BaseAddress = new Uri(config.PetStoreClientSettings.BaseUrl));
-        // Add additional IHttpClientBuilder chained methods as required here:
+        services
+            .AddRefitClient<IToDoClient>()
+            .ConfigureHttpClient(c => c.BaseAddress = new Uri(config.ToDoClientSettings.BaseUrl));
+        //Add additional IHttpClientBuilder chained methods as required here:
         // .AddHttpMessageHandler<MyHandler>()
         // .SetHandlerLifetime(TimeSpan.FromMinutes(2));
     }

@@ -66,7 +66,6 @@ builder.Services.RegisterSignalRHubs();
 builder.Services.RegisterUnitOfWork();
 builder.Services.RegisterApiVersioning();
 builder.Services.RegisterRateLimit();
-builder.Services.RegisterAntiForgeryToken();
 builder.Services.RegisterOutputCache();
 builder.Services.RegisterMediatr();
 
@@ -99,7 +98,7 @@ builder.Services.RegisterMiniProfiler();
 
 builder.Services.AddSignalR();
 
-builder.Services.AddAntiforgery();
+//builder.Services.AddAntiforgery();
 
 var app = builder.Build();
 
