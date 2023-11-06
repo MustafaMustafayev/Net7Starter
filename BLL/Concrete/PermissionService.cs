@@ -44,7 +44,7 @@ public class PermissionService : IPermissionService
 
     public async Task<IDataResult<PaginatedList<PermissionToListDto>>> GetAsPaginatedListAsync()
     {
-        var datas = _unitOfWork.PermissionRepository.GetAsNoTrackingList();
+        var datas = _unitOfWork.PermissionRepository.GetList();
         var paginationDto = _utilService.GetPagination();
         var response = await PaginatedList<Permission>.CreateAsync(datas.OrderBy(m => m.Id), paginationDto.PageIndex,
             paginationDto.PageSize);
@@ -55,20 +55,17 @@ public class PermissionService : IPermissionService
         return new SuccessDataResult<PaginatedList<PermissionToListDto>>(responseDto, Messages.Success.Translate());
     }
 
-    public Task<IDataResult<List<PermissionToListDto>>> GetAsync()
+    public async Task<IDataResult<List<PermissionToListDto>>> GetAsync()
     {
-        var datas = _mapper.Map<List<PermissionToListDto>>(_unitOfWork.PermissionRepository.GetAsNoTrackingList()
-            .ToList());
+        var datas = _mapper.Map<List<PermissionToListDto>>(await _unitOfWork.PermissionRepository.GetListAsync());
 
-        return Task.FromResult<IDataResult<List<PermissionToListDto>>>(new SuccessDataResult<List<PermissionToListDto>>(
-            datas,
-            Messages.Success.Translate()));
+        return new SuccessDataResult<List<PermissionToListDto>>(datas, Messages.Success.Translate());
+
     }
 
     public async Task<IDataResult<PermissionToListDto>> GetAsync(int id)
     {
-        var datas = _mapper.Map<PermissionToListDto>(
-            await _unitOfWork.PermissionRepository.GetAsNoTrackingAsync(m => m.Id == id));
+        var datas = _mapper.Map<PermissionToListDto>(await _unitOfWork.PermissionRepository.GetAsync(m => m.Id == id));
 
         return new SuccessDataResult<PermissionToListDto>(datas, Messages.Success.Translate());
     }
