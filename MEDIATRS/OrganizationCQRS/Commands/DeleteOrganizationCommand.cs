@@ -3,4 +3,4 @@ using MediatR;
 
 namespace MEDIATRS.OrganizationCQRS.Commands;
 
-public record DeleteOrganizationCommand(int Id) : IRequest<IResult>;
+public record DeleteOrganizationCommand(Guid Id) : IRequest<IResult>;

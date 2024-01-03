@@ -14,12 +14,12 @@ public record UserToAddDto
     string Password,
     [property: Compare("Password", ErrorMessage = "Şifrələr eyni deyil")]
     string PasswordConfirmation,
-    int? RoleId
+    Guid? RoleId
 );
 
 public record UserToListDto
 (
-    int Id,
+    Guid Id,
     string Username,
     string Email,
     string ContactNumber,
@@ -32,5 +32,5 @@ public record UserToUpdateDto
     string Email,
     string ContactNumber,
     string Username,
-    int? RoleId
+    Guid? RoleId
 );

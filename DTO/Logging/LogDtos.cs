@@ -9,7 +9,7 @@ public record RequestLogDto
     string? Payload,
     string? Method,
     string? Token,
-    int? UserId,
+    Guid? UserId,
     ResponseLogDto? ResponseLog);
 
 public record ResponseLogDto
@@ -18,5 +18,5 @@ public record ResponseLogDto
     DateTimeOffset ResponseDate,
     string? StatusCode,
     string? Token,
-    int? UserId
+    Guid? UserId
 );

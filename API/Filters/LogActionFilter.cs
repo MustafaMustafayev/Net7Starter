@@ -29,7 +29,7 @@ public class LogActionFilter : IAsyncActionFilter
         var uri = httpContext.Request.Host + httpContext.Request.Path;
 
         var token = string.Empty;
-        int? userId = null;
+        Guid? userId = null;
         var authHeaderName = _configSettings.AuthSettings.HeaderName;
 
         if (!string.IsNullOrEmpty(httpContext.Request.Headers[authHeaderName]) &&

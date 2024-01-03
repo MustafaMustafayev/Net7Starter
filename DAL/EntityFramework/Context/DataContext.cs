@@ -29,6 +29,7 @@ public class DataContext : DbContext
     public required DbSet<ResponseLog> ResponseLogs { get; set; }
     public required DbSet<Permission> Permissions { get; set; }
     public required DbSet<Token> Tokens { get; set; }
+    public required DbSet<ErrorLog> ErrorLogs { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

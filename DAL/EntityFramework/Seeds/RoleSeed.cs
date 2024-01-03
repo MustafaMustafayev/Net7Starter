@@ -2,7 +2,6 @@
 using ENTITIES.Entities;
 using ENTITIES.Enums;
 using Microsoft.EntityFrameworkCore;
-
 namespace DAL.EntityFramework.Seeds;
 
 public static class RoleSeed
@@ -12,7 +11,7 @@ public static class RoleSeed
         var roles = Enum.GetValues<UserType>()
             .Select(e => new Role
             {
-                Id = (int)e,
+                Id = Guid.NewGuid(),
                 Key = Enum.GetName(e)!,
                 Name = EnumHelper.GetEnumDescription(e)
             })

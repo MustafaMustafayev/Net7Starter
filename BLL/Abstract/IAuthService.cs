@@ -12,4 +12,5 @@ public interface IAuthService
     IResult SendVerificationCodeToEmailAsync(string email);
     Task<IResult> ResetPasswordAsync(ResetPasswordDto dto);
     Task<IResult> LogoutAsync(string accessToken);
+    Task<IResult> LogoutRemovedUserAsync(Guid userId);
 }

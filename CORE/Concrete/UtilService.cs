@@ -31,15 +31,15 @@ public class UtilService : IUtilService
         return _context.HttpContext?.Request.Headers[_config.AuthSettings.HeaderName].ToString();
     }
 
-    public int? GetUserIdFromToken()
+    public Guid? GetUserIdFromToken()
     {
         var token = GetJwtSecurityToken();
         if (token == null) return null;
         var userId = Decrypt(token.Claims.First(c => c.Type == _config.AuthSettings.TokenUserIdKey).Value);
-        return Convert.ToInt32(userId);
+        return Guid.Parse(userId);
     }
 
-    public int? GetCompanyIdFromToken()
+    public Guid? GetCompanyIdFromToken()
     {
         var token = GetJwtSecurityToken();
         if (token is null) return null;
@@ -48,7 +48,7 @@ public class UtilService : IUtilService
 
         if (companyIdClaim is null || string.IsNullOrEmpty(companyIdClaim.Value)) return null;
 
-        return Convert.ToInt32(companyIdClaim.Value);
+        return Guid.Parse(companyIdClaim.Value);
     }
 
     public bool IsValidToken()

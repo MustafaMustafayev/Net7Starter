@@ -51,7 +51,7 @@ public class ServiceBuilder : ISourceBuilder
                            return new SuccessResult(Messages.Success.Translate());
                        }
                    
-                       public async Task<IResult> SoftDeleteAsync(int id)
+                       public async Task<IResult> SoftDeleteAsync(Guid id)
                        {
                            var data = await _unitOfWork.{entityName}Repository.GetAsync(m => m.Id == id);
                    
@@ -80,14 +80,14 @@ public class ServiceBuilder : ISourceBuilder
                            return new SuccessDataResult<List<{entityName}ToListDto>>(datas, Messages.Success.Translate());
                        }
                    
-                       public async Task<IDataResult<{entityName}ToListDto>> GetAsync(int id)
+                       public async Task<IDataResult<{entityName}ToListDto>> GetAsync(Guid id)
                        {
                            var data = _mapper.Map<{entityName}ToListDto>(await _unitOfWork.{entityName}Repository.GetAsync(m => m.Id == id));
                    
                            return new SuccessDataResult<{entityName}ToListDto>(data, Messages.Success.Translate());
                        }
                    
-                       public async Task<IResult> UpdateAsync(int id, {entityName}ToUpdateDto dto)
+                       public async Task<IResult> UpdateAsync(Guid id, {entityName}ToUpdateDto dto)
                        {
                            var data = _mapper.Map<{entityName}>(dto);
                            data.Id = id;

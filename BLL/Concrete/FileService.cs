@@ -66,14 +66,14 @@ public class FileService : IFileService
         return new SuccessDataResult<FileToListDto>(data, Messages.Success.Translate());
     }
 
-    private async Task<IDataResult<int>> AddAsync(FileToAddDto dto)
+    private async Task<IDataResult<Guid>> AddAsync(FileToAddDto dto)
     {
         var data = _mapper.Map<File>(dto);
 
         var added = await _unitOfWork.FileRepository.AddAsync(data);
         await _unitOfWork.CommitAsync();
 
-        return new SuccessDataResult<int>(added.Id, Messages.Success.Translate());
+        return new SuccessDataResult<Guid>(added.Id, Messages.Success.Translate());
     }
 
     private async Task<IResult> SoftDeleteAsync(string hashName)

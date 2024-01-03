@@ -32,7 +32,7 @@ public class UserService : IUserService
 
         dto = dto with
         {
-            RoleId = dto.RoleId == 0 || !dto.RoleId.HasValue
+            RoleId = !dto.RoleId.HasValue
                 ? (await _unitOfWork.RoleRepository.GetAsync(m => m.Key == UserType.Guest.ToString()))?.Id
                 : dto.RoleId
         };
@@ -47,7 +47,7 @@ public class UserService : IUserService
         return new SuccessResult(Messages.Success.Translate());
     }
 
-    public async Task<IResult> SoftDeleteAsync(int id)
+    public async Task<IResult> SoftDeleteAsync(Guid id)
     {
         var data = await _unitOfWork.UserRepository.GetAsync(m => m.Id == id);
 
@@ -61,7 +61,7 @@ public class UserService : IUserService
         return new SuccessResult(Messages.Success.Translate());
     }
 
-    public async Task<IResult> AddProfileAsync(int userId, int? fileId)
+    public async Task<IResult> AddProfileAsync(Guid userId, Guid? fileId)
     {
         var user = await _unitOfWork.UserRepository.GetAsNoTrackingAsync(u => u.Id == userId);
         user!.ProfileFileId = fileId;
@@ -80,21 +80,21 @@ public class UserService : IUserService
             Messages.Success.Translate());
     }
 
-    public async Task<IDataResult<UserToListDto>> GetAsync(int id)
+    public async Task<IDataResult<UserToListDto>> GetAsync(Guid id)
     {
         var data = _mapper.Map<UserToListDto>(await _unitOfWork.UserRepository.GetAsync(m => m.Id == id));
 
         return new SuccessDataResult<UserToListDto>(data, Messages.Success.Translate());
     }
 
-    public async Task<IResult> UpdateAsync(int id, UserToUpdateDto dto)
+    public async Task<IResult> UpdateAsync(Guid id, UserToUpdateDto dto)
     {
         if (await _unitOfWork.UserRepository.IsUserExistAsync(dto.Email, id))
             return new ErrorResult(Messages.UserIsExist.Translate());
 
         dto = dto with
         {
-            RoleId = dto.RoleId is 0 or null
+            RoleId = dto.RoleId is null
                 ? (await _unitOfWork.RoleRepository.GetAsync(m => m.Key == UserType.Guest.ToString()))?.Id
                 : dto.RoleId
         };

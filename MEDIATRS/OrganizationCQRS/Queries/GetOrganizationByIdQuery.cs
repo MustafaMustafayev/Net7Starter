@@ -4,4 +4,4 @@ using MediatR;
 
 namespace MEDIATRS.OrganizationCQRS.Queries;
 
-public record GetOrganizationByIdQuery(int Id) : IRequest<IDataResult<OrganizationToListDto>>;
+public record GetOrganizationByIdQuery(Guid Id) : IRequest<IDataResult<OrganizationToListDto>>;

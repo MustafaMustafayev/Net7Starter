@@ -4,4 +4,4 @@ using MediatR;
 
 namespace MEDIATRS.OrganizationCQRS.Commands;
 
-public record UpdateOrganizationCommand(int OrganizationId, OrganizationToUpdateDto Organization) : IRequest<IResult>;
+public record UpdateOrganizationCommand(Guid OrganizationId, OrganizationToUpdateDto Organization) : IRequest<IResult>;

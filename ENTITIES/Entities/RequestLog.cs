@@ -6,7 +6,7 @@ namespace ENTITIES.Entities;
 
 public class RequestLog : IEntity
 {
-    [Key] public int RequestLogId { get; set; }
+    [Key] public Guid RequestLogId { get; set; }
 
     public string? TraceIdentifier { get; set; }
 
@@ -22,11 +22,11 @@ public class RequestLog : IEntity
 
     public string? Token { get; set; }
 
-    public int? UserId { get; set; }
+    public Guid? UserId { get; set; }
 
     public virtual required ResponseLog ResponseLog { get; set; }
 
-    [ForeignKey("ResponseLog")] public int ResponseLogId { get; set; }
+    [ForeignKey("ResponseLog")] public Guid ResponseLogId { get; set; }
 
     public bool IsDeleted { get; set; }
 }

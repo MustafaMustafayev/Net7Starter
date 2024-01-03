@@ -39,13 +39,13 @@ public class RoleControllerTest
     public async Task GetById_ReturnsItem()
     {
         // Arrange
-        _mock.Setup(m => m.GetAsync(1))
+        _mock.Setup(m => m.GetAsync(Guid.NewGuid()))
             .ReturnsAsync(
-                new SuccessDataResult<RoleToListDto>(new RoleToListDto(1, "TT", "TT",
+                new SuccessDataResult<RoleToListDto>(new RoleToListDto(Guid.NewGuid(), "TT", "TT",
                     new List<PermissionToListDto>())));
 
         // Act
-        var notFoundResult = await _controller.Get(1) as OkObjectResult;
+        var notFoundResult = await _controller.Get(Guid.NewGuid()) as OkObjectResult;
 
         // Assert
         Assert.IsAssignableFrom<IDataResult<RoleToListDto>>(notFoundResult?.Value);
@@ -55,7 +55,7 @@ public class RoleControllerTest
     public async Task Add_ReturnsSuccess()
     {
         // Arrange
-        var roleToAdd = new RoleToAddDto("TT", "Test", new List<int>());
+        var roleToAdd = new RoleToAddDto("TT", "Test", new List<Guid>());
         _mock.Setup(m => m.AddAsync(roleToAdd)).ReturnsAsync(new SuccessResult());
 
         // Act
@@ -69,10 +69,10 @@ public class RoleControllerTest
     public async Task Delete_ReturnsSuccess()
     {
         // Arrange
-        _mock.Setup(m => m.SoftDeleteAsync(2)).ReturnsAsync(new SuccessResult());
+        _mock.Setup(m => m.SoftDeleteAsync(Guid.NewGuid())).ReturnsAsync(new SuccessResult());
 
         // Act
-        var okResponse = await _controller.Delete(2) as OkObjectResult;
+        var okResponse = await _controller.Delete(Guid.NewGuid()) as OkObjectResult;
 
         // Assert
         Assert.IsAssignableFrom<IResult>(okResponse?.Value);

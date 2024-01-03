@@ -9,15 +9,15 @@ public interface IRoleService
 {
     Task<IDataResult<List<RoleToListDto>>> GetAsync();
 
-    Task<IDataResult<List<PermissionToListDto>>> GetPermissionsAsync(int id);
+    Task<IDataResult<List<PermissionToListDto>>> GetPermissionsAsync(Guid id);
 
     Task<IDataResult<IQueryable<Role>>> GraphQlGetAsync();
 
-    Task<IDataResult<RoleToListDto>> GetAsync(int id);
+    Task<IDataResult<RoleToListDto>> GetAsync(Guid id);
 
     Task<IResult> AddAsync(RoleToAddDto dto);
 
-    Task<IResult> UpdateAsync(int id, RoleToUpdateDto dto);
+    Task<IResult> UpdateAsync(Guid id, RoleToUpdateDto dto);
 
-    Task<IResult> SoftDeleteAsync(int id);
+    Task<IResult> SoftDeleteAsync(Guid id);
 }

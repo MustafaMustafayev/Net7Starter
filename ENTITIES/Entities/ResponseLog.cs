@@ -5,7 +5,7 @@ namespace ENTITIES.Entities;
 
 public class ResponseLog : IEntity
 {
-    [Key] public int ResponseLogId { get; set; }
+    [Key] public Guid ResponseLogId { get; set; }
 
     public string? TraceIdentifier { get; set; }
 
@@ -15,7 +15,7 @@ public class ResponseLog : IEntity
 
     public string? Token { get; set; }
 
-    public int? UserId { get; set; }
+    public Guid? UserId { get; set; }
 
     public bool IsDeleted { get; set; }
 }

@@ -5,7 +5,7 @@ namespace DTO.File;
 
 public record FileToListDto
 (
-    int Id,
+    Guid Id,
     string OriginalName,
     string HashName,
     string Extension,
@@ -29,14 +29,14 @@ public record FileUploadRequestDto
 (
     IFormFile File,
     FileType Type,
-    int? UserId,
-    int? OrganizationId
+    Guid? UserId,
+    Guid? OrganizationId
 );
 
 public record FileRemoveRequestDto
 (
     string HashName,
     FileType Type,
-    int? UserId,
-    int? OrganizationId
+    Guid? UserId,
+    Guid? OrganizationId
 );

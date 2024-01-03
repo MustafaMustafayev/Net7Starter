@@ -13,12 +13,12 @@ public class UserSeed
         modelBuilder.Entity<User>().HasData(
             new User
             {
-                Id = 1,
+                Id = Guid.NewGuid(),
                 Username = "Test",
                 Email = "test@test.tst",
                 Password = pass,
                 ContactNumber = "",
-                RoleId = 1,
+                RoleId = null,
                 Salt = salt
             }
         );

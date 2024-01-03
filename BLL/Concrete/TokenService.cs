@@ -76,7 +76,7 @@ public class TokenService : ITokenService
         return new SuccessDataResult<LoginResponseDto>(loginResponseDto, Messages.Success.Translate());
     }
 
-    public async Task<IResult> SoftDeleteAsync(int id)
+    public async Task<IResult> SoftDeleteAsync(Guid id)
     {
         var data = await _unitOfWork.TokenRepository.GetAsync(m => m.TokenId == id);
 

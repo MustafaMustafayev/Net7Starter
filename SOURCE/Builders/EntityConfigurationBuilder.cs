@@ -28,7 +28,7 @@ public class EntityConfigurationBuilder : ISourceBuilder
 
                    namespace DAL.EntityFramework.Configurations;
 
-                   public class UserConfiguration : IEntityTypeConfiguration<{entityName}>
+                   public class {entityName}Configuration : IEntityTypeConfiguration<{entityName}>
                    {
                        public void Configure(EntityTypeBuilder<{entityName}> builder)
                        {

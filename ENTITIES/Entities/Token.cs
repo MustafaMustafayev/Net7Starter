@@ -1,12 +1,13 @@
 ﻿using ENTITIES.Entities.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace ENTITIES.Entities;
 
 public class Token : IEntity
 {
-    public int TokenId { get; set; }
+    [Key] public Guid TokenId { get; set; }
     public virtual required User User { get; set; }
-    public int UserId { get; set; }
+    public Guid UserId { get; set; }
     public required string AccessToken { get; set; }
     public DateTimeOffset AccessTokenExpireDate { get; set; }
     public required string RefreshToken { get; set; }

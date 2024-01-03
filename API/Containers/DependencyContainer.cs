@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Redis.OM;
@@ -33,7 +34,7 @@ public static class DependencyContainer
 {
     public static void RegisterLogger(this IServiceCollection services)
     {
-        services.AddSingleton<ILoggerManager, LoggerManager>();
+        services.TryAddSingleton<ILoggerManager, LoggerManager>();
     }
 
     public static void RegisterAuthentication(this IServiceCollection services, ConfigSettings config)
@@ -165,6 +166,8 @@ public static class DependencyContainer
 
     public static void RegisterRepositories(this IServiceCollection services)
     {
+        services.TryAddScoped<IUtilService, UtilService>();
+
         services.Scan(scan => scan
             .FromAssemblies(typeof(UserService).Assembly)
             .AddClasses(classes => classes.AssignableTo(typeof(object)))
@@ -178,17 +181,16 @@ public static class DependencyContainer
             .WithScopedLifetime());
 
         // util service is in the core assembly, therefore we need to register it separately
-        services.AddScoped<IUtilService, UtilService>();
     }
 
     public static void RegisterSignalRHubs(this IServiceCollection services)
     {
-        services.AddSingleton<UserHub>();
+        services.TryAddSingleton<UserHub>();
     }
 
     public static void RegisterUnitOfWork(this IServiceCollection services)
     {
-        services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.TryAddScoped<IUnitOfWork, UnitOfWork>();
     }
 
     public static void RegisterOutputCache(this IServiceCollection services)
@@ -198,17 +200,17 @@ public static class DependencyContainer
 
     public static void RegisterRedis(this IServiceCollection services, ConfigSettings config)
     {
-        services.AddSingleton(new RedisConnectionProvider(config.RedisSettings.Connection));
+        services.TryAddSingleton(new RedisConnectionProvider(config.RedisSettings.Connection));
     }
 
     public static void RegisterMongoDb(this IServiceCollection services)
     {
-        services.AddSingleton<IMongoDbService, MongoDbService>();
+        services.TryAddSingleton<IMongoDbService, MongoDbService>();
     }
 
     public static void RegisterElasticSearch(this IServiceCollection services, ConfigSettings config)
     {
-        services.AddScoped<IElasticSearchService<UserToListDto>>(_ =>
+        services.TryAddScoped<IElasticSearchService<UserToListDto>>(_ =>
             new ElasticSearchService<UserToListDto>(config.ElasticSearchSettings.Connection,
                 config.ElasticSearchSettings.DefaultIndex));
     }

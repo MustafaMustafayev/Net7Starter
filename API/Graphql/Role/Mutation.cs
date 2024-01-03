@@ -28,7 +28,7 @@ mutation AddRole{
         //return ().Data;
     }
 
-    public async Task<bool> UpdateRole(int id, RoleToUpdateDto item, [Service] IRoleService service)
+    public async Task<bool> UpdateRole(Guid id, RoleToUpdateDto item, [Service] IRoleService service)
     {
         await service.UpdateAsync(id, item);
 

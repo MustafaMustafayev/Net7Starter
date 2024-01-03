@@ -56,9 +56,6 @@
         <None Remove="Middlewares\" />
     </ItemGroup>
     <ItemGroup>
-        <Folder Include="wwwroot\files\" />
-    </ItemGroup>
-    <ItemGroup>
         <ProjectReference Include="..\BLL\BLL.csproj">
             <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
         </ProjectReference>
@@ -72,6 +69,6 @@
         <ProjectReference Include="..\REFITS\REFITS.csproj" />
     </ItemGroup>
     <ItemGroup>
-        <Content Remove="wwwroot\files\**" />
+      <Folder Include="wwwroot\files\" />
     </ItemGroup>
 </Project>

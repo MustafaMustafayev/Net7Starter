@@ -10,11 +10,11 @@ public interface IPermissionService
 
     Task<IDataResult<PaginatedList<PermissionToListDto>>> GetAsPaginatedListAsync();
 
-    Task<IDataResult<PermissionToListDto>> GetAsync(int id);
+    Task<IDataResult<PermissionToListDto>> GetAsync(Guid id);
 
     Task<IResult> AddAsync(PermissionToAddDto dto);
 
-    Task<IResult> UpdateAsync(int permissionId, PermissionToUpdateDto dto);
+    Task<IResult> UpdateAsync(Guid permissionId, PermissionToUpdateDto dto);
 
-    Task<IResult> SoftDeleteAsync(int id);
+    Task<IResult> SoftDeleteAsync(Guid id);
 }

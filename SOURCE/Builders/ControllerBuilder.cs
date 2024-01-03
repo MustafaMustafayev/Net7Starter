@@ -64,7 +64,7 @@ public class ControllerBuilder : ISourceBuilder
                        [SwaggerOperation(Summary = "get data")]
                        [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IDataResult<{entityName}ToListDto>))]
                        [HttpGet("{id}")]
-                       public async Task<IActionResult> Get([FromRoute] int id)
+                       public async Task<IActionResult> Get([FromRoute] Guid id)
                        {
                            var response = await _{entityNameLower}Service.GetAsync(id);
                            return Ok(response);
@@ -82,7 +82,7 @@ public class ControllerBuilder : ISourceBuilder
                        [SwaggerOperation(Summary = "update")]
                        [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
                        [HttpPut("{id}")]
-                       public async Task<IActionResult> Update([FromRoute] int id, [FromBody] {entityName}ToUpdateDto dto)
+                       public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] {entityName}ToUpdateDto dto)
                        {
                            var response = await _{entityNameLower}Service.UpdateAsync(id, dto);
                            return Ok(response);
@@ -91,7 +91,7 @@ public class ControllerBuilder : ISourceBuilder
                        [SwaggerOperation(Summary = "delete")]
                        [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
                        [HttpDelete("{id}")]
-                       public async Task<IActionResult> Delete([FromRoute] int id)
+                       public async Task<IActionResult> Delete([FromRoute] Guid id)
                        {
                            var response = await _{entityNameLower}Service.SoftDeleteAsync(id);
                            return Ok(response);

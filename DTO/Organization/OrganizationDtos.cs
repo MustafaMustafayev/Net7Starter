@@ -7,7 +7,7 @@ public record OrganizationToAddDto
     string FullName,
     string ShortName,
     string Address,
-    int? ParentId,
+    Guid? ParentId,
     string PhoneNumber,
     string Tin,
     string Email,
@@ -16,7 +16,7 @@ public record OrganizationToAddDto
 
 public record OrganizationToListDto
 (
-    int Id,
+    Guid Id,
     string FullName,
     string ShortName,
     string Address,
@@ -33,7 +33,7 @@ public record OrganizationToUpdateDto
     string FullName,
     string ShortName,
     string Address,
-    int? ParentId,
+    Guid? ParentId,
     string PhoneNumber,
     string Tin,
     string Email,

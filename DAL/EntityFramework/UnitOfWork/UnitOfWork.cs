@@ -11,6 +11,7 @@ public class UnitOfWork : IUnitOfWork
 
     public UnitOfWork(
         DataContext dataContext,
+        IErrorLogRepository errorLogRepository,
         IFileRepository fileRepository,
         INlogRepository nlogRepository,
         IOrganizationRepository organizationRepository,
@@ -23,6 +24,7 @@ public class UnitOfWork : IUnitOfWork
     )
     {
         _dataContext = dataContext;
+        ErrorLogRepository = errorLogRepository;
         FileRepository = fileRepository;
         NlogRepository = nlogRepository;
         OrganizationRepository = organizationRepository;
@@ -34,6 +36,7 @@ public class UnitOfWork : IUnitOfWork
         UserRepository = userRepository;
     }
 
+    public IErrorLogRepository ErrorLogRepository { get; set; }
     public IFileRepository FileRepository { get; set; }
     public INlogRepository NlogRepository { get; set; }
     public IOrganizationRepository OrganizationRepository { get; set; }

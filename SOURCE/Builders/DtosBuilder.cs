@@ -21,7 +21,7 @@ public class DtosBuilder : ISourceBuilder
 
                    public record {entityName}ToAddDto();
                    public record {entityName}ToUpdateDto();
-                   public record {entityName}ToListDto(int Id);
+                   public record {entityName}ToListDto(Guid Id);
 
                    """;
 

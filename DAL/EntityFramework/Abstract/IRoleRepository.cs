@@ -6,5 +6,6 @@ namespace DAL.EntityFramework.Abstract;
 public interface IRoleRepository : IGenericRepository<Role>
 {
     Role UpdateRole(Role role);
-    Task ClearRolePermissionsAync(int roleId);
+    Task AddRoleAsync(Role role);
+    Task ClearRolePermissionsAync(Guid roleId);
 }

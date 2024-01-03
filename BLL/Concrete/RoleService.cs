@@ -24,17 +24,16 @@ public class RoleService : IRoleService
     {
         var data = _mapper.Map<Role>(dto);
 
-        var permissions =
-            await _unitOfWork.PermissionRepository.GetListAsync(m => dto.PermissionIds!.Contains(m.Id));
+        var permissions = await _unitOfWork.PermissionRepository.GetListAsync(m => dto.PermissionIds!.Contains(m.Id));
         data.Permissions = permissions;
 
-        await _unitOfWork.RoleRepository.AddAsync(data);
+        await _unitOfWork.RoleRepository.AddRoleAsync(data);
         await _unitOfWork.CommitAsync();
 
         return new SuccessResult(Messages.Success.Translate());
     }
 
-    public async Task<IResult> SoftDeleteAsync(int id)
+    public async Task<IResult> SoftDeleteAsync(Guid id)
     {
         var data = await _unitOfWork.RoleRepository.GetAsync(m => m.Id == id);
 
@@ -47,7 +46,6 @@ public class RoleService : IRoleService
     public async Task<IDataResult<List<RoleToListDto>>> GetAsync()
     {
         var datas = _mapper.Map<List<RoleToListDto>>(await _unitOfWork.RoleRepository.GetListAsync());
-
         return new SuccessDataResult<List<RoleToListDto>>(datas, Messages.Success.Translate());
     }
 
@@ -58,14 +56,14 @@ public class RoleService : IRoleService
             Messages.Success.Translate()));
     }
 
-    public async Task<IDataResult<RoleToListDto>> GetAsync(int id)
+    public async Task<IDataResult<RoleToListDto>> GetAsync(Guid id)
     {
         var data = _mapper.Map<RoleToListDto>(await _unitOfWork.RoleRepository.GetAsync(m => m.Id == id));
 
         return new SuccessDataResult<RoleToListDto>(data, Messages.Success.Translate());
     }
 
-    public async Task<IResult> UpdateAsync(int id, RoleToUpdateDto dto)
+    public async Task<IResult> UpdateAsync(Guid id, RoleToUpdateDto dto)
     {
         var data = _mapper.Map<Role>(dto);
         data.Id = id;
@@ -80,7 +78,7 @@ public class RoleService : IRoleService
         return new SuccessResult(Messages.Success.Translate());
     }
 
-    public async Task<IDataResult<List<PermissionToListDto>>> GetPermissionsAsync(int id)
+    public async Task<IDataResult<List<PermissionToListDto>>> GetPermissionsAsync(Guid id)
     {
         var datas = _mapper.Map<List<PermissionToListDto>>(
             (await _unitOfWork.RoleRepository.GetAsync(m => m.Id == id))!.Permissions);

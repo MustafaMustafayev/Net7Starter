@@ -44,14 +44,14 @@ public class PermissionController : Controller
     [SwaggerOperation(Summary = "get permission by id")]
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IDataResult<PermissionToListDto>))]
     [HttpGet("{id}")]
-    public async Task<IActionResult> Get([FromRoute] int id)
+    public async Task<IActionResult> Get([FromRoute] Guid id)
     {
         var response = await _permissionService.GetAsync(id);
         return Ok(response);
     }
 
     [SwaggerOperation(Summary = "create permission")]
-    [HttpPost("register")]
+    [HttpPost]
     public async Task<IActionResult> Add([FromBody] PermissionToAddDto dto)
     {
         var response = await _permissionService.AddAsync(dto);
@@ -60,7 +60,7 @@ public class PermissionController : Controller
 
     [SwaggerOperation(Summary = "update permission")]
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update([FromRoute] int id,
+    public async Task<IActionResult> Update([FromRoute] Guid id,
         [FromBody] PermissionToUpdateDto dto)
     {
         var response = await _permissionService.UpdateAsync(id, dto);
@@ -69,7 +69,7 @@ public class PermissionController : Controller
 
     [SwaggerOperation(Summary = "delete permission")]
     [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete([FromRoute] int id)
+    public async Task<IActionResult> Delete([FromRoute] Guid id)
     {
         var response = await _permissionService.SoftDeleteAsync(id);
         return Ok(response);

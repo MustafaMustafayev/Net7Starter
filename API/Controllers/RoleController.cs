@@ -36,7 +36,7 @@ public class RoleController : Controller
     [SwaggerOperation(Summary = "get role")]
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IDataResult<RoleToListDto>))]
     [HttpGet("{id}")]
-    public async Task<IActionResult> Get([FromRoute] int id)
+    public async Task<IActionResult> Get([FromRoute] Guid id)
     {
         var response = await _roleService.GetAsync(id);
         return Ok(response);
@@ -45,7 +45,7 @@ public class RoleController : Controller
     [SwaggerOperation(Summary = "get role permissions")]
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IDataResult<RoleToListDto>))]
     [HttpGet("{id}/permissions")]
-    public async Task<IActionResult> GetRolePermissions([FromRoute] int id)
+    public async Task<IActionResult> GetRolePermissions([FromRoute] Guid id)
     {
         var response = await _roleService.GetPermissionsAsync(id);
         return Ok(response);
@@ -63,7 +63,7 @@ public class RoleController : Controller
     [SwaggerOperation(Summary = "update role")]
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update([FromRoute] int id, [FromBody] RoleToUpdateDto dto)
+    public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] RoleToUpdateDto dto)
     {
         var response = await _roleService.UpdateAsync(id, dto);
         return Ok(response);
@@ -72,7 +72,7 @@ public class RoleController : Controller
     [SwaggerOperation(Summary = "delete role")]
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
     [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete([FromRoute] int id)
+    public async Task<IActionResult> Delete([FromRoute] Guid id)
     {
         var response = await _roleService.SoftDeleteAsync(id);
         return Ok(response);

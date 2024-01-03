@@ -8,8 +8,8 @@ public interface IUtilService
     public string? GetTokenString();
     public bool IsValidToken();
     public PaginationDto GetPagination();
-    public int? GetUserIdFromToken();
-    public int? GetCompanyIdFromToken();
+    public Guid? GetUserIdFromToken();
+    public Guid? GetCompanyIdFromToken();
     public string GenerateRefreshToken();
     public string? GetRoleFromToken(string jwtToken);
     public string TrimToken(string? jwtToken);

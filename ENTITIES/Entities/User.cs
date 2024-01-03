@@ -10,8 +10,8 @@ public class User : Auditable, IEntity
     public required string Password { get; set; }
     public required string Salt { get; set; }
     public string? LastVerificationCode { get; set; }
-    public int? RoleId { get; set; }
+    public Guid? RoleId { get; set; }
     public virtual Role? Role { get; set; }
-    public int? ProfileFileId { get; set; }
+    public Guid? ProfileFileId { get; set; }
     public virtual File? ProfileFile { get; set; }
 }

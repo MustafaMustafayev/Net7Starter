@@ -2,10 +2,10 @@
 
 public class Auditable
 {
-    public int Id { get; set; }
-    public int? CreatedById { get; set; }
-    public int? ModifiedBy { get; set; }
-    public int? DeletedBy { get; set; }
+    public Guid Id { get; set; }
+    public Guid? CreatedById { get; set; }
+    public Guid? ModifiedBy { get; set; }
+    public Guid? DeletedBy { get; set; }
     public DateTimeOffset CreatedAt { get; set; }
     public DateTimeOffset? ModifiedAt { get; set; }
     public DateTimeOffset? DeletedAt { get; set; }

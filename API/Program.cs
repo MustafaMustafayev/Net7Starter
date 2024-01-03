@@ -15,6 +15,7 @@ using GraphQL.Server.Ui.Voyager;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using System.Text.Json.Serialization;
 using WatchDog;
 
@@ -30,7 +31,7 @@ var config = new ConfigSettings();
 
 builder.Configuration.GetSection(nameof(ConfigSettings)).Bind(config);
 
-builder.Services.AddSingleton(config);
+builder.Services.TryAddSingleton(config);
 
 builder.Services.AddControllers(opt => opt.Filters.Add(typeof(ModelValidatorActionFilter)))
     .AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));

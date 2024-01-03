@@ -28,10 +28,10 @@ public class IServiceBuilder : ISourceBuilder
                    {
                        Task<IDataResult<PaginatedList<{entityName}ToListDto>>> GetAsPaginatedListAsync();
                        Task<IDataResult<List<{entityName}ToListDto>>> GetAsync();
-                       Task<IDataResult<{entityName}ToListDto>> GetAsync(int id);
+                       Task<IDataResult<{entityName}ToListDto>> GetAsync(Guid id);
                        Task<IResult> AddAsync({entityName}ToAddDto dto);
-                       Task<IResult> UpdateAsync(int id, {entityName}ToUpdateDto dto);
-                       Task<IResult> SoftDeleteAsync(int id);
+                       Task<IResult> UpdateAsync(Guid id, {entityName}ToUpdateDto dto);
+                       Task<IResult> SoftDeleteAsync(Guid id);
                    }
 
                    """;

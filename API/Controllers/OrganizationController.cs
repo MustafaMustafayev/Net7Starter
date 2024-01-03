@@ -39,7 +39,7 @@ public class OrganizationController : Controller
     [SwaggerOperation(Summary = "get organization")]
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IDataResult<OrganizationToListDto>))]
     [HttpGet("{id}")]
-    public async Task<IActionResult> Get([FromRoute] int id)
+    public async Task<IActionResult> Get([FromRoute] Guid id)
     {
         var response = await _mediator.Send(new GetOrganizationByIdQuery(id));
         return Ok(response);
@@ -57,7 +57,7 @@ public class OrganizationController : Controller
     [SwaggerOperation(Summary = "update organization")]
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update([FromRoute] int id, [FromBody] OrganizationToUpdateDto request)
+    public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] OrganizationToUpdateDto request)
     {
         var response = await _mediator.Send(new UpdateOrganizationCommand(id, request));
         return Ok(response);
@@ -66,7 +66,7 @@ public class OrganizationController : Controller
     [SwaggerOperation(Summary = "delete organization")]
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
     [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete([FromRoute] int id)
+    public async Task<IActionResult> Delete([FromRoute] Guid id)
     {
         var response = await _mediator.Send(new DeleteOrganizationCommand(id));
         return Ok(response);

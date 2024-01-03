@@ -15,21 +15,22 @@ namespace API.Controllers;
 
 [Route("api/[controller]")]
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+[ValidateToken]
 public class UserController : Controller
 {
     private readonly IUserService _userService;
     private readonly IUtilService _utilService;
-
-    public UserController(IUserService userService, IUtilService utilService)
+    private readonly IAuthService _authService;
+    public UserController(IUserService userService, IUtilService utilService, IAuthService authService)
     {
         _userService = userService;
         _utilService = utilService;
+        _authService = authService;
     }
 
     [SwaggerOperation(Summary = "get users as paginated list")]
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IDataResult<List<UserToListDto>>))]
     [HttpGet("paginate")]
-    [ValidateToken]
     [ServiceFilter(typeof(LogActionFilter))]
     public async Task<IActionResult> GetAsPaginated()
     {
@@ -40,7 +41,6 @@ public class UserController : Controller
     [SwaggerOperation(Summary = "get users")]
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IDataResult<List<UserToListDto>>))]
     [HttpGet]
-    [ValidateToken]
     [ServiceFilter(typeof(LogActionFilter))]
     public async Task<IActionResult> Get()
     {
@@ -65,18 +65,16 @@ public class UserController : Controller
     [SwaggerOperation(Summary = "get user")]
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IDataResult<UserToListDto>))]
     [HttpGet("{id}")]
-    [ValidateToken]
     [ServiceFilter(typeof(LogActionFilter))]
-    public async Task<IActionResult> Get([FromRoute] int id)
+    public async Task<IActionResult> Get([FromRoute] Guid id)
     {
         var response = await _userService.GetAsync(id);
         return Ok(response);
     }
 
-    [AllowAnonymous]
     [SwaggerOperation(Summary = "create user")]
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
-    [HttpPost("register")]
+    [HttpPost]
     [ServiceFilter(typeof(LogActionFilter))]
     public async Task<IActionResult> Add([FromBody] UserToAddDto dto)
     {
@@ -87,9 +85,8 @@ public class UserController : Controller
     [SwaggerOperation(Summary = "update user")]
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
     [HttpPut("{id}")]
-    [ValidateToken]
     [ServiceFilter(typeof(LogActionFilter))]
-    public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UserToUpdateDto dto)
+    public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UserToUpdateDto dto)
     {
         var response = await _userService.UpdateAsync(id, dto);
         return Ok(response);
@@ -98,11 +95,11 @@ public class UserController : Controller
     [SwaggerOperation(Summary = "delete user")]
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
     [HttpDelete("{id}")]
-    [ValidateToken]
     [ServiceFilter(typeof(LogActionFilter))]
-    public async Task<IActionResult> Delete([FromRoute] int id)
+    public async Task<IActionResult> Delete([FromRoute] Guid id)
     {
         var response = await _userService.SoftDeleteAsync(id);
+        await _authService.LogoutRemovedUserAsync(id);
         return Ok(response);
     }
 }

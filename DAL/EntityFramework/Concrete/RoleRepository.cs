@@ -22,11 +22,16 @@ public class RoleRepository : GenericRepository<Role>, IRoleRepository
         return role;
     }
 
-    public async Task ClearRolePermissionsAync(int roleId)
+    public async Task ClearRolePermissionsAync(Guid roleId)
     {
         var entity = await _dataContext.Roles.FindAsync(roleId);
         entity!.Permissions!.Clear();
         _dataContext.Entry(entity).State = EntityState.Detached;
         await _dataContext.SaveChangesAsync();
+    }
+
+    public async Task AddRoleAsync(Role role)
+    {
+        await _dataContext.Roles.AddAsync(role);
     }
 }

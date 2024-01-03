@@ -85,4 +85,13 @@ public class AuthService : IAuthService
 
         return new SuccessResult(Messages.Success.Translate());
     }
+
+    public async Task<IResult> LogoutRemovedUserAsync(Guid userId)
+    {
+        var tokens = await _unitOfWork.TokenRepository.GetListAsync(m => m.UserId == userId);
+        tokens.ForEach(m => m.IsDeleted = true);
+        await _unitOfWork.CommitAsync();
+
+        return new SuccessResult(Messages.Success.Translate());
+    }
 }
