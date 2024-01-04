@@ -124,10 +124,36 @@ public class UserController : Controller
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Upload([FromRoute] Guid id, IFormFile file)
     {
-        var result = await _userService.UploadFileAsync(id, file);
-        if (!result.Success) return BadRequest(result);
+        var existFile = await _userService.GetProfileAsync(id);
 
-        return Ok(result);
+        if (existFile is null || !existFile.Success)
+        {
+            return BadRequest(new ErrorDataResult<string>(Messages.UserIsNotExist.Translate()));
+        }
+
+        string fileName = System.IO.Path.GetFileName(file.FileName);
+        string fileExtension = System.IO.Path.GetExtension(file.FileName);
+        Guid fileNewName = Guid.NewGuid();
+
+        if (!Constants.AllowedImageExtensions.Contains(fileExtension))
+            return BadRequest(new ErrorDataResult<string>(Messages.ThisFileTypeIsNotAllowed.Translate()));
+
+        var path = _utilService.GetEnvFolderPath(_utilService.GetFolderName(FileType.UserProfile));
+        await FileHelper.WriteFile(file, $"{fileNewName}{fileExtension}", path);
+
+        if (existFile!.Data is not null)
+        {
+            var fullPath = System.IO.Path.Combine(path, existFile!.Data);
+
+            if (System.IO.File.Exists(fullPath))
+            {
+                System.IO.File.Delete(fullPath);
+            }
+        }
+
+        await _userService.AddProfileAsync(id,$"{fileNewName}{fileExtension}");       
+
+        return Ok(new SuccessResult(Messages.Success.Translate()));
     }
 
     [SwaggerOperation(Summary = "upload profile file")]
@@ -148,9 +174,28 @@ public class UserController : Controller
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> DeleteFile(Guid id)
     {
-        var result = await _userService.DeleteFileAsync(id);
-        if (!result.Success) return BadRequest(result);
+        var existFile = await _userService.GetProfileAsync(id);
 
-        return Ok(result);
+        if (existFile is null || !existFile.Success)
+        {
+            return BadRequest(new ErrorDataResult<string>(Messages.UserIsNotExist.Translate()));
+        }
+
+        if (existFile!.Data is null)
+        {
+            return Ok(new SuccessResult(Messages.Success.Translate()));
+        }
+
+        var path = _utilService.GetEnvFolderPath(_utilService.GetFolderName(FileType.UserProfile));
+        var fullPath = System.IO.Path.Combine(path, existFile!.Data);
+
+        if (System.IO.File.Exists(fullPath))
+        {
+            System.IO.File.Delete(fullPath);
+        }
+
+        _userService.AddProfileAsync(id, null);
+
+        return Ok(new SuccessResult(Messages.Success.Translate()));
     }
 }

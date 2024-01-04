@@ -20,6 +20,4 @@ public interface IUserService
     Task<IResult> AddProfileAsync(Guid userId, string file);
     Task<IDataResult<string>> GetProfileAsync(Guid userId);
 
-    Task<IResult> UploadFileAsync(Guid id, Microsoft.AspNetCore.Http.IFormFile file);
-    Task<IResult> DeleteFileAsync(Guid id);
 }
