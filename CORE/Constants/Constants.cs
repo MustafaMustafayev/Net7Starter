@@ -9,4 +9,7 @@ public static class Constants
 
     public static readonly string[] AllowedFileExtensions =
         { ".pdf", ".doc", ".docx", ".xls", ".xlsx", ".jpeg", ".jpg", ".png" };
+
+    public static readonly string[] AllowedImageExtensions =
+        { ".jpeg", ".jpg", ".png" };
 }

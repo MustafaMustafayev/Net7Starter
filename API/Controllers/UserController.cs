@@ -2,9 +2,12 @@
 using API.Filters;
 using BLL.Abstract;
 using CORE.Abstract;
+using CORE.Constants;
+using CORE.Helpers;
 using CORE.Localization;
 using DTO.Responses;
 using DTO.User;
+using ENTITIES.Enums;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -101,5 +104,53 @@ public class UserController : Controller
         var response = await _userService.SoftDeleteAsync(id);
         await _authService.LogoutRemovedUserAsync(id);
         return Ok(response);
+    }
+
+    [SwaggerOperation(Summary = "upload profile file")]
+    [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
+    [HttpPost("profile")]
+    //[ServiceFilter(typeof(LogActionFilter))]
+    public async Task<IActionResult> Upload (IFormFile file)
+    {
+        Guid userId = _utilService.GetUserIdFromToken().GetValueOrDefault() ;
+        
+        return await Upload(userId, file);
+    }
+
+    [SwaggerOperation(Summary = "upload profile file by user id")]
+    [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
+    [HttpPost("profile/{id}")]
+    //[ServiceFilter(typeof(LogActionFilter))]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> Upload([FromRoute] Guid id, IFormFile file)
+    {
+        var result = await _userService.UploadFileAsyn(id, file);
+        if (!result.Success) return BadRequest(result);
+
+        return Ok(result);
+    }
+
+    [SwaggerOperation(Summary = "upload profile file")]
+    [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
+    [HttpDelete("profile")]
+    [ServiceFilter(typeof(LogActionFilter))]
+    public async Task<IActionResult> DeleteFile()
+    {
+        Guid userId = _utilService.GetUserIdFromToken().GetValueOrDefault();
+
+        return await DeleteFile(userId);
+    }
+
+    [SwaggerOperation(Summary = "upload profile file")]
+    [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
+    [HttpDelete("profile/{id}")]
+    [ServiceFilter(typeof(LogActionFilter))]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> DeleteFile(Guid id)
+    {
+        var result = await _userService.DeleteFileAsync(id);
+        if (!result.Success) return BadRequest(result);
+
+        return Ok(result);
     }
 }

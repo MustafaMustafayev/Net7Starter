@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BLL.Abstract;
 using CORE.Abstract;
+using CORE.Constants;
 using CORE.Helpers;
 using CORE.Localization;
 using DAL.EntityFramework.UnitOfWork;
@@ -61,10 +62,10 @@ public class UserService : IUserService
         return new SuccessResult(Messages.Success.Translate());
     }
 
-    public async Task<IResult> AddProfileAsync(Guid userId, Guid? fileId)
+    public async Task<IResult> AddProfileAsync(Guid userId, string? file)
     {
         var user = await _unitOfWork.UserRepository.GetAsNoTrackingAsync(u => u.Id == userId);
-        user!.ProfileFileId = fileId;
+        user!.File = file;
 
         await _unitOfWork.UserRepository.UpdateUserAsync(user);
         await _unitOfWork.CommitAsync();
@@ -105,7 +106,7 @@ public class UserService : IUserService
         var data = _mapper.Map<User>(dto);
 
         data.Id = id;
-        data.ProfileFileId = old.ProfileFileId;
+        data.File = old.File;
 
         await _unitOfWork.UserRepository.UpdateUserAsync(data);
         await _unitOfWork.CommitAsync();
@@ -127,5 +128,79 @@ public class UserService : IUserService
 
         return new SuccessDataResult<PaginatedList<UserToListDto>>(responseDto,
             Messages.Success.Translate());
+    }
+
+    public async Task<IDataResult<string>> GetProfileAsync(Guid userId)
+    {
+        var user = await _unitOfWork.UserRepository.GetAsNoTrackingAsync(u => u.Id == userId);
+
+
+        return new SuccessDataResult<string>(user.File, Messages.Success.Translate());
+    }
+
+    public async Task<IResult> UploadFileAsyn(Guid id, Microsoft.AspNetCore.Http.IFormFile file)
+    {
+        User user = await _unitOfWork.UserRepository.GetAsync(m => m.Id == id);
+
+        if (user is null)
+        {
+            return new ErrorDataResult<string>(Messages.UserIsNotExist.Translate());
+        }
+
+
+        string fileName = System.IO.Path.GetFileName(file.FileName);
+        string fileExtension = System.IO.Path.GetExtension(file.FileName);
+        Guid fileNewName = Guid.NewGuid();
+
+        if (!Constants.AllowedImageExtensions.Contains(fileExtension))
+            return new ErrorDataResult<string>(Messages.ThisFileTypeIsNotAllowed.Translate());
+
+        var path = _utilService.GetEnvFolderPath(_utilService.GetFolderName(FileType.UserProfile));
+        await FileHelper.WriteFile(file, $"{fileNewName}{fileExtension}", path);
+
+        if (user!.File is not null)
+        {
+            var fullPath = System.IO.Path.Combine(path, user!.File);
+           
+            if (System.IO.File.Exists(fullPath))
+            {
+                System.IO.File.Delete(fullPath);
+            }
+        }
+
+        user.File = $"{fileNewName}{fileExtension}";
+        await _unitOfWork.UserRepository.UpdateUserAsync(user);
+        await _unitOfWork.CommitAsync();
+
+        return new SuccessResult(Messages.Success.Translate());
+    }
+
+    public async Task<IResult> DeleteFileAsync(Guid id)
+    {
+        User user = await _unitOfWork.UserRepository.GetAsync(m => m.Id == id);
+
+        if (user is null)
+        {
+            return new ErrorDataResult<string>(Messages.UserIsNotExist.Translate());
+        }
+
+        if (user!.File is null)
+        {
+            return new SuccessResult(Messages.Success.Translate());
+        }
+
+        var path = _utilService.GetEnvFolderPath(_utilService.GetFolderName(FileType.UserProfile));
+        var fullPath = System.IO.Path.Combine(path, user!.File);
+
+        if (System.IO.File.Exists(fullPath))
+        {
+            System.IO.File.Delete(fullPath);
+        }
+
+        user.File = null;
+        await _unitOfWork.UserRepository.UpdateUserAsync(user);
+        await _unitOfWork.CommitAsync();
+
+        return new SuccessResult(Messages.Success.Translate());
     }
 }

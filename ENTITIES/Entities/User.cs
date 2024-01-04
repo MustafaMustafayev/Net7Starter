@@ -12,6 +12,6 @@ public class User : Auditable, IEntity
     public string? LastVerificationCode { get; set; }
     public Guid? RoleId { get; set; }
     public virtual Role? Role { get; set; }
-    public Guid? ProfileFileId { get; set; }
-    public virtual File? ProfileFile { get; set; }
+    public string? File { get; set; }
+
 }

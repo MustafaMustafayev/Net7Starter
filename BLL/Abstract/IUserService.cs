@@ -17,5 +17,9 @@ public interface IUserService
     Task<IResult> UpdateAsync(Guid id, UserToUpdateDto dto);
 
     Task<IResult> SoftDeleteAsync(Guid id);
-    Task<IResult> AddProfileAsync(Guid userId, Guid? fileId);
+    Task<IResult> AddProfileAsync(Guid userId, string file);
+    Task<IDataResult<string>> GetProfileAsync(Guid userId);
+
+    Task<IResult> UploadFileAsyn(Guid id, Microsoft.AspNetCore.Http.IFormFile file);
+    Task<IResult> DeleteFileAsync(Guid id);
 }
