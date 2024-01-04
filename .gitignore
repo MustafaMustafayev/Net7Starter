@@ -37,3 +37,5 @@ msbuild.wrn
 .vs/
 /data
 /postgres
+/wwwroot/files/images/user_profile
+/API/wwwroot/files/images/user_profile/Screenshot 2023-12-09 170920.png
