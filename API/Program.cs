@@ -110,7 +110,10 @@ var app = builder.Build();
 if (config.SwaggerSettings.IsEnabled) app.UseSwagger();
 
 if (config.SwaggerSettings.IsEnabled)
-    app.UseSwaggerUI(c => c.InjectStylesheet(config.SwaggerSettings.Theme));
+    app.UseSwaggerUI(c => {
+        c.EnablePersistAuthorization();
+        c.InjectStylesheet(config.SwaggerSettings.Theme);
+    });
 
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
