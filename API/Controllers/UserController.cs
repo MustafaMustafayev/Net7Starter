@@ -124,7 +124,7 @@ public class UserController : Controller
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Upload([FromRoute] Guid id, IFormFile file)
     {
-        var result = await _userService.UploadFileAsyn(id, file);
+        var result = await _userService.UploadFileAsync(id, file);
         if (!result.Success) return BadRequest(result);
 
         return Ok(result);

@@ -138,7 +138,7 @@ public class UserService : IUserService
         return new SuccessDataResult<string>(user.File, Messages.Success.Translate());
     }
 
-    public async Task<IResult> UploadFileAsyn(Guid id, Microsoft.AspNetCore.Http.IFormFile file)
+    public async Task<IResult> UploadFileAsync(Guid id, Microsoft.AspNetCore.Http.IFormFile file)
     {
         User user = await _unitOfWork.UserRepository.GetAsync(m => m.Id == id);
 
