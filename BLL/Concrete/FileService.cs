@@ -28,9 +28,9 @@ public class FileService : IFileService
 
         switch (dto.Type)
         {
-            case FileType.UserProfile:
-                await _userService.AddProfileAsync(requestDto.UserId!.Value, fileId.Data);
-                break;
+            //case FileType.UserProfile:
+            //    await _userService.AddProfileAsync(requestDto.UserId!.Value, fileId.Data);
+            //    break;
             case FileType.OrganizationLogo:
                 // because of organization services are in mediatr
                 // we don't need to inject this to here and add mediatr package to BLL just for this line.

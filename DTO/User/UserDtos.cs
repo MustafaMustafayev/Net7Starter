@@ -1,5 +1,4 @@
-﻿using DTO.File;
-using DTO.Role;
+﻿using DTO.Role;
 using System.ComponentModel.DataAnnotations;
 
 namespace DTO.User;
@@ -24,7 +23,7 @@ public record UserToListDto
     string Email,
     string ContactNumber,
     RoleToFkDto? Role,
-    FileToListDto? ProfileFile
+    string? File
 );
 
 public record UserToUpdateDto

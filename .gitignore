@@ -37,3 +37,4 @@ msbuild.wrn
 .vs/
 /data
 /postgres
+/API/wwwroot/files/images/user_profile
