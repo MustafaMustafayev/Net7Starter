@@ -19,12 +19,12 @@ namespace API.Controllers;
 [Route("api/[controller]")]
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 [ValidateToken]
-public class FileController : Controller
+public class FilesController : Controller
 {
     private readonly IFileService _fileService;
     private readonly IUtilService _utilService;
 
-    public FileController(
+    public FilesController(
         IFileService fileService,
         IUtilService utilService
     )

@@ -17,11 +17,11 @@ namespace API.Controllers;
 [ServiceFilter(typeof(LogActionFilter))]
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 [ValidateToken]
-public class OrganizationController : Controller
+public class OrganizationsController : Controller
 {
     private readonly IMediator _mediator;
 
-    public OrganizationController(IMediator mediator)
+    public OrganizationsController(IMediator mediator)
     {
         _mediator = mediator;
     }

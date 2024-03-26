@@ -15,11 +15,11 @@ namespace API.Controllers;
 [ServiceFilter(typeof(LogActionFilter))]
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 [ValidateToken]
-public class RoleController : Controller
+public class RolesController : Controller
 {
     private readonly IRoleService _roleService;
 
-    public RoleController(IRoleService roleService)
+    public RolesController(IRoleService roleService)
     {
         _roleService = roleService;
     }
