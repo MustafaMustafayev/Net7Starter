@@ -69,6 +69,8 @@ public class DtosBuilder : ISourceBuilder
             if (compilation is null) return result.ToString();
 
             INamedTypeSymbol? classSymbol = compilation.GetTypeByMetadataName(fullNamespace + "." + entity.Name);
+            if (classSymbol is null) return result.ToString();
+
             GetClassProperties(result, classSymbol);
 
             if(

@@ -35,7 +35,7 @@ public class ControllerBuilder : ISourceBuilder
                    [ServiceFilter(typeof(LogActionFilter))]
                    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
                    [ValidateToken]
-                   public class {entityName}Controller : Controller
+                   public class {entityName}sController : Controller
                    {
                        private readonly I{entityName}Service _{entityNameLower}Service;
                        public {entityName}sController(I{entityName}Service {entityNameLower}Service)
