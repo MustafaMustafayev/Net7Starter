@@ -70,7 +70,15 @@ public class ExceptionMiddleware
                     : null;
             }
 
-            ErrorLogToAddDto errorLogToAddDto = new ErrorLogToAddDto(token, userId, path, clientIp, ex.Message, stackTrace);
+            ErrorLogToAddDto errorLogToAddDto = new ErrorLogToAddDto()
+            {
+                AccessToken = token,
+                UserId = userId,
+                Path = path,
+                Ip = clientIp,
+                ErrorMessage = ex.Message,
+                StackTrace = stackTrace
+            };
             await _errorLogService.AddAsync(errorLogToAddDto);
         }
     }

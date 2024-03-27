@@ -41,8 +41,7 @@ public class RolesControllerTest
         // Arrange
         _mock.Setup(m => m.GetAsync(Guid.NewGuid()))
             .ReturnsAsync(
-                new SuccessDataResult<RoleToListDto>(new RoleToListDto(Guid.NewGuid(), "TT", "TT",
-                    new List<PermissionToListDto>())));
+                new SuccessDataResult<RoleToListDto>(new RoleToListDto() { Id = Guid.NewGuid(), Key = "TT", Name = "TT", Permissions = new List<PermissionToListDto>() }));
 
         // Act
         var notFoundResult = await _controller.Get(Guid.NewGuid()) as OkObjectResult;
@@ -55,7 +54,7 @@ public class RolesControllerTest
     public async Task Add_ReturnsSuccess()
     {
         // Arrange
-        var roleToAdd = new RoleToAddDto("TT", "Test", new List<Guid>());
+        var roleToAdd = new RoleToAddDto() { Key = "TT", Name = "Test", PermissionIds = new List<Guid>() };
         _mock.Setup(m => m.AddAsync(roleToAdd)).ReturnsAsync(new SuccessResult());
 
         // Act
