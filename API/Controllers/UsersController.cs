@@ -79,7 +79,6 @@ public class UsersController : Controller
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
     [HttpPost]
     [ServiceFilter(typeof(LogActionFilter))]
-    [AllowAnonymous]
     public async Task<IActionResult> Add([FromBody] UserToAddDto dto)
     {
         var response = await _userService.AddAsync(dto);
