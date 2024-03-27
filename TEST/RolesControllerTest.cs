@@ -8,15 +8,15 @@ using Moq;
 
 namespace TEST;
 
-public class RoleControllerTest
+public class RolesControllerTest
 {
-    private readonly RoleController _controller;
+    private readonly RolesController _controller;
     private readonly Mock<IRoleService> _mock;
 
-    public RoleControllerTest()
+    public RolesControllerTest()
     {
         _mock = new Mock<IRoleService>();
-        _controller = new RoleController(_mock.Object);
+        _controller = new RolesController(_mock.Object);
     }
 
     [Fact]

@@ -14,11 +14,11 @@ namespace API.Controllers;
 [ServiceFilter(typeof(LogActionFilter))]
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 [ValidateToken]
-public class PermissionController : Controller
+public class PermissionsController : Controller
 {
     private readonly IPermissionService _permissionService;
 
-    public PermissionController(IPermissionService permissionService)
+    public PermissionsController(IPermissionService permissionService)
     {
         _permissionService = permissionService;
     }

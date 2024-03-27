@@ -19,12 +19,12 @@ namespace API.Controllers;
 [Route("api/[controller]")]
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 [ValidateToken]
-public class UserController : Controller
+public class UsersController : Controller
 {
     private readonly IUserService _userService;
     private readonly IUtilService _utilService;
     private readonly IAuthService _authService;
-    public UserController(IUserService userService, IUtilService utilService, IAuthService authService)
+    public UsersController(IUserService userService, IUtilService utilService, IAuthService authService)
     {
         _userService = userService;
         _utilService = utilService;
