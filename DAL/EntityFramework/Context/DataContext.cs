@@ -30,6 +30,7 @@ public class DataContext : DbContext
     public required DbSet<Permission> Permissions { get; set; }
     public required DbSet<Token> Tokens { get; set; }
     public required DbSet<ErrorLog> ErrorLogs { get; set; }
+    public required DbSet<Test> Test { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
