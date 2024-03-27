@@ -20,7 +20,7 @@ if (typeOfBuild == 2)
 
 async Task EntityBuilderDialogAsync()
 {
-    Console.WriteLine("I am starting to build, plase wait...");
+    Console.WriteLine("I am starting to build, please wait...");
     Console.WriteLine("I am not stuck, just working hard on millions of lines, please be patient...");
 
     var sourceBuilder = SourceBuilder.Instance;
