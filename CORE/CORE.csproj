@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net7.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <CodeAnalysisRuleSet>../settings.ruleset</CodeAnalysisRuleSet>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
@@ -9,20 +9,20 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <None Remove="Newtonsoft.Json"/>
-        <None Remove="Microsoft.AspNetCore.Cryptography.KeyDerivation"/>
-        <None Remove="Microsoft.AspNetCore.Authentication.JwtBearer"/>
-        <None Remove="Middlewares\TokenMiddleware\"/>
+        <None Remove="Newtonsoft.Json" />
+        <None Remove="Microsoft.AspNetCore.Cryptography.KeyDerivation" />
+        <None Remove="Microsoft.AspNetCore.Authentication.JwtBearer" />
+        <None Remove="Middlewares\TokenMiddleware\" />
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.12"/>
-        <PackageReference Include="MongoDB.Driver" Version="2.22.0"/>
-        <PackageReference Include="NEST" Version="7.17.5"/>
-        <PackageReference Include="SSH.NET" Version="2023.0.0"/>
-        <PackageReference Include="System.Drawing.Common" Version="7.0.0"/>
-        <PackageReference Include="WatchDog.NET" Version="1.4.10"/>
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.12" />
+        <PackageReference Include="MongoDB.Driver" Version="2.22.0" />
+        <PackageReference Include="NEST" Version="7.17.5" />
+        <PackageReference Include="SSH.NET" Version="2023.0.0" />
+        <PackageReference Include="System.Drawing.Common" Version="7.0.0" />
+        <PackageReference Include="WatchDog.NET" Version="1.4.10" />
     </ItemGroup>
     <ItemGroup>
-        <ProjectReference Include="..\DTO\DTO.csproj"/>
+        <ProjectReference Include="..\DTO\DTO.csproj" />
     </ItemGroup>
 </Project>
