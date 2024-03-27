@@ -20,14 +20,14 @@ if (typeOfBuild == 2)
 
 async Task EntityBuilderDialogAsync()
 {
-    Console.WriteLine("I am starting to build, plase wait..");
-    Console.WriteLine("I am not stuck. I working hard on millions of lines please be patient..");
+    Console.WriteLine("I am starting to build, plase wait...");
+    Console.WriteLine("I am not stuck, just working hard on millions of lines, please be patient...");
 
     var sourceBuilder = SourceBuilder.Instance;
     Console.WriteLine(
         await sourceBuilder.BuildSourceFiles()
             ? "I generated all of your code."
-            : "Error has happened during process!"
+            : "Error has happened during process (:"
     );
 }
 
@@ -38,8 +38,8 @@ async Task ClientBuilderDialogAsync()
 
     var openApiJsonUrl = Console.ReadLine();
 
-    Console.WriteLine("I am starting to build, plase wait..");
-    Console.WriteLine("I am not stuck. I working hard on millions of lines please be patient..");
+    Console.WriteLine("I am starting to build, plase wait...");
+    Console.WriteLine("I am not stuck, just working hard on millions of lines, please be patient...");
 
     if (string.IsNullOrEmpty(openApiJsonUrl?.Trim())) openApiJsonUrl = Constants.OpenApiFileName;
 
