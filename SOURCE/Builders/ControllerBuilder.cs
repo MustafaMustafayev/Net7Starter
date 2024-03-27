@@ -11,7 +11,7 @@ public class ControllerBuilder : ISourceBuilder
     public void BuildSourceFile(List<Entity> entities)
     {
         entities.ForEach(model =>
-            SourceBuilder.Instance.AddSourceFile(Constants.ControllerPath, $"{model.Name}Controller.cs",
+            SourceBuilder.Instance.AddSourceFile(Constants.ControllerPath, $"{model.Name}sController.cs",
                 BuildSourceText(model, null)));
     }
 
@@ -35,10 +35,10 @@ public class ControllerBuilder : ISourceBuilder
                    [ServiceFilter(typeof(LogActionFilter))]
                    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
                    [ValidateToken]
-                   public class {entityName}Controller : Controller
+                   public class {entityName}sController : Controller
                    {
                        private readonly I{entityName}Service _{entityNameLower}Service;
-                       public {entityName}Controller(I{entityName}Service {entityNameLower}Service)
+                       public {entityName}sController(I{entityName}Service {entityNameLower}Service)
                        {
                            _{entityNameLower}Service = {entityNameLower}Service;
                        }

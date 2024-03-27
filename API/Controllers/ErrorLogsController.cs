@@ -14,10 +14,10 @@ namespace API.Controllers;
 [ServiceFilter(typeof(LogActionFilter))]
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 [ValidateToken]
-public class ErrorLogController : Controller
+public class ErrorLogsController : Controller
 {
     private readonly IErrorLogService _errorLogService;
-    public ErrorLogController(IErrorLogService errorLogService)
+    public ErrorLogsController(IErrorLogService errorLogService)
     {
         _errorLogService = errorLogService;
     }

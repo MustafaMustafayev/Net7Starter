@@ -1,1 +1,1 @@
-﻿[  {    "name": "Test",    "configure": true,    "path": "Test"  }]
+﻿[  {    "name": "Test",    "configure": false,    "path": "Test"  }]

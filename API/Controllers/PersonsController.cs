@@ -15,12 +15,12 @@ namespace API.Controllers;
 [ServiceFilter(typeof(LogActionFilter))]
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 [ValidateToken]
-public class PersonController : Controller
+public class PersonsController : Controller
 {
     private readonly RedisCollection<Person> _collection;
     private readonly RedisConnectionProvider _provider;
 
-    public PersonController(RedisConnectionProvider provider)
+    public PersonsController(RedisConnectionProvider provider)
     {
         _provider = provider;
         _collection = (RedisCollection<Person>)provider.RedisCollection<Person>();
