@@ -32,7 +32,6 @@
         <ProjectReference Include="..\ENTITIES\ENTITIES.csproj" />
     </ItemGroup>
     <ItemGroup>
-        <Folder Include="Permission\" />
         <Folder Include="Token\" />
     </ItemGroup>
     <ItemGroup>
