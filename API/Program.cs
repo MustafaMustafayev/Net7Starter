@@ -8,7 +8,7 @@ using BLL.Mappers;
 using CORE.Config;
 using CORE.Constants;
 using DAL.EntityFramework.Context;
-using DTO.Auth.Validators;
+using DTO;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using GraphQL.Server.Ui.Voyager;
@@ -37,7 +37,7 @@ builder.Services.AddControllers(opt => opt.Filters.Add(typeof(ModelValidatorActi
     .AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 
 builder.Services.AddFluentValidationAutoValidation()
-    .AddValidatorsFromAssemblyContaining<ResetPasswordDtoValidator>();
+    .AddValidatorsFromAssemblyContaining<DtoObject>();
 
 if (config.SentrySettings.IsEnabled) builder.WebHost.UseSentry();
 
