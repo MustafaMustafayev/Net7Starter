@@ -9,7 +9,6 @@ using CORE.Config;
 using CORE.Constants;
 using DAL.EntityFramework.Context;
 using DTO;
-using DTO.Auth.Validators;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using GraphQL.Server.Ui.Voyager;
