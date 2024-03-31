@@ -12,7 +12,7 @@ public class DataContext : DbContext
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly IUtilService _utilService;
-
+  
     public DataContext(DbContextOptions<DataContext> options,
         IHttpContextAccessor httpContextAccessor,
         IUtilService utilService) : base(options)
@@ -34,6 +34,7 @@ public class DataContext : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseLazyLoadingProxies();
+        optionsBuilder.EnableSensitiveDataLogging();
     }
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
