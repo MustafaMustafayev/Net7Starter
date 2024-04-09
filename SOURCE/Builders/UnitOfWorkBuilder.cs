@@ -20,8 +20,11 @@ public class UnitOfWorkBuilder : ISourceBuilder
             newEntities.Add(new Entity { Name = entityName });
         }
 
-        SourceBuilder.Instance.AddSourceFile(Constants.UnitOfWorkPath, "UnitOfWork.cs",
-            BuildSourceText(null, newEntities));
+        SourceBuilder.Instance.AddSourceFile(
+            Constants.UnitOfWorkPath,
+            "UnitOfWork.cs",
+            BuildSourceText(null, newEntities),
+            false);
     }
 
     public string BuildSourceText(Entity? entity, List<Entity>? entities)

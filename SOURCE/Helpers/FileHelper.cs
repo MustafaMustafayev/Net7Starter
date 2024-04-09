@@ -28,11 +28,11 @@ public class FileHelper
         if (!Directory.Exists(Path.GetDirectoryName(filePath)))
             Directory.CreateDirectory(Path.GetDirectoryName(filePath)!);
 
-        /*if (File.Exists(filePath))
+        if (File.Exists(filePath) && sourceFile.SkipIfExists)
         {
             Console.WriteLine($"I found your file and skipped creating this. {filePath}");
             return true;
-        }*/
+        }
 
         await using var fs = File.Create(filePath);
 

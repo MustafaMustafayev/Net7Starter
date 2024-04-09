@@ -27,9 +27,9 @@ public class SourceBuilder
         }
     }
 
-    public void AddSourceFile(string filePath, string fileName, string text)
+    public void AddSourceFile(string filePath, string fileName, string text, bool skipIfExists = true)
     {
-        _sourceFiles.Add(new SourceFile { Path = filePath, Name = fileName, Text = text });
+        _sourceFiles.Add(new SourceFile { Path = filePath, Name = fileName, Text = text, SkipIfExists = skipIfExists });
     }
 
     private async Task<bool> CreateAllSourceFilesAsync()
