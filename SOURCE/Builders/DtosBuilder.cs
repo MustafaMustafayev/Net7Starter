@@ -33,15 +33,19 @@ public class DtosBuilder : ISourceBuilder
             string properties = GetProperties(entity).Result;
             SourceBuilder.Instance.AddSourceFile(
                 Constants.DtoPath.Replace("{entityName}", entity.Name),
-                $"{entity.Name}ToAddDto.cs", GenerateContent(entity.Name, $"{entity.Name}ToAddDto", properties));
+                $"{entity.Name}CreateRequestDto.cs", GenerateContent(entity.Name, $"{entity.Name}CreateRequestDto", properties));
 
             SourceBuilder.Instance.AddSourceFile(
                 Constants.DtoPath.Replace("{entityName}", entity.Name),
-                $"{entity.Name}ToUpdateDto.cs", GenerateContent(entity.Name, $"{entity.Name}ToUpdateDto", properties));
+                $"{entity.Name}UpdateRequestDto.cs", GenerateContent(entity.Name, $"{entity.Name}UpdateRequestDto", properties));
 
             SourceBuilder.Instance.AddSourceFile(
                 Constants.DtoPath.Replace("{entityName}", entity.Name),
-                $"{entity.Name}ToListDto.cs", GenerateContent(entity.Name, $"{entity.Name}ToListDto", properties));
+                $"{entity.Name}ResponseDto.cs", GenerateContent(entity.Name, $"{entity.Name}ResponseDto", properties));
+
+            SourceBuilder.Instance.AddSourceFile(
+                Constants.DtoPath.Replace("{entityName}", entity.Name),
+                $"{entity.Name}ByIdResponseDto.cs", GenerateContent(entity.Name, $"{entity.Name}ByIdResponseDto", properties));
         }
     }
 
@@ -136,9 +140,10 @@ public class DtosBuilder : ISourceBuilder
         var text = """
                    namespace DTO.{entityName};
 
-                   public record {entityName}ToAddDto();
-                   public record {entityName}ToUpdateDto();
-                   public record {entityName}ToListDto(Guid Id);
+                   public record {entityName}CreateRequestDto();
+                   public record {entityName}UpdateRequestDto();
+                   public record {entityName}ResponseDto(Guid Id);
+                   public record {entityName}ByIdResponseDto(Guid Id);
 
                    """;
 

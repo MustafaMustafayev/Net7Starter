@@ -1,6 +1,6 @@
 ﻿namespace DTO.Role;
 
-public record RoleToUpdateDto()
+public record RoleUpdateRequestDto()
 { 
     public string Name { get; set;}
     public string Key { get; set;}

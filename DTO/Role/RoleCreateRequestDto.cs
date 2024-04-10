@@ -1,6 +1,6 @@
 ﻿namespace DTO.Role;
 
-public record RoleToAddDto()
+public record RoleCreateRequestDto()
 {
     public string Name { get; set; }
     public string Key { get; set; }

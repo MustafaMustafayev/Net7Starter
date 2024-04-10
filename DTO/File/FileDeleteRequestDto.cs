@@ -2,7 +2,7 @@
 
 namespace DTO.File;
 
-public record FileRemoveRequestDto
+public record FileDeleteRequestDto
 {
     public string HashName { get; set; }
     public FileType Type { get; set; }

@@ -8,8 +8,9 @@ public class PermissionMapper : Profile
 {
     public PermissionMapper()
     {
-        CreateMap<PermissionToAddDto, Permission>();
-        CreateMap<PermissionToUpdateDto, Permission>();
-        CreateMap<Permission, PermissionToListDto>();
+        CreateMap<Permission, PermissionResponseDto>();
+        CreateMap<Permission, PermissionByIdResponseDto>();
+        CreateMap<PermissionCreateRequestDto, Permission>();
+        CreateMap<PermissionUpdateRequestDto, Permission>();
     }
 }

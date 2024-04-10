@@ -70,7 +70,7 @@ public class ExceptionMiddleware
                     : null;
             }
 
-            ErrorLogToAddDto errorLogToAddDto = new ErrorLogToAddDto()
+            ErrorLogCreateDto errorLogToAddDto = new ErrorLogCreateDto()
             {
                 AccessToken = token,
                 UserId = userId,

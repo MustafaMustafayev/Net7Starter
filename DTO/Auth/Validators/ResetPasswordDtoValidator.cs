@@ -2,7 +2,7 @@
 
 namespace DTO.Auth.Validators;
 
-public class ResetPasswordDtoValidator : AbstractValidator<ResetPasswordDto>
+public class ResetPasswordDtoValidator : AbstractValidator<ResetPasswordRequestDto>
 {
     // public ResetPasswordDtoValidator()
     // {

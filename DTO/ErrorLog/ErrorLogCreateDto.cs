@@ -1,6 +1,6 @@
 ﻿namespace DTO.ErrorLog;
 
-public record ErrorLogToAddDto
+public record ErrorLogCreateDto
 {
     public string AccessToken { get; set; }
     public Guid? UserId { get; set; }

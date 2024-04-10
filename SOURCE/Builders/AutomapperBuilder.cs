@@ -27,9 +27,10 @@ public class AutomapperBuilder : ISourceBuilder
                    {
                        public {entityName}Mapper()
                        {
-                           CreateMap<{entityName}, {entityName}ToListDto>();
-                           CreateMap<{entityName}ToAddDto, {entityName}>();
-                           CreateMap<{entityName}ToUpdateDto, {entityName}>();
+                           CreateMap<{entityName}, {entityName}ResponseDto>();
+                           CreateMap<{entityName}, {entityName}ByIdResponseDto>();
+                           CreateMap<{entityName}CreateRequestDto, {entityName}>();
+                           CreateMap<{entityName}UpdateRequestDto, {entityName}>();
                        }
                    }
 

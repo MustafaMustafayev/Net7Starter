@@ -6,15 +6,15 @@ namespace BLL.Abstract;
 
 public interface IUserService
 {
-    Task<IDataResult<List<UserToListDto>>> GetAsync();
+    Task<IDataResult<List<UserResponseDto>>> GetAsync();
 
-    Task<IDataResult<PaginatedList<UserToListDto>>> GetAsPaginatedListAsync();
+    Task<IDataResult<PaginatedList<UserResponseDto>>> GetAsPaginatedListAsync();
 
-    Task<IDataResult<UserToListDto>> GetAsync(Guid id);
+    Task<IDataResult<UserByIdResponseDto>> GetAsync(Guid id);
 
-    Task<IResult> AddAsync(UserToAddDto dto);
+    Task<IResult> AddAsync(UserCreateRequestDto dto);
 
-    Task<IResult> UpdateAsync(Guid id, UserToUpdateDto dto);
+    Task<IResult> UpdateAsync(Guid id, UserUpdateRequestDto dto);
 
     Task<IResult> SoftDeleteAsync(Guid id);
     Task<IResult> AddProfileAsync(Guid userId, string file);

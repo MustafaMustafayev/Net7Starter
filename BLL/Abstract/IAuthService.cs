@@ -7,10 +7,10 @@ namespace BLL.Abstract;
 public interface IAuthService
 {
     Task<string?> GetUserSaltAsync(string userEmail);
-    Task<IDataResult<UserToListDto>> LoginAsync(LoginDto dtos);
-    Task<IDataResult<UserToListDto>> LoginByTokenAsync();
+    Task<IDataResult<UserResponseDto>> LoginAsync(LoginRequestDto dtos);
+    Task<IDataResult<UserResponseDto>> LoginByTokenAsync();
     IResult SendVerificationCodeToEmailAsync(string email);
-    Task<IResult> ResetPasswordAsync(ResetPasswordDto dto);
+    Task<IResult> ResetPasswordAsync(ResetPasswordRequestDto dto);
     Task<IResult> LogoutAsync(string accessToken);
     Task<IResult> LogoutRemovedUserAsync(Guid userId);
 }

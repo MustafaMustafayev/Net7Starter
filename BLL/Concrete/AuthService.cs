@@ -28,29 +28,29 @@ public class AuthService : IAuthService
         return await _unitOfWork.UserRepository.GetUserSaltAsync(userEmail);
     }
 
-    public async Task<IDataResult<UserToListDto>> LoginAsync(LoginDto dtos)
+    public async Task<IDataResult<UserResponseDto>> LoginAsync(LoginRequestDto dtos)
     {
         var data =
             await _unitOfWork.UserRepository.GetAsync(m =>
                 m.Email == dtos.Email && m.Password == dtos.Password);
         if (data == null)
-            return new ErrorDataResult<UserToListDto>(Messages.InvalidUserCredentials.Translate());
+            return new ErrorDataResult<UserResponseDto>(Messages.InvalidUserCredentials.Translate());
 
-        return new SuccessDataResult<UserToListDto>(_mapper.Map<UserToListDto>(data),
+        return new SuccessDataResult<UserResponseDto>(_mapper.Map<UserResponseDto>(data),
             Messages.Success.Translate());
     }
 
-    public async Task<IDataResult<UserToListDto>> LoginByTokenAsync()
+    public async Task<IDataResult<UserResponseDto>> LoginByTokenAsync()
     {
         var userId = _utilService.GetUserIdFromToken();
         if (userId is null)
-            return new ErrorDataResult<UserToListDto>(Messages.CanNotFoundUserIdInYourAccessToken.Translate());
+            return new ErrorDataResult<UserResponseDto>(Messages.CanNotFoundUserIdInYourAccessToken.Translate());
 
         var data = await _unitOfWork.UserRepository.GetAsync(m => m.Id == userId);
         if (data == null)
-            return new ErrorDataResult<UserToListDto>(Messages.InvalidUserCredentials.Translate());
+            return new ErrorDataResult<UserResponseDto>(Messages.InvalidUserCredentials.Translate());
 
-        return new SuccessDataResult<UserToListDto>(_mapper.Map<UserToListDto>(data), Messages.Success.Translate());
+        return new SuccessDataResult<UserResponseDto>(_mapper.Map<UserResponseDto>(data), Messages.Success.Translate());
     }
 
     public IResult SendVerificationCodeToEmailAsync(string email)
@@ -59,7 +59,7 @@ public class AuthService : IAuthService
         return new SuccessResult(Messages.VerificationCodeSent.Translate());
     }
 
-    public async Task<IResult> ResetPasswordAsync(ResetPasswordDto dto)
+    public async Task<IResult> ResetPasswordAsync(ResetPasswordRequestDto dto)
     {
         var data = await _unitOfWork.UserRepository.GetAsync(m => m.Email == dto.Email);
 

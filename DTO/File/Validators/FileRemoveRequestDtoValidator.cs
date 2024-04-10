@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace DTO.File.Validators;
 
-public class FileRemoveRequestDtoValidator : AbstractValidator<FileRemoveRequestDto>
+public class FileRemoveRequestDtoValidator : AbstractValidator<FileDeleteRequestDto>
 {
     public FileRemoveRequestDtoValidator()
     {

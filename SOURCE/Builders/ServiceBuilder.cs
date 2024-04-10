@@ -41,7 +41,7 @@ public class ServiceBuilder : ISourceBuilder
                            _utilService = utilService;
                        }
                    
-                       public async Task<IResult> AddAsync({entityName}ToAddDto dto)
+                       public async Task<IResult> AddAsync({entityName}CreateRequestDto dto)
                        {
                            var data = _mapper.Map<{entityName}>(dto);
                    
@@ -61,33 +61,33 @@ public class ServiceBuilder : ISourceBuilder
                            return new SuccessResult(Messages.Success.Translate());
                        }
                    
-                       public async Task<IDataResult<PaginatedList<{entityName}ToListDto>>> GetAsPaginatedListAsync()
+                       public async Task<IDataResult<PaginatedList<{entityName}ResponseDto>>> GetAsPaginatedListAsync()
                        {
                            var datas = _unitOfWork.{entityName}Repository.GetList();
                            var paginationDto = _utilService.GetPagination();
                    
                            var response = await PaginatedList<{entityName}>.CreateAsync(datas.OrderBy(m => m.Id), paginationDto.PageIndex, paginationDto.PageSize);
                    
-                           var responseDto = new PaginatedList<{entityName}ToListDto>(_mapper.Map<List<{entityName}ToListDto>>(response.Datas), response.TotalRecordCount, response.PageIndex, paginationDto.PageSize);
+                           var responseDto = new PaginatedList<{entityName}ResponseDto>(_mapper.Map<List<{entityName}ResponseDto>>(response.Datas), response.TotalRecordCount, response.PageIndex, paginationDto.PageSize);
                    
-                           return new SuccessDataResult<PaginatedList<{entityName}ToListDto>>(responseDto, Messages.Success.Translate());
+                           return new SuccessDataResult<PaginatedList<{entityName}ResponseDto>>(responseDto, Messages.Success.Translate());
                        }
                    
-                       public async Task<IDataResult<List<{entityName}ToListDto>>> GetAsync()
+                       public async Task<IDataResult<List<{entityName}ResponseDto>>> GetAsync()
                        {
-                           var datas = _mapper.Map<List<{entityName}ToListDto>>(await _unitOfWork.{entityName}Repository.GetListAsync());
+                           var datas = _mapper.Map<List<{entityName}ResponseDto>>(await _unitOfWork.{entityName}Repository.GetListAsync());
                    
-                           return new SuccessDataResult<List<{entityName}ToListDto>>(datas, Messages.Success.Translate());
+                           return new SuccessDataResult<List<{entityName}ResponseDto>>(datas, Messages.Success.Translate());
                        }
                    
-                       public async Task<IDataResult<{entityName}ToListDto>> GetAsync(Guid id)
+                       public async Task<IDataResult<{entityName}ByIdResponseDto>> GetAsync(Guid id)
                        {
-                           var data = _mapper.Map<{entityName}ToListDto>(await _unitOfWork.{entityName}Repository.GetAsync(m => m.Id == id));
+                           var data = _mapper.Map<{entityName}ByIdResponseDto>(await _unitOfWork.{entityName}Repository.GetAsync(m => m.Id == id));
                    
-                           return new SuccessDataResult<{entityName}ToListDto>(data, Messages.Success.Translate());
+                           return new SuccessDataResult<{entityName}ByIdResponseDto>(data, Messages.Success.Translate());
                        }
                    
-                       public async Task<IResult> UpdateAsync(Guid id, {entityName}ToUpdateDto dto)
+                       public async Task<IResult> UpdateAsync(Guid id, {entityName}UpdateRequestDto dto)
                        {
                            var data = _mapper.Map<{entityName}>(dto);
                            data.Id = id;

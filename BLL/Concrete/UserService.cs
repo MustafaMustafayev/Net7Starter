@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using BLL.Abstract;
 using CORE.Abstract;
-using CORE.Constants;
 using CORE.Helpers;
 using CORE.Localization;
 using DAL.EntityFramework.UnitOfWork;
@@ -26,7 +25,7 @@ public class UserService : IUserService
         _utilService = utilService;
     }
 
-    public async Task<IResult> AddAsync(UserToAddDto dto)
+    public async Task<IResult> AddAsync(UserCreateRequestDto dto)
     {
         if (await _unitOfWork.UserRepository.IsUserExistAsync(dto.Email, null))
             return new ErrorResult(Messages.UserIsExist.Translate());
@@ -73,22 +72,22 @@ public class UserService : IUserService
         return new SuccessResult();
     }
 
-    public async Task<IDataResult<List<UserToListDto>>> GetAsync()
+    public async Task<IDataResult<List<UserResponseDto>>> GetAsync()
     {
         var datas = await _unitOfWork.UserRepository.GetListAsync();
 
-        return new SuccessDataResult<List<UserToListDto>>(_mapper.Map<List<UserToListDto>>(datas),
+        return new SuccessDataResult<List<UserResponseDto>>(_mapper.Map<List<UserResponseDto>>(datas),
             Messages.Success.Translate());
     }
 
-    public async Task<IDataResult<UserToListDto>> GetAsync(Guid id)
+    public async Task<IDataResult<UserByIdResponseDto>> GetAsync(Guid id)
     {
-        var data = _mapper.Map<UserToListDto>(await _unitOfWork.UserRepository.GetAsync(m => m.Id == id));
+        var data = _mapper.Map<UserByIdResponseDto>(await _unitOfWork.UserRepository.GetAsync(m => m.Id == id));
 
-        return new SuccessDataResult<UserToListDto>(data, Messages.Success.Translate());
+        return new SuccessDataResult<UserByIdResponseDto>(data, Messages.Success.Translate());
     }
 
-    public async Task<IResult> UpdateAsync(Guid id, UserToUpdateDto dto)
+    public async Task<IResult> UpdateAsync(Guid id, UserUpdateRequestDto dto)
     {
         if (await _unitOfWork.UserRepository.IsUserExistAsync(dto.Email, id))
             return new ErrorResult(Messages.UserIsExist.Translate());
@@ -114,7 +113,7 @@ public class UserService : IUserService
         return new SuccessResult(Messages.Success.Translate());
     }
 
-    public async Task<IDataResult<PaginatedList<UserToListDto>>> GetAsPaginatedListAsync()
+    public async Task<IDataResult<PaginatedList<UserResponseDto>>> GetAsPaginatedListAsync()
     {
         var datas = _unitOfWork.UserRepository.GetList();
         var paginationDto = _utilService.GetPagination();
@@ -122,11 +121,11 @@ public class UserService : IUserService
         var response = await PaginatedList<User>.CreateAsync(datas.OrderBy(m => m.Id), paginationDto.PageIndex,
             paginationDto.PageSize);
 
-        var responseDto = new PaginatedList<UserToListDto>(
-            _mapper.Map<List<UserToListDto>>(response.Datas),
+        var responseDto = new PaginatedList<UserResponseDto>(
+            _mapper.Map<List<UserResponseDto>>(response.Datas),
             response.TotalRecordCount, response.PageIndex, response.TotalPageCount);
 
-        return new SuccessDataResult<PaginatedList<UserToListDto>>(responseDto,
+        return new SuccessDataResult<PaginatedList<UserResponseDto>>(responseDto,
             Messages.Success.Translate());
     }
 

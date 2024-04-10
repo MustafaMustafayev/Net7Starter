@@ -11,5 +11,5 @@ public interface ITokenService
     Task<IResult> SoftDeleteAsync(Guid id);
     Task<IDataResult<TokenToListDto>> GetAsync(string accessToken, string refreshToken);
     Task<IResult> CheckValidationAsync(string accessToken, string refreshToken);
-    Task<IDataResult<LoginResponseDto>> CreateTokenAsync(UserToListDto dto);
+    Task<IDataResult<LoginResponseDto>> CreateTokenAsync(UserResponseDto dto);
 }

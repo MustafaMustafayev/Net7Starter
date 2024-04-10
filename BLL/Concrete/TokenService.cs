@@ -57,7 +57,7 @@ public class TokenService : ITokenService
             : new ErrorResult(Messages.PermissionDenied.Translate());
     }
 
-    public async Task<IDataResult<LoginResponseDto>> CreateTokenAsync(UserToListDto dto)
+    public async Task<IDataResult<LoginResponseDto>> CreateTokenAsync(UserResponseDto dto)
     {
         var securityHelper = new SecurityHelper(_configSettings, _utilService);
         var accessTokenExpireDate =

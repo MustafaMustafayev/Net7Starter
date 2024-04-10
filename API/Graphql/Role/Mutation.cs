@@ -21,14 +21,14 @@ mutation AddRole{
 }
      */
 
-    public async Task<bool> AddRole(RoleToAddDto item, [Service] IRoleService service)
+    public async Task<bool> AddRole(RoleCreateRequestDto item, [Service] IRoleService service)
     {
         await service.AddAsync(item);
         return true;
         //return ().Data;
     }
 
-    public async Task<bool> UpdateRole(Guid id, RoleToUpdateDto item, [Service] IRoleService service)
+    public async Task<bool> UpdateRole(Guid id, RoleUpdateRequestDto item, [Service] IRoleService service)
     {
         await service.UpdateAsync(id, item);
 

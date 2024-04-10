@@ -2,7 +2,7 @@
 
 namespace DTO.File;
 
-public record FileToListDto
+public record FileResponseDto
 {
     public Guid Id { get; set; }
     public string OriginalName { get; set; }

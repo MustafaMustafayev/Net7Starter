@@ -1,6 +1,6 @@
 namespace DTO.ErrorLog;
 
-public record ErrorLogToListDto
+public record ErrorLogResponseDto
 {
     public Guid ErrorLogId { get; set; }
     public DateTime DateTime { get; set; }

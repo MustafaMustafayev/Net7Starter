@@ -1,5 +1,5 @@
 namespace DTO.Department;
-public record DepartmentToListDto()
+public record DepartmentResponseDto()
 {
     public Guid Id { get; set; }
 }
