@@ -44,7 +44,7 @@ public class ControllerBuilder : ISourceBuilder
                        }
                    
                        [SwaggerOperation(Summary = "get paginated list")]
-                       [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IDataResult<List<{entityName}ToListDto>>))]
+                       [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IDataResult<List<{entityName}ResponseDto>>))]
                        [HttpGet("paginate")]
                        public async Task<IActionResult> GetAsPaginated()
                        {
@@ -53,7 +53,7 @@ public class ControllerBuilder : ISourceBuilder
                        }
                    
                        [SwaggerOperation(Summary = "get list")]
-                       [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IDataResult<List<{entityName}ToListDto>>))]
+                       [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IDataResult<List<{entityName}ResponseDto>>))]
                        [HttpGet]
                        public async Task<IActionResult> Get()
                        {
@@ -62,7 +62,7 @@ public class ControllerBuilder : ISourceBuilder
                        }
                    
                        [SwaggerOperation(Summary = "get data")]
-                       [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IDataResult<{entityName}ToListDto>))]
+                       [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IDataResult<{entityName}ByIdResponseDto>))]
                        [HttpGet("{id}")]
                        public async Task<IActionResult> Get([FromRoute] Guid id)
                        {
@@ -73,7 +73,7 @@ public class ControllerBuilder : ISourceBuilder
                        [SwaggerOperation(Summary = "create")]
                        [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
                        [HttpPost]
-                       public async Task<IActionResult> Add([FromBody] {entityName}ToAddDto dto)
+                       public async Task<IActionResult> Add([FromBody] {entityName}CreateRequestDto dto)
                        {
                            var response = await _{entityNameLower}Service.AddAsync(dto);
                            return Ok(response);
@@ -82,7 +82,7 @@ public class ControllerBuilder : ISourceBuilder
                        [SwaggerOperation(Summary = "update")]
                        [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
                        [HttpPut("{id}")]
-                       public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] {entityName}ToUpdateDto dto)
+                       public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] {entityName}UpdateRequestDto dto)
                        {
                            var response = await _{entityNameLower}Service.UpdateAsync(id, dto);
                            return Ok(response);

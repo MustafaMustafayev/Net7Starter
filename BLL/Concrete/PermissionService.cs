@@ -63,11 +63,11 @@ public class PermissionService : IPermissionService
 
     }
 
-    public async Task<IDataResult<PermissionResponseDto>> GetAsync(Guid id)
+    public async Task<IDataResult<PermissionByIdResponseDto>> GetAsync(Guid id)
     {
-        var datas = _mapper.Map<PermissionResponseDto>(await _unitOfWork.PermissionRepository.GetAsync(m => m.Id == id));
+        var datas = _mapper.Map<PermissionByIdResponseDto>(await _unitOfWork.PermissionRepository.GetAsync(m => m.Id == id));
 
-        return new SuccessDataResult<PermissionResponseDto>(datas, Messages.Success.Translate());
+        return new SuccessDataResult<PermissionByIdResponseDto>(datas, Messages.Success.Translate());
     }
 
     public async Task<IResult> UpdateAsync(Guid permissionId, PermissionUpdateRequestDto dto)

@@ -56,11 +56,11 @@ public class RoleService : IRoleService
             Messages.Success.Translate()));
     }
 
-    public async Task<IDataResult<RoleResponseDto>> GetAsync(Guid id)
+    public async Task<IDataResult<RoleByIdResponseDto>> GetAsync(Guid id)
     {
-        var data = _mapper.Map<RoleResponseDto>(await _unitOfWork.RoleRepository.GetAsync(m => m.Id == id));
+        var data = _mapper.Map<RoleByIdResponseDto>(await _unitOfWork.RoleRepository.GetAsync(m => m.Id == id));
 
-        return new SuccessDataResult<RoleResponseDto>(data, Messages.Success.Translate());
+        return new SuccessDataResult<RoleByIdResponseDto>(data, Messages.Success.Translate());
     }
 
     public async Task<IResult> UpdateAsync(Guid id, RoleUpdateRequestDto dto)

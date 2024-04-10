@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using BLL.Abstract;
 using CORE.Abstract;
-using CORE.Constants;
 using CORE.Helpers;
 using CORE.Localization;
 using DAL.EntityFramework.UnitOfWork;
@@ -81,11 +80,11 @@ public class UserService : IUserService
             Messages.Success.Translate());
     }
 
-    public async Task<IDataResult<UserResponseDto>> GetAsync(Guid id)
+    public async Task<IDataResult<UserByIdResponseDto>> GetAsync(Guid id)
     {
-        var data = _mapper.Map<UserResponseDto>(await _unitOfWork.UserRepository.GetAsync(m => m.Id == id));
+        var data = _mapper.Map<UserByIdResponseDto>(await _unitOfWork.UserRepository.GetAsync(m => m.Id == id));
 
-        return new SuccessDataResult<UserResponseDto>(data, Messages.Success.Translate());
+        return new SuccessDataResult<UserByIdResponseDto>(data, Messages.Success.Translate());
     }
 
     public async Task<IResult> UpdateAsync(Guid id, UserUpdateRequestDto dto)

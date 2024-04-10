@@ -10,7 +10,7 @@ public interface IUserService
 
     Task<IDataResult<PaginatedList<UserResponseDto>>> GetAsPaginatedListAsync();
 
-    Task<IDataResult<UserResponseDto>> GetAsync(Guid id);
+    Task<IDataResult<UserByIdResponseDto>> GetAsync(Guid id);
 
     Task<IResult> AddAsync(UserCreateRequestDto dto);
 

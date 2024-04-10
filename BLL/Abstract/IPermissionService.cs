@@ -10,7 +10,7 @@ public interface IPermissionService
 
     Task<IDataResult<PaginatedList<PermissionResponseDto>>> GetAsPaginatedListAsync();
 
-    Task<IDataResult<PermissionResponseDto>> GetAsync(Guid id);
+    Task<IDataResult<PermissionByIdResponseDto>> GetAsync(Guid id);
 
     Task<IResult> AddAsync(PermissionCreateRequestDto dto);
 

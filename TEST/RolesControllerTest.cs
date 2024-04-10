@@ -41,7 +41,7 @@ public class RolesControllerTest
         // Arrange
         _mock.Setup(m => m.GetAsync(Guid.NewGuid()))
             .ReturnsAsync(
-                new SuccessDataResult<RoleResponseDto>(new RoleResponseDto() { Id = Guid.NewGuid(), Key = "TT", Name = "TT", Permissions = new List<PermissionResponseDto>() }));
+                new SuccessDataResult<RoleByIdResponseDto>(new RoleByIdResponseDto() { Id = Guid.NewGuid(), Key = "TT", Name = "TT", Permissions = new List<PermissionResponseDto>() }));
 
         // Act
         var notFoundResult = await _controller.Get(Guid.NewGuid()) as OkObjectResult;

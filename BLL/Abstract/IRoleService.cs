@@ -13,7 +13,7 @@ public interface IRoleService
 
     Task<IDataResult<IQueryable<Role>>> GraphQlGetAsync();
 
-    Task<IDataResult<RoleResponseDto>> GetAsync(Guid id);
+    Task<IDataResult<RoleByIdResponseDto>> GetAsync(Guid id);
 
     Task<IResult> AddAsync(RoleCreateRequestDto dto);
 

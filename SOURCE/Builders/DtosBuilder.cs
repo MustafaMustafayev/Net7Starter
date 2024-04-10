@@ -140,9 +140,10 @@ public class DtosBuilder : ISourceBuilder
         var text = """
                    namespace DTO.{entityName};
 
-                   public record {entityName}ToAddDto();
-                   public record {entityName}ToUpdateDto();
-                   public record {entityName}ToListDto(Guid Id);
+                   public record {entityName}CreateRequestDto();
+                   public record {entityName}UpdateRequestDto();
+                   public record {entityName}ResponseDto(Guid Id);
+                   public record {entityName}ByIdResponseDto(Guid Id);
 
                    """;
 
