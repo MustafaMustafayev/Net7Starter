@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using BLL.Abstract;
+using CORE.Enums;
 using CORE.Localization;
 using DAL.EntityFramework.UnitOfWork;
 using DTO.File;
 using DTO.Responses;
-using ENTITIES.Enums;
 using File = ENTITIES.Entities.File;
 
 namespace BLL.Concrete;
@@ -31,7 +31,7 @@ public class FileService : IFileService
             //case FileType.UserProfile:
             //    await _userService.AddProfileAsync(requestDto.UserId!.Value, fileId.Data);
             //    break;
-            case FileType.OrganizationLogo:
+            case EFileType.OrganizationLogo:
                 // because of organization services are in mediatr
                 // we don't need to inject this to here and add mediatr package to BLL just for this line.
                 // that is example line and shows logic
@@ -48,10 +48,10 @@ public class FileService : IFileService
 
         switch (dto.Type)
         {
-            case FileType.UserProfile:
+            case EFileType.UserProfile:
                 await _userService.AddProfileAsync(dto.UserId!.Value, null);
                 break;
-            case FileType.OrganizationLogo:
+            case EFileType.OrganizationLogo:
                 //await _organizationService.AddProfileAsync(userId!.Value, null);
                 break;
         }

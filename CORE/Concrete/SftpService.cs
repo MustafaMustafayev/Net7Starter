@@ -1,6 +1,5 @@
 ﻿using CORE.Abstract;
 using CORE.Config;
-using DTO.Sftp;
 using Microsoft.AspNetCore.Http;
 using Renci.SshNet;
 using Renci.SshNet.Sftp;

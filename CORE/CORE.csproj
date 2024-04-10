@@ -22,7 +22,4 @@
         <PackageReference Include="System.Drawing.Common" Version="7.0.0" />
         <PackageReference Include="WatchDog.NET" Version="1.4.10" />
     </ItemGroup>
-    <ItemGroup>
-        <ProjectReference Include="..\DTO\DTO.csproj" />
-    </ItemGroup>
 </Project>

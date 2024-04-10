@@ -13,10 +13,10 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="Enums" />
+        <Compile Remove="Entities\First.cs" />
     </ItemGroup>
 
     <ItemGroup>
-        <Compile Remove="Entities\First.cs" />
+      <ProjectReference Include="..\CORE\CORE.csproj" />
     </ItemGroup>
 </Project>

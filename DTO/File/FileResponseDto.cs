@@ -1,4 +1,4 @@
-﻿using ENTITIES.Enums;
+﻿using CORE.Enums;
 
 namespace DTO.File;
 
@@ -10,5 +10,5 @@ public record FileResponseDto
     public string Extension { get; set; }
     public double Length { get; set; }
     public string Path { get; set; }
-    public FileType Type { get; set; }
+    public EFileType Type { get; set; }
 }

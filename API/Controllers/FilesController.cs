@@ -2,11 +2,11 @@
 using BLL.Abstract;
 using CORE.Abstract;
 using CORE.Constants;
+using CORE.Enums;
 using CORE.Helpers;
 using CORE.Localization;
 using DTO.File;
 using DTO.Responses;
-using ENTITIES.Enums;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -83,7 +83,7 @@ public class FilesController : Controller
     [SwaggerOperation(Summary = "download file")]
     [Produces(typeof(void))]
     [HttpGet("download")]
-    public async Task<IActionResult> Download([FromQuery] string hashName, [FromQuery] FileType type)
+    public async Task<IActionResult> Download([FromQuery] string hashName, [FromQuery] EFileType type)
     {
         // get file from database
         var file = await _fileService.GetAsync(hashName);
@@ -98,7 +98,7 @@ public class FilesController : Controller
     [HttpGet]
     [SwaggerOperation(Summary = "get file")]
     [Produces(typeof(void))]
-    public async Task<IActionResult> Get([FromQuery] string hashName, [FromQuery] FileType type)
+    public async Task<IActionResult> Get([FromQuery] string hashName, [FromQuery] EFileType type)
     {
         // get file from database
         var file = await _fileService.GetAsync(hashName);

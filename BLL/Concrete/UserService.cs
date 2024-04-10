@@ -1,14 +1,14 @@
 ﻿using AutoMapper;
 using BLL.Abstract;
+using BLL.Helpers;
 using CORE.Abstract;
-using CORE.Helpers;
+using CORE.Enums;
 using CORE.Localization;
 using DAL.EntityFramework.UnitOfWork;
 using DAL.EntityFramework.Utility;
 using DTO.Responses;
 using DTO.User;
 using ENTITIES.Entities;
-using ENTITIES.Enums;
 
 namespace BLL.Concrete;
 
@@ -33,7 +33,7 @@ public class UserService : IUserService
         dto = dto with
         {
             RoleId = !dto.RoleId.HasValue
-                ? (await _unitOfWork.RoleRepository.GetAsync(m => m.Key == UserType.Guest.ToString()))?.Id
+                ? (await _unitOfWork.RoleRepository.GetAsync(m => m.Key == EUserType.Guest.ToString()))?.Id
                 : dto.RoleId
         };
         var data = _mapper.Map<User>(dto);
@@ -95,7 +95,7 @@ public class UserService : IUserService
         dto = dto with
         {
             RoleId = dto.RoleId is null
-                ? (await _unitOfWork.RoleRepository.GetAsync(m => m.Key == UserType.Guest.ToString()))?.Id
+                ? (await _unitOfWork.RoleRepository.GetAsync(m => m.Key == EUserType.Guest.ToString()))?.Id
                 : dto.RoleId
         };
 

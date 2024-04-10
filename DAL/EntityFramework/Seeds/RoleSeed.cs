@@ -1,6 +1,6 @@
-﻿using CORE.Helpers;
+﻿using CORE.Enums;
+using CORE.Helpers;
 using ENTITIES.Entities;
-using ENTITIES.Enums;
 using Microsoft.EntityFrameworkCore;
 namespace DAL.EntityFramework.Seeds;
 
@@ -8,7 +8,7 @@ public static class RoleSeed
 {
     public static void Seed(ModelBuilder modelBuilder)
     {
-        var roles = Enum.GetValues<UserType>()
+        var roles = Enum.GetValues<EUserType>()
             .Select(e => new Role
             {
                 Id = Guid.NewGuid(),

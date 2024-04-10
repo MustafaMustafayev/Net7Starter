@@ -1,5 +1,4 @@
-﻿using DTO.Sftp;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 
 namespace CORE.Abstract;
 

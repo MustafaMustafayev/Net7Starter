@@ -1,7 +1,6 @@
 ﻿using CORE.Abstract;
 using CORE.Config;
-using DTO.Helper;
-using ENTITIES.Enums;
+using CORE.Enums;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.IdentityModel.Tokens;
@@ -179,12 +178,12 @@ public class UtilService : IUtilService
         return roleIdClaim.Value;
     }
 
-    public string GetFolderName(FileType type)
+    public string GetFolderName(EFileType type)
     {
         return type switch
         {
-            FileType.UserProfile => @"files\images\user_profile",
-            FileType.OrganizationLogo => @"files\images\organization_logo",
+            EFileType.UserProfile => @"files\images\user_profile",
+            EFileType.OrganizationLogo => @"files\images\organization_logo",
             _ => "files/error"
         };
     }

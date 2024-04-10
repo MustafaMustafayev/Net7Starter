@@ -1,6 +1,4 @@
-﻿namespace DTO.Sftp;
-
-public record DirectoryInformation
+﻿public record DirectoryInformation
 {
     public required string Name { get; set; }
     public required string Length { get; set; }

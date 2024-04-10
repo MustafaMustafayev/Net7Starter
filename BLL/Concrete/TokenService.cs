@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using BLL.Abstract;
+using BLL.Helpers;
 using CORE.Abstract;
 using CORE.Config;
-using CORE.Helpers;
 using CORE.Localization;
 using DAL.EntityFramework.UnitOfWork;
 using DTO.Auth;

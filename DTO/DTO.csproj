@@ -34,4 +34,7 @@
     <ItemGroup>
         <Compile Remove="First\FirstDtos.cs" />
     </ItemGroup>
+    <ItemGroup>
+      <Folder Include="Helper\" />
+    </ItemGroup>
 </Project>

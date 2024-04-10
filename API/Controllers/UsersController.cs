@@ -3,11 +3,11 @@ using API.Filters;
 using BLL.Abstract;
 using CORE.Abstract;
 using CORE.Constants;
+using CORE.Enums;
 using CORE.Helpers;
 using CORE.Localization;
 using DTO.Responses;
 using DTO.User;
-using ENTITIES.Enums;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -138,7 +138,7 @@ public class UsersController : Controller
         if (!Constants.AllowedImageExtensions.Contains(fileExtension))
             return BadRequest(new ErrorDataResult<string>(Messages.ThisFileTypeIsNotAllowed.Translate()));
 
-        var path = _utilService.GetEnvFolderPath(_utilService.GetFolderName(FileType.UserProfile));
+        var path = _utilService.GetEnvFolderPath(_utilService.GetFolderName(EFileType.UserProfile));
         await FileHelper.WriteFile(file, $"{fileNewName}{fileExtension}", path);
 
         if (existFile!.Data is not null)
@@ -186,7 +186,7 @@ public class UsersController : Controller
             return Ok(new SuccessResult(Messages.Success.Translate()));
         }
 
-        var path = _utilService.GetEnvFolderPath(_utilService.GetFolderName(FileType.UserProfile));
+        var path = _utilService.GetEnvFolderPath(_utilService.GetFolderName(EFileType.UserProfile));
         var fullPath = System.IO.Path.Combine(path, existFile!.Data);
 
         if (System.IO.File.Exists(fullPath))
