@@ -48,7 +48,7 @@ public class SecurityHelper
         return Convert.ToBase64String(hashed);
     }
 
-    public string CreateTokenForUser(UserToListDto userDto, DateTime expirationDate)
+    public string CreateTokenForUser(UserResponseDto userDto, DateTime expirationDate)
     {
         var claims = new List<Claim>
         {

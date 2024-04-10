@@ -2,10 +2,10 @@
 
 namespace DTO.Role;
 
-public record RoleToListDto()
+public record RoleByIdResponseDto()
 {
     public Guid Id { get; set; }
     public string Name { get; set; }
     public string Key { get; set; }
-    public List<PermissionToListDto> Permissions { get; set; }
+    public List<PermissionResponseDto> Permissions { get; set; }
 }

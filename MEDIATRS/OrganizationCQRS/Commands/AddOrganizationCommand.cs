@@ -5,4 +5,4 @@ using MediatR;
 namespace MEDIATRS.OrganizationCQRS.Commands;
 
 public record AddOrganizationCommand
-    (OrganizationToAddDto Organization) : IRequest<IResult>;
+    (OrganizationCreateRequestDto Organization) : IRequest<IResult>;

@@ -8,7 +8,7 @@ public class ErrorLogMapper : Profile
 {
     public ErrorLogMapper()
     {
-        CreateMap<ErrorLog, ErrorLogToListDto>();
-        CreateMap<ErrorLogToAddDto, ErrorLog>();
+        CreateMap<ErrorLog, ErrorLogResponseDto>();
+        CreateMap<ErrorLogCreateDto, ErrorLog>();
     }
 }

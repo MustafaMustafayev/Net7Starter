@@ -2,7 +2,7 @@
 
 namespace DTO.File;
 
-public record FileToAddDto
+public record FileCreateRequestDto
 {
     public string OriginalName { get; set; }
     public string HashName { get; set; }

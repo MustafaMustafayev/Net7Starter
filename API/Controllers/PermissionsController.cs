@@ -24,7 +24,7 @@ public class PermissionsController : Controller
     }
 
     [SwaggerOperation(Summary = "get permissions as paginated list")]
-    [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IDataResult<List<PermissionToListDto>>))]
+    [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IDataResult<List<PermissionResponseDto>>))]
     [HttpGet("paginate")]
     public async Task<IActionResult> GetAsPaginated()
     {
@@ -33,7 +33,7 @@ public class PermissionsController : Controller
     }
 
     [SwaggerOperation(Summary = "get permissions")]
-    [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IDataResult<List<PermissionToListDto>>))]
+    [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IDataResult<List<PermissionResponseDto>>))]
     [HttpGet]
     public async Task<IActionResult> Get()
     {
@@ -42,7 +42,7 @@ public class PermissionsController : Controller
     }
 
     [SwaggerOperation(Summary = "get permission by id")]
-    [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IDataResult<PermissionToListDto>))]
+    [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IDataResult<PermissionResponseDto>))]
     [HttpGet("{id}")]
     public async Task<IActionResult> Get([FromRoute] Guid id)
     {
@@ -52,7 +52,7 @@ public class PermissionsController : Controller
 
     [SwaggerOperation(Summary = "create permission")]
     [HttpPost]
-    public async Task<IActionResult> Add([FromBody] PermissionToAddDto dto)
+    public async Task<IActionResult> Add([FromBody] PermissionCreateRequestDto dto)
     {
         var response = await _permissionService.AddAsync(dto);
         return Ok(response);
@@ -61,7 +61,7 @@ public class PermissionsController : Controller
     [SwaggerOperation(Summary = "update permission")]
     [HttpPut("{id}")]
     public async Task<IActionResult> Update([FromRoute] Guid id,
-        [FromBody] PermissionToUpdateDto dto)
+        [FromBody] PermissionUpdateRequestDto dto)
     {
         var response = await _permissionService.UpdateAsync(id, dto);
         return Ok(response);

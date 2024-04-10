@@ -210,8 +210,8 @@ public static class DependencyContainer
 
     public static void RegisterElasticSearch(this IServiceCollection services, ConfigSettings config)
     {
-        services.TryAddScoped<IElasticSearchService<UserToListDto>>(_ =>
-            new ElasticSearchService<UserToListDto>(config.ElasticSearchSettings.Connection,
+        services.TryAddScoped<IElasticSearchService<UserResponseDto>>(_ =>
+            new ElasticSearchService<UserResponseDto>(config.ElasticSearchSettings.Connection,
                 config.ElasticSearchSettings.DefaultIndex));
     }
 

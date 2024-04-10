@@ -6,15 +6,15 @@ namespace BLL.Abstract;
 
 public interface IPermissionService
 {
-    Task<IDataResult<List<PermissionToListDto>>> GetAsync();
+    Task<IDataResult<List<PermissionResponseDto>>> GetAsync();
 
-    Task<IDataResult<PaginatedList<PermissionToListDto>>> GetAsPaginatedListAsync();
+    Task<IDataResult<PaginatedList<PermissionResponseDto>>> GetAsPaginatedListAsync();
 
-    Task<IDataResult<PermissionToListDto>> GetAsync(Guid id);
+    Task<IDataResult<PermissionResponseDto>> GetAsync(Guid id);
 
-    Task<IResult> AddAsync(PermissionToAddDto dto);
+    Task<IResult> AddAsync(PermissionCreateRequestDto dto);
 
-    Task<IResult> UpdateAsync(Guid permissionId, PermissionToUpdateDto dto);
+    Task<IResult> UpdateAsync(Guid permissionId, PermissionUpdateRequestDto dto);
 
     Task<IResult> SoftDeleteAsync(Guid id);
 }

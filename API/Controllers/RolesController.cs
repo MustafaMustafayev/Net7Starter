@@ -25,7 +25,7 @@ public class RolesController : Controller
     }
 
     [SwaggerOperation(Summary = "get roles")]
-    [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IDataResult<List<RoleToListDto>>))]
+    [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IDataResult<List<RoleResponseDto>>))]
     [HttpGet]
     public async Task<IActionResult> Get()
     {
@@ -34,7 +34,7 @@ public class RolesController : Controller
     }
 
     [SwaggerOperation(Summary = "get role")]
-    [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IDataResult<RoleToListDto>))]
+    [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IDataResult<RoleResponseDto>))]
     [HttpGet("{id}")]
     public async Task<IActionResult> Get([FromRoute] Guid id)
     {
@@ -43,7 +43,7 @@ public class RolesController : Controller
     }
 
     [SwaggerOperation(Summary = "get role permissions")]
-    [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IDataResult<RoleToListDto>))]
+    [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IDataResult<RoleResponseDto>))]
     [HttpGet("{id}/permissions")]
     public async Task<IActionResult> GetRolePermissions([FromRoute] Guid id)
     {
@@ -54,7 +54,7 @@ public class RolesController : Controller
     [SwaggerOperation(Summary = "create role")]
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
     [HttpPost]
-    public async Task<IActionResult> Add([FromBody] RoleToAddDto dto)
+    public async Task<IActionResult> Add([FromBody] RoleCreateRequestDto dto)
     {
         var response = await _roleService.AddAsync(dto);
         return Ok(response);
@@ -63,7 +63,7 @@ public class RolesController : Controller
     [SwaggerOperation(Summary = "update role")]
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] RoleToUpdateDto dto)
+    public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] RoleUpdateRequestDto dto)
     {
         var response = await _roleService.UpdateAsync(id, dto);
         return Ok(response);

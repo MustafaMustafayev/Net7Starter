@@ -28,7 +28,7 @@ public class OrganizationsController : Controller
 
     [SwaggerOperation(Summary = "get organizations")]
     [SwaggerResponse(StatusCodes.Status200OK,
-        type: typeof(IDataResult<List<OrganizationToListDto>>))]
+        type: typeof(IDataResult<List<OrganizationResponseDto>>))]
     [HttpGet]
     public async Task<IActionResult> Get()
     {
@@ -37,7 +37,7 @@ public class OrganizationsController : Controller
     }
 
     [SwaggerOperation(Summary = "get organization")]
-    [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IDataResult<OrganizationToListDto>))]
+    [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IDataResult<OrganizationResponseDto>))]
     [HttpGet("{id}")]
     public async Task<IActionResult> Get([FromRoute] Guid id)
     {
@@ -48,7 +48,7 @@ public class OrganizationsController : Controller
     [SwaggerOperation(Summary = "create organization")]
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
     [HttpPost]
-    public async Task<IActionResult> Add([FromBody] OrganizationToAddDto request)
+    public async Task<IActionResult> Add([FromBody] OrganizationCreateRequestDto request)
     {
         var response = await _mediator.Send(new AddOrganizationCommand(request));
         return Ok(response);
@@ -57,7 +57,7 @@ public class OrganizationsController : Controller
     [SwaggerOperation(Summary = "update organization")]
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] OrganizationToUpdateDto request)
+    public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] OrganizationUpdateRequestDto request)
     {
         var response = await _mediator.Send(new UpdateOrganizationCommand(id, request));
         return Ok(response);

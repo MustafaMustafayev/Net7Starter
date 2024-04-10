@@ -45,7 +45,7 @@ public class AuthController : Controller
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IDataResult<LoginResponseDto>))]
     [HttpPost("login")]
     [AllowAnonymous]
-    public async Task<IActionResult> Login([FromBody] LoginDto request)
+    public async Task<IActionResult> Login([FromBody] LoginRequestDto request)
     {
         var userSalt = await _authService.GetUserSaltAsync(request.Email);
 
@@ -96,7 +96,7 @@ public class AuthController : Controller
     [SwaggerOperation(Summary = "reset password")]
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
     [HttpPost("resetPassword")]
-    public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDto request)
+    public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequestDto request)
     {
         var response = await _authService.ResetPasswordAsync(request);
         return Ok(response);

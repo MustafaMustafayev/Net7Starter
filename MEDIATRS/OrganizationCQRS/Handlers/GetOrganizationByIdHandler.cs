@@ -9,7 +9,7 @@ using MEDIATRS.OrganizationCQRS.Queries;
 namespace MEDIATRS.OrganizationCQRS.Handlers;
 
 public class GetOrganizationByIdHandler : IRequestHandler<GetOrganizationByIdQuery,
-    IDataResult<OrganizationToListDto>>
+    IDataResult<OrganizationResponseDto>>
 {
     private readonly IMapper _mapper;
     private readonly IUnitOfWork _unitOfWork;
@@ -20,13 +20,13 @@ public class GetOrganizationByIdHandler : IRequestHandler<GetOrganizationByIdQue
         _mapper = mapper;
     }
 
-    public async Task<IDataResult<OrganizationToListDto>> Handle(GetOrganizationByIdQuery request,
+    public async Task<IDataResult<OrganizationResponseDto>> Handle(GetOrganizationByIdQuery request,
         CancellationToken cancellationToken)
     {
         var data =
             await _unitOfWork.OrganizationRepository.GetAsync(e => e.Id == request.Id);
-        var result = _mapper.Map<OrganizationToListDto>(data);
+        var result = _mapper.Map<OrganizationResponseDto>(data);
 
-        return new SuccessDataResult<OrganizationToListDto>(result, Messages.Success.Translate());
+        return new SuccessDataResult<OrganizationResponseDto>(result, Messages.Success.Translate());
     }
 }

@@ -24,13 +24,13 @@ public class RolesControllerTest
     {
         // Arrange
         _mock.Setup(m => m.GetAsync())
-            .ReturnsAsync(new SuccessDataResult<List<RoleToListDto>>(new List<RoleToListDto>()));
+            .ReturnsAsync(new SuccessDataResult<List<RoleResponseDto>>(new List<RoleResponseDto>()));
 
         // Act
         var okResult = await _controller.Get() as OkObjectResult;
 
         // Assert
-        var items = Assert.IsAssignableFrom<IDataResult<List<RoleToListDto>>>(okResult?.Value);
+        var items = Assert.IsAssignableFrom<IDataResult<List<RoleResponseDto>>>(okResult?.Value);
 
         Assert.Equal(0, items.Data?.Count);
     }
@@ -41,20 +41,20 @@ public class RolesControllerTest
         // Arrange
         _mock.Setup(m => m.GetAsync(Guid.NewGuid()))
             .ReturnsAsync(
-                new SuccessDataResult<RoleToListDto>(new RoleToListDto() { Id = Guid.NewGuid(), Key = "TT", Name = "TT", Permissions = new List<PermissionToListDto>() }));
+                new SuccessDataResult<RoleResponseDto>(new RoleResponseDto() { Id = Guid.NewGuid(), Key = "TT", Name = "TT", Permissions = new List<PermissionResponseDto>() }));
 
         // Act
         var notFoundResult = await _controller.Get(Guid.NewGuid()) as OkObjectResult;
 
         // Assert
-        Assert.IsAssignableFrom<IDataResult<RoleToListDto>>(notFoundResult?.Value);
+        Assert.IsAssignableFrom<IDataResult<RoleResponseDto>>(notFoundResult?.Value);
     }
 
     [Fact]
     public async Task Add_ReturnsSuccess()
     {
         // Arrange
-        var roleToAdd = new RoleToAddDto() { Key = "TT", Name = "Test", PermissionIds = new List<Guid>() };
+        var roleToAdd = new RoleCreateRequestDto() { Key = "TT", Name = "Test", PermissionIds = new List<Guid>() };
         _mock.Setup(m => m.AddAsync(roleToAdd)).ReturnsAsync(new SuccessResult());
 
         // Act

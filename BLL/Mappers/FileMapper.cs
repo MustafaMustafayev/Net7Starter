@@ -8,7 +8,7 @@ public class FileMapper : Profile
 {
     public FileMapper()
     {
-        CreateMap<FileToAddDto, File>();
-        CreateMap<File, FileToListDto>();
+        CreateMap<FileCreateRequestDto, File>();
+        CreateMap<File, FileResponseDto>();
     }
 }

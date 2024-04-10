@@ -32,7 +32,7 @@ public class UsersController : Controller
     }
 
     [SwaggerOperation(Summary = "get users as paginated list")]
-    [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IDataResult<List<UserToListDto>>))]
+    [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IDataResult<List<UserResponseDto>>))]
     [HttpGet("paginate")]
     [ServiceFilter(typeof(LogActionFilter))]
     public async Task<IActionResult> GetAsPaginated()
@@ -42,7 +42,7 @@ public class UsersController : Controller
     }
 
     [SwaggerOperation(Summary = "get users")]
-    [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IDataResult<List<UserToListDto>>))]
+    [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IDataResult<List<UserResponseDto>>))]
     [HttpGet]
     [ServiceFilter(typeof(LogActionFilter))]
     public async Task<IActionResult> Get()
@@ -53,7 +53,7 @@ public class UsersController : Controller
 
     [ServiceFilter(typeof(LogActionFilter))]
     [SwaggerOperation(Summary = "get profile info")]
-    [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IDataResult<List<UserToListDto>>))]
+    [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IDataResult<List<UserResponseDto>>))]
     [HttpGet("profile")]
     public async Task<IActionResult> GetProfileInfo()
     {
@@ -66,7 +66,7 @@ public class UsersController : Controller
     }
 
     [SwaggerOperation(Summary = "get user")]
-    [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IDataResult<UserToListDto>))]
+    [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IDataResult<UserResponseDto>))]
     [HttpGet("{id}")]
     [ServiceFilter(typeof(LogActionFilter))]
     public async Task<IActionResult> Get([FromRoute] Guid id)
@@ -79,7 +79,7 @@ public class UsersController : Controller
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
     [HttpPost]
     [ServiceFilter(typeof(LogActionFilter))]
-    public async Task<IActionResult> Add([FromBody] UserToAddDto dto)
+    public async Task<IActionResult> Add([FromBody] UserCreateRequestDto dto)
     {
         var response = await _userService.AddAsync(dto);
         return Ok(response);
@@ -89,7 +89,7 @@ public class UsersController : Controller
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
     [HttpPut("{id}")]
     [ServiceFilter(typeof(LogActionFilter))]
-    public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UserToUpdateDto dto)
+    public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UserUpdateRequestDto dto)
     {
         var response = await _userService.UpdateAsync(id, dto);
         return Ok(response);

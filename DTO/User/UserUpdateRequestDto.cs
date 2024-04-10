@@ -1,6 +1,6 @@
 ﻿namespace DTO.User;
 
-public record UserToUpdateDto()
+public record UserUpdateRequestDto()
 {
     public string Email { get; set; }
     public string ContactNumber { get; set; }

@@ -10,7 +10,7 @@ public class RoleTest : RootTest
     {
         var scenario = Scenario.Create("http_role_list_test", async context =>
             {
-                var step = await CreateHttpStep<SuccessDataResult<List<RoleToListDto>>>(
+                var step = await CreateHttpStep<SuccessDataResult<List<RoleResponseDto>>>(
                     "fist_step",
                     context,
                     HttpMethod.Get,
@@ -34,7 +34,7 @@ public class RoleTest : RootTest
     {
         var scenario = Scenario.Create("http_role_by_id_test", async context =>
             {
-                var step = await CreateHttpStep<SuccessDataResult<RoleToListDto>>(
+                var step = await CreateHttpStep<SuccessDataResult<RoleResponseDto>>(
                     "second_step",
                     context,
                     HttpMethod.Get,

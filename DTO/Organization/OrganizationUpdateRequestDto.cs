@@ -1,6 +1,6 @@
 ﻿namespace DTO.Organization;
 
-public record OrganizationToUpdateDto
+public record OrganizationUpdateRequestDto
 {
     public string FullName { get; set; }
     public string ShortName { get; set; }

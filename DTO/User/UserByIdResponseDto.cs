@@ -2,7 +2,7 @@
 
 namespace DTO.User;
 
-public record UserToListDto()
+public record UserByIdResponseDto()
 {
     public Guid Id { get; set; }
     public string Username { get; set; }

@@ -7,17 +7,17 @@ namespace BLL.Abstract;
 
 public interface IRoleService
 {
-    Task<IDataResult<List<RoleToListDto>>> GetAsync();
+    Task<IDataResult<List<RoleResponseDto>>> GetAsync();
 
-    Task<IDataResult<List<PermissionToListDto>>> GetPermissionsAsync(Guid id);
+    Task<IDataResult<List<PermissionResponseDto>>> GetPermissionsAsync(Guid id);
 
     Task<IDataResult<IQueryable<Role>>> GraphQlGetAsync();
 
-    Task<IDataResult<RoleToListDto>> GetAsync(Guid id);
+    Task<IDataResult<RoleResponseDto>> GetAsync(Guid id);
 
-    Task<IResult> AddAsync(RoleToAddDto dto);
+    Task<IResult> AddAsync(RoleCreateRequestDto dto);
 
-    Task<IResult> UpdateAsync(Guid id, RoleToUpdateDto dto);
+    Task<IResult> UpdateAsync(Guid id, RoleUpdateRequestDto dto);
 
     Task<IResult> SoftDeleteAsync(Guid id);
 }

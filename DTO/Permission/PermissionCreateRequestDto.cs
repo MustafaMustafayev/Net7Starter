@@ -1,7 +1,6 @@
 ﻿namespace DTO.Permission;
 
-public record PermissionToUpdateDto()
-{
+public record PermissionCreateRequestDto() {
     public string Name { get; set; }
     public string Key { get; set; }
 }

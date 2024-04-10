@@ -23,7 +23,7 @@ public class ErrorLogsController : Controller
     }
 
     [SwaggerOperation(Summary = "get paginated list")]
-    [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IDataResult<List<ErrorLogToListDto>>))]
+    [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IDataResult<List<ErrorLogResponseDto>>))]
     [HttpGet("paginate")]
     public async Task<IActionResult> GetAsPaginated()
     {
@@ -32,7 +32,7 @@ public class ErrorLogsController : Controller
     }
 
     [SwaggerOperation(Summary = "get list")]
-    [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IDataResult<List<ErrorLogToListDto>>))]
+    [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IDataResult<List<ErrorLogResponseDto>>))]
     [HttpGet]
     public async Task<IActionResult> Get()
     {
@@ -41,7 +41,7 @@ public class ErrorLogsController : Controller
     }
 
     [SwaggerOperation(Summary = "get data")]
-    [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IDataResult<ErrorLogToListDto>))]
+    [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IDataResult<ErrorLogResponseDto>))]
     [HttpGet("{id}")]
     public async Task<IActionResult> Get([FromRoute] Guid id)
     {

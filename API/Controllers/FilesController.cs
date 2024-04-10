@@ -52,7 +52,7 @@ public class FilesController : Controller
 
         // add to database
         var result = await _fileService.AddFileAsync(
-            new FileToAddDto() { 
+            new FileCreateRequestDto() { 
                 OriginalName = originalFileName,
                 HashName = hashFileName,
                 Extension = fileExtension,
@@ -68,7 +68,7 @@ public class FilesController : Controller
     [SwaggerOperation(Summary = "delete file")]
     [Produces(typeof(IResult))]
     [HttpDelete]
-    public async Task<IActionResult> Delete([FromBody] FileRemoveRequestDto dto)
+    public async Task<IActionResult> Delete([FromBody] FileDeleteRequestDto dto)
     {
         // delete file
         var path = Path.Combine(_utilService.GetEnvFolderPath(_utilService.GetFolderName(dto.Type)), dto.HashName);
