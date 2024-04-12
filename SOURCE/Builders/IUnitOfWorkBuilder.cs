@@ -10,10 +10,14 @@ namespace SOURCE.Builders;
 // ReSharper disable once UnusedType.Global
 public class IUnitOfWorkBuilder : ISourceBuilder
 {
+    private readonly List<string> _exceptPatchs = new List<string>()
+    {
+        "Generic","Redis"
+    };
     public void BuildSourceFile(List<Entity> entities)
     {
         var newEntities = entities.ToList();
-        var currentEntityNames = FileHelper.GetFileNames(Constants.EntitiesPath);
+        var currentEntityNames = FileHelper.GetFileNames(Constants.EntitiesPath, _exceptPatchs);
 
         foreach (var entityName in currentEntityNames)
         {

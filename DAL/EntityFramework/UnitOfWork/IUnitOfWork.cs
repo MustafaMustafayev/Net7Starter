@@ -4,6 +4,7 @@ namespace DAL.EntityFramework.UnitOfWork;
 
 public interface IUnitOfWork : IAsyncDisposable, IDisposable
 {
+    public IDepartmentRepository DepartmentRepository { get; set; }
     public IErrorLogRepository ErrorLogRepository { get; set; }
     public IFileRepository FileRepository { get; set; }
     public INlogRepository NlogRepository { get; set; }
