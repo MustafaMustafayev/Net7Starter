@@ -1,9 +1,9 @@
-﻿namespace ENTITIES.Entities.Structures;
+﻿using ENTITIES.Entities.Generic;
 
-public class Department
+namespace ENTITIES.Entities.Structures;
+
+public class Department : Auditable, IEntity
 {
-    public int Id { get; set; }
-    public string Name { get; set; }
-    public string Description { get; set; }
-
+    public required string Name { get; set; }
+    public required string Description { get; set; }
 }
