@@ -88,7 +88,7 @@ public class AuthService : IAuthService
 
     public async Task<IResult> LogoutRemovedUserAsync(Guid userId)
     {
-        var tokens = await _unitOfWork.TokenRepository.GetListAsync(m => m.UserId == userId);
+        var tokens = (await _unitOfWork.TokenRepository.GetListAsync(m => m.UserId == userId)).ToList();
         tokens.ForEach(m => m.IsDeleted = true);
         await _unitOfWork.CommitAsync();
 

@@ -5,7 +5,7 @@ namespace DAL.EntityFramework.GenericRepository;
 public interface IGenericRepository<T>
     where T : class
 {
-    Task<List<T>> GetListAsync(Expression<Func<T, bool>>? filter = null,
+    Task<IEnumerable<T>> GetListAsync(Expression<Func<T, bool>>? filter = null,
         bool ignoreQueryFilters = false);
 
     Task<T?> GetAsync(Expression<Func<T, bool>> filter, bool ignoreQueryFilters = false);

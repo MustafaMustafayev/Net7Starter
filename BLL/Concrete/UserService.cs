@@ -53,7 +53,7 @@ public class UserService : IUserService
 
         _unitOfWork.UserRepository.SoftDelete(data!);
 
-        var tokens = await _unitOfWork.TokenRepository.GetListAsync(m => m.UserId == id);
+        var tokens = (await _unitOfWork.TokenRepository.GetListAsync(m => m.UserId == id)).ToList();
         tokens.ForEach(m => m.IsDeleted = true);
 
         await _unitOfWork.CommitAsync();
@@ -72,18 +72,15 @@ public class UserService : IUserService
         return new SuccessResult();
     }
 
-    public async Task<IDataResult<List<UserResponseDto>>> GetAsync()
+    public async Task<IDataResult<IEnumerable<UserResponseDto>>> GetAsync()
     {
         var datas = await _unitOfWork.UserRepository.GetListAsync();
-
-        return new SuccessDataResult<List<UserResponseDto>>(_mapper.Map<List<UserResponseDto>>(datas),
-            Messages.Success.Translate());
+        return new SuccessDataResult<IEnumerable<UserResponseDto>>(_mapper.Map<IEnumerable<UserResponseDto>>(datas), Messages.Success.Translate());
     }
 
     public async Task<IDataResult<UserByIdResponseDto>> GetAsync(Guid id)
     {
         var data = _mapper.Map<UserByIdResponseDto>(await _unitOfWork.UserRepository.GetAsync(m => m.Id == id));
-
         return new SuccessDataResult<UserByIdResponseDto>(data, Messages.Success.Translate());
     }
 
