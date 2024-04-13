@@ -6,7 +6,7 @@ namespace BLL.Abstract;
 
 public interface IUserService
 {
-    Task<IDataResult<List<UserResponseDto>>> GetAsync();
+    Task<IDataResult<IEnumerable<UserResponseDto>>> GetAsync();
 
     Task<IDataResult<PaginatedList<UserResponseDto>>> GetAsPaginatedListAsync();
 

@@ -66,7 +66,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity>
             : await _ctx.Set<TEntity>().FirstOrDefaultAsync(filter);
     }
 
-    public async Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>>? filter = null,
+    public async Task<IEnumerable<TEntity>> GetListAsync(Expression<Func<TEntity, bool>>? filter = null,
         bool ignoreQueryFilters = false)
     {
         return filter is null

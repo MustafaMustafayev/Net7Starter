@@ -54,11 +54,11 @@ public class DepartmentService : IDepartmentService
         return new SuccessDataResult<PaginatedList<DepartmentResponseDto>>(responseDto, Messages.Success.Translate());
     }
 
-    public async Task<IDataResult<List<DepartmentResponseDto>>> GetAsync()
+    public async Task<IDataResult<IEnumerable<DepartmentResponseDto>>> GetAsync()
     {
-        var datas = _mapper.Map<List<DepartmentResponseDto>>(await _unitOfWork.DepartmentRepository.GetListAsync());
+        var datas = _mapper.Map<IEnumerable<DepartmentResponseDto>>(await _unitOfWork.DepartmentRepository.GetListAsync());
 
-        return new SuccessDataResult<List<DepartmentResponseDto>>(datas, Messages.Success.Translate());
+        return new SuccessDataResult<IEnumerable<DepartmentResponseDto>>(datas, Messages.Success.Translate());
     }
 
     public async Task<IDataResult<DepartmentByIdResponseDto>> GetAsync(Guid id)

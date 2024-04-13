@@ -73,11 +73,11 @@ public class ServiceBuilder : ISourceBuilder
                            return new SuccessDataResult<PaginatedList<{entityName}ResponseDto>>(responseDto, Messages.Success.Translate());
                        }
                    
-                       public async Task<IDataResult<List<{entityName}ResponseDto>>> GetAsync()
+                       public async Task<IDataResult<IEnumerable<{entityName}ResponseDto>>> GetAsync()
                        {
-                           var datas = _mapper.Map<List<{entityName}ResponseDto>>(await _unitOfWork.{entityName}Repository.GetListAsync());
+                           var datas = _mapper.Map<IEnumerable<{entityName}ResponseDto>>(await _unitOfWork.{entityName}Repository.GetListAsync());
                    
-                           return new SuccessDataResult<List<{entityName}ResponseDto>>(datas, Messages.Success.Translate());
+                           return new SuccessDataResult<IEnumerable<{entityName}ResponseDto>>(datas, Messages.Success.Translate());
                        }
                    
                        public async Task<IDataResult<{entityName}ByIdResponseDto>> GetAsync(Guid id)

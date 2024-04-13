@@ -7,9 +7,9 @@ namespace BLL.Abstract;
 
 public interface IRoleService
 {
-    Task<IDataResult<List<RoleResponseDto>>> GetAsync();
+    Task<IDataResult<IEnumerable<RoleResponseDto>>> GetAsync();
 
-    Task<IDataResult<List<PermissionResponseDto>>> GetPermissionsAsync(Guid id);
+    Task<IDataResult<IEnumerable<PermissionResponseDto>>> GetPermissionsAsync(Guid id);
 
     Task<IDataResult<IQueryable<Role>>> GraphQlGetAsync();
 
