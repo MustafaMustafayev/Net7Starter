@@ -15,5 +15,4 @@ public interface IUnitOfWork : IAsyncDisposable, IDisposable
     public IRoleRepository RoleRepository { get; set; }
     public ITokenRepository TokenRepository { get; set; }
     public IUserRepository UserRepository { get; set; }
-    public IDepartment1Repository Department1Repository { get; set; }
 }

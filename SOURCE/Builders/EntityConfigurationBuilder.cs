@@ -11,7 +11,7 @@ public class EntityConfigurationBuilder : ISourceBuilder
     {
         entities.ForEach(model =>
         {
-            if (model.Configure)
+            if (model.Configure.HasValue && model.Configure.GetValueOrDefault())
             {
                 SourceBuilder.Instance.AddSourceFile(Constants.EntityConfigurationPath, $"{model.Name}Configuration.cs",
                     BuildSourceText(model, null));
