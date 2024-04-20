@@ -38,18 +38,6 @@ public class UnitOfWork : IUnitOfWork
         UserRepository = userRepository;
     }
 
-    public IDepartmentRepository DepartmentRepository { get; set; }
-    public IErrorLogRepository ErrorLogRepository { get; set; }
-    public IFileRepository FileRepository { get; set; }
-    public INlogRepository NlogRepository { get; set; }
-    public IOrganizationRepository OrganizationRepository { get; set; }
-    public IPermissionRepository PermissionRepository { get; set; }
-    public IRequestLogRepository RequestLogRepository { get; set; }
-    public IResponseLogRepository ResponseLogRepository { get; set; }
-    public IRoleRepository RoleRepository { get; set; }
-    public ITokenRepository TokenRepository { get; set; }
-    public IUserRepository UserRepository { get; set; }
-
     public async Task CommitAsync()
     {
         await _dataContext.SaveChangesAsync();
@@ -82,4 +70,18 @@ public class UnitOfWork : IUnitOfWork
     {
         if (disposing) await _dataContext.DisposeAsync();
     }
+
+    public IDepartmentRepository DepartmentRepository { get; set; }
+    public IErrorLogRepository ErrorLogRepository { get; set; }
+    public IFileRepository FileRepository { get; set; }
+    public INlogRepository NlogRepository { get; set; }
+    public IOrganizationRepository OrganizationRepository { get; set; }
+    public IPermissionRepository PermissionRepository { get; set; }
+    public IRequestLogRepository RequestLogRepository { get; set; }
+    public IResponseLogRepository ResponseLogRepository { get; set; }
+    public IRoleRepository RoleRepository { get; set; }
+    public ITokenRepository TokenRepository { get; set; }
+    public IUserRepository UserRepository { get; set; }
+
+    
 }

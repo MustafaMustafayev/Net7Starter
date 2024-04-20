@@ -1,45 +1,26 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
-    <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
-        <CodeAnalysisRuleSet>../settings.ruleset</CodeAnalysisRuleSet>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
-        <LangVersion>default</LangVersion>
-    </PropertyGroup>
-
-    <ItemGroup>
-        <None Remove="Npgsql.EntityFrameworkCore.PostgreSQL" />
-        <None Remove="StyleCop.Analyzers" />
-        <None Remove="Microsoft.EntityFrameworkCore.Proxies" />
-        <None Remove="Microsoft.AspNetCore.Http" />
-        <None Remove="stylecop.json" />
-    </ItemGroup>
-    <ItemGroup>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.3">
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.3">
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
-        <PackageReference Include="MongoDB.Driver" Version="2.22.0" />
-        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.2" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="8.0.3" />
-    </ItemGroup>
-    <ItemGroup>
-        <ProjectReference Include="..\CORE\CORE.csproj" />
-        <ProjectReference Include="..\ENTITIES\ENTITIES.csproj" />
-    </ItemGroup>
-    <ItemGroup>
-        <Compile Remove="UnitOfWorks\Concrete\UnitOfWorkGenerated.cs" />
-        <Compile Remove="Concrete\TestRepository.cs" />
-        <Compile Remove="Abstract\ITestRepository.cs" />
-        <Compile Remove="Abstract\IFirstRepository.cs" />
-        <Compile Remove="Concrete\FirstRepository.cs" />
-    </ItemGroup>
-    <ItemGroup>
-      <Folder Include="EntityFramework\Configurations\" />
-    </ItemGroup>
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <CodeAnalysisRuleSet>../settings.ruleset</CodeAnalysisRuleSet>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <LangVersion>default</LangVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="MongoDB.Driver" Version="2.22.0" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="8.0.3" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CORE\CORE.csproj" />
+    <ProjectReference Include="..\ENTITIES\ENTITIES.csproj" />
+  </ItemGroup>
 </Project>
