@@ -72,7 +72,10 @@ public class UnitOfWork : IUnitOfWork
 
     public void BuildSourceFile(List<Entity> entities)
     {
-        var result = GenerateSource(entities).Result;
+        var result = GenerateSource(entities.Where(w =>
+                w.Options.BuildUnitOfWork
+                && w.Options.BuildRepository)
+            .ToList()).Result;
     }
 
     private async Task<string> GenerateSource(List<Entity> entities)

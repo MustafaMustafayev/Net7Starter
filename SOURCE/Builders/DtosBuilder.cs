@@ -27,26 +27,28 @@ public class DtosBuilder : ISourceBuilder
         //entities.ForEach(model => SourceBuilder.Instance
         //    .AddSourceFile(Constants.DtoPath.Replace("{entityName}", model.Name),
         //        $"{model.Name}Dtos.cs", BuildSourceText(model, null)));
+        entities
+            .Where(w => w.Options.BuildDto)
+            .ToList()
+            .ForEach(entity =>
+            {
+                string properties = GetProperties(entity).Result;
+                SourceBuilder.Instance.AddSourceFile(
+                    Constants.DtoPath.Replace("{entityName}", entity.Name),
+                    $"{entity.Name}CreateRequestDto.cs", GenerateContent(entity.Name, $"{entity.Name}CreateRequestDto", properties));
 
-        foreach (var entity in entities)
-        {
-            string properties = GetProperties(entity).Result;
-            SourceBuilder.Instance.AddSourceFile(
-                Constants.DtoPath.Replace("{entityName}", entity.Name),
-                $"{entity.Name}CreateRequestDto.cs", GenerateContent(entity.Name, $"{entity.Name}CreateRequestDto", properties));
+                SourceBuilder.Instance.AddSourceFile(
+                    Constants.DtoPath.Replace("{entityName}", entity.Name),
+                    $"{entity.Name}UpdateRequestDto.cs", GenerateContent(entity.Name, $"{entity.Name}UpdateRequestDto", properties));
 
-            SourceBuilder.Instance.AddSourceFile(
-                Constants.DtoPath.Replace("{entityName}", entity.Name),
-                $"{entity.Name}UpdateRequestDto.cs", GenerateContent(entity.Name, $"{entity.Name}UpdateRequestDto", properties));
+                SourceBuilder.Instance.AddSourceFile(
+                    Constants.DtoPath.Replace("{entityName}", entity.Name),
+                    $"{entity.Name}ResponseDto.cs", GenerateContent(entity.Name, $"{entity.Name}ResponseDto", properties));
 
-            SourceBuilder.Instance.AddSourceFile(
-                Constants.DtoPath.Replace("{entityName}", entity.Name),
-                $"{entity.Name}ResponseDto.cs", GenerateContent(entity.Name, $"{entity.Name}ResponseDto", properties));
-
-            SourceBuilder.Instance.AddSourceFile(
-                Constants.DtoPath.Replace("{entityName}", entity.Name),
-                $"{entity.Name}ByIdResponseDto.cs", GenerateContent(entity.Name, $"{entity.Name}ByIdResponseDto", properties));
-        }
+                SourceBuilder.Instance.AddSourceFile(
+                    Constants.DtoPath.Replace("{entityName}", entity.Name),
+                    $"{entity.Name}ByIdResponseDto.cs", GenerateContent(entity.Name, $"{entity.Name}ByIdResponseDto", properties));
+            });
     }
 
     private async Task<string> GetProperties(Entity entity)

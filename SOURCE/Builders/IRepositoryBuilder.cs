@@ -10,9 +10,12 @@ public class IRepositoryBuilder : ISourceBuilder
 {
     public void BuildSourceFile(List<Entity> entities)
     {
-        entities.ForEach(model =>
-            SourceBuilder.Instance.AddSourceFile(Constants.IRepositoryPath, $"I{model.Name}Repository.cs",
-                BuildSourceText(model, null)));
+        entities
+            .Where(w => w.Options.BuildRepository)
+            .ToList()
+            .ForEach(model =>
+                SourceBuilder.Instance.AddSourceFile(Constants.IRepositoryPath, $"I{model.Name}Repository.cs",
+                    BuildSourceText(model, null)));
     }
 
     public string BuildSourceText(Entity? entity, List<Entity>? entities)

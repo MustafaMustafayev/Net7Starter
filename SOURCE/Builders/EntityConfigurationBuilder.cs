@@ -9,14 +9,15 @@ public class EntityConfigurationBuilder : ISourceBuilder
 {
     public void BuildSourceFile(List<Entity> entities)
     {
-        entities.ForEach(model =>
-        {
-            if (model.Configure.HasValue && model.Configure.GetValueOrDefault())
+        entities
+            .Where(w => w.Configure.HasValue && w.Configure.Value)
+            .ToList()
+            .ForEach(model =>
             {
                 SourceBuilder.Instance.AddSourceFile(Constants.EntityConfigurationPath, $"{model.Name}Configuration.cs",
                     BuildSourceText(model, null));
-            }
-        });
+                
+            });
     }
 
     public string BuildSourceText(Entity? entity, List<Entity>? entities)
