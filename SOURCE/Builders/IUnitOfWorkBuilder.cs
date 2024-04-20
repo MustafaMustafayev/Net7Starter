@@ -55,11 +55,15 @@ public interface IUnitOfWork : IAsyncDisposable, IDisposable
             .Where(w => w.Name == "IUnitOfWork.cs")
             .FirstOrDefault();
 
+        if (document != null && !entities.Any())
+        {
+            return string.Empty;
+        }
+
         if (document is null)
         {
             document = project
                 .AddDocument("IUnitOfWork.cs", DefaultDocumentBody, ["EntityFramework", "UnitOfWork"]);
-
         }
 
         SyntaxTree syntaxTree = await document.GetSyntaxTreeAsync();

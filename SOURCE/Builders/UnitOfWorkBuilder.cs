@@ -91,6 +91,11 @@ public class UnitOfWork : IUnitOfWork
 
         Project project = await workspace.OpenProjectAsync(ProjectPath);
         Document document = project.Documents.Where(w=>w.Name=="UnitOfWork.cs").FirstOrDefault();
+
+        if(document != null && !entities.Any()) {
+            return string.Empty;
+        }
+
         if (document is null)
         {
             document = project
