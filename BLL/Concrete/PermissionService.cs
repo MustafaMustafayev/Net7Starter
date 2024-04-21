@@ -46,20 +46,18 @@ public class PermissionService : IPermissionService
     {
         var datas = _unitOfWork.PermissionRepository.GetList();
         var paginationDto = _utilService.GetPagination();
-        var response = await PaginatedList<Permission>.CreateAsync(datas.OrderBy(m => m.Id), paginationDto.PageIndex,
-            paginationDto.PageSize);
+        var response = await PaginatedList<Permission>.CreateAsync(datas.OrderBy(m => m.Id), paginationDto.PageIndex, paginationDto.PageSize);
 
-        var responseDto = new PaginatedList<PermissionResponseDto>(_mapper.Map<List<PermissionResponseDto>>(response.Datas),
-            response.TotalRecordCount, response.PageIndex, response.TotalPageCount);
+        var responseDto = new PaginatedList<PermissionResponseDto>(_mapper.Map<List<PermissionResponseDto>>(response.Datas), response.TotalRecordCount, response.PageIndex, response.TotalPageCount);
 
         return new SuccessDataResult<PaginatedList<PermissionResponseDto>>(responseDto, Messages.Success.Translate());
     }
 
-    public async Task<IDataResult<List<PermissionResponseDto>>> GetAsync()
+    public async Task<IDataResult<IEnumerable<PermissionResponseDto>>> GetAsync()
     {
-        var datas = _mapper.Map<List<PermissionResponseDto>>(await _unitOfWork.PermissionRepository.GetListAsync());
+        var datas = _mapper.Map<IEnumerable<PermissionResponseDto>>(await _unitOfWork.PermissionRepository.GetListAsync());
 
-        return new SuccessDataResult<List<PermissionResponseDto>>(datas, Messages.Success.Translate());
+        return new SuccessDataResult<IEnumerable<PermissionResponseDto>>(datas, Messages.Success.Translate());
 
     }
 

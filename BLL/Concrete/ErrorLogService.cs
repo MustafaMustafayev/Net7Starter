@@ -44,11 +44,11 @@ public class ErrorLogService : IErrorLogService
         return new SuccessDataResult<PaginatedList<ErrorLogResponseDto>>(responseDto, Messages.Success.Translate());
     }
 
-    public async Task<IDataResult<List<ErrorLogResponseDto>>> GetAsync()
+    public async Task<IDataResult<IEnumerable<ErrorLogResponseDto>>> GetAsync()
     {
-        var datas = _mapper.Map<List<ErrorLogResponseDto>>(await _unitOfWork.ErrorLogRepository.GetListAsync());
+        var datas = _mapper.Map<IEnumerable<ErrorLogResponseDto>>(await _unitOfWork.ErrorLogRepository.GetListAsync());
 
-        return new SuccessDataResult<List<ErrorLogResponseDto>>(datas, Messages.Success.Translate());
+        return new SuccessDataResult<IEnumerable<ErrorLogResponseDto>>(datas, Messages.Success.Translate());
     }
 
     public async Task<IDataResult<ErrorLogResponseDto>> GetAsync(Guid id)

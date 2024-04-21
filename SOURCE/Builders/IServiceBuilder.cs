@@ -33,7 +33,7 @@ public class IServiceBuilder : ISourceBuilder
                    public interface I{entityName}Service
                    {
                        Task<IDataResult<PaginatedList<{entityName}ResponseDto>>> GetAsPaginatedListAsync();
-                       Task<IDataResult<List<{entityName}ResponseDto>>> GetAsync();
+                       Task<IDataResult<IEnumerable<{entityName}ResponseDto>>> GetAsync();
                        Task<IDataResult<{entityName}ByIdResponseDto>> GetAsync(Guid id);
                        Task<IResult> AddAsync({entityName}CreateRequestDto dto);
                        Task<IResult> UpdateAsync(Guid id, {entityName}UpdateRequestDto dto);
