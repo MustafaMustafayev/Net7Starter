@@ -9,9 +9,11 @@ public class RepositoryBuilder : ISourceBuilder
 {
     public void BuildSourceFile(List<Entity> entities)
     {
-        entities.ForEach(model =>
-            SourceBuilder.Instance.AddSourceFile(Constants.RepositoryPath, $"{model.Name}Repository.cs",
-                BuildSourceText(model, null)));
+        entities
+            .Where(w => w.Options.BuildRepository)
+            .ToList().ForEach(model =>
+                SourceBuilder.Instance.AddSourceFile(Constants.RepositoryPath, $"{model.Name}Repository.cs",
+                    BuildSourceText(model, null)));
     }
 
     public string BuildSourceText(Entity? entity, List<Entity>? entities)

@@ -1,9 +1,9 @@
 using DAL.EntityFramework.Abstract;
 
 namespace DAL.EntityFramework.UnitOfWork;
-
 public interface IUnitOfWork : IAsyncDisposable, IDisposable
 {
+    public Task CommitAsync();
     public IDepartmentRepository DepartmentRepository { get; set; }
     public IErrorLogRepository ErrorLogRepository { get; set; }
     public IFileRepository FileRepository { get; set; }
@@ -15,6 +15,4 @@ public interface IUnitOfWork : IAsyncDisposable, IDisposable
     public IRoleRepository RoleRepository { get; set; }
     public ITokenRepository TokenRepository { get; set; }
     public IUserRepository UserRepository { get; set; }
-
-    public Task CommitAsync();
 }

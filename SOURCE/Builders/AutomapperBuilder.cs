@@ -9,7 +9,8 @@ public class AutomapperBuilder : ISourceBuilder
 {
     public void BuildSourceFile(List<Entity> entities)
     {
-        entities.ForEach(model =>
+        entities
+            .ForEach(model =>
             SourceBuilder.Instance.AddSourceFile(Constants.AutomapperPath, $"{model.Name}Mapper.cs",
                 BuildSourceText(model, null)));
     }

@@ -10,9 +10,18 @@ public class ControllerBuilder : ISourceBuilder
 {
     public void BuildSourceFile(List<Entity> entities)
     {
-        entities.ForEach(model =>
-            SourceBuilder.Instance.AddSourceFile(Constants.ControllerPath, $"{model.Name}sController.cs",
-                BuildSourceText(model, null)));
+        entities
+            .Where(w=>
+                w.Options.BuildController
+                && w.Options.BuildService
+                && w.Options.BuildUnitOfWork
+                && w.Options.BuildRepository)
+            .ToList()
+            .ForEach(model => SourceBuilder
+                .Instance.AddSourceFile(
+                    Constants.ControllerPath,
+                    $"{model.Name}sController.cs",
+                    BuildSourceText(model, null)));
     }
 
     public string BuildSourceText(Entity? entity, List<Entity>? entities)

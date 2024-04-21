@@ -10,7 +10,13 @@ public class IServiceBuilder : ISourceBuilder
 {
     public void BuildSourceFile(List<Entity> entities)
     {
-        entities.ForEach(model =>
+        entities
+            .Where(w =>
+                w.Options.BuildService
+                && w.Options.BuildUnitOfWork
+                && w.Options.BuildRepository)
+            .ToList()
+            .ForEach(model =>
             SourceBuilder.Instance.AddSourceFile(Constants.IServicePath, $"I{model.Name}Service.cs",
                 BuildSourceText(model, null)));
     }

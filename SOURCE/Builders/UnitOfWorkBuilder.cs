@@ -1,4 +1,8 @@
-﻿using SOURCE.Builders.Abstract;
+﻿using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.MSBuild;
+using SOURCE.Builders.Abstract;
 using SOURCE.Helpers;
 using SOURCE.Models;
 using SOURCE.Workers;
@@ -9,115 +13,160 @@ namespace SOURCE.Builders;
 // ReSharper disable once UnusedType.Global
 public class UnitOfWorkBuilder : ISourceBuilder
 {
-    private readonly List<string> _exceptPatchs = new List<string>()
+    private readonly string ProjectPath;
+    private readonly string RootNamespace = "DAL.EntityFramework.UnitOfWork";
+    private readonly string DefaultDocumentBody = @"using DAL.EntityFramework.Abstract;
+using DAL.EntityFramework.Context;
+
+namespace DAL.EntityFramework.UnitOfWork;
+public class UnitOfWork : IUnitOfWork
+{
+    private readonly DataContext _dataContext;
+    private bool _isDisposed;
+
+    public UnitOfWork() {}
+
+    public async Task CommitAsync()
     {
-        "Generic","Redis"
-    };
+        await _dataContext.SaveChangesAsync();
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (!_isDisposed)
+        {
+            _isDisposed = true;
+            await DisposeAsync(true);
+            GC.SuppressFinalize(this);
+        }
+    }
+
+    public void Dispose()
+    {
+        if (_isDisposed)
+            return;
+        _isDisposed = true;
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (disposing)
+            _dataContext.Dispose();
+    }
+
+    private async ValueTask DisposeAsync(bool disposing)
+    {
+        if (disposing)
+            await _dataContext.DisposeAsync();
+    }
+}";
+
+    public UnitOfWorkBuilder()
+    {
+        ProjectPath = Path.Combine(
+            Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.Parent.ToString(),
+            @"DAL\DAL.csproj");
+    }
+
     public void BuildSourceFile(List<Entity> entities)
     {
-        var newEntities = entities.ToList();
-        var currentEntityNames = FileHelper.GetFileNames(Constants.EntitiesPath, _exceptPatchs);
+        var result = GenerateSource(entities.Where(w =>
+                w.Options.BuildUnitOfWork
+                && w.Options.BuildRepository)
+            .ToList()).Result;
+    }
 
-        foreach (var entityName in currentEntityNames)
+    private async Task<string> GenerateSource(List<Entity> entities)
+    {
+        using MSBuildWorkspace workspace = MSBuildWorkspace.Create();
+        workspace.WorkspaceFailed += (source, args)=>
         {
-            if (newEntities.Any(e => e.Name == entityName)) continue;
-            newEntities.Add(new Entity { Name = entityName });
+            if(args.Diagnostic.Kind == WorkspaceDiagnosticKind.Failure)
+            {
+                Console.WriteLine(args.Diagnostic.Message);
+            }
+        };
+
+        Project project = await workspace.OpenProjectAsync(ProjectPath);
+        Document document = project.Documents.Where(w=>w.Name=="UnitOfWork.cs").FirstOrDefault();
+
+        if(document != null && !entities.Any()) {
+            return string.Empty;
         }
 
-        SourceBuilder.Instance.AddSourceFile(
-            Constants.UnitOfWorkPath,
-            "UnitOfWork.cs",
-            BuildSourceText(null, newEntities),
-            false);
+        if (document is null)
+        {
+            document = project
+                .AddDocument("UnitOfWork.cs", DefaultDocumentBody, ["EntityFramework", "UnitOfWork"]);
+        }
+
+        SyntaxTree? syntaxTree = await document.GetSyntaxTreeAsync();
+        SyntaxNode syntaxNode = await syntaxTree.GetRootAsync();
+        ClassDeclarationSyntax classDeclaration = syntaxNode.DescendantNodes().OfType<ClassDeclarationSyntax>().FirstOrDefault();
+
+        ConstructorDeclarationSyntax constructor = classDeclaration.DescendantNodes().OfType<ConstructorDeclarationSyntax>().FirstOrDefault();
+        List<PropertyDeclarationSyntax> properties = new List<PropertyDeclarationSyntax>();
+        List<ParameterSyntax> parameters = new List<ParameterSyntax>();
+        
+        foreach (Entity entity in entities)
+        {
+            var existEntity = classDeclaration.DescendantNodes().OfType<PropertyDeclarationSyntax>()
+                .Any(w => w.Identifier.Text == $"{entity.Name}Repository");
+            if (existEntity) continue;
+            properties.Add(BuildProperty(classDeclaration, entity));
+
+            constructor = BuildConstructor(constructor, entity);
+        }
+
+        classDeclaration = classDeclaration.ReplaceNode(classDeclaration.DescendantNodes().OfType<ConstructorDeclarationSyntax>().FirstOrDefault(), constructor);
+
+        if (properties.Count > 0)
+        {
+            classDeclaration = classDeclaration.AddMembers(properties.ToArray());
+            syntaxNode = syntaxNode.ReplaceNode(syntaxNode.DescendantNodes().OfType<ClassDeclarationSyntax>().FirstOrDefault(), classDeclaration);
+        }        
+
+        Document newDocument = document.WithSyntaxRoot(syntaxNode.NormalizeWhitespace());
+        
+        workspace.TryApplyChanges(newDocument.Project.Solution);
+        
+        
+        return string.Empty;
     }
+
+    private static ConstructorDeclarationSyntax BuildConstructor(ConstructorDeclarationSyntax constructor, Entity entity)
+    {
+        ParameterSyntax newParameter = SyntaxFactory
+            .Parameter(SyntaxFactory.Identifier($"{entity.Name.FirstCharToLowerCase()}Repository"))
+            .WithType(SyntaxFactory.ParseTypeName($"I{entity.Name}Repository"));
+
+        StatementSyntax newStatment = SyntaxFactory
+            .ParseStatement($"{entity.Name}Repository = {entity.Name.FirstCharToLowerCase()}Repository;");
+
+        ParameterListSyntax newParameterList = constructor.ParameterList.AddParameters(newParameter);
+        constructor = constructor.WithParameterList(newParameterList).AddBodyStatements(newStatment);
+        return constructor;
+    }
+
+    private static PropertyDeclarationSyntax BuildProperty(ClassDeclarationSyntax? classDeclaration, Entity entity)
+    {
+        var property = SyntaxFactory.PropertyDeclaration(SyntaxFactory.ParseTypeName($"I{entity.Name}Repository"), $"{entity.Name}Repository")
+                        .AddModifiers(SyntaxFactory.Token(SyntaxKind.PublicKeyword))
+                        .AddAccessorListAccessors(
+                            SyntaxFactory.AccessorDeclaration(SyntaxKind.GetAccessorDeclaration).WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken)),
+                            SyntaxFactory.AccessorDeclaration(SyntaxKind.SetAccessorDeclaration).WithSemicolonToken(SyntaxFactory.Token(SyntaxKind.SemicolonToken))
+                        )
+                        .WithTrailingTrivia(SyntaxFactory.Space);
+        return property.NormalizeWhitespace();
+    }
+
+
 
     public string BuildSourceText(Entity? entity, List<Entity>? entities)
     {
-        var constructorArguments = new StringBuilder();
-        entities!.ForEach(e =>
-        {
-            if (entities.Last() == e)
-                constructorArguments.Append(
-                    $"        I{e.Name}Repository {e.Name.FirstCharToLowerCase()}Repository");
-            else
-                constructorArguments.AppendLine(
-                    $"        I{e.Name}Repository {e.Name.FirstCharToLowerCase()}Repository,");
-        });
-
-        var constructorSetters = new StringBuilder();
-        entities.ForEach(e =>
-        {
-            if (entities.Last() == e)
-                constructorSetters.Append(
-                    $"        {e.Name}Repository = {e.Name.FirstCharToLowerCase()}Repository;");
-            else
-                constructorSetters.AppendLine(
-                    $"        {e.Name}Repository = {e.Name.FirstCharToLowerCase()}Repository;");
-        });
-
-        var properties = new StringBuilder();
-        entities.ForEach(e =>
-            properties.AppendLine($"    public I{e.Name}Repository {e.Name}Repository {{ get; set; }}"));
-
-
-        var text = $$"""
-                     using DAL.EntityFramework.Abstract;
-                     using DAL.EntityFramework.Context;
-
-                     namespace DAL.EntityFramework.UnitOfWork;
-
-                     public class UnitOfWork : IUnitOfWork
-                     {
-                         private readonly DataContext _dataContext;
-                     
-                         private bool _isDisposed;
-                     
-                         public UnitOfWork(
-                             DataContext dataContext,
-                     {{constructorArguments}}
-                         )
-                         {
-                             _dataContext = dataContext;
-                     {{constructorSetters}}
-                         }
-
-                     {{properties}}
-                         public async Task CommitAsync()
-                         {
-                             await _dataContext.SaveChangesAsync();
-                         }
-                     
-                         public async ValueTask DisposeAsync()
-                         {
-                             if (!_isDisposed)
-                             {
-                                 _isDisposed = true;
-                                 await DisposeAsync(true);
-                                 GC.SuppressFinalize(this);
-                             }
-                         }
-                     
-                         public void Dispose()
-                         {
-                             if (_isDisposed) return;
-                             _isDisposed = true;
-                             Dispose(true);
-                             GC.SuppressFinalize(this);
-                         }
-                     
-                         protected virtual void Dispose(bool disposing)
-                         {
-                             if (disposing) _dataContext.Dispose();
-                         }
-                     
-                         private async ValueTask DisposeAsync(bool disposing)
-                         {
-                             if (disposing) await _dataContext.DisposeAsync();
-                         }
-                     }
-
-                     """;
-
-        return text;
+        throw new NotImplementedException();
     }
+
 }
