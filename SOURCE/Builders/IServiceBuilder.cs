@@ -13,6 +13,7 @@ public class IServiceBuilder : ISourceBuilder
         entities
             .Where(w =>
                 w.Options.BuildService
+                && w.Options.BuildDto
                 && w.Options.BuildUnitOfWork
                 && w.Options.BuildRepository)
             .ToList()

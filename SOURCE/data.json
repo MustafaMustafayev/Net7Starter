@@ -1,1 +1,1 @@
-﻿[  {    "name": "Department",    "configure": false,    "path": "Structures",    "options": {      "BuildRepository": true,      "BuildService": true,      "BuildUnitOfWork": true,      "BuildController": true    }  }]
+﻿[  {    "name": "Department",    "configure": false,    "path": "Structures",    "options": {      "BuildDto": true,      "BuildRepository": true,      "BuildService": true,      "BuildUnitOfWork": true,      "BuildController": true    }  }]
