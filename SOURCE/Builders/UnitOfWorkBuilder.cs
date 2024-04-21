@@ -24,7 +24,9 @@ public class UnitOfWork : IUnitOfWork
     private readonly DataContext _dataContext;
     private bool _isDisposed;
 
-    public UnitOfWork() {}
+    public UnitOfWork(DataContext dataContext) {
+        _dataContext = dataContext;
+    }
 
     public async Task CommitAsync()
     {

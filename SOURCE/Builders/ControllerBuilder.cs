@@ -15,7 +15,8 @@ public class ControllerBuilder : ISourceBuilder
                 w.Options.BuildController
                 && w.Options.BuildService
                 && w.Options.BuildUnitOfWork
-                && w.Options.BuildRepository)
+                && w.Options.BuildRepository
+                && w.Options.BuildDto)
             .ToList()
             .ForEach(model => SourceBuilder
                 .Instance.AddSourceFile(

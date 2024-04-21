@@ -28,6 +28,8 @@ public class DtosBuilder : ISourceBuilder
         //    .AddSourceFile(Constants.DtoPath.Replace("{entityName}", model.Name),
         //        $"{model.Name}Dtos.cs", BuildSourceText(model, null)));
         entities
+            .Where(w=>w.Options.BuildDto)
+            .ToList()
             .ForEach(entity =>
             {
                 string properties = GetProperties(entity).Result;
