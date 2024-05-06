@@ -26,6 +26,7 @@
 > load test implemented,
 > Mediatr seperated as a independent layer,
 > Elasticsearch implemented,
+> .editorconfig implemented to the best conventions rules,
 > MongoDb implemented.
 
 ## Structure
