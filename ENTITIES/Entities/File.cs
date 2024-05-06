@@ -5,6 +5,7 @@ namespace ENTITIES.Entities;
 
 public class File : Auditable, IEntity
 {
+    public Guid Id { get; set; }
     public required string OriginalName { get; set; }
     public required string HashName { get; set; }
     public required string Extension { get; set; }

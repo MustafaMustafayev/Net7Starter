@@ -1,11 +1,10 @@
 ﻿using ENTITIES.Entities.Generic;
-using System.ComponentModel.DataAnnotations;
 
 namespace ENTITIES.Entities;
 
 public class ResponseLog : IEntity
 {
-    [Key] public Guid ResponseLogId { get; set; }
+    public Guid Id { get; set; }
 
     public string? TraceIdentifier { get; set; }
 

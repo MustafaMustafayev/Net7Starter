@@ -85,7 +85,7 @@ public class AuthController : Controller
         var tokenResponse = await _tokenService.GetAsync(jwtToken, refreshToken);
         if (tokenResponse.Success)
         {
-            await _tokenService.SoftDeleteAsync(tokenResponse.Data!.TokenId);
+            await _tokenService.SoftDeleteAsync(tokenResponse.Data!.Id);
             var response = await _tokenService.CreateTokenAsync(tokenResponse.Data.User);
             return Ok(response);
         }

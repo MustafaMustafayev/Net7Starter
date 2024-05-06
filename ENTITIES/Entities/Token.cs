@@ -1,11 +1,10 @@
 ﻿using ENTITIES.Entities.Generic;
-using System.ComponentModel.DataAnnotations;
 
 namespace ENTITIES.Entities;
 
 public class Token : IEntity
 {
-    [Key] public Guid TokenId { get; set; }
+    public Guid Id { get; set; }
     public virtual required User User { get; set; }
     public Guid UserId { get; set; }
     public required string AccessToken { get; set; }

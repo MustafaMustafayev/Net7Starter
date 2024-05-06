@@ -2,7 +2,7 @@ namespace DTO.ErrorLog;
 
 public record ErrorLogResponseDto
 {
-    public Guid ErrorLogId { get; set; }
+    public Guid Id { get; set; }
     public DateTime DateTime { get; set; }
     public string AccessToken { get; set; }
     public Guid? UserId { get; set; }

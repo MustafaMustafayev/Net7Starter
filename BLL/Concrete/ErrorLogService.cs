@@ -37,7 +37,7 @@ public class ErrorLogService : IErrorLogService
         var datas = _unitOfWork.ErrorLogRepository.GetList();
         var paginationDto = _utilService.GetPagination();
 
-        var response = await PaginatedList<ErrorLog>.CreateAsync(datas.OrderBy(m => m.ErrorLogId), paginationDto.PageIndex, paginationDto.PageSize);
+        var response = await PaginatedList<ErrorLog>.CreateAsync(datas.OrderBy(m => m.Id), paginationDto.PageIndex, paginationDto.PageSize);
 
         var responseDto = new PaginatedList<ErrorLogResponseDto>(_mapper.Map<List<ErrorLogResponseDto>>(response.Datas), response.TotalRecordCount, response.PageIndex, paginationDto.PageSize);
 
@@ -53,7 +53,7 @@ public class ErrorLogService : IErrorLogService
 
     public async Task<IDataResult<ErrorLogResponseDto>> GetAsync(Guid id)
     {
-        var data = _mapper.Map<ErrorLogResponseDto>(await _unitOfWork.ErrorLogRepository.GetAsync(m => m.ErrorLogId == id));
+        var data = _mapper.Map<ErrorLogResponseDto>(await _unitOfWork.ErrorLogRepository.GetAsync(m => m.Id == id));
 
         return new SuccessDataResult<ErrorLogResponseDto>(data, Messages.Success.Translate());
     }

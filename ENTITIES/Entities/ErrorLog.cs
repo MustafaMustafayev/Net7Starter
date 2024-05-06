@@ -1,11 +1,10 @@
 ﻿using ENTITIES.Entities.Generic;
-using System.ComponentModel.DataAnnotations;
 
 namespace ENTITIES.Entities
 {
     public class ErrorLog : IEntity
     {
-        [Key] public Guid ErrorLogId { get; set; }
+        public Guid Id { get; set; }
         public required DateTime DateTime { get; set; } = DateTime.Now;
         public required string AccessToken { get; set; }
         public required Guid? UserId { get; set; }
