@@ -41,7 +41,7 @@ public class ExceptionMiddleware
             await LogErrorAsync(httpContext, ex);
             if (_config.SentrySettings.IsEnabled) SentrySdk.CaptureException(ex);
 
-          //  if (_env.IsDevelopment()) throw;
+            //  if (_env.IsDevelopment()) throw;
             await HandleExceptionAsync(httpContext);
         }
     }

@@ -11,7 +11,7 @@ public class ControllerBuilder : ISourceBuilder
     public void BuildSourceFile(List<Entity> entities)
     {
         entities
-            .Where(w=>
+            .Where(w =>
                 w.Options.BuildController
                 && w.Options.BuildService
                 && w.Options.BuildUnitOfWork

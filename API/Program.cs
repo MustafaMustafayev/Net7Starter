@@ -110,7 +110,8 @@ var app = builder.Build();
 if (config.SwaggerSettings.IsEnabled) app.UseSwagger();
 
 if (config.SwaggerSettings.IsEnabled)
-    app.UseSwaggerUI(c => {
+    app.UseSwaggerUI(c =>
+    {
         c.EnablePersistAuthorization();
         c.InjectStylesheet(config.SwaggerSettings.Theme);
     });

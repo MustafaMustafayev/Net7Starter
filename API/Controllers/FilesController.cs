@@ -52,13 +52,15 @@ public class FilesController : Controller
 
         // add to database
         var result = await _fileService.AddFileAsync(
-            new FileCreateRequestDto() { 
+            new FileCreateRequestDto()
+            {
                 OriginalName = originalFileName,
                 HashName = hashFileName,
                 Extension = fileExtension,
                 Length = dto.File.Length,
                 Path = path,
-                Type = dto.Type},
+                Type = dto.Type
+            },
             dto);
         if (!result.Success) return BadRequest(new ErrorDataResult<string>(Messages.InvalidModel.Translate()));
 

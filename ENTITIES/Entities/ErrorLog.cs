@@ -10,8 +10,8 @@ namespace ENTITIES.Entities
         public required Guid? UserId { get; set; }
         public required string Path { get; set; }
         public required string Ip { get; set; }
-        public required string ErrorMessage { get; set;}
-        public required string StackTrace { get; set;}
+        public required string ErrorMessage { get; set; }
+        public required string StackTrace { get; set; }
         public bool IsDeleted { get; set; }
     }
 }

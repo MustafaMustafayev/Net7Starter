@@ -4,8 +4,8 @@ namespace DTO.Auth;
 
 public record ResetPasswordRequestDto()
 {
-    public string Email {  set; get; }
-    public string? VerificationCode {  get; set; }
+    public string Email { set; get; }
+    public string? VerificationCode { get; set; }
     [property: RegularExpression("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$",
         ErrorMessage = "Şifrə formatı düzgün deyil")]
     public string Password { get; set; }

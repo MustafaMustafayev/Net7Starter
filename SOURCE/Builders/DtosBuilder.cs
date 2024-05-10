@@ -28,7 +28,7 @@ public class DtosBuilder : ISourceBuilder
         //    .AddSourceFile(Constants.DtoPath.Replace("{entityName}", model.Name),
         //        $"{model.Name}Dtos.cs", BuildSourceText(model, null)));
         entities
-            .Where(w=>w.Options.BuildDto)
+            .Where(w => w.Options.BuildDto)
             .ToList()
             .ForEach(entity =>
             {
@@ -79,7 +79,7 @@ public class DtosBuilder : ISourceBuilder
 
             GetClassProperties(result, classSymbol);
 
-            if(
+            if (
                 classSymbol.BaseType.ContainingNamespace.ToDisplayString().StartsWith("ENTITIES")
                 && !classSymbol.BaseType.Name.Contains("Auditable"))
             {

@@ -16,7 +16,7 @@ public class EntityConfigurationBuilder : ISourceBuilder
             {
                 SourceBuilder.Instance.AddSourceFile(Constants.EntityConfigurationPath, $"{model.Name}Configuration.cs",
                     BuildSourceText(model, null));
-                
+
             });
     }
 

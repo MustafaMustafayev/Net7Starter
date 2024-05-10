@@ -110,10 +110,10 @@ public class UsersController : Controller
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
     [HttpPost("profile")]
     //[ServiceFilter(typeof(LogActionFilter))]
-    public async Task<IActionResult> Upload (IFormFile file)
+    public async Task<IActionResult> Upload(IFormFile file)
     {
-        Guid userId = _utilService.GetUserIdFromToken().GetValueOrDefault() ;
-        
+        Guid userId = _utilService.GetUserIdFromToken().GetValueOrDefault();
+
         return await Upload(userId, file);
     }
 
@@ -151,7 +151,7 @@ public class UsersController : Controller
             }
         }
 
-        await _userService.AddProfileAsync(id,$"{fileNewName}{fileExtension}");       
+        await _userService.AddProfileAsync(id, $"{fileNewName}{fileExtension}");
 
         return Ok(new SuccessResult(Messages.Success.Translate()));
     }

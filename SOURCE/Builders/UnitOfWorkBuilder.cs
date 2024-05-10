@@ -83,18 +83,19 @@ public class UnitOfWork : IUnitOfWork
     private async Task<string> GenerateSource(List<Entity> entities)
     {
         using MSBuildWorkspace workspace = MSBuildWorkspace.Create();
-        workspace.WorkspaceFailed += (source, args)=>
+        workspace.WorkspaceFailed += (source, args) =>
         {
-            if(args.Diagnostic.Kind == WorkspaceDiagnosticKind.Failure)
+            if (args.Diagnostic.Kind == WorkspaceDiagnosticKind.Failure)
             {
                 Console.WriteLine(args.Diagnostic.Message);
             }
         };
 
         Project project = await workspace.OpenProjectAsync(ProjectPath);
-        Document document = project.Documents.Where(w=>w.Name=="UnitOfWork.cs").FirstOrDefault();
+        Document document = project.Documents.Where(w => w.Name == "UnitOfWork.cs").FirstOrDefault();
 
-        if(document != null && !entities.Any()) {
+        if (document != null && !entities.Any())
+        {
             return string.Empty;
         }
 
@@ -111,7 +112,7 @@ public class UnitOfWork : IUnitOfWork
         ConstructorDeclarationSyntax constructor = classDeclaration.DescendantNodes().OfType<ConstructorDeclarationSyntax>().FirstOrDefault();
         List<PropertyDeclarationSyntax> properties = new List<PropertyDeclarationSyntax>();
         List<ParameterSyntax> parameters = new List<ParameterSyntax>();
-        
+
         foreach (Entity entity in entities)
         {
             var existEntity = classDeclaration.DescendantNodes().OfType<PropertyDeclarationSyntax>()
@@ -128,13 +129,13 @@ public class UnitOfWork : IUnitOfWork
         {
             classDeclaration = classDeclaration.AddMembers(properties.ToArray());
             syntaxNode = syntaxNode.ReplaceNode(syntaxNode.DescendantNodes().OfType<ClassDeclarationSyntax>().FirstOrDefault(), classDeclaration);
-        }        
+        }
 
         Document newDocument = document.WithSyntaxRoot(syntaxNode.NormalizeWhitespace());
-        
+
         workspace.TryApplyChanges(newDocument.Project.Solution);
-        
-        
+
+
         return string.Empty;
     }
 

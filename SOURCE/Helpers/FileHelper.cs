@@ -54,11 +54,11 @@ public class FileHelper
     public static string[] GetFileNames(string folderPath)
     {
         string rootPath = Directory.GetParent(Environment.CurrentDirectory)!.Parent!.Parent!.Parent!.FullName;
-        folderPath = Path.Combine(rootPath,folderPath);
+        folderPath = Path.Combine(rootPath, folderPath);
         var directoryInfo = new DirectoryInfo(folderPath);
 
         IEnumerable<FileInfo> files = directoryInfo.GetFiles("*.*", SearchOption.AllDirectories);
 
-        return files.Select(s=>Path.GetFileNameWithoutExtension(s.FullName)).ToArray()!;
+        return files.Select(s => Path.GetFileNameWithoutExtension(s.FullName)).ToArray()!;
     }
 }

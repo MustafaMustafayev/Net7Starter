@@ -12,7 +12,7 @@ public class DataContext : DbContext
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly IUtilService _utilService;
-  
+
     public DataContext(DbContextOptions<DataContext> options,
         IHttpContextAccessor httpContextAccessor,
         IUtilService utilService) : base(options)
