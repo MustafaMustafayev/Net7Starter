@@ -19,8 +19,11 @@ public class ExceptionMiddleware
     private readonly ILoggerManager _logger;
     private readonly RequestDelegate _next;
     private readonly IServiceScopeFactory _serviceScopeFactory;
-    public ExceptionMiddleware(RequestDelegate next, ILoggerManager logger, IWebHostEnvironment env,
-        ConfigSettings config, IServiceScopeFactory serviceScopeFactory)
+    public ExceptionMiddleware(RequestDelegate next, 
+                               ILoggerManager logger, 
+                               IWebHostEnvironment env,
+                               ConfigSettings config,
+                               IServiceScopeFactory serviceScopeFactory)
     {
         _config = config;
         _logger = logger;
