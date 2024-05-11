@@ -64,6 +64,7 @@ public class DataContext : DbContext
             .Where(e => e.Entity is Auditable && e.State is EntityState.Added or EntityState.Modified);
 
         foreach (var entityEntry in entries)
+        {
             switch (entityEntry.State)
             {
                 case EntityState.Added:
@@ -109,5 +110,6 @@ public class DataContext : DbContext
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+        }
     }
 }

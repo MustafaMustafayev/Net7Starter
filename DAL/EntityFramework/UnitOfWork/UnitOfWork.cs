@@ -40,7 +40,10 @@ public class UnitOfWork : IUnitOfWork
     public void Dispose()
     {
         if (_isDisposed)
+        {
             return;
+        }
+
         _isDisposed = true;
         Dispose(true);
         GC.SuppressFinalize(this);
@@ -49,13 +52,17 @@ public class UnitOfWork : IUnitOfWork
     protected virtual void Dispose(bool disposing)
     {
         if (disposing)
+        {
             _dataContext.Dispose();
+        }
     }
 
     private async ValueTask DisposeAsync(bool disposing)
     {
         if (disposing)
+        {
             await _dataContext.DisposeAsync();
+        }
     }
 
     public IDepartmentRepository DepartmentRepository { get; set; }

@@ -20,14 +20,20 @@ public class SftpService : ISftpService
 
     public List<DirectoryInformation> GetDirectoryInformation(string path)
     {
-        if (string.IsNullOrEmpty(path) || string.IsNullOrWhiteSpace(path)) path = string.Empty;
+        if (string.IsNullOrEmpty(path) || string.IsNullOrWhiteSpace(path))
+        {
+            path = string.Empty;
+        }
 
         var directoryInfos = new List<DirectoryInformation>();
         var connectionInfo = GetConnectionInfo();
         using (var sftp = new SftpClient(connectionInfo))
         {
             sftp.Connect();
-            if (!sftp.IsConnected) return directoryInfos.OrderBy(m => m.Name).ThenBy(m => !m.IsDirectory).ToList();
+            if (!sftp.IsConnected)
+            {
+                return directoryInfos.OrderBy(m => m.Name).ThenBy(m => !m.IsDirectory).ToList();
+            }
 
             var realPath = ("/" + path).Replace("//", "/");
             sftp.ChangeDirectory(realPath);
@@ -59,7 +65,10 @@ public class SftpService : ISftpService
         var connectionInfo = GetConnectionInfo();
         using var sftp = new SftpClient(connectionInfo);
         sftp.Connect();
-        if (!sftp.IsConnected) return;
+        if (!sftp.IsConnected)
+        {
+            return;
+        }
 
         sftp.ChangeDirectory(filePath);
         using (var ms = new MemoryStream())
@@ -77,11 +86,17 @@ public class SftpService : ISftpService
         var connectionInfo = GetConnectionInfo();
         using var sftp = new SftpClient(connectionInfo);
         sftp.Connect();
-        if (!sftp.IsConnected) return;
+        if (!sftp.IsConnected)
+        {
+            return;
+        }
 
         sftp.ChangeDirectory(filePath);
 
-        if (sftp.Exists(filePath)) sftp.Delete(filePath);
+        if (sftp.Exists(filePath))
+        {
+            sftp.Delete(filePath);
+        }
     }
 
     public byte[] ReadImage(string filePath)
@@ -91,14 +106,22 @@ public class SftpService : ISftpService
         var connectionInfo = GetConnectionInfo();
         using var sftp = new SftpClient(connectionInfo);
         sftp.Connect();
-        if (!sftp.IsConnected) return imageBytes;
+        if (!sftp.IsConnected)
+        {
+            return imageBytes;
+        }
 
         sftp.ChangeDirectory(filePath);
 
-        if (string.IsNullOrEmpty(filePath)) return imageBytes;
+        if (string.IsNullOrEmpty(filePath))
+        {
+            return imageBytes;
+        }
 
         if (sftp.Exists(filePath))
+        {
             imageBytes = sftp.ReadAllBytes(filePath);
+        }
 
         return imageBytes;
     }
@@ -106,7 +129,9 @@ public class SftpService : ISftpService
     public byte[] CompressImage(int jpegQuality, byte[] data)
     {
         if (!OperatingSystem.IsWindows())
+        {
             throw new NotSupportedException("CompressImage function only works on windows platform");
+        }
 
         using var inputStream = new MemoryStream(data);
         using var image = Image.FromStream(inputStream);

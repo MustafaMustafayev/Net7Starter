@@ -21,7 +21,11 @@ public class SourceBuilder
         {
             lock (Padlock)
             {
-                if (_instance == null) _instance = new SourceBuilder();
+                if (_instance == null)
+                {
+                    _instance = new SourceBuilder();
+                }
+
                 return _instance;
             }
         }
@@ -34,11 +38,18 @@ public class SourceBuilder
 
     private async Task<bool> CreateAllSourceFilesAsync()
     {
-        if (!_sourceFiles.Any()) return true;
+        if (!_sourceFiles.Any())
+        {
+            return true;
+        }
 
         foreach (var sourceFile in _sourceFiles)
+        {
             if (!await FileHelper.CreateFileAsync(sourceFile))
+            {
                 return false;
+            }
+        }
 
         return true;
     }
@@ -50,7 +61,9 @@ public class SourceBuilder
             .Where(p => typeof(ISourceBuilder).IsAssignableFrom(p) && p != typeof(ISourceBuilder)).ToList();
 
         foreach (var instance in types.Select(type => (ISourceBuilder)Activator.CreateInstance(type)!))
+        {
             instance.BuildSourceFile(entities);
+        }
     }
 
     public async Task<bool> BuildSourceFiles()

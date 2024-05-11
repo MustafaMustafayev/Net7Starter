@@ -46,12 +46,17 @@ public class AuthController : Controller
         var userSalt = await _authService.GetUserSaltAsync(request.Email);
 
         if (string.IsNullOrEmpty(userSalt))
+        {
             return Ok(new ErrorDataResult<Result>(Messages.InvalidUserCredentials.Translate()));
+        }
 
         request = request with { Password = SecurityHelper.HashPassword(request.Password, userSalt) };
 
         var loginResult = await _authService.LoginAsync(request);
-        if (!loginResult.Success) return Unauthorized(loginResult);
+        if (!loginResult.Success)
+        {
+            return Unauthorized(loginResult);
+        }
 
         var response = await _tokenService.CreateTokenAsync(loginResult.Data!);
 
@@ -105,10 +110,15 @@ public class AuthController : Controller
     public async Task<IActionResult> LoginByToken()
     {
         if (string.IsNullOrEmpty(HttpContext.Request.Headers.Authorization))
+        {
             return Unauthorized(new ErrorResult(Messages.CanNotFoundUserIdInYourAccessToken.Translate()));
+        }
 
         var loginByTokenResponse = await _authService.LoginByTokenAsync();
-        if (!loginByTokenResponse.Success) return BadRequest(loginByTokenResponse.Data);
+        if (!loginByTokenResponse.Success)
+        {
+            return BadRequest(loginByTokenResponse.Data);
+        }
 
         var response = await _tokenService.CreateTokenAsync(loginByTokenResponse.Data!);
 

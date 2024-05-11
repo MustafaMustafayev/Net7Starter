@@ -1,8 +1,7 @@
-﻿namespace CORE.Enums
+﻿namespace CORE.Enums;
+
+public enum EFileType
 {
-    public enum EFileType
-    {
-        UserProfile,
-        OrganizationLogo
-    }
+    UserProfile,
+    OrganizationLogo
 }

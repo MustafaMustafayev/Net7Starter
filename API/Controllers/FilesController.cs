@@ -45,7 +45,9 @@ public class FilesController : Controller
 
         // check extension
         if (!Constants.AllowedFileExtensions.Contains(fileExtension))
+        {
             return BadRequest(new ErrorDataResult<string>(Messages.ThisFileTypeIsNotAllowed.Translate()));
+        }
 
         var path = _utilService.GetEnvFolderPath(_utilService.GetFolderName(dto.Type));
         await FileHelper.WriteFile(dto.File, $"{hashFileName}{fileExtension}", path);
@@ -62,7 +64,10 @@ public class FilesController : Controller
                 Type = dto.Type
             },
             dto);
-        if (!result.Success) return BadRequest(new ErrorDataResult<string>(Messages.InvalidModel.Translate()));
+        if (!result.Success)
+        {
+            return BadRequest(new ErrorDataResult<string>(Messages.InvalidModel.Translate()));
+        }
 
         return Ok(new SuccessDataResult<string>(hashFileName, Messages.Success.Translate()));
     }
@@ -80,7 +85,6 @@ public class FilesController : Controller
         var result = await _fileService.RemoveFileAsync(dto);
         return Ok(result);
     }
-
 
     [SwaggerOperation(Summary = "download file")]
     [Produces(typeof(void))]
@@ -110,7 +114,10 @@ public class FilesController : Controller
             $"{hashName}{file.Data!.Extension}");
         var fileStream = System.IO.File.OpenRead(path);
 
-        if (fileStream is null) return BadRequest(new ErrorResult(Messages.FileIsNotFound.Translate()));
+        if (fileStream is null)
+        {
+            return BadRequest(new ErrorResult(Messages.FileIsNotFound.Translate()));
+        }
 
         return File(fileStream, "image/png");
     }

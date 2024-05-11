@@ -1,12 +1,12 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
+﻿using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.MSBuild;
-using Microsoft.CodeAnalysis;
 using SOURCE.Builders.Abstract;
 using SOURCE.Helpers;
 using SOURCE.Models;
 using SOURCE.Workers;
 using System.Text;
-using Microsoft.CodeAnalysis.CSharp;
 
 namespace SOURCE.Builders;
 
@@ -79,7 +79,11 @@ public interface IUnitOfWork : IAsyncDisposable, IDisposable
                 .DescendantNodes()
                 .OfType<PropertyDeclarationSyntax>()
                 .Any(w => w.Identifier.Text == $"{entity.Name}Repository");
-            if (existEntity) continue;
+            if (existEntity)
+            {
+                continue;
+            }
+
             interfaceDeclaration = interfaceDeclaration
                 .AddMembers(GetProperty(interfaceDeclaration, entity));
 
@@ -89,11 +93,9 @@ public interface IUnitOfWork : IAsyncDisposable, IDisposable
             rootNode.DescendantNodes().OfType<InterfaceDeclarationSyntax>().FirstOrDefault(),
             interfaceDeclaration);
 
-
         Document newDocument = document.WithSyntaxRoot(rootNode.NormalizeWhitespace());
 
         workspace.TryApplyChanges(newDocument.Project.Solution);
-
 
         return string.Empty;
     }
@@ -115,7 +117,6 @@ public interface IUnitOfWork : IAsyncDisposable, IDisposable
         var properties = new StringBuilder();
         entities?.ForEach(e =>
             properties.AppendLine($"    public I{e.Name}Repository {e.Name}Repository {{ get; set; }}"));
-
 
         var text = $$"""
                      using DAL.EntityFramework.Abstract;

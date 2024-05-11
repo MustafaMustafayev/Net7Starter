@@ -28,7 +28,9 @@ public class UserService : IUserService
     public async Task<IResult> AddAsync(UserCreateRequestDto dto)
     {
         if (await _unitOfWork.UserRepository.IsUserExistAsync(dto.Email, null))
+        {
             return new ErrorResult(Messages.UserIsExist.Translate());
+        }
 
         dto = dto with
         {
@@ -87,7 +89,9 @@ public class UserService : IUserService
     public async Task<IResult> UpdateAsync(Guid id, UserUpdateRequestDto dto)
     {
         if (await _unitOfWork.UserRepository.IsUserExistAsync(dto.Email, id))
+        {
             return new ErrorResult(Messages.UserIsExist.Translate());
+        }
 
         dto = dto with
         {
@@ -97,7 +101,10 @@ public class UserService : IUserService
         };
 
         var old = await _unitOfWork.UserRepository.GetAsNoTrackingAsync(u => u.Id == id);
-        if (old is null) return new ErrorResult(Messages.UserIsNotExist.Translate());
+        if (old is null)
+        {
+            return new ErrorResult(Messages.UserIsNotExist.Translate());
+        }
 
         var data = _mapper.Map<User>(dto);
 
@@ -130,8 +137,6 @@ public class UserService : IUserService
     {
         var user = await _unitOfWork.UserRepository.GetAsNoTrackingAsync(u => u.Id == userId);
 
-
         return new SuccessDataResult<string>(user.File, Messages.Success.Translate());
     }
-
 }

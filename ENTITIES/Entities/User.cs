@@ -14,5 +14,4 @@ public class User : Auditable, IEntity
     public Guid? RoleId { get; set; }
     public virtual Role? Role { get; set; }
     public string? File { get; set; }
-
 }

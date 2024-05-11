@@ -26,7 +26,9 @@ public class FileHelper
         var filePath = Path.Combine(projectPath, sourceFile.Path, sourceFile.Name);
 
         if (!Directory.Exists(Path.GetDirectoryName(filePath)))
+        {
             Directory.CreateDirectory(Path.GetDirectoryName(filePath)!);
+        }
 
         if (File.Exists(filePath) && sourceFile.SkipIfExists)
         {

@@ -110,14 +110,18 @@ public class UnitOfWork : IUnitOfWork
         ClassDeclarationSyntax classDeclaration = syntaxNode.DescendantNodes().OfType<ClassDeclarationSyntax>().FirstOrDefault();
 
         ConstructorDeclarationSyntax constructor = classDeclaration.DescendantNodes().OfType<ConstructorDeclarationSyntax>().FirstOrDefault();
-        List<PropertyDeclarationSyntax> properties = new List<PropertyDeclarationSyntax>();
-        List<ParameterSyntax> parameters = new List<ParameterSyntax>();
+        List<PropertyDeclarationSyntax> properties = new();
+        List<ParameterSyntax> parameters = new();
 
         foreach (Entity entity in entities)
         {
             var existEntity = classDeclaration.DescendantNodes().OfType<PropertyDeclarationSyntax>()
                 .Any(w => w.Identifier.Text == $"{entity.Name}Repository");
-            if (existEntity) continue;
+            if (existEntity)
+            {
+                continue;
+            }
+
             properties.Add(BuildProperty(classDeclaration, entity));
 
             constructor = BuildConstructor(constructor, entity);
@@ -134,7 +138,6 @@ public class UnitOfWork : IUnitOfWork
         Document newDocument = document.WithSyntaxRoot(syntaxNode.NormalizeWhitespace());
 
         workspace.TryApplyChanges(newDocument.Project.Solution);
-
 
         return string.Empty;
     }
@@ -165,11 +168,8 @@ public class UnitOfWork : IUnitOfWork
         return property.NormalizeWhitespace();
     }
 
-
-
     public string BuildSourceText(Entity? entity, List<Entity>? entities)
     {
         throw new NotImplementedException();
     }
-
 }

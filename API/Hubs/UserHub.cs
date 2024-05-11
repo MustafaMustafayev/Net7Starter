@@ -25,7 +25,10 @@ public class UserHub : Hub
         var companyId = Context.User?.FindFirst(_configSettings.AuthSettings.TokenCompanyIdKey)
             ?.Value;
 
-        if (companyId is null) return;
+        if (companyId is null)
+        {
+            return;
+        }
 
         await Groups.AddToGroupAsync(Context.ConnectionId, companyId);
 

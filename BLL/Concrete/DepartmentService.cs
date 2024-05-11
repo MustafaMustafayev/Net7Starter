@@ -2,11 +2,11 @@ using AutoMapper;
 using BLL.Abstract;
 using CORE.Abstract;
 using CORE.Localization;
-using DTO.Responses;
-using DTO.Department;
-using ENTITIES.Entities.Structures;
-using DAL.EntityFramework.Utility;
 using DAL.EntityFramework.UnitOfWork;
+using DAL.EntityFramework.Utility;
+using DTO.Department;
+using DTO.Responses;
+using ENTITIES.Entities.Structures;
 
 namespace BLL.Concrete;
 

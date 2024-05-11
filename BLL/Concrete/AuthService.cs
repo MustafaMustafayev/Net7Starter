@@ -34,7 +34,9 @@ public class AuthService : IAuthService
             await _unitOfWork.UserRepository.GetAsync(m =>
                 m.Email == dtos.Email && m.Password == dtos.Password);
         if (data == null)
+        {
             return new ErrorDataResult<UserResponseDto>(Messages.InvalidUserCredentials.Translate());
+        }
 
         return new SuccessDataResult<UserResponseDto>(_mapper.Map<UserResponseDto>(data),
             Messages.Success.Translate());
@@ -44,11 +46,15 @@ public class AuthService : IAuthService
     {
         var userId = _utilService.GetUserIdFromToken();
         if (userId is null)
+        {
             return new ErrorDataResult<UserResponseDto>(Messages.CanNotFoundUserIdInYourAccessToken.Translate());
+        }
 
         var data = await _unitOfWork.UserRepository.GetAsync(m => m.Id == userId);
         if (data == null)
+        {
             return new ErrorDataResult<UserResponseDto>(Messages.InvalidUserCredentials.Translate());
+        }
 
         return new SuccessDataResult<UserResponseDto>(_mapper.Map<UserResponseDto>(data), Messages.Success.Translate());
     }
@@ -63,11 +69,16 @@ public class AuthService : IAuthService
     {
         var data = await _unitOfWork.UserRepository.GetAsync(m => m.Email == dto.Email);
 
-        if (data is null) return new ErrorResult(Messages.UserIsNotExist.Translate());
+        if (data is null)
+        {
+            return new ErrorResult(Messages.UserIsNotExist.Translate());
+        }
 
         if (data.LastVerificationCode is null ||
             !data.LastVerificationCode.Equals(dto.VerificationCode))
+        {
             return new ErrorResult(Messages.InvalidVerificationCode.Translate());
+        }
 
         data.Salt = SecurityHelper.GenerateSalt();
         data.Password = SecurityHelper.HashPassword(dto.Password, data.Salt);

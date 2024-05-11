@@ -43,7 +43,10 @@ public class TokenService : ITokenService
         var token = await _unitOfWork.TokenRepository.GetAsync(m =>
             m.AccessToken == accessToken && m.RefreshToken == refreshToken &&
             m.RefreshTokenExpireDate > DateTime.UtcNow);
-        if (token == null) return new ErrorDataResult<TokenToListDto>(Messages.PermissionDenied.Translate());
+        if (token == null)
+        {
+            return new ErrorDataResult<TokenToListDto>(Messages.PermissionDenied.Translate());
+        }
 
         var data = _mapper.Map<TokenToListDto>(token);
 

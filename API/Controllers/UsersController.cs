@@ -59,7 +59,9 @@ public class UsersController : Controller
     {
         var userId = _utilService.GetUserIdFromToken();
         if (userId is null)
+        {
             return Unauthorized(new ErrorResult(Messages.CanNotFoundUserIdInYourAccessToken.Translate()));
+        }
 
         var response = await _userService.GetAsync(userId.Value);
         return Ok(response);
@@ -136,7 +138,9 @@ public class UsersController : Controller
         Guid fileNewName = Guid.NewGuid();
 
         if (!Constants.AllowedImageExtensions.Contains(fileExtension))
+        {
             return BadRequest(new ErrorDataResult<string>(Messages.ThisFileTypeIsNotAllowed.Translate()));
+        }
 
         var path = _utilService.GetEnvFolderPath(_utilService.GetFolderName(EFileType.UserProfile));
         await FileHelper.WriteFile(file, $"{fileNewName}{fileExtension}", path);

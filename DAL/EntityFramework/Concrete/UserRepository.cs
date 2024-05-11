@@ -20,7 +20,7 @@ public class UserRepository : GenericRepository<User>, IUserRepository
     {
         var user = await _dataContext.Users.SingleOrDefaultAsync(m => m.Email == userEmail);
 
-        return user == null ? null : user.Salt;
+        return user?.Salt;
     }
 
     public async Task<bool> IsUserExistAsync(string email, Guid? userId)

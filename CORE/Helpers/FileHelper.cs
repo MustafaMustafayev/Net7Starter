@@ -6,7 +6,10 @@ public static class FileHelper
 {
     public static async Task WriteFile(IFormFile file, string name, string path)
     {
-        if (!Directory.Exists(path)) Directory.CreateDirectory(path);
+        if (!Directory.Exists(path))
+        {
+            Directory.CreateDirectory(path);
+        }
 
         await using var fileStream = new FileStream(Path.Combine(path, name), FileMode.Create);
         await file.CopyToAsync(fileStream);
@@ -20,7 +23,10 @@ public static class FileHelper
 
     public static bool DeleteFile(string filePath)
     {
-        if (!File.Exists(filePath)) return false;
+        if (!File.Exists(filePath))
+        {
+            return false;
+        }
 
         File.Delete(filePath);
 
@@ -30,7 +36,10 @@ public static class FileHelper
     public static async Task<IFormFile?> ReadFileAsIFormFile(string name, string path)
     {
         var filePath = Path.Combine(path, name);
-        if (!File.Exists(filePath)) return null; // or throw an exception based on your use case
+        if (!File.Exists(filePath))
+        {
+            return null; // or throw an exception based on your use case
+        }
 
         var fileInfo = new FileInfo(filePath);
         var memoryStream = new MemoryStream();

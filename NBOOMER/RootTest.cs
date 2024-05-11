@@ -51,7 +51,10 @@ public abstract class RootTest
 
         var token = JsonConvert.DeserializeObject<SuccessDataResult<LoginResponseDto?>>(result, setting);
 
-        if (token?.Data?.AccessToken is null || !token.Success) throw new UnauthorizedAccessException();
+        if (token?.Data?.AccessToken is null || !token.Success)
+        {
+            throw new UnauthorizedAccessException();
+        }
 
         _isAuthenticate = true;
         _accessToken = token.Data.AccessToken;
@@ -70,7 +73,10 @@ public abstract class RootTest
             request.WithHeader("RefreshToken", _refreshToken);
         }
 
-        if (jsonBody is not null) request.WithBody(new StringContent(jsonBody, Encoding.UTF8, "application/json"));
+        if (jsonBody is not null)
+        {
+            request.WithBody(new StringContent(jsonBody, Encoding.UTF8, "application/json"));
+        }
 
         return request;
     }
@@ -103,7 +109,10 @@ public abstract class RootTest
                 var request = CreateRequest(httpMethod.ToString(), url, payload);
                 var response = await Http.Send(_httpClient, request);
 
-                if (response.IsError) return Response.Fail(message: response.Message, statusCode: response.StatusCode);
+                if (response.IsError)
+                {
+                    return Response.Fail(message: response.Message, statusCode: response.StatusCode);
+                }
 
                 var result = await response.Payload.Value.Content.ReadAsStringAsync();
 
@@ -123,7 +132,10 @@ public abstract class RootTest
                         return Response.Fail();
                     }
 
-                    if (!validator(context, data)) return Response.Fail(message: "Data is invalid");
+                    if (!validator(context, data))
+                    {
+                        return Response.Fail(message: "Data is invalid");
+                    }
                 }
             }
             catch (Exception ex)

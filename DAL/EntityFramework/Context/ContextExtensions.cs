@@ -9,6 +9,7 @@ public static class ContextExtensions
     public static void AddGlobalFilter(this ModelBuilder modelBuilder, string property, object value)
     {
         foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+        {
             if (typeof(Auditable).IsAssignableFrom(entityType.ClrType))
             {
                 var parameter = Expression.Parameter(entityType.ClrType, "p");
@@ -19,5 +20,6 @@ public static class ContextExtensions
                     ), parameter);
                 modelBuilder.Entity(entityType.ClrType).HasQueryFilter(deletedCheck);
             }
+        }
     }
 }

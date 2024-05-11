@@ -23,7 +23,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MEDIATRS", "MEDIATRS\MEDIAT
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NBOOMER", "NBOOMER\NBOOMER.csproj", "{05C8EAB4-E8DA-4AD4-9AD0-77B17F951C84}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "REFITS", "REFITS\REFITS.csproj", "{D57C93DB-E24B-477B-9A71-8D39AB06C710}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "REFITS", "REFITS\REFITS.csproj", "{D57C93DB-E24B-477B-9A71-8D39AB06C710}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{79988D17-A867-4171-954E-2549B2ACA400}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

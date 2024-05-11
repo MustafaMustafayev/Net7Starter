@@ -54,7 +54,7 @@ public class DtosBuilder : ISourceBuilder
     private async Task<string> GetProperties(Entity entity)
     {
         string fullNamespace = RootNamespace + (!string.IsNullOrEmpty(entity!.Path) ? $".{entity.Path}" : string.Empty);
-        StringBuilder result = new StringBuilder();
+        StringBuilder result = new();
         //if (!MSBuildLocator.IsRegistered)
         //{
         //    var instances = MSBuildLocator.QueryVisualStudioInstances().ToArray();
@@ -72,10 +72,16 @@ public class DtosBuilder : ISourceBuilder
             Project project = await workspace.OpenProjectAsync(EntityProjectPath);
             Compilation? compilation = await project.GetCompilationAsync();
 
-            if (compilation is null) return result.ToString();
+            if (compilation is null)
+            {
+                return result.ToString();
+            }
 
             INamedTypeSymbol? classSymbol = compilation.GetTypeByMetadataName(fullNamespace + "." + entity.Name);
-            if (classSymbol is null) return result.ToString();
+            if (classSymbol is null)
+            {
+                return result.ToString();
+            }
 
             GetClassProperties(result, classSymbol);
 
@@ -152,5 +158,4 @@ public class DtosBuilder : ISourceBuilder
         text = text.Replace("{entityName}", entity!.Name);
         return text;
     }
-
 }

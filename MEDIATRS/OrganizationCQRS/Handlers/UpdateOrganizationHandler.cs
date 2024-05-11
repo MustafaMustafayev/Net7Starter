@@ -23,7 +23,10 @@ public class UpdateOrganizationHandler : IRequestHandler<UpdateOrganizationComma
         CancellationToken cancellationToken)
     {
         var old = await _unitOfWork.OrganizationRepository.GetAsNoTrackingAsync(u => u.Id == request.OrganizationId);
-        if (old is null) return new ErrorResult(Messages.DataNotFound.Translate());
+        if (old is null)
+        {
+            return new ErrorResult(Messages.DataNotFound.Translate());
+        }
 
         var mapped = _mapper.Map<Organization>(request.Organization);
 

@@ -9,71 +9,70 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace BLL.Helpers
+namespace BLL.Helpers;
+
+public class SecurityHelper
 {
-    public class SecurityHelper
+    private readonly ConfigSettings _configSettings;
+    private readonly IUtilService _utilService;
+
+    public SecurityHelper(ConfigSettings configSettings, IUtilService utilService)
     {
-        private readonly ConfigSettings _configSettings;
-        private readonly IUtilService _utilService;
+        _configSettings = configSettings;
+        _utilService = utilService;
+    }
 
-        public SecurityHelper(ConfigSettings configSettings, IUtilService utilService)
+    public static string GenerateSalt()
+    {
+        var saltBytes = new byte[16];
+
+        using (var rng = RandomNumberGenerator.Create())
         {
-            _configSettings = configSettings;
-            _utilService = utilService;
+            rng.GetBytes(saltBytes);
         }
 
-        public static string GenerateSalt()
+        return Convert.ToBase64String(saltBytes);
+    }
+
+    public static string HashPassword(string password, string salt)
+    {
+        var saltBytes = Convert.FromBase64String(salt);
+
+        var hashed = KeyDerivation.Pbkdf2(
+            password,
+            saltBytes,
+            KeyDerivationPrf.HMACSHA512,
+            100000,
+            512 / 8);
+
+        return Convert.ToBase64String(hashed);
+    }
+
+    public string CreateTokenForUser(UserResponseDto userDto, DateTime expirationDate)
+    {
+        var claims = new List<Claim>
+    {
+        new(_configSettings.AuthSettings.TokenUserIdKey, _utilService.Encrypt(userDto.Id.ToString())),
+        new(ClaimTypes.Name, userDto.Username),
+        new(_configSettings.AuthSettings.Role, userDto.Role == null ? string.Empty : userDto.Role!.Name),
+        new(ClaimTypes.Expiration, expirationDate.ToString(CultureInfo.InvariantCulture))
+    };
+        //claims.Add(new Claim(_configSettings.AuthSettings.TokenCompanyIdKey, userDto.CompanyId.ToString()!));
+        //claims.Add(new Claim(_configSettings.AuthSettings.TokenUserTypeKey, userDto.Type.ToString()));
+
+        var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_configSettings.AuthSettings.SecretKey));
+        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+
+        var tokenDescriptor = new SecurityTokenDescriptor
         {
-            var saltBytes = new byte[16];
-
-            using (var rng = RandomNumberGenerator.Create())
-            {
-                rng.GetBytes(saltBytes);
-            }
-
-            return Convert.ToBase64String(saltBytes);
-        }
-
-        public static string HashPassword(string password, string salt)
-        {
-            var saltBytes = Convert.FromBase64String(salt);
-
-            var hashed = KeyDerivation.Pbkdf2(
-                password,
-                saltBytes,
-                KeyDerivationPrf.HMACSHA512,
-                100000,
-                512 / 8);
-
-            return Convert.ToBase64String(hashed);
-        }
-
-        public string CreateTokenForUser(UserResponseDto userDto, DateTime expirationDate)
-        {
-            var claims = new List<Claim>
-        {
-            new(_configSettings.AuthSettings.TokenUserIdKey, _utilService.Encrypt(userDto.Id.ToString())),
-            new(ClaimTypes.Name, userDto.Username),
-            new(_configSettings.AuthSettings.Role, userDto.Role == null ? string.Empty : userDto.Role!.Name),
-            new(ClaimTypes.Expiration, expirationDate.ToString(CultureInfo.InvariantCulture))
+            Subject = new ClaimsIdentity(claims),
+            Expires = expirationDate,
+            SigningCredentials = creds
         };
-            //claims.Add(new Claim(_configSettings.AuthSettings.TokenCompanyIdKey, userDto.CompanyId.ToString()!));
-            //claims.Add(new Claim(_configSettings.AuthSettings.TokenUserTypeKey, userDto.Type.ToString()));
 
-            var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_configSettings.AuthSettings.SecretKey));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var token = tokenHandler.CreateToken(tokenDescriptor);
 
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(claims),
-                Expires = expirationDate,
-                SigningCredentials = creds
-            };
-
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-
-            return tokenHandler.WriteToken(token);
-        }
+        return tokenHandler.WriteToken(token);
     }
 }
