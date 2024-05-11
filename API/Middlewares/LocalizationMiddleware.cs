@@ -14,13 +14,13 @@ public class LocalizationMiddleware
 
     public async Task Invoke(HttpContext context)
     {
-        var requestLang = context.Request.Headers[LocalizationConstants.LangHeaderName].ToString();
+        var requestLang = context.Request.Headers[LocalizationConstants.LANG_HEADER_NAME].ToString();
 
         var threadLang = requestLang switch
         {
-            LocalizationConstants.LangHeaderAz => "az-Latn",
-            LocalizationConstants.LangHeaderEn => "en-GB",
-            LocalizationConstants.LangHeaderRu => "ru-RU",
+            LocalizationConstants.LANG_HEADER_AZ => "az-Latn",
+            LocalizationConstants.LANG_HEADER_EN => "en-GB",
+            LocalizationConstants.LANG_HEADER_RU => "ru-RU",
 
             _ => "az-Latn"
         };

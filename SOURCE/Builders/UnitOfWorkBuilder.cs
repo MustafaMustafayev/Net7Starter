@@ -14,7 +14,7 @@ namespace SOURCE.Builders;
 public class UnitOfWorkBuilder : ISourceBuilder
 {
     private readonly string ProjectPath;
-    private readonly string RootNamespace = "DAL.EntityFramework.UnitOfWork";
+    //private readonly string RootNamespace = "DAL.EntityFramework.UnitOfWork";
     private readonly string DefaultDocumentBody = @"using DAL.EntityFramework.Abstract;
 using DAL.EntityFramework.Context;
 
@@ -67,9 +67,8 @@ public class UnitOfWork : IUnitOfWork
 
     public UnitOfWorkBuilder()
     {
-        ProjectPath = Path.Combine(
-            Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.Parent.ToString(),
-            @"DAL\DAL.csproj");
+        string? solutionRoot = Directory.GetParent(Environment.CurrentDirectory)?.Parent?.Parent?.Parent?.ToString() ?? string.Empty;
+        ProjectPath = Path.Combine(solutionRoot, @"DAL\DAL.csproj");
     }
 
     public void BuildSourceFile(List<Entity> entities)
@@ -92,26 +91,27 @@ public class UnitOfWork : IUnitOfWork
         };
 
         Project project = await workspace.OpenProjectAsync(ProjectPath);
-        Document document = project.Documents.Where(w => w.Name == "UnitOfWork.cs").FirstOrDefault();
+        Document? document = project.Documents.Where(w => w.Name == "UnitOfWork.cs").FirstOrDefault();
 
-        if (document != null && !entities.Any())
+        if (document is null || entities.Count == 0)
         {
             return string.Empty;
         }
 
-        if (document is null)
-        {
-            document = project
+        document ??= project
                 .AddDocument("UnitOfWork.cs", DefaultDocumentBody, ["EntityFramework", "UnitOfWork"]);
-        }
 
         SyntaxTree? syntaxTree = await document.GetSyntaxTreeAsync();
-        SyntaxNode syntaxNode = await syntaxTree.GetRootAsync();
-        ClassDeclarationSyntax classDeclaration = syntaxNode.DescendantNodes().OfType<ClassDeclarationSyntax>().FirstOrDefault();
+        ArgumentNullException.ThrowIfNull(syntaxTree);
 
-        ConstructorDeclarationSyntax constructor = classDeclaration.DescendantNodes().OfType<ConstructorDeclarationSyntax>().FirstOrDefault();
-        List<PropertyDeclarationSyntax> properties = new();
-        List<ParameterSyntax> parameters = new();
+        SyntaxNode syntaxNode = await syntaxTree.GetRootAsync();
+
+        ClassDeclarationSyntax? classDeclaration = syntaxNode.DescendantNodes().OfType<ClassDeclarationSyntax>().FirstOrDefault();
+        ArgumentNullException.ThrowIfNull(classDeclaration);
+        ConstructorDeclarationSyntax? constructor = classDeclaration.DescendantNodes().OfType<ConstructorDeclarationSyntax>().FirstOrDefault();
+        ArgumentNullException.ThrowIfNull(constructor);
+        List<PropertyDeclarationSyntax> properties = [];
+        List<ParameterSyntax> parameters = [];
 
         foreach (Entity entity in entities)
         {
@@ -122,17 +122,18 @@ public class UnitOfWork : IUnitOfWork
                 continue;
             }
 
-            properties.Add(BuildProperty(classDeclaration, entity));
+            properties.Add(BuildProperty(entity));
 
             constructor = BuildConstructor(constructor, entity);
         }
-
-        classDeclaration = classDeclaration.ReplaceNode(classDeclaration.DescendantNodes().OfType<ConstructorDeclarationSyntax>().FirstOrDefault(), constructor);
+        ConstructorDeclarationSyntax? originalContructorSyntax = classDeclaration.DescendantNodes().OfType<ConstructorDeclarationSyntax>().FirstOrDefault();
+        classDeclaration = classDeclaration.ReplaceNode(originalContructorSyntax!, constructor);
 
         if (properties.Count > 0)
         {
             classDeclaration = classDeclaration.AddMembers(properties.ToArray());
-            syntaxNode = syntaxNode.ReplaceNode(syntaxNode.DescendantNodes().OfType<ClassDeclarationSyntax>().FirstOrDefault(), classDeclaration);
+            SyntaxNode? originalSyntaxNode = syntaxNode.DescendantNodes().OfType<ClassDeclarationSyntax>().FirstOrDefault();
+            syntaxNode = syntaxNode.ReplaceNode(originalSyntaxNode!, classDeclaration);
         }
 
         Document newDocument = document.WithSyntaxRoot(syntaxNode.NormalizeWhitespace());
@@ -156,7 +157,7 @@ public class UnitOfWork : IUnitOfWork
         return constructor;
     }
 
-    private static PropertyDeclarationSyntax BuildProperty(ClassDeclarationSyntax? classDeclaration, Entity entity)
+    private static PropertyDeclarationSyntax BuildProperty(Entity entity)
     {
         var property = SyntaxFactory.PropertyDeclaration(SyntaxFactory.ParseTypeName($"I{entity.Name}Repository"), $"{entity.Name}Repository")
                         .AddModifiers(SyntaxFactory.Token(SyntaxKind.PublicKeyword))

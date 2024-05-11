@@ -1,6 +1,6 @@
 ﻿namespace CORE.Localization;
 
-public enum Messages
+public enum EMessages
 {
     InvalidModel,
     GeneralError,

@@ -35,7 +35,7 @@ public class TokenService : ITokenService
         await _unitOfWork.TokenRepository.AddAsync(data);
         await _unitOfWork.CommitAsync();
 
-        return new SuccessResult(Messages.Success.Translate());
+        return new SuccessResult(EMessages.Success.Translate());
     }
 
     public async Task<IDataResult<TokenToListDto>> GetAsync(string accessToken, string refreshToken)
@@ -45,19 +45,19 @@ public class TokenService : ITokenService
             m.RefreshTokenExpireDate > DateTime.UtcNow);
         if (token == null)
         {
-            return new ErrorDataResult<TokenToListDto>(Messages.PermissionDenied.Translate());
+            return new ErrorDataResult<TokenToListDto>(EMessages.PermissionDenied.Translate());
         }
 
         var data = _mapper.Map<TokenToListDto>(token);
 
-        return new SuccessDataResult<TokenToListDto>(data, Messages.Success.Translate());
+        return new SuccessDataResult<TokenToListDto>(data, EMessages.Success.Translate());
     }
 
     public async Task<IResult> CheckValidationAsync(string accessToken, string refreshToken)
     {
         return await _unitOfWork.TokenRepository.IsValid(accessToken, refreshToken)
-            ? new SuccessResult(Messages.Success.Translate())
-            : new ErrorResult(Messages.PermissionDenied.Translate());
+            ? new SuccessResult(EMessages.Success.Translate())
+            : new ErrorResult(EMessages.PermissionDenied.Translate());
     }
 
     public async Task<IDataResult<LoginResponseDto>> CreateTokenAsync(UserResponseDto dto)
@@ -77,7 +77,7 @@ public class TokenService : ITokenService
 
         await AddAsync(loginResponseDto);
 
-        return new SuccessDataResult<LoginResponseDto>(loginResponseDto, Messages.Success.Translate());
+        return new SuccessDataResult<LoginResponseDto>(loginResponseDto, EMessages.Success.Translate());
     }
 
     public async Task<IResult> SoftDeleteAsync(Guid id)
@@ -87,6 +87,6 @@ public class TokenService : ITokenService
         _unitOfWork.TokenRepository.SoftDelete(data!);
         await _unitOfWork.CommitAsync();
 
-        return new SuccessResult(Messages.Success.Translate());
+        return new SuccessResult(EMessages.Success.Translate());
     }
 }

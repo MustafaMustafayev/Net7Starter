@@ -18,7 +18,7 @@ public class IServiceBuilder : ISourceBuilder
                 && w.Options.BuildRepository)
             .ToList()
             .ForEach(model =>
-            SourceBuilder.Instance.AddSourceFile(Constants.IServicePath, $"I{model.Name}Service.cs",
+            SourceBuilder.Instance.AddSourceFile(Constants.I_SERVICE_PATH, $"I{model.Name}Service.cs",
                 BuildSourceText(model, null)));
     }
 

@@ -51,6 +51,6 @@ public static class FileHelper
 
         memoryStream.Position = 0;
 
-        return new FormFile(memoryStream, 0, memoryStream.Length, null, fileInfo.Name);
+        return new FormFile(memoryStream, 0, memoryStream.Length, name, fileInfo.Name);
     }
 }

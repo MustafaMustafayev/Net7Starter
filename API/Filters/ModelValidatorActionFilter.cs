@@ -19,7 +19,7 @@ public class ModelValidatorActionFilter : IActionFilter
             return;
         }
 
-        var result = new ErrorDataResult<ModelStateDictionary>(context.ModelState, Messages.InvalidModel.Translate());
+        var result = new ErrorDataResult<ModelStateDictionary>(context.ModelState, EMessages.InvalidModel.Translate());
         context.Result = new BadRequestObjectResult(result);
     }
 }

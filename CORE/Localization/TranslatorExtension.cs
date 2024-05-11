@@ -2,7 +2,7 @@
 
 public static class TranslatorExtension
 {
-    public static string Translate(this Messages message)
+    public static string Translate(this EMessages message)
     {
         return MsgResource.ResourceManager.GetString(message.ToString())
                ?? throw new ArgumentNullException(

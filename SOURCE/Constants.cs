@@ -3,31 +3,31 @@
 // ReSharper disable InconsistentNaming
 public static class Constants
 {
-    public const string DataFileName = "data.json";
-    public const string OpenApiFileName = "openapi.json";
+    public const string DATA_FILE_NAME = "data.json";
+    public const string OPEN_API_FILE_NAME = "openapi.json";
 
     #region PATHS
 
-    public const string ControllerPath = "API\\Controllers\\";
+    public const string CONTROLLER_PATH = "API\\Controllers\\";
 
-    public const string IRepositoryPath = "DAL\\EntityFramework\\Abstract\\";
+    public const string I_REPOSITORY_PATH = "DAL\\EntityFramework\\Abstract\\";
 
-    public const string IServicePath = "BLL\\Abstract\\";
+    public const string I_SERVICE_PATH = "BLL\\Abstract\\";
 
-    public const string IUnitOfWorkPath = "DAL\\EntityFramework\\UnitOfWork\\";
+    public const string I_UNIT_OF_WORK_PATH = "DAL\\EntityFramework\\UnitOfWork\\";
 
-    public const string RepositoryPath = "DAL\\EntityFramework\\Concrete\\";
+    public const string REPOSITORY_PATH = "DAL\\EntityFramework\\Concrete\\";
 
-    public const string ServicePath = "BLL\\Concrete\\";
+    public const string SERVICE_PATH = "BLL\\Concrete\\";
 
-    public const string UnitOfWorkPath = "DAL\\EntityFramework\\UnitOfWork\\";
+    public const string UNIT_OF_WORK_PATH = "DAL\\EntityFramework\\UnitOfWork\\";
 
-    public const string AutomapperPath = "BLL\\Mappers\\";
+    public const string AUTOMAPPER_PATH = "BLL\\Mappers\\";
 
-    public const string DtoPath = "DTO\\{entityName}\\";
+    public const string DTO_PATH = "DTO\\{entityName}\\";
 
-    public const string EntitiesPath = "ENTITIES\\Entities\\";
+    public const string ENTITIES_PATH = "ENTITIES\\Entities\\";
 
-    public const string EntityConfigurationPath = "DAL\\EntityFramework\\Configurations";
+    public const string ENTITY_CONFIGURATION_PATH = "DAL\\EntityFramework\\Configurations";
     #endregion
 }

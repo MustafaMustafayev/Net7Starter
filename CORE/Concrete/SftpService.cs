@@ -5,18 +5,14 @@ using Renci.SshNet;
 using Renci.SshNet.Sftp;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Runtime.Versioning;
 using ConnectionInfo = Renci.SshNet.ConnectionInfo;
 
 namespace CORE.Concrete;
 
-public class SftpService : ISftpService
+public class SftpService(ConfigSettings configSettings) : ISftpService
 {
-    private readonly ConfigSettings _configSettings;
-
-    public SftpService(ConfigSettings configSettings)
-    {
-        _configSettings = configSettings;
-    }
+    private readonly ConfigSettings _configSettings = configSettings;
 
     public List<DirectoryInformation> GetDirectoryInformation(string path)
     {
@@ -32,7 +28,7 @@ public class SftpService : ISftpService
             sftp.Connect();
             if (!sftp.IsConnected)
             {
-                return directoryInfos.OrderBy(m => m.Name).ThenBy(m => !m.IsDirectory).ToList();
+                return [.. directoryInfos.OrderBy(m => m.Name).ThenBy(m => !m.IsDirectory)];
             }
 
             var realPath = ("/" + path).Replace("//", "/");
@@ -44,7 +40,7 @@ public class SftpService : ISftpService
                                     where fileName != "." && fileName != ".."
                                     let isAvaliable = sftpFile.IsDirectory || fileParts[^1] == "mp4"
                                     where isAvaliable
-                                    let subDirectory = sftpFile.FullName.StartsWith("/") && sftpFile.FullName.Length > 0
+                                    let subDirectory = sftpFile.FullName.StartsWith('/') && sftpFile.FullName.Length > 0
                                         ? sftpFile.FullName.Remove(0, 1)
                                         : sftpFile.FullName
                                     select new DirectoryInformation
@@ -57,7 +53,7 @@ public class SftpService : ISftpService
                                     });
         }
 
-        return directoryInfos.OrderBy(m => m.Name).ThenBy(m => !m.IsDirectory).ToList();
+        return [.. directoryInfos.OrderBy(m => m.Name).ThenBy(m => !m.IsDirectory)];
     }
 
     public void UploadFile(string filePath, string fileName, IFormFile formFile)
@@ -135,8 +131,9 @@ public class SftpService : ISftpService
 
         using var inputStream = new MemoryStream(data);
         using var image = Image.FromStream(inputStream);
-
+        #pragma warning disable CA1416
         var jpegEncoder = ImageCodecInfo.GetImageDecoders().First(c => c.FormatID == ImageFormat.Jpeg.Guid);
+        #pragma warning restore CA1416
         var encoderParameters = new EncoderParameters(1);
         encoderParameters.Param[0] = new EncoderParameter(Encoder.Quality, jpegQuality);
 

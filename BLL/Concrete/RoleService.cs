@@ -30,7 +30,7 @@ public class RoleService : IRoleService
         await _unitOfWork.RoleRepository.AddRoleAsync(data);
         await _unitOfWork.CommitAsync();
 
-        return new SuccessResult(Messages.Success.Translate());
+        return new SuccessResult(EMessages.Success.Translate());
     }
 
     public async Task<IResult> SoftDeleteAsync(Guid id)
@@ -40,25 +40,25 @@ public class RoleService : IRoleService
         _unitOfWork.RoleRepository.SoftDelete(data!);
         await _unitOfWork.CommitAsync();
 
-        return new SuccessResult(Messages.Success.Translate());
+        return new SuccessResult(EMessages.Success.Translate());
     }
 
     public async Task<IDataResult<IEnumerable<RoleResponseDto>>> GetAsync()
     {
         var datas = _mapper.Map<IEnumerable<RoleResponseDto>>(await _unitOfWork.RoleRepository.GetListAsync());
-        return new SuccessDataResult<IEnumerable<RoleResponseDto>>(datas, Messages.Success.Translate());
+        return new SuccessDataResult<IEnumerable<RoleResponseDto>>(datas, EMessages.Success.Translate());
     }
 
     public Task<IDataResult<IQueryable<Role>>> GraphQlGetAsync()
     {
-        return Task.FromResult<IDataResult<IQueryable<Role>>>(new SuccessDataResult<IQueryable<Role>>(_unitOfWork.RoleRepository.GetList()!, Messages.Success.Translate()));
+        return Task.FromResult<IDataResult<IQueryable<Role>>>(new SuccessDataResult<IQueryable<Role>>(_unitOfWork.RoleRepository.GetList()!, EMessages.Success.Translate()));
     }
 
     public async Task<IDataResult<RoleByIdResponseDto>> GetAsync(Guid id)
     {
         var data = _mapper.Map<RoleByIdResponseDto>(await _unitOfWork.RoleRepository.GetAsync(m => m.Id == id));
 
-        return new SuccessDataResult<RoleByIdResponseDto>(data, Messages.Success.Translate());
+        return new SuccessDataResult<RoleByIdResponseDto>(data, EMessages.Success.Translate());
     }
 
     public async Task<IResult> UpdateAsync(Guid id, RoleUpdateRequestDto dto)
@@ -73,13 +73,13 @@ public class RoleService : IRoleService
         _unitOfWork.RoleRepository.UpdateRole(data);
         await _unitOfWork.CommitAsync();
 
-        return new SuccessResult(Messages.Success.Translate());
+        return new SuccessResult(EMessages.Success.Translate());
     }
 
     public async Task<IDataResult<IEnumerable<PermissionResponseDto>>> GetPermissionsAsync(Guid id)
     {
         var datas = _mapper.Map<IEnumerable<PermissionResponseDto>>((await _unitOfWork.RoleRepository.GetAsync(m => m.Id == id))!.Permissions);
 
-        return new SuccessDataResult<IEnumerable<PermissionResponseDto>>(datas, Messages.Success.Translate());
+        return new SuccessDataResult<IEnumerable<PermissionResponseDto>>(datas, EMessages.Success.Translate());
     }
 }

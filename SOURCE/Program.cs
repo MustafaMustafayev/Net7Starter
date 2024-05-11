@@ -48,7 +48,7 @@ async Task ClientBuilderDialogAsync()
 
     if (string.IsNullOrEmpty(openApiJsonUrl?.Trim()))
     {
-        openApiJsonUrl = Constants.OpenApiFileName;
+        openApiJsonUrl = Constants.OPEN_API_FILE_NAME;
     }
 
     var refitBuilder = new RefitBuilder();

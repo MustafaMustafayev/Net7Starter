@@ -20,7 +20,7 @@ public class ControllerBuilder : ISourceBuilder
             .ToList()
             .ForEach(model => SourceBuilder
                 .Instance.AddSourceFile(
-                    Constants.ControllerPath,
+                    Constants.CONTROLLER_PATH,
                     $"{model.Name}sController.cs",
                     BuildSourceText(model, null)));
     }

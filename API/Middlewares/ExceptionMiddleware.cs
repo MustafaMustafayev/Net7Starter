@@ -12,22 +12,13 @@ using System.Text.Json;
 
 namespace API.Middlewares;
 
-public class ExceptionMiddleware
+public class ExceptionMiddleware(RequestDelegate next, ILoggerManager logger,
+    ConfigSettings config, IServiceScopeFactory serviceScopeFactory)
 {
-    private readonly ConfigSettings _config;
-    private readonly IWebHostEnvironment _env;
-    private readonly ILoggerManager _logger;
-    private readonly RequestDelegate _next;
-    private readonly IServiceScopeFactory _serviceScopeFactory;
-    public ExceptionMiddleware(RequestDelegate next, ILoggerManager logger, IWebHostEnvironment env,
-        ConfigSettings config, IServiceScopeFactory serviceScopeFactory)
-    {
-        _config = config;
-        _logger = logger;
-        _env = env;
-        _next = next;
-        _serviceScopeFactory = serviceScopeFactory;
-    }
+    private readonly ConfigSettings _config = config;
+    private readonly ILoggerManager _logger = logger;
+    private readonly RequestDelegate _next = next;
+    private readonly IServiceScopeFactory _serviceScopeFactory = serviceScopeFactory;
 
     public async Task InvokeAsync(HttpContext httpContext)
     {
@@ -52,13 +43,13 @@ public class ExceptionMiddleware
     private async Task LogErrorAsync(HttpContext httpContext, Exception ex)
     {
         using IServiceScope scope = _serviceScopeFactory.CreateScope();
-        IUtilService _utilService = scope.ServiceProvider.GetRequiredService<IUtilService>();
-        IErrorLogService _errorLogService = scope.ServiceProvider.GetRequiredService<IErrorLogService>();
+        IUtilService utilService = scope.ServiceProvider.GetRequiredService<IUtilService>();
+        IErrorLogService errorLogService = scope.ServiceProvider.GetRequiredService<IErrorLogService>();
 
         var traceIdentifier = httpContext.TraceIdentifier;
         var clientIp = httpContext.Features.Get<IHttpConnectionFeature>()?.RemoteIpAddress?.ToString();
         var path = httpContext.Request.Path;
-        string stackTrace = ex.StackTrace != null && ex.StackTrace.Length > 2000 ? ex.StackTrace[..2000] : ex.StackTrace;
+        string? stackTrace = ex.StackTrace?.Length > 2000 ? ex.StackTrace[..2000] : ex.StackTrace;
         var token = string.Empty;
         Guid? userId = null;
         var authHeaderName = _config.AuthSettings.HeaderName;
@@ -68,7 +59,7 @@ public class ExceptionMiddleware
         {
             token = httpContext.Request.Headers[authHeaderName].ToString();
             userId = !string.IsNullOrEmpty(token)
-                ? _utilService.GetUserIdFromToken()
+                ? utilService.GetUserIdFromToken()
                 : null;
         }
 
@@ -81,7 +72,7 @@ public class ExceptionMiddleware
             ErrorMessage = ex.Message,
             StackTrace = stackTrace
         };
-        await _errorLogService.AddAsync(errorLogToAddDto);
+        await errorLogService.AddAsync(errorLogToAddDto);
     }
 
     private static async Task HandleExceptionAsync(HttpContext context)
@@ -89,7 +80,7 @@ public class ExceptionMiddleware
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
 
-        var response = new ErrorResult(Messages.GeneralError.Translate());
+        var response = new ErrorResult(EMessages.GeneralError.Translate());
         await context.Response.WriteAsync(JsonSerializer.Serialize(response));
     }
 }

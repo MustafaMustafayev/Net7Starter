@@ -92,7 +92,7 @@ builder.Services.AddHealthChecks().AddNpgSql(config.ConnectionStrings.AppDb);
 builder.Services.RegisterAuthentication(config);
 
 builder.Services.AddCors(o => o
-    .AddPolicy(Constants.EnableAllCorsName, b => b
+    .AddPolicy(Constants.ENABLE_ALL_CORS_NAME, b => b
         .AllowAnyMethod()
         .AllowAnyHeader()
         .AllowAnyOrigin()));
@@ -136,7 +136,7 @@ if (config.SwaggerSettings.IsEnabled)
 
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
-app.UseCors(Constants.EnableAllCorsName);
+app.UseCors(Constants.ENABLE_ALL_CORS_NAME);
 
 app.UseMiddleware<LocalizationMiddleware>();
 app.UseMiddleware<ExceptionMiddleware>();

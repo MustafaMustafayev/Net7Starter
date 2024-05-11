@@ -15,7 +15,7 @@ namespace SOURCE.Builders;
 public class IUnitOfWorkBuilder : ISourceBuilder
 {
     private readonly string ProjectPath;
-    private readonly string RootNamespace = "DAL.EntityFramework.UnitOfWork";
+    //private readonly string RootNamespace = "DAL.EntityFramework.UnitOfWork";
     private readonly string DefaultDocumentBody = @"using DAL.EntityFramework.Abstract;
 
 namespace DAL.EntityFramework.UnitOfWork;
@@ -26,9 +26,8 @@ public interface IUnitOfWork : IAsyncDisposable, IDisposable
 
     public IUnitOfWorkBuilder()
     {
-        ProjectPath = Path.Combine(
-            Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.Parent.ToString(),
-            @"DAL\DAL.csproj");
+        string? solutionRoot = Directory.GetParent(Environment.CurrentDirectory)?.Parent?.Parent?.Parent?.ToString() ?? string.Empty;
+        ProjectPath = Path.Combine(solutionRoot, @"DAL\DAL.csproj");
     }
 
     public void BuildSourceFile(List<Entity> entities)
@@ -55,23 +54,26 @@ public interface IUnitOfWork : IAsyncDisposable, IDisposable
             .Where(w => w.Name == "IUnitOfWork.cs")
             .FirstOrDefault();
 
-        if (document != null && !entities.Any())
+        if (document is not null && entities.Count == 0)
         {
             return string.Empty;
         }
 
-        if (document is null)
-        {
-            document = project
+        document ??= project
                 .AddDocument("IUnitOfWork.cs", DefaultDocumentBody, ["EntityFramework", "UnitOfWork"]);
-        }
 
-        SyntaxTree syntaxTree = await document.GetSyntaxTreeAsync();
+        SyntaxTree? syntaxTree = await document.GetSyntaxTreeAsync();
+
+        ArgumentNullException.ThrowIfNull(syntaxTree);
+
         SyntaxNode rootNode = await syntaxTree.GetRootAsync();
-        InterfaceDeclarationSyntax interfaceDeclaration = rootNode
+
+        InterfaceDeclarationSyntax? interfaceDeclaration = rootNode
             .DescendantNodes()
             .OfType<InterfaceDeclarationSyntax>()
             .FirstOrDefault();
+
+        ArgumentNullException.ThrowIfNull(interfaceDeclaration);
 
         foreach (Entity entity in entities)
         {
@@ -85,13 +87,12 @@ public interface IUnitOfWork : IAsyncDisposable, IDisposable
             }
 
             interfaceDeclaration = interfaceDeclaration
-                .AddMembers(GetProperty(interfaceDeclaration, entity));
+                .AddMembers(GetProperty(entity));
 
         }
-
-        rootNode = rootNode.ReplaceNode(
-            rootNode.DescendantNodes().OfType<InterfaceDeclarationSyntax>().FirstOrDefault(),
-            interfaceDeclaration);
+        InterfaceDeclarationSyntax? originalInterfaceDeclaration = rootNode.DescendantNodes().OfType<InterfaceDeclarationSyntax>().FirstOrDefault();
+        ArgumentNullException.ThrowIfNull(originalInterfaceDeclaration);
+        rootNode = rootNode.ReplaceNode(originalInterfaceDeclaration, interfaceDeclaration);
 
         Document newDocument = document.WithSyntaxRoot(rootNode.NormalizeWhitespace());
 
@@ -100,7 +101,7 @@ public interface IUnitOfWork : IAsyncDisposable, IDisposable
         return string.Empty;
     }
 
-    private static PropertyDeclarationSyntax GetProperty(InterfaceDeclarationSyntax? classDeclaration, Entity entity)
+    private static PropertyDeclarationSyntax GetProperty(Entity entity)
     {
         var property = SyntaxFactory.PropertyDeclaration(SyntaxFactory.ParseTypeName($"I{entity.Name}Repository"), $"{entity.Name}Repository")
                         .AddModifiers(SyntaxFactory.Token(SyntaxKind.PublicKeyword))

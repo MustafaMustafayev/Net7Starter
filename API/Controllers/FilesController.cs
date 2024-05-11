@@ -46,7 +46,7 @@ public class FilesController : Controller
         // check extension
         if (!Constants.AllowedFileExtensions.Contains(fileExtension))
         {
-            return BadRequest(new ErrorDataResult<string>(Messages.ThisFileTypeIsNotAllowed.Translate()));
+            return BadRequest(new ErrorDataResult<string>(EMessages.ThisFileTypeIsNotAllowed.Translate()));
         }
 
         var path = _utilService.GetEnvFolderPath(_utilService.GetFolderName(dto.Type));
@@ -66,10 +66,10 @@ public class FilesController : Controller
             dto);
         if (!result.Success)
         {
-            return BadRequest(new ErrorDataResult<string>(Messages.InvalidModel.Translate()));
+            return BadRequest(new ErrorDataResult<string>(EMessages.InvalidModel.Translate()));
         }
 
-        return Ok(new SuccessDataResult<string>(hashFileName, Messages.Success.Translate()));
+        return Ok(new SuccessDataResult<string>(hashFileName, EMessages.Success.Translate()));
     }
 
     [SwaggerOperation(Summary = "delete file")]
@@ -116,7 +116,7 @@ public class FilesController : Controller
 
         if (fileStream is null)
         {
-            return BadRequest(new ErrorResult(Messages.FileIsNotFound.Translate()));
+            return BadRequest(new ErrorResult(EMessages.FileIsNotFound.Translate()));
         }
 
         return File(fileStream, "image/png");
