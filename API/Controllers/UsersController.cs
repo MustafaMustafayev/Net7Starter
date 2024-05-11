@@ -78,7 +78,7 @@ public class UsersController : Controller
     [SwaggerOperation(Summary = "create user")]
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
     [HttpPost]
-    [ServiceFilter(typeof(LogActionFilter))]
+    [AllowAnonymous]
     public async Task<IActionResult> Add([FromBody] UserCreateRequestDto dto)
     {
         var response = await _userService.AddAsync(dto);
@@ -109,7 +109,6 @@ public class UsersController : Controller
     [SwaggerOperation(Summary = "upload profile file")]
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
     [HttpPost("profile")]
-    //[ServiceFilter(typeof(LogActionFilter))]
     public async Task<IActionResult> Upload (IFormFile file)
     {
         Guid userId = _utilService.GetUserIdFromToken().GetValueOrDefault() ;
@@ -119,8 +118,7 @@ public class UsersController : Controller
 
     [SwaggerOperation(Summary = "upload profile file by user id")]
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
-    [HttpPost("profile/{id}")]
-    //[ServiceFilter(typeof(LogActionFilter))]
+    [HttpPost("{id}/profile")]
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Upload([FromRoute] Guid id, IFormFile file)
     {
