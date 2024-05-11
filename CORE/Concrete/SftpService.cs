@@ -20,14 +20,20 @@ public class SftpService : ISftpService
 
     public List<DirectoryInformation> GetDirectoryInformation(string path)
     {
-        if (string.IsNullOrEmpty(path) || string.IsNullOrWhiteSpace(path)) path = string.Empty;
+        if (string.IsNullOrEmpty(path) || string.IsNullOrWhiteSpace(path))
+        {
+            path = string.Empty;
+        }
 
         var directoryInfos = new List<DirectoryInformation>();
         var connectionInfo = GetConnectionInfo();
         using (var sftp = new SftpClient(connectionInfo))
         {
             sftp.Connect();
-            if (!sftp.IsConnected) return directoryInfos.OrderBy(m => m.Name).ThenBy(m => !m.IsDirectory).ToList();
+            if (!sftp.IsConnected)
+            {
+                return directoryInfos.OrderBy(m => m.Name).ThenBy(m => !m.IsDirectory).ToList();
+            }
 
             var realPath = ("/" + path).Replace("//", "/");
             sftp.ChangeDirectory(realPath);
