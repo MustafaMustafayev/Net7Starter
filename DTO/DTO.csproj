@@ -8,6 +8,12 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <Compile Remove="Helper\**" />
+      <EmbeddedResource Remove="Helper\**" />
+      <None Remove="Helper\**" />
+    </ItemGroup>
+
+    <ItemGroup>
         <None Remove="StyleCop.Analyzers" />
         <None Remove="DTOs\CustomLoggingDTOs\" />
         <None Remove="DTOs\RoleDTOs\" />
@@ -32,8 +38,5 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Remove="First\FirstDtos.cs" />
-    </ItemGroup>
-    <ItemGroup>
-      <Folder Include="Helper\" />
     </ItemGroup>
 </Project>

@@ -1,13 +1,10 @@
 ﻿using API.Hubs;
 using BLL;
-using BLL.Concrete;
 using CORE.Abstract;
 using CORE.Concrete;
 using CORE.Config;
-using CORE.Logging;
 using DAL.ElasticSearch;
 using DAL.EntityFramework;
-using DAL.EntityFramework.Concrete;
 using DAL.EntityFramework.UnitOfWork;
 using DAL.MongoDb;
 using DTO.User;
@@ -34,11 +31,6 @@ namespace API.Containers;
 
 public static class DependencyContainer
 {
-    public static void RegisterLogger(this IServiceCollection services)
-    {
-        services.TryAddSingleton<ILoggerManager, LoggerManager>();
-    }
-
     public static void RegisterAuthentication(this IServiceCollection services, ConfigSettings config)
     {
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

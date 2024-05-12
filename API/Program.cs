@@ -16,12 +16,17 @@ using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Serilog;
 using System.Text.Json.Serialization;
 using WatchDog;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.RegisterLogger();
+//builder.Services.RegisterLogger();
+builder.Host.UseSerilog((context, configuration) =>
+{
+    configuration.ReadFrom.Configuration(context.Configuration);
+});
 
 var config = new ConfigSettings();
 
