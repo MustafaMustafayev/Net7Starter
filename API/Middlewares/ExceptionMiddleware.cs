@@ -35,7 +35,6 @@ public class ExceptionMiddleware(RequestDelegate next,
             {
                 SentrySdk.CaptureException(ex);
             }
-
             //  if (_env.IsDevelopment()) throw;
             await HandleExceptionAsync(httpContext);
         }
