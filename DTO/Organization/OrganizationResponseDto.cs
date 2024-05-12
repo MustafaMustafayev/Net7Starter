@@ -12,6 +12,6 @@ public record OrganizationResponseDto
     public string? PhoneNumber { get; set; }
     public string? Tin { get; set; }
     public string? Email { get; set; }
-    public string?  Rekvizit { get; set; }
+    public string? Rekvizit { get; set; }
     public FileResponseDto? LogoFile { get; set; }
 }

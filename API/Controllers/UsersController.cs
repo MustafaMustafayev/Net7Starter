@@ -169,7 +169,7 @@ public class UsersController(IUserService userService, IUtilService utilService,
     [HttpDelete("profile/{id}")]
     [ServiceFilter(typeof(LogActionFilter))]
     [Authorize(Roles = "Admin")]
-    public async Task<IActionResult> DeleteFile(Guid id)
+    public async Task<IActionResult> DeleteFile([FromRoute] Guid id)
     {
         var existFile = await _userService.GetProfileAsync(id);
 
