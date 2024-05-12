@@ -31,7 +31,7 @@ public class SftpService(ConfigSettings configSettings) : ISftpService
                 return [.. directoryInfos.OrderBy(m => m.Name).ThenBy(m => !m.IsDirectory)];
             }
 
-            var realPath = ("/" + path).Replace("//", "/");
+            var realPath = ("/" + path).Replace("//", "/", StringComparison.OrdinalIgnoreCase);
             sftp.ChangeDirectory(realPath);
             ICollection<ISftpFile> directories = sftp.ListDirectory(realPath).ToList();
             directoryInfos.AddRange(from sftpFile in directories
