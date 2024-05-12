@@ -18,7 +18,7 @@ public class IServiceBuilder : ISourceBuilder
                 && w.Options.BuildRepository)
             .ToList()
             .ForEach(model =>
-            SourceBuilder.Instance.AddSourceFile(Constants.IServicePath, $"I{model.Name}Service.cs",
+            SourceBuilder.Instance.AddSourceFile(Constants.I_SERVICE_PATH, $"I{model.Name}Service.cs",
                 BuildSourceText(model, null)));
     }
 
@@ -40,7 +40,6 @@ public class IServiceBuilder : ISourceBuilder
                        Task<IResult> UpdateAsync(Guid id, {entityName}UpdateRequestDto dto);
                        Task<IResult> SoftDeleteAsync(Guid id);
                    }
-
                    """;
 
         text = text.Replace("{entityName}", entity!.Name);

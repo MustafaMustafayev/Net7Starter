@@ -12,23 +12,18 @@ using ENTITIES.Entities;
 
 namespace BLL.Concrete;
 
-public class UserService : IUserService
+public class UserService(IUnitOfWork unitOfWork, IMapper mapper, IUtilService utilService) : IUserService
 {
-    private readonly IMapper _mapper;
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly IUtilService _utilService;
-
-    public UserService(IUnitOfWork unitOfWork, IMapper mapper, IUtilService utilService)
-    {
-        _unitOfWork = unitOfWork;
-        _mapper = mapper;
-        _utilService = utilService;
-    }
+    private readonly IMapper _mapper = mapper;
+    private readonly IUnitOfWork _unitOfWork = unitOfWork;
+    private readonly IUtilService _utilService = utilService;
 
     public async Task<IResult> AddAsync(UserCreateRequestDto dto)
     {
         if (await _unitOfWork.UserRepository.IsUserExistAsync(dto.Email, null))
-            return new ErrorResult(Messages.UserIsExist.Translate());
+        {
+            return new ErrorResult(EMessages.UserIsExist.Translate());
+        }
 
         dto = dto with
         {
@@ -44,7 +39,7 @@ public class UserService : IUserService
         await _unitOfWork.UserRepository.AddAsync(data);
         await _unitOfWork.CommitAsync();
 
-        return new SuccessResult(Messages.Success.Translate());
+        return new SuccessResult(EMessages.Success.Translate());
     }
 
     public async Task<IResult> SoftDeleteAsync(Guid id)
@@ -58,10 +53,10 @@ public class UserService : IUserService
 
         await _unitOfWork.CommitAsync();
 
-        return new SuccessResult(Messages.Success.Translate());
+        return new SuccessResult(EMessages.Success.Translate());
     }
 
-    public async Task<IResult> AddProfileAsync(Guid userId, string? file)
+    public async Task<IResult> AddProfileAsync(Guid userId, string? file = null)
     {
         var user = await _unitOfWork.UserRepository.GetAsNoTrackingAsync(u => u.Id == userId);
         user!.File = file;
@@ -75,19 +70,21 @@ public class UserService : IUserService
     public async Task<IDataResult<IEnumerable<UserResponseDto>>> GetAsync()
     {
         var datas = await _unitOfWork.UserRepository.GetListAsync();
-        return new SuccessDataResult<IEnumerable<UserResponseDto>>(_mapper.Map<IEnumerable<UserResponseDto>>(datas), Messages.Success.Translate());
+        return new SuccessDataResult<IEnumerable<UserResponseDto>>(_mapper.Map<IEnumerable<UserResponseDto>>(datas), EMessages.Success.Translate());
     }
 
     public async Task<IDataResult<UserByIdResponseDto>> GetAsync(Guid id)
     {
         var data = _mapper.Map<UserByIdResponseDto>(await _unitOfWork.UserRepository.GetAsync(m => m.Id == id));
-        return new SuccessDataResult<UserByIdResponseDto>(data, Messages.Success.Translate());
+        return new SuccessDataResult<UserByIdResponseDto>(data, EMessages.Success.Translate());
     }
 
     public async Task<IResult> UpdateAsync(Guid id, UserUpdateRequestDto dto)
     {
         if (await _unitOfWork.UserRepository.IsUserExistAsync(dto.Email, id))
-            return new ErrorResult(Messages.UserIsExist.Translate());
+        {
+            return new ErrorResult(EMessages.UserIsExist.Translate());
+        }
 
         dto = dto with
         {
@@ -97,7 +94,10 @@ public class UserService : IUserService
         };
 
         var old = await _unitOfWork.UserRepository.GetAsNoTrackingAsync(u => u.Id == id);
-        if (old is null) return new ErrorResult(Messages.UserIsNotExist.Translate());
+        if (old is null)
+        {
+            return new ErrorResult(EMessages.UserIsNotExist.Translate());
+        }
 
         var data = _mapper.Map<User>(dto);
 
@@ -107,7 +107,7 @@ public class UserService : IUserService
         await _unitOfWork.UserRepository.UpdateUserAsync(data);
         await _unitOfWork.CommitAsync();
 
-        return new SuccessResult(Messages.Success.Translate());
+        return new SuccessResult(EMessages.Success.Translate());
     }
 
     public async Task<IDataResult<PaginatedList<UserResponseDto>>> GetAsPaginatedListAsync()
@@ -123,15 +123,17 @@ public class UserService : IUserService
             response.TotalRecordCount, response.PageIndex, response.TotalPageCount);
 
         return new SuccessDataResult<PaginatedList<UserResponseDto>>(responseDto,
-            Messages.Success.Translate());
+            EMessages.Success.Translate());
     }
 
     public async Task<IDataResult<string>> GetProfileAsync(Guid userId)
     {
         var user = await _unitOfWork.UserRepository.GetAsNoTrackingAsync(u => u.Id == userId);
+        if (user is { File: not null })
+        {
+            return new SuccessDataResult<string>(user.File, EMessages.Success.Translate());
 
-
-        return new SuccessDataResult<string>(user.File, Messages.Success.Translate());
+        }
+        return new SuccessDataResult<string>(EMessages.FileIsNotFound.Translate());
     }
-
 }

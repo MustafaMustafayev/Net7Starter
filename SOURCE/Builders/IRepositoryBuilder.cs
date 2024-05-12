@@ -14,7 +14,7 @@ public class IRepositoryBuilder : ISourceBuilder
             .Where(w => w.Options.BuildRepository)
             .ToList()
             .ForEach(model =>
-                SourceBuilder.Instance.AddSourceFile(Constants.IRepositoryPath, $"I{model.Name}Repository.cs",
+                SourceBuilder.Instance.AddSourceFile(Constants.I_REPOSITORY_PATH, $"I{model.Name}Repository.cs",
                     BuildSourceText(model, null)));
     }
 
@@ -29,7 +29,6 @@ public class IRepositoryBuilder : ISourceBuilder
                    public interface I{entityName}Repository : IGenericRepository<{entityName}>
                    {
                    }
-
                    """;
         text = text.Replace("{entityName}", entity!.Name);
         text = text.Replace("{entityPath}", !string.IsNullOrEmpty(entity!.Path) ? $".{entity.Path}" : string.Empty);

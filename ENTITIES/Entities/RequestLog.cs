@@ -1,13 +1,11 @@
 ﻿using ENTITIES.Entities.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ENTITIES.Entities;
 
 public class RequestLog : IEntity
 {
-    [Key] public Guid RequestLogId { get; set; }
-
+    public Guid Id { get; set; }
     public string? TraceIdentifier { get; set; }
 
     public string? ClientIp { get; set; }

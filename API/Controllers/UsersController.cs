@@ -19,17 +19,11 @@ namespace API.Controllers;
 [Route("api/[controller]")]
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 [ValidateToken]
-public class UsersController : Controller
+public class UsersController(IUserService userService, IUtilService utilService, IAuthService authService) : Controller
 {
-    private readonly IUserService _userService;
-    private readonly IUtilService _utilService;
-    private readonly IAuthService _authService;
-    public UsersController(IUserService userService, IUtilService utilService, IAuthService authService)
-    {
-        _userService = userService;
-        _utilService = utilService;
-        _authService = authService;
-    }
+    private readonly IUserService _userService = userService;
+    private readonly IUtilService _utilService = utilService;
+    private readonly IAuthService _authService = authService;
 
     [SwaggerOperation(Summary = "get users as paginated list")]
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IDataResult<List<UserResponseDto>>))]
@@ -59,7 +53,9 @@ public class UsersController : Controller
     {
         var userId = _utilService.GetUserIdFromToken();
         if (userId is null)
-            return Unauthorized(new ErrorResult(Messages.CanNotFoundUserIdInYourAccessToken.Translate()));
+        {
+            return Unauthorized(new ErrorResult(EMessages.CanNotFoundUserIdInYourAccessToken.Translate()));
+        }
 
         var response = await _userService.GetAsync(userId.Value);
         return Ok(response);
@@ -78,7 +74,6 @@ public class UsersController : Controller
     [SwaggerOperation(Summary = "create user")]
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
     [HttpPost]
-    [ServiceFilter(typeof(LogActionFilter))]
     public async Task<IActionResult> Add([FromBody] UserCreateRequestDto dto)
     {
         var response = await _userService.AddAsync(dto);
@@ -109,18 +104,16 @@ public class UsersController : Controller
     [SwaggerOperation(Summary = "upload profile file")]
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
     [HttpPost("profile")]
-    //[ServiceFilter(typeof(LogActionFilter))]
-    public async Task<IActionResult> Upload (IFormFile file)
+    public async Task<IActionResult> Upload(IFormFile file)
     {
-        Guid userId = _utilService.GetUserIdFromToken().GetValueOrDefault() ;
-        
+        Guid userId = _utilService.GetUserIdFromToken().GetValueOrDefault();
+
         return await Upload(userId, file);
     }
 
     [SwaggerOperation(Summary = "upload profile file by user id")]
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
-    [HttpPost("profile/{id}")]
-    //[ServiceFilter(typeof(LogActionFilter))]
+    [HttpPost("{id}/profile")]
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Upload([FromRoute] Guid id, IFormFile file)
     {
@@ -128,15 +121,16 @@ public class UsersController : Controller
 
         if (existFile is null || !existFile.Success)
         {
-            return BadRequest(new ErrorDataResult<string>(Messages.UserIsNotExist.Translate()));
+            return BadRequest(new ErrorDataResult<string>(EMessages.UserIsNotExist.Translate()));
         }
 
-        string fileName = System.IO.Path.GetFileName(file.FileName);
         string fileExtension = System.IO.Path.GetExtension(file.FileName);
         Guid fileNewName = Guid.NewGuid();
 
         if (!Constants.AllowedImageExtensions.Contains(fileExtension))
-            return BadRequest(new ErrorDataResult<string>(Messages.ThisFileTypeIsNotAllowed.Translate()));
+        {
+            return BadRequest(new ErrorDataResult<string>(EMessages.ThisFileTypeIsNotAllowed.Translate()));
+        }
 
         var path = _utilService.GetEnvFolderPath(_utilService.GetFolderName(EFileType.UserProfile));
         await FileHelper.WriteFile(file, $"{fileNewName}{fileExtension}", path);
@@ -151,9 +145,9 @@ public class UsersController : Controller
             }
         }
 
-        await _userService.AddProfileAsync(id,$"{fileNewName}{fileExtension}");       
+        await _userService.AddProfileAsync(id, $"{fileNewName}{fileExtension}");
 
-        return Ok(new SuccessResult(Messages.Success.Translate()));
+        return Ok(new SuccessResult(EMessages.Success.Translate()));
     }
 
     [SwaggerOperation(Summary = "upload profile file")]
@@ -171,19 +165,18 @@ public class UsersController : Controller
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
     [HttpDelete("profile/{id}")]
     [ServiceFilter(typeof(LogActionFilter))]
-    [Authorize(Roles = "Admin")]
-    public async Task<IActionResult> DeleteFile(Guid id)
+    public async Task<IActionResult> DeleteFile([FromRoute] Guid id)
     {
         var existFile = await _userService.GetProfileAsync(id);
 
         if (existFile is null || !existFile.Success)
         {
-            return BadRequest(new ErrorDataResult<string>(Messages.UserIsNotExist.Translate()));
+            return BadRequest(new ErrorDataResult<string>(EMessages.UserIsNotExist.Translate()));
         }
 
         if (existFile!.Data is null)
         {
-            return Ok(new SuccessResult(Messages.Success.Translate()));
+            return Ok(new SuccessResult(EMessages.Success.Translate()));
         }
 
         var path = _utilService.GetEnvFolderPath(_utilService.GetFolderName(EFileType.UserProfile));
@@ -194,8 +187,8 @@ public class UsersController : Controller
             System.IO.File.Delete(fullPath);
         }
 
-        _userService.AddProfileAsync(id, null);
+        await _userService.AddProfileAsync(id);
 
-        return Ok(new SuccessResult(Messages.Success.Translate()));
+        return Ok(new SuccessResult(EMessages.Success.Translate()));
     }
 }

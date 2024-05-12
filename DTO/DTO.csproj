@@ -2,11 +2,16 @@
 
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
-        <CodeAnalysisRuleSet>../settings.ruleset</CodeAnalysisRuleSet>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <LangVersion>default</LangVersion>
     </PropertyGroup>
+
+    <ItemGroup>
+      <Compile Remove="Helper\**" />
+      <EmbeddedResource Remove="Helper\**" />
+      <None Remove="Helper\**" />
+    </ItemGroup>
 
     <ItemGroup>
         <None Remove="StyleCop.Analyzers" />
@@ -33,8 +38,5 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Remove="First\FirstDtos.cs" />
-    </ItemGroup>
-    <ItemGroup>
-      <Folder Include="Helper\" />
     </ItemGroup>
 </Project>

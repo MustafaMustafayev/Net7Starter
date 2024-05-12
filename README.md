@@ -1,11 +1,14 @@
-# Net7ApiStarter
+# NetAPIStarter
 
 ### Code contributors
 
 ![Alt](https://repobeats.axiom.co/api/embed/f8c50b5c55ce520d8198a81cb6f63150cec32209.svg "Repobeats analytics image")
 
-> .NET 7.0 Web Api project with Entity framework 6 code first approach. In this template n-tier architecture, repository and unit of work pattern implemented,
+> .NET Web Api project with Entity framework 8 code first approach. In this template n-tier architecture, repository and unit of work pattern implemented,
 > database based logging implemented using action filters, request profiling added using MiniProfiler, unhandled exception handled by sentry,
+> source code generator implemented, this mean is that all crud operaions (paginatedlist, get, getbyid, add, update, delete, softdelete) generated automatically in a 2 seconds after creating entity,
+> watcdog implemented,
+> token black list implemented, custom validate token attribute added,
 > response security headers added, audit properties implemented by overriding SaveChangesAsync method of DbContext, docker-compose yaml written,
 > authentication and authorization implemented using custom middleware, generic CRUD operations implemented, automapper configured,
 > simple one to many role and permission logic implemented,
@@ -23,6 +26,7 @@
 > load test implemented,
 > Mediatr seperated as a independent layer,
 > Elasticsearch implemented,
+> .editorconfig implemented to the best conventions rules,
 > MongoDb implemented.
 
 ## Structure

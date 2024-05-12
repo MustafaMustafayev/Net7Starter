@@ -9,22 +9,15 @@ using File = ENTITIES.Entities.File;
 
 namespace BLL.Concrete;
 
-public class FileService : IFileService
+public class FileService(IUnitOfWork unitOfWork, IMapper mapper, IUserService userService) : IFileService
 {
-    private readonly IMapper _mapper;
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly IUserService _userService;
-
-    public FileService(IUnitOfWork unitOfWork, IMapper mapper, IUserService userService)
-    {
-        _unitOfWork = unitOfWork;
-        _mapper = mapper;
-        _userService = userService;
-    }
+    private readonly IMapper _mapper = mapper;
+    private readonly IUnitOfWork _unitOfWork = unitOfWork;
+    private readonly IUserService _userService = userService;
 
     public async Task<IResult> AddFileAsync(FileCreateRequestDto dto, FileUploadRequestDto requestDto)
     {
-        var fileId = await AddAsync(dto);
+        await AddAsync(dto);
 
         switch (dto.Type)
         {
@@ -39,7 +32,7 @@ public class FileService : IFileService
                 break;
         }
 
-        return new SuccessResult(Messages.Success.Translate());
+        return new SuccessResult(EMessages.Success.Translate());
     }
 
     public async Task<IResult> RemoveFileAsync(FileDeleteRequestDto dto)
@@ -56,14 +49,14 @@ public class FileService : IFileService
                 break;
         }
 
-        return new SuccessResult(Messages.Success.Translate());
+        return new SuccessResult(EMessages.Success.Translate());
     }
 
     public async Task<IDataResult<FileResponseDto>> GetAsync(string hashName)
     {
         var data = _mapper.Map<FileResponseDto>(await _unitOfWork.FileRepository.GetAsync(m => m.HashName == hashName));
 
-        return new SuccessDataResult<FileResponseDto>(data, Messages.Success.Translate());
+        return new SuccessDataResult<FileResponseDto>(data, EMessages.Success.Translate());
     }
 
     private async Task<IDataResult<Guid>> AddAsync(FileCreateRequestDto dto)
@@ -73,7 +66,7 @@ public class FileService : IFileService
         var added = await _unitOfWork.FileRepository.AddAsync(data);
         await _unitOfWork.CommitAsync();
 
-        return new SuccessDataResult<Guid>(added.Id, Messages.Success.Translate());
+        return new SuccessDataResult<Guid>(added.Id, EMessages.Success.Translate());
     }
 
     private async Task<IResult> SoftDeleteAsync(string hashName)
@@ -83,6 +76,6 @@ public class FileService : IFileService
         _unitOfWork.FileRepository.SoftDelete(data!);
         await _unitOfWork.CommitAsync();
 
-        return new SuccessResult(Messages.Success.Translate());
+        return new SuccessResult(EMessages.Success.Translate());
     }
 }

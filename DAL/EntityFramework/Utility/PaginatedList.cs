@@ -30,9 +30,13 @@ public class PaginatedList<T> : PaginationInfo
         var count = await source.CountAsync();
         List<T> items;
         if (pageIndex != 0)
+        {
             items = await source.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+        }
         else
+        {
             items = await source.ToListAsync();
+        }
 
         var response = new PaginatedList<T>(items, count, pageIndex, pageSize);
         return response;

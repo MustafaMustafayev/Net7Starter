@@ -17,7 +17,7 @@ public interface IUserService
     Task<IResult> UpdateAsync(Guid id, UserUpdateRequestDto dto);
 
     Task<IResult> SoftDeleteAsync(Guid id);
-    Task<IResult> AddProfileAsync(Guid userId, string file);
+    Task<IResult> AddProfileAsync(Guid userId, string? file = null);
     Task<IDataResult<string>> GetProfileAsync(Guid userId);
 
 }

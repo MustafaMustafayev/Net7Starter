@@ -33,7 +33,11 @@ public class UtilService : IUtilService
     public Guid? GetUserIdFromToken()
     {
         var token = GetJwtSecurityToken();
-        if (token == null) return null;
+        if (token == null)
+        {
+            return null;
+        }
+
         var userId = Decrypt(token.Claims.First(c => c.Type == _config.AuthSettings.TokenUserIdKey).Value);
         return Guid.Parse(userId);
     }
@@ -41,11 +45,17 @@ public class UtilService : IUtilService
     public Guid? GetCompanyIdFromToken()
     {
         var token = GetJwtSecurityToken();
-        if (token is null) return null;
+        if (token is null)
+        {
+            return null;
+        }
 
         var companyIdClaim = token.Claims.First(c => c.Type == _config.AuthSettings.TokenCompanyIdKey);
 
-        if (companyIdClaim is null || string.IsNullOrEmpty(companyIdClaim.Value)) return null;
+        if (companyIdClaim is null || string.IsNullOrEmpty(companyIdClaim.Value))
+        {
+            return null;
+        }
 
         return Guid.Parse(companyIdClaim.Value);
     }
@@ -54,7 +64,10 @@ public class UtilService : IUtilService
     {
         var tokenString = GetTokenString();
 
-        if (string.IsNullOrEmpty(tokenString) || tokenString.Length < 7) return false;
+        if (string.IsNullOrEmpty(tokenString) || tokenString.Length < 7)
+        {
+            return false;
+        }
 
         var tokenHandler = new JwtSecurityTokenHandler();
         var secretKey = Encoding.ASCII.GetBytes(_config.AuthSettings.SecretKey);
@@ -89,7 +102,10 @@ public class UtilService : IUtilService
 
     public string TrimToken(string? jwtToken)
     {
-        if (string.IsNullOrEmpty(jwtToken) || jwtToken.Length < 7) throw new Exception();
+        if (string.IsNullOrEmpty(jwtToken) || jwtToken.Length < 7)
+        {
+            throw new Exception();
+        }
 
         return jwtToken[7..];
     }
@@ -169,11 +185,17 @@ public class UtilService : IUtilService
     public string? GetRoleFromToken(string? tokenString)
     {
         var token = GetJwtSecurityToken();
-        if (token == null) return null;
+        if (token == null)
+        {
+            return null;
+        }
 
         var roleIdClaim = token.Claims.First(c => c.Type == _config.AuthSettings.Role);
 
-        if (roleIdClaim is null || string.IsNullOrEmpty(roleIdClaim.Value)) return null;
+        if (roleIdClaim is null || string.IsNullOrEmpty(roleIdClaim.Value))
+        {
+            return null;
+        }
 
         return roleIdClaim.Value;
     }
@@ -197,7 +219,11 @@ public class UtilService : IUtilService
     {
         var tokenString = GetTokenString();
 
-        if (string.IsNullOrEmpty(tokenString)) return null;
+        if (string.IsNullOrEmpty(tokenString))
+        {
+            return null;
+        }
+
         return !tokenString.Contains($"{_config.AuthSettings.TokenPrefix} ")
             ? null
             : new JwtSecurityToken(tokenString[7..]);

@@ -18,9 +18,8 @@ public class DtosBuilder : ISourceBuilder
 
     public DtosBuilder()
     {
-        EntityProjectPath = Path.Combine(
-            Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.Parent.ToString(),
-            @"ENTITIES\ENTITIES.csproj");
+        string rootDirectory = Directory.GetParent(Environment.CurrentDirectory)?.Parent?.Parent?.Parent?.ToString() ?? "";
+        EntityProjectPath = Path.Combine(rootDirectory, @"ENTITIES\ENTITIES.csproj");
     }
     public void BuildSourceFile(List<Entity> entities)
     {
@@ -28,25 +27,25 @@ public class DtosBuilder : ISourceBuilder
         //    .AddSourceFile(Constants.DtoPath.Replace("{entityName}", model.Name),
         //        $"{model.Name}Dtos.cs", BuildSourceText(model, null)));
         entities
-            .Where(w=>w.Options.BuildDto)
+            .Where(w => w.Options.BuildDto)
             .ToList()
             .ForEach(entity =>
             {
                 string properties = GetProperties(entity).Result;
                 SourceBuilder.Instance.AddSourceFile(
-                    Constants.DtoPath.Replace("{entityName}", entity.Name),
+                    Constants.DTO_PATH.Replace("{entityName}", entity.Name),
                     $"{entity.Name}CreateRequestDto.cs", GenerateContent(entity.Name, $"{entity.Name}CreateRequestDto", properties));
 
                 SourceBuilder.Instance.AddSourceFile(
-                    Constants.DtoPath.Replace("{entityName}", entity.Name),
+                    Constants.DTO_PATH.Replace("{entityName}", entity.Name),
                     $"{entity.Name}UpdateRequestDto.cs", GenerateContent(entity.Name, $"{entity.Name}UpdateRequestDto", properties));
 
                 SourceBuilder.Instance.AddSourceFile(
-                    Constants.DtoPath.Replace("{entityName}", entity.Name),
+                    Constants.DTO_PATH.Replace("{entityName}", entity.Name),
                     $"{entity.Name}ResponseDto.cs", GenerateContent(entity.Name, $"{entity.Name}ResponseDto", properties));
 
                 SourceBuilder.Instance.AddSourceFile(
-                    Constants.DtoPath.Replace("{entityName}", entity.Name),
+                    Constants.DTO_PATH.Replace("{entityName}", entity.Name),
                     $"{entity.Name}ByIdResponseDto.cs", GenerateContent(entity.Name, $"{entity.Name}ByIdResponseDto", properties));
             });
     }
@@ -54,7 +53,7 @@ public class DtosBuilder : ISourceBuilder
     private async Task<string> GetProperties(Entity entity)
     {
         string fullNamespace = RootNamespace + (!string.IsNullOrEmpty(entity!.Path) ? $".{entity.Path}" : string.Empty);
-        StringBuilder result = new StringBuilder();
+        StringBuilder result = new();
         //if (!MSBuildLocator.IsRegistered)
         //{
         //    var instances = MSBuildLocator.QueryVisualStudioInstances().ToArray();
@@ -72,15 +71,21 @@ public class DtosBuilder : ISourceBuilder
             Project project = await workspace.OpenProjectAsync(EntityProjectPath);
             Compilation? compilation = await project.GetCompilationAsync();
 
-            if (compilation is null) return result.ToString();
+            if (compilation is null)
+            {
+                return result.ToString();
+            }
 
             INamedTypeSymbol? classSymbol = compilation.GetTypeByMetadataName(fullNamespace + "." + entity.Name);
-            if (classSymbol is null) return result.ToString();
+            if (classSymbol is null)
+            {
+                return result.ToString();
+            }
 
             GetClassProperties(result, classSymbol);
 
-            if(
-                classSymbol.BaseType.ContainingNamespace.ToDisplayString().StartsWith("ENTITIES")
+            if (classSymbol is { BaseType: not null }
+                && classSymbol.BaseType.ContainingNamespace.ToDisplayString().StartsWith("ENTITIES")
                 && !classSymbol.BaseType.Name.Contains("Auditable"))
             {
                 GetClassProperties(result, classSymbol.BaseType);
@@ -89,7 +94,7 @@ public class DtosBuilder : ISourceBuilder
         return result.ToString();
     }
 
-    private static void GetClassProperties(StringBuilder result, INamedTypeSymbol? classSymbol)
+    private static void GetClassProperties(StringBuilder result, INamedTypeSymbol classSymbol)
     {
         List<ISymbol> properties = classSymbol.GetMembers().Where(w => w.Kind == SymbolKind.Property).ToList();
 
@@ -122,7 +127,7 @@ public class DtosBuilder : ISourceBuilder
         }
     }
 
-    private string GenerateContent(string name, string className, string properties)
+    private static string GenerateContent(string name, string className, string properties)
     {
         var text = """
                    namespace DTO.{0};
@@ -146,11 +151,9 @@ public class DtosBuilder : ISourceBuilder
                    public record {entityName}UpdateRequestDto();
                    public record {entityName}ResponseDto(Guid Id);
                    public record {entityName}ByIdResponseDto(Guid Id);
-
                    """;
 
         text = text.Replace("{entityName}", entity!.Name);
         return text;
     }
-
 }

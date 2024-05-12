@@ -30,7 +30,7 @@ public class PermissionService : IPermissionService
         await _unitOfWork.PermissionRepository.AddAsync(data);
         await _unitOfWork.CommitAsync();
 
-        return new SuccessResult(Messages.Success.Translate());
+        return new SuccessResult(EMessages.Success.Translate());
     }
 
     public async Task<IResult> SoftDeleteAsync(Guid id)
@@ -39,7 +39,7 @@ public class PermissionService : IPermissionService
         _unitOfWork.PermissionRepository.SoftDelete(data!);
         await _unitOfWork.CommitAsync();
 
-        return new SuccessResult(Messages.Success.Translate());
+        return new SuccessResult(EMessages.Success.Translate());
     }
 
     public async Task<IDataResult<PaginatedList<PermissionResponseDto>>> GetAsPaginatedListAsync()
@@ -50,14 +50,14 @@ public class PermissionService : IPermissionService
 
         var responseDto = new PaginatedList<PermissionResponseDto>(_mapper.Map<List<PermissionResponseDto>>(response.Datas), response.TotalRecordCount, response.PageIndex, response.TotalPageCount);
 
-        return new SuccessDataResult<PaginatedList<PermissionResponseDto>>(responseDto, Messages.Success.Translate());
+        return new SuccessDataResult<PaginatedList<PermissionResponseDto>>(responseDto, EMessages.Success.Translate());
     }
 
     public async Task<IDataResult<IEnumerable<PermissionResponseDto>>> GetAsync()
     {
         var datas = _mapper.Map<IEnumerable<PermissionResponseDto>>(await _unitOfWork.PermissionRepository.GetListAsync());
 
-        return new SuccessDataResult<IEnumerable<PermissionResponseDto>>(datas, Messages.Success.Translate());
+        return new SuccessDataResult<IEnumerable<PermissionResponseDto>>(datas, EMessages.Success.Translate());
 
     }
 
@@ -65,7 +65,7 @@ public class PermissionService : IPermissionService
     {
         var datas = _mapper.Map<PermissionByIdResponseDto>(await _unitOfWork.PermissionRepository.GetAsync(m => m.Id == id));
 
-        return new SuccessDataResult<PermissionByIdResponseDto>(datas, Messages.Success.Translate());
+        return new SuccessDataResult<PermissionByIdResponseDto>(datas, EMessages.Success.Translate());
     }
 
     public async Task<IResult> UpdateAsync(Guid permissionId, PermissionUpdateRequestDto dto)
@@ -76,6 +76,6 @@ public class PermissionService : IPermissionService
         _unitOfWork.PermissionRepository.Update(data);
         await _unitOfWork.CommitAsync();
 
-        return new SuccessResult(Messages.Success.Translate());
+        return new SuccessResult(EMessages.Success.Translate());
     }
 }

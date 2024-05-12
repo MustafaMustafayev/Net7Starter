@@ -12,6 +12,7 @@
         <PackageReference Include="Microsoft.CodeAnalysis" Version="4.9.2" />
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.9.2" />
         <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.MSBuild" Version="4.9.2" />
+        <PackageReference Include="Microsoft.Extensions.Primitives" Version="8.0.0" />
         <PackageReference Include="Refitter.Core" Version="0.8.2" />
     </ItemGroup>
 

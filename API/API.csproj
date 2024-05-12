@@ -2,7 +2,6 @@
 
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
-        <CodeAnalysisRuleSet>../settings.ruleset</CodeAnalysisRuleSet>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <DockerComposeProjectPath>../docker-compose.dcproj</DockerComposeProjectPath>
@@ -29,24 +28,33 @@
         <PackageReference Include="HotChocolate.AspNetCore" Version="13.5.1" />
         <PackageReference Include="HotChocolate.Data.EntityFramework" Version="13.5.1" />
         <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.1.0" />
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp.CodeStyle" Version="4.9.2">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.3">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
+        <PackageReference Include="Microsoft.Extensions.Primitives" Version="8.0.0" />
         <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.4" />
         <PackageReference Include="MiniProfiler.EntityFrameworkCore" Version="4.3.8" />
         <PackageReference Include="MongoDB.Driver" Version="2.22.0" />
-        <PackageReference Include="NLog.Database" Version="5.2.5" />
         <PackageReference Include="Redis.OM" Version="0.5.3" />
         <PackageReference Include="Refit" Version="7.0.0" />
         <PackageReference Include="Refit.HttpClientFactory" Version="7.0.0" />
         <PackageReference Include="Scrutor" Version="4.2.2" />
         <PackageReference Include="Sentry.AspNetCore" Version="3.40.1" />
+        <PackageReference Include="Serilog" Version="3.1.1" />
+        <PackageReference Include="Serilog.AspNetCore" Version="8.0.1" />
+        <PackageReference Include="Serilog.Formatting.Compact" Version="2.0.0" />
+        <PackageReference Include="Serilog.Sinks.Console" Version="5.0.1" />
+        <PackageReference Include="Serilog.Sinks.Elasticsearch" Version="10.0.0" />
+        <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
         <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.5.0" />
         <PackageReference Include="MiniProfiler.AspNetCore.Mvc" Version="4.3.8" />
         <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
-        <PackageReference Include="WatchDog.NET" Version="1.4.10" />
     </ItemGroup>
 
     <ItemGroup>

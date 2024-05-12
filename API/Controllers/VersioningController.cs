@@ -15,10 +15,10 @@ public class VersioningController : ControllerBase
         return Ok(new SuccessResult());
     }
 
-    [MapToApiVersion("2.0")]
-    [HttpGet("{id}")]
-    public IActionResult Get([FromRoute] int id)
-    {
-        return Ok(new SuccessResult());
-    }
+    //[MapToApiVersion("2.0")]
+    //[HttpGet("{id}")]
+    //public IActionResult Get([FromRoute] int id)
+    //{
+    //    return Ok(new SuccessResult());
+    //}
 }

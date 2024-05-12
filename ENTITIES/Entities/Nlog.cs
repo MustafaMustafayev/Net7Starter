@@ -4,7 +4,7 @@ namespace ENTITIES.Entities;
 
 public class Nlog : IEntity
 {
-    public int NlogId { get; set; }
+    public Guid Id { get; set; }
 
     public string? Application { get; set; }
 

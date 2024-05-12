@@ -24,6 +24,6 @@ public class DeleteOrganizationHandler : IRequestHandler<DeleteOrganizationComma
 
         await _unitOfWork.CommitAsync();
 
-        return new SuccessResult(Messages.Success.Translate());
+        return new SuccessResult(EMessages.Success.Translate());
     }
 }

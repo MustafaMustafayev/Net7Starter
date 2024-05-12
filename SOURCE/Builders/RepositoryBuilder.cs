@@ -12,7 +12,7 @@ public class RepositoryBuilder : ISourceBuilder
         entities
             .Where(w => w.Options.BuildRepository)
             .ToList().ForEach(model =>
-                SourceBuilder.Instance.AddSourceFile(Constants.RepositoryPath, $"{model.Name}Repository.cs",
+                SourceBuilder.Instance.AddSourceFile(Constants.REPOSITORY_PATH, $"{model.Name}Repository.cs",
                     BuildSourceText(model, null)));
     }
 
@@ -36,7 +36,6 @@ public class RepositoryBuilder : ISourceBuilder
                            _dataContext = dataContext;
                        }
                    }
-
                    """;
         text = text.Replace("{entityName}", entity!.Name);
         text = text.Replace("{entityPath}", !string.IsNullOrEmpty(entity!.Path) ? $".{entity.Path}" : string.Empty);

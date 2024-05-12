@@ -48,22 +48,24 @@ public class LogActionFilter : IAsyncActionFilter
 
         await next();
 
-        var requestLog = new RequestLogDto() { 
-            TraceIdentifier = traceIdentifier, 
+        var requestLog = new RequestLogDto()
+        {
+            TraceIdentifier = traceIdentifier,
             ClientIp = clientIp!,
             Uri = uri,
-            RequestDate = DateTime.Now, 
-            Payload = bodyContent, 
+            RequestDate = DateTime.Now,
+            Payload = bodyContent,
             Method = httpContext.Request.Method,
-            Token = token, 
+            Token = token,
             UserId = userId,
-            ResponseLog = new ResponseLogDto() { 
+            ResponseLog = new ResponseLogDto()
+            {
                 TraceIdentifier = traceIdentifier,
-                ResponseDate = DateTime.Now, 
+                ResponseDate = DateTime.Now,
                 StatusCode = httpContext.Response.StatusCode.ToString(),
                 Token = token,
-                UserId = userId 
-            } 
+                UserId = userId
+            }
         };
 
         await _loggingService.AddLogAsync(requestLog);

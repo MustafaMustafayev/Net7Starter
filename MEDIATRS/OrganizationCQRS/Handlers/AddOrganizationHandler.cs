@@ -27,6 +27,6 @@ public class AddOrganizationHandler : IRequestHandler<AddOrganizationCommand, IR
 
         await _unitOfWork.CommitAsync();
 
-        return new SuccessResult(Messages.Success.Translate());
+        return new SuccessResult(EMessages.Success.Translate());
     }
 }

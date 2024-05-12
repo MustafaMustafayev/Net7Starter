@@ -2,8 +2,8 @@
 
 public record UserUpdateRequestDto()
 {
-    public string Email { get; set; }
-    public string ContactNumber { get; set; }
-    public string Username { get; set; }
+    public required string Email { get; set; }
+    public required string ContactNumber { get; set; }
+    public required string Username { get; set; }
     public Guid? RoleId { get; set; }
 }

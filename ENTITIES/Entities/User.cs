@@ -4,6 +4,7 @@ namespace ENTITIES.Entities;
 
 public class User : Auditable, IEntity
 {
+    public Guid Id { get; set; }
     public required string Username { get; set; }
     public required string Email { get; set; }
     public required string ContactNumber { get; set; }
@@ -13,5 +14,4 @@ public class User : Auditable, IEntity
     public Guid? RoleId { get; set; }
     public virtual Role? Role { get; set; }
     public string? File { get; set; }
-
 }
