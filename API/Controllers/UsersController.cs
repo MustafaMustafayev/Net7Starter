@@ -106,7 +106,7 @@ public class UsersController(IUserService userService, IUtilService utilService,
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
     [HttpPost("profile")]
     //[ServiceFilter(typeof(LogActionFilter))]
-    public async Task<IActionResult> Upload (IFormFile file)
+    public async Task<IActionResult> Upload(IFormFile file)
     {
         Guid userId = _utilService.GetUserIdFromToken().GetValueOrDefault();
 

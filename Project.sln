@@ -25,7 +25,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NBOOMER", "NBOOMER\NBOOMER.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "REFITS", "REFITS\REFITS.csproj", "{D57C93DB-E24B-477B-9A71-8D39AB06C710}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{79988D17-A867-4171-954E-2549B2ACA400}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C36DA7A2-11EB-4EEE-A66A-A3631776843E}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 	EndProjectSection
