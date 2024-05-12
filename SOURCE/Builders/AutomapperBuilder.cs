@@ -10,10 +10,10 @@ public class AutomapperBuilder : ISourceBuilder
     public void BuildSourceFile(List<Entity> entities)
     {
         entities
-            .Where(w=>w.Options.BuildDto)
+            .Where(w => w.Options.BuildDto)
             .ToList()
             .ForEach(model =>
-            SourceBuilder.Instance.AddSourceFile(Constants.AutomapperPath, $"{model.Name}Mapper.cs",
+            SourceBuilder.Instance.AddSourceFile(Constants.AUTOMAPPER_PATH, $"{model.Name}Mapper.cs",
                 BuildSourceText(model, null)));
     }
 

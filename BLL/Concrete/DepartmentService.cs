@@ -2,25 +2,19 @@ using AutoMapper;
 using BLL.Abstract;
 using CORE.Abstract;
 using CORE.Localization;
-using DTO.Responses;
-using DTO.Department;
-using ENTITIES.Entities.Structures;
-using DAL.EntityFramework.Utility;
 using DAL.EntityFramework.UnitOfWork;
+using DAL.EntityFramework.Utility;
+using DTO.Department;
+using DTO.Responses;
+using ENTITIES.Entities.Structures;
 
 namespace BLL.Concrete;
 
-public class DepartmentService : IDepartmentService
+public class DepartmentService(IMapper mapper, IUnitOfWork unitOfWork, IUtilService utilService) : IDepartmentService
 {
-    private readonly IMapper _mapper;
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly IUtilService _utilService;
-    public DepartmentService(IMapper mapper, IUnitOfWork unitOfWork, IUtilService utilService)
-    {
-        _mapper = mapper;
-        _unitOfWork = unitOfWork;
-        _utilService = utilService;
-    }
+    private readonly IMapper _mapper = mapper;
+    private readonly IUnitOfWork _unitOfWork = unitOfWork;
+    private readonly IUtilService _utilService = utilService;
 
     public async Task<IResult> AddAsync(DepartmentCreateRequestDto dto)
     {
@@ -29,17 +23,19 @@ public class DepartmentService : IDepartmentService
         await _unitOfWork.DepartmentRepository.AddAsync(data);
         await _unitOfWork.CommitAsync();
 
-        return new SuccessResult(Messages.Success.Translate());
+        return new SuccessResult(EMessages.Success.Translate());
     }
 
     public async Task<IResult> SoftDeleteAsync(Guid id)
     {
         var data = await _unitOfWork.DepartmentRepository.GetAsync(m => m.Id == id);
+        if (data is not null)
+        {
+            _unitOfWork.DepartmentRepository.SoftDelete(data);
+            await _unitOfWork.CommitAsync();
+        }
 
-        _unitOfWork.DepartmentRepository.SoftDelete(data);
-        await _unitOfWork.CommitAsync();
-
-        return new SuccessResult(Messages.Success.Translate());
+        return new SuccessResult(EMessages.Success.Translate());
     }
 
     public async Task<IDataResult<PaginatedList<DepartmentResponseDto>>> GetAsPaginatedListAsync()
@@ -51,21 +47,21 @@ public class DepartmentService : IDepartmentService
 
         var responseDto = new PaginatedList<DepartmentResponseDto>(_mapper.Map<List<DepartmentResponseDto>>(response.Datas), response.TotalRecordCount, response.PageIndex, paginationDto.PageSize);
 
-        return new SuccessDataResult<PaginatedList<DepartmentResponseDto>>(responseDto, Messages.Success.Translate());
+        return new SuccessDataResult<PaginatedList<DepartmentResponseDto>>(responseDto, EMessages.Success.Translate());
     }
 
     public async Task<IDataResult<IEnumerable<DepartmentResponseDto>>> GetAsync()
     {
         var datas = _mapper.Map<IEnumerable<DepartmentResponseDto>>(await _unitOfWork.DepartmentRepository.GetListAsync());
 
-        return new SuccessDataResult<IEnumerable<DepartmentResponseDto>>(datas, Messages.Success.Translate());
+        return new SuccessDataResult<IEnumerable<DepartmentResponseDto>>(datas, EMessages.Success.Translate());
     }
 
     public async Task<IDataResult<DepartmentByIdResponseDto>> GetAsync(Guid id)
     {
         var data = _mapper.Map<DepartmentByIdResponseDto>(await _unitOfWork.DepartmentRepository.GetAsync(m => m.Id == id));
 
-        return new SuccessDataResult<DepartmentByIdResponseDto>(data, Messages.Success.Translate());
+        return new SuccessDataResult<DepartmentByIdResponseDto>(data, EMessages.Success.Translate());
     }
 
     public async Task<IResult> UpdateAsync(Guid id, DepartmentUpdateRequestDto dto)
@@ -76,6 +72,6 @@ public class DepartmentService : IDepartmentService
         _unitOfWork.DepartmentRepository.Update(data);
         await _unitOfWork.CommitAsync();
 
-        return new SuccessResult(Messages.Success.Translate());
+        return new SuccessResult(EMessages.Success.Translate());
     }
 }

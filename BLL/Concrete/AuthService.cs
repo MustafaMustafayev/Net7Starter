@@ -34,46 +34,57 @@ public class AuthService : IAuthService
             await _unitOfWork.UserRepository.GetAsync(m =>
                 m.Email == dtos.Email && m.Password == dtos.Password);
         if (data == null)
-            return new ErrorDataResult<UserResponseDto>(Messages.InvalidUserCredentials.Translate());
+        {
+            return new ErrorDataResult<UserResponseDto>(EMessages.InvalidUserCredentials.Translate());
+        }
 
         return new SuccessDataResult<UserResponseDto>(_mapper.Map<UserResponseDto>(data),
-            Messages.Success.Translate());
+            EMessages.Success.Translate());
     }
 
     public async Task<IDataResult<UserResponseDto>> LoginByTokenAsync()
     {
         var userId = _utilService.GetUserIdFromToken();
         if (userId is null)
-            return new ErrorDataResult<UserResponseDto>(Messages.CanNotFoundUserIdInYourAccessToken.Translate());
+        {
+            return new ErrorDataResult<UserResponseDto>(EMessages.CanNotFoundUserIdInYourAccessToken.Translate());
+        }
 
         var data = await _unitOfWork.UserRepository.GetAsync(m => m.Id == userId);
         if (data == null)
-            return new ErrorDataResult<UserResponseDto>(Messages.InvalidUserCredentials.Translate());
+        {
+            return new ErrorDataResult<UserResponseDto>(EMessages.InvalidUserCredentials.Translate());
+        }
 
-        return new SuccessDataResult<UserResponseDto>(_mapper.Map<UserResponseDto>(data), Messages.Success.Translate());
+        return new SuccessDataResult<UserResponseDto>(_mapper.Map<UserResponseDto>(data), EMessages.Success.Translate());
     }
 
     public IResult SendVerificationCodeToEmailAsync(string email)
     {
         //TODO SEND MAIL TO EMAIL
-        return new SuccessResult(Messages.VerificationCodeSent.Translate());
+        return new SuccessResult(EMessages.VerificationCodeSent.Translate());
     }
 
     public async Task<IResult> ResetPasswordAsync(ResetPasswordRequestDto dto)
     {
         var data = await _unitOfWork.UserRepository.GetAsync(m => m.Email == dto.Email);
 
-        if (data is null) return new ErrorResult(Messages.UserIsNotExist.Translate());
+        if (data is null)
+        {
+            return new ErrorResult(EMessages.UserIsNotExist.Translate());
+        }
 
         if (data.LastVerificationCode is null ||
             !data.LastVerificationCode.Equals(dto.VerificationCode))
-            return new ErrorResult(Messages.InvalidVerificationCode.Translate());
+        {
+            return new ErrorResult(EMessages.InvalidVerificationCode.Translate());
+        }
 
         data.Salt = SecurityHelper.GenerateSalt();
         data.Password = SecurityHelper.HashPassword(dto.Password, data.Salt);
         await _unitOfWork.CommitAsync();
 
-        return new SuccessResult(Messages.PasswordResetted.Translate());
+        return new SuccessResult(EMessages.PasswordResetted.Translate());
     }
 
     public async Task<IResult> LogoutAsync(string accessToken)
@@ -83,7 +94,7 @@ public class AuthService : IAuthService
         tokens.ForEach(m => m.IsDeleted = true);
         await _unitOfWork.CommitAsync();
 
-        return new SuccessResult(Messages.Success.Translate());
+        return new SuccessResult(EMessages.Success.Translate());
     }
 
     public async Task<IResult> LogoutRemovedUserAsync(Guid userId)
@@ -92,6 +103,6 @@ public class AuthService : IAuthService
         tokens.ForEach(m => m.IsDeleted = true);
         await _unitOfWork.CommitAsync();
 
-        return new SuccessResult(Messages.Success.Translate());
+        return new SuccessResult(EMessages.Success.Translate());
     }
 }

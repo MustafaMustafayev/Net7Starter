@@ -11,7 +11,7 @@ public class ControllerBuilder : ISourceBuilder
     public void BuildSourceFile(List<Entity> entities)
     {
         entities
-            .Where(w=>
+            .Where(w =>
                 w.Options.BuildController
                 && w.Options.BuildService
                 && w.Options.BuildUnitOfWork
@@ -20,7 +20,7 @@ public class ControllerBuilder : ISourceBuilder
             .ToList()
             .ForEach(model => SourceBuilder
                 .Instance.AddSourceFile(
-                    Constants.ControllerPath,
+                    Constants.CONTROLLER_PATH,
                     $"{model.Name}sController.cs",
                     BuildSourceText(model, null)));
     }

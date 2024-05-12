@@ -18,24 +18,16 @@ namespace API.Controllers;
 [Route("api/[controller]")]
 [ServiceFilter(typeof(LogActionFilter))]
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-public class AuthController : Controller
+public class AuthController(
+    IAuthService authService,
+    ConfigSettings configSettings,
+    IUtilService utilService,
+    ITokenService tokenService) : Controller
 {
-    private readonly IAuthService _authService;
-    private readonly ConfigSettings _configSettings;
-    private readonly ITokenService _tokenService;
-    private readonly IUtilService _utilService;
-
-    public AuthController(
-        IAuthService authService,
-        ConfigSettings configSettings,
-        IUtilService utilService,
-        ITokenService tokenService)
-    {
-        _authService = authService;
-        _configSettings = configSettings;
-        _utilService = utilService;
-        _tokenService = tokenService;
-    }
+    private readonly IAuthService _authService = authService;
+    private readonly ConfigSettings _configSettings = configSettings;
+    private readonly ITokenService _tokenService = tokenService;
+    private readonly IUtilService _utilService = utilService;
 
     [SwaggerOperation(Summary = "login")]
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IDataResult<LoginResponseDto>))]
@@ -46,12 +38,17 @@ public class AuthController : Controller
         var userSalt = await _authService.GetUserSaltAsync(request.Email);
 
         if (string.IsNullOrEmpty(userSalt))
-            return Ok(new ErrorDataResult<Result>(Messages.InvalidUserCredentials.Translate()));
+        {
+            return Ok(new ErrorDataResult<Result>(EMessages.InvalidUserCredentials.Translate()));
+        }
 
         request = request with { Password = SecurityHelper.HashPassword(request.Password, userSalt) };
 
         var loginResult = await _authService.LoginAsync(request);
-        if (!loginResult.Success) return Unauthorized(loginResult);
+        if (!loginResult.Success)
+        {
+            return Unauthorized(loginResult);
+        }
 
         var response = await _tokenService.CreateTokenAsync(loginResult.Data!);
 
@@ -105,10 +102,15 @@ public class AuthController : Controller
     public async Task<IActionResult> LoginByToken()
     {
         if (string.IsNullOrEmpty(HttpContext.Request.Headers.Authorization))
-            return Unauthorized(new ErrorResult(Messages.CanNotFoundUserIdInYourAccessToken.Translate()));
+        {
+            return Unauthorized(new ErrorResult(EMessages.CanNotFoundUserIdInYourAccessToken.Translate()));
+        }
 
         var loginByTokenResponse = await _authService.LoginByTokenAsync();
-        if (!loginByTokenResponse.Success) return BadRequest(loginByTokenResponse.Data);
+        if (!loginByTokenResponse.Success)
+        {
+            return BadRequest(loginByTokenResponse.Data);
+        }
 
         var response = await _tokenService.CreateTokenAsync(loginByTokenResponse.Data!);
 

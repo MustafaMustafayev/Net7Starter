@@ -28,6 +28,6 @@ public class
         var data = await _unitOfWork.OrganizationRepository.GetListAsync();
         var result = _mapper.Map<List<OrganizationResponseDto>>(data);
 
-        return new SuccessDataResult<List<OrganizationResponseDto>>(result, Messages.Success.Translate());
+        return new SuccessDataResult<List<OrganizationResponseDto>>(result, EMessages.Success.Translate());
     }
 }

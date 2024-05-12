@@ -1,6 +1,5 @@
-﻿namespace DTO
+﻿namespace DTO;
+
+public record DtoObject
 {
-    public record DtoObject
-    {
-    }
 }

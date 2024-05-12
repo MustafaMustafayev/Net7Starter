@@ -344,7 +344,7 @@ namespace DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("e2fce7a1-dd24-442c-b1e6-f56494455ea9"),
+                            Id = new Guid("f7f42853-10c5-4ddc-984d-09d4cbc8af1f"),
                             CreatedAt = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             IsDeleted = false,
                             Key = "SuperAdmin",
@@ -352,7 +352,7 @@ namespace DAL.Migrations
                         },
                         new
                         {
-                            Id = new Guid("781a962f-161b-4b04-8333-4f308acfb032"),
+                            Id = new Guid("e012cbd3-bdd0-42a3-9dd9-542ebf9000aa"),
                             CreatedAt = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             IsDeleted = false,
                             Key = "Admin",
@@ -360,7 +360,7 @@ namespace DAL.Migrations
                         },
                         new
                         {
-                            Id = new Guid("6484052f-3151-45ff-906f-690fc64efb72"),
+                            Id = new Guid("125e017a-4654-4dde-ae32-2ef9dbc7479a"),
                             CreatedAt = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             IsDeleted = false,
                             Key = "User",
@@ -368,7 +368,7 @@ namespace DAL.Migrations
                         },
                         new
                         {
-                            Id = new Guid("fd19aff6-af66-4786-803e-c87abf6bf3c5"),
+                            Id = new Guid("9986b81b-919d-4eea-8214-32b3419ea6f3"),
                             CreatedAt = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             IsDeleted = false,
                             Key = "Guest",

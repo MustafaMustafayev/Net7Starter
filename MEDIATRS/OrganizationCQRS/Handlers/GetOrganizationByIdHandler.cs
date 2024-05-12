@@ -27,6 +27,6 @@ public class GetOrganizationByIdHandler : IRequestHandler<GetOrganizationByIdQue
             await _unitOfWork.OrganizationRepository.GetAsync(e => e.Id == request.Id);
         var result = _mapper.Map<OrganizationResponseDto>(data);
 
-        return new SuccessDataResult<OrganizationResponseDto>(result, Messages.Success.Translate());
+        return new SuccessDataResult<OrganizationResponseDto>(result, EMessages.Success.Translate());
     }
 }

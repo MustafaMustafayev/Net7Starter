@@ -13,7 +13,10 @@ public class ValidateTokenAttribute : Attribute, IAuthorizationFilter
     public void OnAuthorization(AuthorizationFilterContext context)
     {
         var hasAllowAnonymous = context.ActionDescriptor.EndpointMetadata.OfType<AllowAnonymousAttribute>().Any();
-        if (hasAllowAnonymous) return;
+        if (hasAllowAnonymous)
+        {
+            return;
+        }
 
         var configSettings =
             (context.HttpContext.RequestServices
@@ -34,6 +37,8 @@ public class ValidateTokenAttribute : Attribute, IAuthorizationFilter
             .CheckValidationAsync(jwtToken, refreshToken!).Result;
 
         if (!validationResult.Success)
+        {
             context.Result = new UnauthorizedObjectResult(validationResult);
+        }
     }
 }

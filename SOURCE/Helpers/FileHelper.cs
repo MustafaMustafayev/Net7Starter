@@ -9,7 +9,7 @@ public class FileHelper
     public static async Task<List<Entity>> ReadJsonAsync()
     {
         var projectPath = Directory.GetParent(Environment.CurrentDirectory)!.Parent!.Parent!.FullName;
-        var filePath = Path.Combine(projectPath, Constants.DataFileName);
+        var filePath = Path.Combine(projectPath, Constants.DATA_FILE_NAME);
 
         using var r = new StreamReader(filePath);
 
@@ -26,7 +26,9 @@ public class FileHelper
         var filePath = Path.Combine(projectPath, sourceFile.Path, sourceFile.Name);
 
         if (!Directory.Exists(Path.GetDirectoryName(filePath)))
+        {
             Directory.CreateDirectory(Path.GetDirectoryName(filePath)!);
+        }
 
         if (File.Exists(filePath) && sourceFile.SkipIfExists)
         {
@@ -54,11 +56,11 @@ public class FileHelper
     public static string[] GetFileNames(string folderPath)
     {
         string rootPath = Directory.GetParent(Environment.CurrentDirectory)!.Parent!.Parent!.Parent!.FullName;
-        folderPath = Path.Combine(rootPath,folderPath);
+        folderPath = Path.Combine(rootPath, folderPath);
         var directoryInfo = new DirectoryInfo(folderPath);
 
         IEnumerable<FileInfo> files = directoryInfo.GetFiles("*.*", SearchOption.AllDirectories);
 
-        return files.Select(s=>Path.GetFileNameWithoutExtension(s.FullName)).ToArray()!;
+        return files.Select(s => Path.GetFileNameWithoutExtension(s.FullName)).ToArray()!;
     }
 }

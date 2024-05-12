@@ -1,6 +1,6 @@
+using DAL.EntityFramework.Utility;
 using DTO.Department;
 using DTO.Responses;
-using DAL.EntityFramework.Utility;
 
 namespace BLL.Abstract;
 

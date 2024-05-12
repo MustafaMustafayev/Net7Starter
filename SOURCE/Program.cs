@@ -9,14 +9,19 @@ Console.WriteLine("2 - Clients For Refit");
 int typeOfBuild;
 
 if (!int.TryParse(Console.ReadLine(), out typeOfBuild))
+{
     Console.WriteLine("Pick valid number!");
+}
 
 if (typeOfBuild == 1)
+{
     await EntityBuilderDialogAsync();
+}
 
 if (typeOfBuild == 2)
+{
     await ClientBuilderDialogAsync();
-
+}
 
 async Task EntityBuilderDialogAsync()
 {
@@ -41,7 +46,10 @@ async Task ClientBuilderDialogAsync()
     Console.WriteLine("I am starting to build, plase wait...");
     Console.WriteLine("I am not stuck, just working hard on millions of lines, please be patient...");
 
-    if (string.IsNullOrEmpty(openApiJsonUrl?.Trim())) openApiJsonUrl = Constants.OpenApiFileName;
+    if (string.IsNullOrEmpty(openApiJsonUrl?.Trim()))
+    {
+        openApiJsonUrl = Constants.OPEN_API_FILE_NAME;
+    }
 
     var refitBuilder = new RefitBuilder();
     // Relative or absolute path to .json or .yaml local file or a URL to a .json or .yaml file

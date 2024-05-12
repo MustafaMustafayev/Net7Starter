@@ -55,7 +55,11 @@ public class ElasticSearchService<T> : IElasticSearchService<T> where T : class
     public async Task<bool> AddRangeToIndexAsync(IEnumerable<T> documents)
     {
         var indexResponse = await _client.IndexManyAsync(documents);
-        if (!indexResponse.IsValid) return false;
+        if (!indexResponse.IsValid)
+        {
+            return false;
+        }
+
         return indexResponse.IsValid;
     }
 
@@ -64,7 +68,6 @@ public class ElasticSearchService<T> : IElasticSearchService<T> where T : class
         var deleteIndexResponse = await _client.Indices.DeleteAsync(indexName);
         return deleteIndexResponse.IsValid;
     }
-
 
     /// <summary>
     ///     Example: var documents = await SearchDocumentsAsync(d => d.Text, "some query");

@@ -45,24 +45,31 @@ public class FilesController : Controller
 
         // check extension
         if (!Constants.AllowedFileExtensions.Contains(fileExtension))
-            return BadRequest(new ErrorDataResult<string>(Messages.ThisFileTypeIsNotAllowed.Translate()));
+        {
+            return BadRequest(new ErrorDataResult<string>(EMessages.ThisFileTypeIsNotAllowed.Translate()));
+        }
 
         var path = _utilService.GetEnvFolderPath(_utilService.GetFolderName(dto.Type));
         await FileHelper.WriteFile(dto.File, $"{hashFileName}{fileExtension}", path);
 
         // add to database
         var result = await _fileService.AddFileAsync(
-            new FileCreateRequestDto() { 
+            new FileCreateRequestDto()
+            {
                 OriginalName = originalFileName,
                 HashName = hashFileName,
                 Extension = fileExtension,
                 Length = dto.File.Length,
                 Path = path,
-                Type = dto.Type},
+                Type = dto.Type
+            },
             dto);
-        if (!result.Success) return BadRequest(new ErrorDataResult<string>(Messages.InvalidModel.Translate()));
+        if (!result.Success)
+        {
+            return BadRequest(new ErrorDataResult<string>(EMessages.InvalidModel.Translate()));
+        }
 
-        return Ok(new SuccessDataResult<string>(hashFileName, Messages.Success.Translate()));
+        return Ok(new SuccessDataResult<string>(hashFileName, EMessages.Success.Translate()));
     }
 
     [SwaggerOperation(Summary = "delete file")]
@@ -78,7 +85,6 @@ public class FilesController : Controller
         var result = await _fileService.RemoveFileAsync(dto);
         return Ok(result);
     }
-
 
     [SwaggerOperation(Summary = "download file")]
     [Produces(typeof(void))]
@@ -108,7 +114,10 @@ public class FilesController : Controller
             $"{hashName}{file.Data!.Extension}");
         var fileStream = System.IO.File.OpenRead(path);
 
-        if (fileStream is null) return BadRequest(new ErrorResult(Messages.FileIsNotFound.Translate()));
+        if (fileStream is null)
+        {
+            return BadRequest(new ErrorResult(EMessages.FileIsNotFound.Translate()));
+        }
 
         return File(fileStream, "image/png");
     }

@@ -14,9 +14,9 @@ public class EntityConfigurationBuilder : ISourceBuilder
             .ToList()
             .ForEach(model =>
             {
-                SourceBuilder.Instance.AddSourceFile(Constants.EntityConfigurationPath, $"{model.Name}Configuration.cs",
+                SourceBuilder.Instance.AddSourceFile(Constants.ENTITY_CONFIGURATION_PATH, $"{model.Name}Configuration.cs",
                     BuildSourceText(model, null));
-                
+
             });
     }
 

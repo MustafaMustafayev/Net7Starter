@@ -14,7 +14,7 @@ namespace LoadTesting;
 
 public abstract class RootTest
 {
-    private const string BaseUrl = "https://localhost:7086/";
+    private const string BASE_URL = "https://localhost:7086/";
     private readonly HttpClient _httpClient;
     private string? _accessToken;
     private bool _isAuthenticate;
@@ -22,8 +22,10 @@ public abstract class RootTest
 
     protected RootTest()
     {
-        _httpClient = new HttpClient();
-        _httpClient.BaseAddress = new Uri(BaseUrl);
+        _httpClient = new HttpClient
+        {
+            BaseAddress = new Uri(BASE_URL)
+        };
 
         _httpClient.DefaultRequestHeaders.Accept.Clear();
         _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -39,7 +41,7 @@ public abstract class RootTest
     private async Task Login()
     {
         var login = new LoginRequestDto() { Email = "test@test.tst", Password = "testtest" };
-        using var httpResponse = await _httpClient.PostAsJsonAsync(new Uri(BaseUrl + "api/Auth/login"), login);
+        using var httpResponse = await _httpClient.PostAsJsonAsync(new Uri(BASE_URL + "api/Auth/login"), login);
 
         var result = await httpResponse.Content.ReadAsStringAsync();
 
@@ -51,7 +53,10 @@ public abstract class RootTest
 
         var token = JsonConvert.DeserializeObject<SuccessDataResult<LoginResponseDto?>>(result, setting);
 
-        if (token?.Data?.AccessToken is null || !token.Success) throw new UnauthorizedAccessException();
+        if (token?.Data?.AccessToken is null || !token.Success)
+        {
+            throw new UnauthorizedAccessException();
+        }
 
         _isAuthenticate = true;
         _accessToken = token.Data.AccessToken;
@@ -60,7 +65,7 @@ public abstract class RootTest
 
     private HttpRequestMessage CreateRequest(string type, string url, string? jsonBody)
     {
-        var request = Http.CreateRequest(type, BaseUrl + url)
+        var request = Http.CreateRequest(type, BASE_URL + url)
             .WithHeader("Content-Type", "application/json")
             .WithHeader("Accept", "application/json");
 
@@ -70,7 +75,10 @@ public abstract class RootTest
             request.WithHeader("RefreshToken", _refreshToken);
         }
 
-        if (jsonBody is not null) request.WithBody(new StringContent(jsonBody, Encoding.UTF8, "application/json"));
+        if (jsonBody is not null)
+        {
+            request.WithBody(new StringContent(jsonBody, Encoding.UTF8, "application/json"));
+        }
 
         return request;
     }
@@ -96,14 +104,17 @@ public abstract class RootTest
     )
         where TResponse : class
     {
-        return await Step.Run("step_1", context, async () =>
+        return await Step.Run(stepName, context, async () =>
         {
             try
             {
                 var request = CreateRequest(httpMethod.ToString(), url, payload);
                 var response = await Http.Send(_httpClient, request);
 
-                if (response.IsError) return Response.Fail(message: response.Message, statusCode: response.StatusCode);
+                if (response.IsError)
+                {
+                    return Response.Fail(message: response.Message, statusCode: response.StatusCode);
+                }
 
                 var result = await response.Payload.Value.Content.ReadAsStringAsync();
 
@@ -123,7 +134,10 @@ public abstract class RootTest
                         return Response.Fail();
                     }
 
-                    if (!validator(context, data)) return Response.Fail(message: "Data is invalid");
+                    if (!validator(context, data))
+                    {
+                        return Response.Fail(message: "Data is invalid");
+                    }
                 }
             }
             catch (Exception ex)

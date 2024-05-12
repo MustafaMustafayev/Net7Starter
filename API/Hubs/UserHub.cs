@@ -10,7 +10,7 @@ namespace API.Hubs;
 
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 [Authorize]
-[EnableCors(Constants.EnableAllCorsName)]
+[EnableCors(Constants.ENABLE_ALL_CORS_NAME)]
 public class UserHub : Hub
 {
     private readonly ConfigSettings _configSettings;
@@ -25,7 +25,10 @@ public class UserHub : Hub
         var companyId = Context.User?.FindFirst(_configSettings.AuthSettings.TokenCompanyIdKey)
             ?.Value;
 
-        if (companyId is null) return;
+        if (companyId is null)
+        {
+            return;
+        }
 
         await Groups.AddToGroupAsync(Context.ConnectionId, companyId);
 

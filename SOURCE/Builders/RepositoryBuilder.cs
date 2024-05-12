@@ -12,7 +12,7 @@ public class RepositoryBuilder : ISourceBuilder
         entities
             .Where(w => w.Options.BuildRepository)
             .ToList().ForEach(model =>
-                SourceBuilder.Instance.AddSourceFile(Constants.RepositoryPath, $"{model.Name}Repository.cs",
+                SourceBuilder.Instance.AddSourceFile(Constants.REPOSITORY_PATH, $"{model.Name}Repository.cs",
                     BuildSourceText(model, null)));
     }
 
