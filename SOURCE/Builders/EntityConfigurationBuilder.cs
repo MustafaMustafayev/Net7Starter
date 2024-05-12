@@ -36,7 +36,6 @@ public class EntityConfigurationBuilder : ISourceBuilder
                            
                        }
                    }
-
                    """;
         text = text.Replace("{entityName}", entity!.Name);
         text = text.Replace("{entityPath}", !string.IsNullOrEmpty(entity!.Path) ? $".{entity.Path}" : string.Empty);

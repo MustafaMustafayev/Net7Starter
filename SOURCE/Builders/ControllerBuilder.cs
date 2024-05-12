@@ -107,7 +107,6 @@ public class ControllerBuilder : ISourceBuilder
                            return Ok(response);
                        }
                    }
-
                    """;
 
         text = text.Replace("{entityName}", entity!.Name);

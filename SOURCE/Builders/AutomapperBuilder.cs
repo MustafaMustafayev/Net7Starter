@@ -36,7 +36,6 @@ public class AutomapperBuilder : ISourceBuilder
                            CreateMap<{entityName}UpdateRequestDto, {entityName}>();
                        }
                    }
-
                    """;
 
         text = text.Replace("{entityName}", entity!.Name);

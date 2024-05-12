@@ -151,7 +151,6 @@ public class DtosBuilder : ISourceBuilder
                    public record {entityName}UpdateRequestDto();
                    public record {entityName}ResponseDto(Guid Id);
                    public record {entityName}ByIdResponseDto(Guid Id);
-
                    """;
 
         text = text.Replace("{entityName}", entity!.Name);

@@ -40,7 +40,6 @@ public class IServiceBuilder : ISourceBuilder
                        Task<IResult> UpdateAsync(Guid id, {entityName}UpdateRequestDto dto);
                        Task<IResult> SoftDeleteAsync(Guid id);
                    }
-
                    """;
 
         text = text.Replace("{entityName}", entity!.Name);

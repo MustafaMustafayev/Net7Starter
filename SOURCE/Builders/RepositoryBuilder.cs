@@ -36,7 +36,6 @@ public class RepositoryBuilder : ISourceBuilder
                            _dataContext = dataContext;
                        }
                    }
-
                    """;
         text = text.Replace("{entityName}", entity!.Name);
         text = text.Replace("{entityPath}", !string.IsNullOrEmpty(entity!.Path) ? $".{entity.Path}" : string.Empty);

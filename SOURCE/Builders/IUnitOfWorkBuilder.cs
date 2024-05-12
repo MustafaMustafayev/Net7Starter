@@ -129,7 +129,6 @@ public interface IUnitOfWork : IAsyncDisposable, IDisposable
                      {{properties}}
                          public Task CommitAsync();
                      }
-
                      """;
 
         return text;

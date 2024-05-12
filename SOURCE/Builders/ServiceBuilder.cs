@@ -54,7 +54,7 @@ public class ServiceBuilder : ISourceBuilder
                            await _unitOfWork.{entityName}Repository.AddAsync(data);
                            await _unitOfWork.CommitAsync();
                    
-                           return new SuccessResult(Messages.Success.Translate());
+                           return new SuccessResult(EMessages.Success.Translate());
                        }
                    
                        public async Task<IResult> SoftDeleteAsync(Guid id)
@@ -64,7 +64,7 @@ public class ServiceBuilder : ISourceBuilder
                            _unitOfWork.{entityName}Repository.SoftDelete(data);
                            await _unitOfWork.CommitAsync();
                    
-                           return new SuccessResult(Messages.Success.Translate());
+                           return new SuccessResult(EMessages.Success.Translate());
                        }
                    
                        public async Task<IDataResult<PaginatedList<{entityName}ResponseDto>>> GetAsPaginatedListAsync()
@@ -76,21 +76,21 @@ public class ServiceBuilder : ISourceBuilder
                    
                            var responseDto = new PaginatedList<{entityName}ResponseDto>(_mapper.Map<List<{entityName}ResponseDto>>(response.Datas), response.TotalRecordCount, response.PageIndex, paginationDto.PageSize);
                    
-                           return new SuccessDataResult<PaginatedList<{entityName}ResponseDto>>(responseDto, Messages.Success.Translate());
+                           return new SuccessDataResult<PaginatedList<{entityName}ResponseDto>>(responseDto, EMessages.Success.Translate());
                        }
                    
                        public async Task<IDataResult<IEnumerable<{entityName}ResponseDto>>> GetAsync()
                        {
                            var datas = _mapper.Map<IEnumerable<{entityName}ResponseDto>>(await _unitOfWork.{entityName}Repository.GetListAsync());
                    
-                           return new SuccessDataResult<IEnumerable<{entityName}ResponseDto>>(datas, Messages.Success.Translate());
+                           return new SuccessDataResult<IEnumerable<{entityName}ResponseDto>>(datas, EMessages.Success.Translate());
                        }
                    
                        public async Task<IDataResult<{entityName}ByIdResponseDto>> GetAsync(Guid id)
                        {
                            var data = _mapper.Map<{entityName}ByIdResponseDto>(await _unitOfWork.{entityName}Repository.GetAsync(m => m.Id == id));
                    
-                           return new SuccessDataResult<{entityName}ByIdResponseDto>(data, Messages.Success.Translate());
+                           return new SuccessDataResult<{entityName}ByIdResponseDto>(data, EMessages.Success.Translate());
                        }
                    
                        public async Task<IResult> UpdateAsync(Guid id, {entityName}UpdateRequestDto dto)
@@ -101,10 +101,9 @@ public class ServiceBuilder : ISourceBuilder
                            _unitOfWork.{entityName}Repository.Update(data);
                            await _unitOfWork.CommitAsync();
                    
-                           return new SuccessResult(Messages.Success.Translate());
+                           return new SuccessResult(EMessages.Success.Translate());
                        }
                    }
-
                    """;
 
         text = text.Replace("{entityName}", entity!.Name);
