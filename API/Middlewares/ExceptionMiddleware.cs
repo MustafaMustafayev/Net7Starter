@@ -2,7 +2,6 @@
 using CORE.Abstract;
 using CORE.Config;
 using CORE.Localization;
-using CORE.Logging;
 using DTO.ErrorLog;
 using DTO.Responses;
 using Microsoft.AspNetCore.Http.Features;
@@ -12,11 +11,11 @@ using System.Text.Json;
 
 namespace API.Middlewares;
 
-public class ExceptionMiddleware(RequestDelegate next, ILoggerManager logger,
+public class ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddleware> logger,
     ConfigSettings config, IServiceScopeFactory serviceScopeFactory)
 {
     private readonly ConfigSettings _config = config;
-    private readonly ILoggerManager _logger = logger;
+    private readonly ILogger<ExceptionMiddleware> _logger = logger;
     private readonly RequestDelegate _next = next;
     private readonly IServiceScopeFactory _serviceScopeFactory = serviceScopeFactory;
 
@@ -28,7 +27,7 @@ public class ExceptionMiddleware(RequestDelegate next, ILoggerManager logger,
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Something went wrong: {ex}");
+            _logger.LogError("Something went wrong: {Exception}",ex);
             await LogErrorAsync(httpContext, ex);
             if (_config.SentrySettings.IsEnabled)
             {

@@ -8,6 +8,12 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <Compile Remove="Logging\**" />
+      <EmbeddedResource Remove="Logging\**" />
+      <None Remove="Logging\**" />
+    </ItemGroup>
+
+    <ItemGroup>
         <None Remove="Newtonsoft.Json" />
         <None Remove="Microsoft.AspNetCore.Cryptography.KeyDerivation" />
         <None Remove="Microsoft.AspNetCore.Authentication.JwtBearer" />
