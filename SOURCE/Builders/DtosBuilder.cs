@@ -103,26 +103,26 @@ public class DtosBuilder : ISourceBuilder
             INamedTypeSymbol propertyType = ((INamedTypeSymbol)((IPropertySymbol)property).Type);
             if (propertyType.IsValueType)
             {
-                result.AppendLine($"\tpublic {propertyType.ToDisplayString()} {property.Name} {{get; set;}} = default!;");
+                result.AppendLine($"    public {propertyType.ToDisplayString()} {property.Name} {{ get; set; }} = default!;");
             }
             else if (propertyType.Name == "String")
             {
-                result.AppendLine($"\tpublic string {property.Name} {{get; set;}} = default!;");
+                result.AppendLine($"    public string {property.Name} {{ get; set; }} = default!;");
             }
             else if (propertyType.IsGenericType)
             {
                 if (propertyType.TypeArguments[0].IsValueType)
                 {
-                    result.AppendLine($"\tpublic {propertyType.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat)} {property.Name} {{get; set;}} = default!;");
+                    result.AppendLine($"    public {propertyType.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat)} {property.Name} {{ get; set; }} = default!;");
                 }
                 else
                 {
-                    result.AppendLine($"\tpublic {propertyType.Name}<object> {property.Name} {{get; set;}} = default!;");
+                    result.AppendLine($"    public {propertyType.Name}<object> {property.Name} {{ get; set; }} = default!;");
                 }
             }
             else
             {
-                result.AppendLine($"\tpublic object {property.Name} {{get; set;}} = default!;");
+                result.AppendLine($"    public object {property.Name} {{ get; set; }} = default!;");
             }
         }
     }

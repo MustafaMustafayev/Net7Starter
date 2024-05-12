@@ -27,25 +27,19 @@ public class ServiceBuilder : ISourceBuilder
                    using BLL.Abstract;
                    using CORE.Abstract;
                    using CORE.Localization;
+                   using DAL.EntityFramework.UnitOfWork;
+                   using DAL.EntityFramework.Utility;
                    using DTO.Responses;
                    using DTO.{entityName};
                    using ENTITIES.Entities{entityPath};
-                   using DAL.EntityFramework.Utility;
-                   using DAL.EntityFramework.UnitOfWork;
 
                    namespace BLL.Concrete;
 
-                   public class {entityName}Service : I{entityName}Service
+                   public class {entityName}Service(IMapper mapper, IUnitOfWork unitOfWork, IUtilService utilService) : I{entityName}Service
                    {
-                       private readonly IMapper _mapper;
-                       private readonly IUnitOfWork _unitOfWork;
-                       private readonly IUtilService _utilService;
-                       public {entityName}Service(IMapper mapper, IUnitOfWork unitOfWork, IUtilService utilService)
-                       {
-                           _mapper = mapper;
-                           _unitOfWork = unitOfWork;
-                           _utilService = utilService;
-                       }
+                       private readonly IMapper _mapper = mapper;
+                       private readonly IUnitOfWork _unitOfWork = unitOfWork;
+                       private readonly IUtilService _utilService = utilService;
                    
                        public async Task<IResult> AddAsync({entityName}CreateRequestDto dto)
                        {
@@ -60,7 +54,10 @@ public class ServiceBuilder : ISourceBuilder
                        public async Task<IResult> SoftDeleteAsync(Guid id)
                        {
                            var data = await _unitOfWork.{entityName}Repository.GetAsync(m => m.Id == id);
-                   
+                           if (data is null)
+                           {
+                               return new ErrorResult(EMessages.DataNotFound.Translate());
+                           }
                            _unitOfWork.{entityName}Repository.SoftDelete(data);
                            await _unitOfWork.CommitAsync();
                    

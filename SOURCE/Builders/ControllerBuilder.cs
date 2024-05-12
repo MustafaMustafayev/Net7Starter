@@ -28,8 +28,8 @@ public class ControllerBuilder : ISourceBuilder
     public string BuildSourceText(Entity? entity, List<Entity>? entities)
     {
         var text = """
-                   using API.Filters;
                    using API.Attributes;
+                   using API.Filters;
                    using BLL.Abstract;
                    using DTO.Responses;
                    using DTO.{entityName};
