@@ -131,9 +131,9 @@ public class SftpService(ConfigSettings configSettings) : ISftpService
 
         using var inputStream = new MemoryStream(data);
         using var image = Image.FromStream(inputStream);
-        #pragma warning disable CA1416
+#pragma warning disable CA1416
         var jpegEncoder = ImageCodecInfo.GetImageDecoders().First(c => c.FormatID == ImageFormat.Jpeg.Guid);
-        #pragma warning restore CA1416
+#pragma warning restore CA1416
         var encoderParameters = new EncoderParameters(1);
         encoderParameters.Param[0] = new EncoderParameter(Encoder.Quality, jpegQuality);
 
