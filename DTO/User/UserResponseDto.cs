@@ -4,10 +4,10 @@ namespace DTO.User;
 
 public record UserResponseDto()
 {
-    public Guid Id { get; set; }
-    public string Username { get; set; }
-    public string Email { get; set; }
-    public string ContactNumber { get; set; }
+    public required Guid Id { get; set; }
+    public required string Username { get; set; }
+    public required string Email { get; set; }
+    public required string ContactNumber { get; set; }
     public RoleToFkDto? Role { get; set; }
     public string? File { get; set; }
 }

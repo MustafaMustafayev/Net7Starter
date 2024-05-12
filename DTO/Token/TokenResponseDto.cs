@@ -4,12 +4,12 @@ namespace DTO.Token;
 
 public record TokenToListDto()
 {
-    public Guid Id { get; set; }
-    public UserResponseDto User { get; set; }
-    public string AccessToken { get; set; }
-    public DateTimeOffset AccessTokenExpireDate { get; set; }
-    public string RefreshToken { get; set; }
-    public DateTimeOffset RefreshTokenExpireDate { get; set; }
-    public DateTimeOffset CreatedAt { get; set; }
+    public required Guid Id { get; set; }
+    public required UserResponseDto User { get; set; }
+    public required string AccessToken { get; set; }
+    public required DateTimeOffset AccessTokenExpireDate { get; set; }
+    public required string RefreshToken { get; set; }
+    public required DateTimeOffset RefreshTokenExpireDate { get; set; }
+    public required DateTimeOffset CreatedAt { get; set; }
     public DateTimeOffset? DeletedAt { get; set; }
 }
