@@ -37,7 +37,7 @@ public class ExceptionMiddleware
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Something went wrong: {ex}");
+            _logger.LogError("Something went wrong: {Exception}", ex);
             await LogErrorAsync(httpContext, ex);
             if (_config.SentrySettings.IsEnabled) SentrySdk.CaptureException(ex);
 
