@@ -105,7 +105,6 @@ public class UsersController(IUserService userService, IUtilService utilService,
     [SwaggerOperation(Summary = "upload profile file")]
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
     [HttpPost("profile")]
-    //[ServiceFilter(typeof(LogActionFilter))]
     public async Task<IActionResult> Upload(IFormFile file)
     {
         Guid userId = _utilService.GetUserIdFromToken().GetValueOrDefault();
@@ -126,7 +125,6 @@ public class UsersController(IUserService userService, IUtilService utilService,
             return BadRequest(new ErrorDataResult<string>(EMessages.UserIsNotExist.Translate()));
         }
 
-        //string fileName = System.IO.Path.GetFileName(file.FileName);
         string fileExtension = System.IO.Path.GetExtension(file.FileName);
         Guid fileNewName = Guid.NewGuid();
 
@@ -168,7 +166,6 @@ public class UsersController(IUserService userService, IUtilService utilService,
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
     [HttpDelete("profile/{id}")]
     [ServiceFilter(typeof(LogActionFilter))]
-    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> DeleteFile([FromRoute] Guid id)
     {
         var existFile = await _userService.GetProfileAsync(id);
