@@ -11,8 +11,10 @@ using System.Text.Json;
 
 namespace API.Middlewares;
 
-public class ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddleware> logger,
-    ConfigSettings config, IServiceScopeFactory serviceScopeFactory)
+public class ExceptionMiddleware(RequestDelegate next,
+                                 ILogger<ExceptionMiddleware> logger,
+                                 ConfigSettings config,
+                                 IServiceScopeFactory serviceScopeFactory)
 {
     private readonly ConfigSettings _config = config;
     private readonly ILogger<ExceptionMiddleware> _logger = logger;

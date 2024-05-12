@@ -55,7 +55,6 @@
         <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.5.0" />
         <PackageReference Include="MiniProfiler.AspNetCore.Mvc" Version="4.3.8" />
         <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
-        <PackageReference Include="WatchDog.NET" Version="1.4.10" />
     </ItemGroup>
 
     <ItemGroup>

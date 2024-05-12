@@ -74,7 +74,6 @@ public class UsersController(IUserService userService, IUtilService utilService,
     [SwaggerOperation(Summary = "create user")]
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
     [HttpPost]
-    [AllowAnonymous]
     public async Task<IActionResult> Add([FromBody] UserCreateRequestDto dto)
     {
         var response = await _userService.AddAsync(dto);
