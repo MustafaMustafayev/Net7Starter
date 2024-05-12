@@ -1,10 +1,12 @@
 ﻿using API.Hubs;
+using BLL;
 using BLL.Concrete;
 using CORE.Abstract;
 using CORE.Concrete;
 using CORE.Config;
 using CORE.Logging;
 using DAL.ElasticSearch;
+using DAL.EntityFramework;
 using DAL.EntityFramework.Concrete;
 using DAL.EntityFramework.UnitOfWork;
 using DAL.MongoDb;
@@ -169,18 +171,16 @@ public static class DependencyContainer
         services.TryAddScoped<IUtilService, UtilService>();
 
         services.Scan(scan => scan
-            .FromAssemblies(typeof(UserService).Assembly)
+            .FromAssemblies(typeof(Service).Assembly)
             .AddClasses(classes => classes.AssignableTo(typeof(object)))
             .AsImplementedInterfaces()
             .WithScopedLifetime());
 
         services.Scan(scan => scan
-            .FromAssemblies(typeof(UserRepository).Assembly)
+            .FromAssemblies(typeof(Repository).Assembly)
             .AddClasses(classes => classes.AssignableTo(typeof(object)))
             .AsImplementedInterfaces()
             .WithScopedLifetime());
-
-        // util service is in the core assembly, therefore we need to register it separately
     }
 
     public static void RegisterSignalRHubs(this IServiceCollection services)

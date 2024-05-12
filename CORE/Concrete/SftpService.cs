@@ -21,6 +21,10 @@ public class SftpService(ConfigSettings configSettings) : ISftpService
             path = string.Empty;
         }
 
+    public List<DirectoryInformation> GetDirectoryInformation(string path)
+    {
+        if (string.IsNullOrEmpty(path) || string.IsNullOrWhiteSpace(path)) path = string.Empty;
+
         var directoryInfos = new List<DirectoryInformation>();
         var connectionInfo = GetConnectionInfo();
         using (var sftp = new SftpClient(connectionInfo))
