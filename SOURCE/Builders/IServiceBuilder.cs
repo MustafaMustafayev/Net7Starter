@@ -25,9 +25,9 @@ public class IServiceBuilder : ISourceBuilder
     public string BuildSourceText(Entity? entity, List<Entity>? entities)
     {
         var text = """
-                   using DTO.{entityName};
-                   using DTO.Responses;
                    using DAL.EntityFramework.Utility;
+                   using DTO.Responses;
+                   using DTO.{entityName};
 
                    namespace BLL.Abstract;
 

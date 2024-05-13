@@ -1,1 +1,1 @@
-﻿[  {    "name": "EntityName",    "configure": false,    "path": "", //set folder name of inner folder under Entities folder    "options": {      "BuildDto": true,      "BuildRepository": true,      "BuildService": true,      "BuildUnitOfWork": true,      "BuildController": true    }  }]
+﻿[  {    "name": "",    "configure": false,    "path": "",    "options": {      "BuildDto": true,      "BuildRepository": true,      "BuildService": true,      "BuildUnitOfWork": true,      "BuildController": true    }  }]
