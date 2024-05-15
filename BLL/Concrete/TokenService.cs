@@ -20,7 +20,10 @@ public class TokenService : ITokenService
     private readonly IUnitOfWork _unitOfWork;
     private readonly IUtilService _utilService;
 
-    public TokenService(ConfigSettings configSettings, IUnitOfWork unitOfWork, IUtilService utilService, IMapper mapper)
+    public TokenService(ConfigSettings configSettings,
+                        IUnitOfWork unitOfWork,
+                        IUtilService utilService,
+                        IMapper mapper)
     {
         _configSettings = configSettings;
         _mapper = mapper;
@@ -40,9 +43,10 @@ public class TokenService : ITokenService
 
     public async Task<IDataResult<TokenToListDto>> GetAsync(string accessToken, string refreshToken)
     {
-        var token = await _unitOfWork.TokenRepository.GetAsync(m =>
-            m.AccessToken == accessToken && m.RefreshToken == refreshToken &&
-            m.RefreshTokenExpireDate > DateTime.UtcNow);
+        var token = await _unitOfWork.TokenRepository.GetAsync(m => m.AccessToken == accessToken &&
+                                                                    m.RefreshToken == refreshToken &&
+                                                                    m.RefreshTokenExpireDate > DateTime.UtcNow);
+
         if (token == null)
         {
             return new ErrorDataResult<TokenToListDto>(EMessages.PermissionDenied.Translate());
@@ -56,15 +60,14 @@ public class TokenService : ITokenService
     public async Task<IResult> CheckValidationAsync(string accessToken, string refreshToken)
     {
         return await _unitOfWork.TokenRepository.IsValid(accessToken, refreshToken)
-            ? new SuccessResult(EMessages.Success.Translate())
-            : new ErrorResult(EMessages.PermissionDenied.Translate());
+               ? new SuccessResult(EMessages.Success.Translate())
+               : new ErrorResult(EMessages.PermissionDenied.Translate());
     }
 
     public async Task<IDataResult<LoginResponseDto>> CreateTokenAsync(UserResponseDto dto)
     {
         var securityHelper = new SecurityHelper(_configSettings, _utilService);
-        var accessTokenExpireDate =
-            DateTime.UtcNow.AddHours(_configSettings.AuthSettings.TokenExpirationTimeInHours);
+        var accessTokenExpireDate = DateTime.UtcNow.AddHours(_configSettings.AuthSettings.TokenExpirationTimeInHours);
 
         var loginResponseDto = new LoginResponseDto()
         {

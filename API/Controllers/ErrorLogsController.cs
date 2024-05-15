@@ -24,10 +24,10 @@ public class ErrorLogsController : Controller
 
     [SwaggerOperation(Summary = "get paginated list")]
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IDataResult<List<ErrorLogResponseDto>>))]
-    [HttpGet("paginate")]
-    public async Task<IActionResult> GetAsPaginated()
+    [HttpGet("{pageIndex}/{pageSize}")]
+    public async Task<IActionResult> GetAsPaginated([FromRoute] int pageIndex, int pageSize)
     {
-        var response = await _errorLogService.GetAsPaginatedListAsync();
+        var response = await _errorLogService.GetAsPaginatedListAsync(pageIndex, pageSize);
         return Ok(response);
     }
 

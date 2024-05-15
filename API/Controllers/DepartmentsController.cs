@@ -25,10 +25,10 @@ public class DepartmentsController : Controller
 
     [SwaggerOperation(Summary = "get paginated list")]
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IDataResult<List<DepartmentResponseDto>>))]
-    [HttpGet("paginate")]
-    public async Task<IActionResult> GetAsPaginated()
+    [HttpGet("{pageIndex}/{pageSize}")]
+    public async Task<IActionResult> GetAsPaginated([FromRoute] int pageIndex, int pageSize)
     {
-        var response = await _departmentService.GetAsPaginatedListAsync();
+        var response = await _departmentService.GetAsPaginatedListAsync(pageIndex, pageSize);
         return Ok(response);
     }
 

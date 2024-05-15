@@ -16,7 +16,9 @@ public class AuthService : IAuthService
     private readonly IUnitOfWork _unitOfWork;
     private readonly IUtilService _utilService;
 
-    public AuthService(IUnitOfWork unitOfWork, IMapper mapper, IUtilService utilService)
+    public AuthService(IUnitOfWork unitOfWork,
+                       IMapper mapper,
+                       IUtilService utilService)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
@@ -30,16 +32,13 @@ public class AuthService : IAuthService
 
     public async Task<IDataResult<UserResponseDto>> LoginAsync(LoginRequestDto dtos)
     {
-        var data =
-            await _unitOfWork.UserRepository.GetAsync(m =>
-                m.Email == dtos.Email && m.Password == dtos.Password);
+        var data = await _unitOfWork.UserRepository.GetAsync(m => m.Email == dtos.Email && m.Password == dtos.Password);
         if (data == null)
         {
             return new ErrorDataResult<UserResponseDto>(EMessages.InvalidUserCredentials.Translate());
         }
 
-        return new SuccessDataResult<UserResponseDto>(_mapper.Map<UserResponseDto>(data),
-            EMessages.Success.Translate());
+        return new SuccessDataResult<UserResponseDto>(_mapper.Map<UserResponseDto>(data), EMessages.Success.Translate());
     }
 
     public async Task<IDataResult<UserResponseDto>> LoginByTokenAsync()
@@ -74,8 +73,7 @@ public class AuthService : IAuthService
             return new ErrorResult(EMessages.UserIsNotExist.Translate());
         }
 
-        if (data.LastVerificationCode is null ||
-            !data.LastVerificationCode.Equals(dto.VerificationCode))
+        if (data.LastVerificationCode is null || !data.LastVerificationCode.Equals(dto.VerificationCode))
         {
             return new ErrorResult(EMessages.InvalidVerificationCode.Translate());
         }

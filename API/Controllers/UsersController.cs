@@ -1,6 +1,7 @@
 ﻿using API.Attributes;
 using API.Filters;
 using BLL.Abstract;
+using BLL.Concrete;
 using CORE.Abstract;
 using CORE.Constants;
 using CORE.Enums;
@@ -28,10 +29,10 @@ public class UsersController(IUserService userService, IUtilService utilService,
     [SwaggerOperation(Summary = "get users as paginated list")]
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IDataResult<List<UserResponseDto>>))]
     [ServiceFilter(typeof(LogActionFilter))]
-    [HttpGet("paginate")]
-    public async Task<IActionResult> GetAsPaginated()
+    [HttpGet("{pageIndex}/{pageSize}")]
+    public async Task<IActionResult> GetAsPaginated([FromRoute] int pageIndex, int pageSize)
     {
-        var response = await _userService.GetAsPaginatedListAsync();
+        var response = await _userService.GetAsPaginatedListAsync(pageIndex, pageSize);
         return Ok(response);
     }
 

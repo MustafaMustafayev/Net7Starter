@@ -6,9 +6,9 @@ namespace BLL.Abstract;
 
 public interface IPermissionService
 {
-    Task<IDataResult<IEnumerable<PermissionResponseDto>>> GetAsync();
+    Task<IDataResult<PaginatedList<PermissionResponseDto>>> GetAsPaginatedListAsync(int pageIndex, int pageSize);
 
-    Task<IDataResult<PaginatedList<PermissionResponseDto>>> GetAsPaginatedListAsync();
+    Task<IDataResult<IEnumerable<PermissionResponseDto>>> GetAsync();
 
     Task<IDataResult<PermissionByIdResponseDto>> GetAsync(Guid id);
 

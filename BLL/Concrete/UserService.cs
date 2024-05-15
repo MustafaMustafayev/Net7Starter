@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using BLL.Abstract;
 using BLL.Helpers;
-using CORE.Abstract;
 using CORE.Enums;
 using CORE.Localization;
 using DAL.EntityFramework.UnitOfWork;
@@ -12,11 +11,17 @@ using ENTITIES.Entities;
 
 namespace BLL.Concrete;
 
-public class UserService(IUnitOfWork unitOfWork, IMapper mapper, IUtilService utilService) : IUserService
+public class UserService : IUserService
 {
-    private readonly IMapper _mapper = mapper;
-    private readonly IUnitOfWork _unitOfWork = unitOfWork;
-    private readonly IUtilService _utilService = utilService;
+    private readonly IMapper _mapper;
+    private readonly IUnitOfWork _unitOfWork;
+
+    public UserService(IUnitOfWork unitOfWork,
+                       IMapper mapper)
+    {
+        _mapper = mapper;
+        _unitOfWork = unitOfWork;
+    }
 
     public async Task<IResult> AddAsync(UserCreateRequestDto dto)
     {
@@ -28,8 +33,8 @@ public class UserService(IUnitOfWork unitOfWork, IMapper mapper, IUtilService ut
         dto = dto with
         {
             RoleId = !dto.RoleId.HasValue
-                ? (await _unitOfWork.RoleRepository.GetAsync(m => m.Key == EUserType.Guest.ToString()))?.Id
-                : dto.RoleId
+                     ? (await _unitOfWork.RoleRepository.GetAsync(m => m.Key == EUserType.Guest.ToString()))?.Id
+                     : dto.RoleId
         };
         var data = _mapper.Map<User>(dto);
 
@@ -89,8 +94,8 @@ public class UserService(IUnitOfWork unitOfWork, IMapper mapper, IUtilService ut
         dto = dto with
         {
             RoleId = dto.RoleId is null
-                ? (await _unitOfWork.RoleRepository.GetAsync(m => m.Key == EUserType.Guest.ToString()))?.Id
-                : dto.RoleId
+                     ? (await _unitOfWork.RoleRepository.GetAsync(m => m.Key == EUserType.Guest.ToString()))?.Id
+                     : dto.RoleId
         };
 
         var old = await _unitOfWork.UserRepository.GetAsNoTrackingAsync(u => u.Id == id);
@@ -110,20 +115,15 @@ public class UserService(IUnitOfWork unitOfWork, IMapper mapper, IUtilService ut
         return new SuccessResult(EMessages.Success.Translate());
     }
 
-    public async Task<IDataResult<PaginatedList<UserResponseDto>>> GetAsPaginatedListAsync()
+    public async Task<IDataResult<PaginatedList<UserResponseDto>>> GetAsPaginatedListAsync(int pageIndex, int pageSize)
     {
         var datas = _unitOfWork.UserRepository.GetList();
-        var paginationDto = _utilService.GetPagination();
 
-        var response = await PaginatedList<User>.CreateAsync(datas.OrderBy(m => m.Id), paginationDto.PageIndex,
-            paginationDto.PageSize);
+        var response = await PaginatedList<User>.CreateAsync(datas.OrderBy(m => m.Id), pageIndex, pageSize);
 
-        var responseDto = new PaginatedList<UserResponseDto>(
-            _mapper.Map<List<UserResponseDto>>(response.Datas),
-            response.TotalRecordCount, response.PageIndex, response.TotalPageCount);
+        var responseDto = new PaginatedList<UserResponseDto>(_mapper.Map<List<UserResponseDto>>(response.Datas), response.TotalRecordCount, response.PageIndex, pageSize);
 
-        return new SuccessDataResult<PaginatedList<UserResponseDto>>(responseDto,
-            EMessages.Success.Translate());
+        return new SuccessDataResult<PaginatedList<UserResponseDto>>(responseDto, EMessages.Success.Translate());
     }
 
     public async Task<IDataResult<string>> GetProfileAsync(Guid userId)
@@ -132,7 +132,6 @@ public class UserService(IUnitOfWork unitOfWork, IMapper mapper, IUtilService ut
         if (user is { File: not null })
         {
             return new SuccessDataResult<string>(user.File, EMessages.Success.Translate());
-
         }
         return new SuccessDataResult<string>(EMessages.FileIsNotFound.Translate());
     }

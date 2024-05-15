@@ -1,6 +1,5 @@
 using AutoMapper;
 using BLL.Abstract;
-using CORE.Abstract;
 using CORE.Localization;
 using DAL.EntityFramework.UnitOfWork;
 using DAL.EntityFramework.Utility;
@@ -10,11 +9,17 @@ using ENTITIES.Entities.Structures;
 
 namespace BLL.Concrete;
 
-public class DepartmentService(IMapper mapper, IUnitOfWork unitOfWork, IUtilService utilService) : IDepartmentService
+public class DepartmentService : IDepartmentService
 {
-    private readonly IMapper _mapper = mapper;
-    private readonly IUnitOfWork _unitOfWork = unitOfWork;
-    private readonly IUtilService _utilService = utilService;
+    private readonly IMapper _mapper;
+    private readonly IUnitOfWork _unitOfWork;
+
+    public DepartmentService(IMapper mapper,
+                             IUnitOfWork unitOfWork)
+    {
+        _mapper = mapper;
+        _unitOfWork = unitOfWork;
+    }
 
     public async Task<IResult> AddAsync(DepartmentCreateRequestDto dto)
     {
@@ -38,14 +43,13 @@ public class DepartmentService(IMapper mapper, IUnitOfWork unitOfWork, IUtilServ
         return new SuccessResult(EMessages.Success.Translate());
     }
 
-    public async Task<IDataResult<PaginatedList<DepartmentResponseDto>>> GetAsPaginatedListAsync()
+    public async Task<IDataResult<PaginatedList<DepartmentResponseDto>>> GetAsPaginatedListAsync(int pageIndex, int pageSize)
     {
         var datas = _unitOfWork.DepartmentRepository.GetList();
-        var paginationDto = _utilService.GetPagination();
 
-        var response = await PaginatedList<Department>.CreateAsync(datas.OrderBy(m => m.Id), paginationDto.PageIndex, paginationDto.PageSize);
+        var response = await PaginatedList<Department>.CreateAsync(datas.OrderBy(m => m.Id), pageIndex, pageSize);
 
-        var responseDto = new PaginatedList<DepartmentResponseDto>(_mapper.Map<List<DepartmentResponseDto>>(response.Datas), response.TotalRecordCount, response.PageIndex, paginationDto.PageSize);
+        var responseDto = new PaginatedList<DepartmentResponseDto>(_mapper.Map<List<DepartmentResponseDto>>(response.Datas), response.TotalRecordCount, response.PageIndex, pageSize);
 
         return new SuccessDataResult<PaginatedList<DepartmentResponseDto>>(responseDto, EMessages.Success.Translate());
     }

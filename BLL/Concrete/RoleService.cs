@@ -14,7 +14,8 @@ public class RoleService : IRoleService
     private readonly IMapper _mapper;
     private readonly IUnitOfWork _unitOfWork;
 
-    public RoleService(IUnitOfWork unitOfWork, IMapper mapper)
+    public RoleService(IUnitOfWork unitOfWork,
+                       IMapper mapper)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;

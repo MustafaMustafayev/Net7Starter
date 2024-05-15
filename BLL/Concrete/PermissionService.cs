@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using BLL.Abstract;
-using CORE.Abstract;
 using CORE.Localization;
 using DAL.EntityFramework.UnitOfWork;
 using DAL.EntityFramework.Utility;
@@ -14,13 +13,12 @@ public class PermissionService : IPermissionService
 {
     private readonly IMapper _mapper;
     private readonly IUnitOfWork _unitOfWork;
-    private readonly IUtilService _utilService;
 
-    public PermissionService(IUnitOfWork unitOfWork, IMapper mapper, IUtilService utilService)
+    public PermissionService(IUnitOfWork unitOfWork,
+                             IMapper mapper)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
-        _utilService = utilService;
     }
 
     public async Task<IResult> AddAsync(PermissionCreateRequestDto dto)
@@ -42,13 +40,12 @@ public class PermissionService : IPermissionService
         return new SuccessResult(EMessages.Success.Translate());
     }
 
-    public async Task<IDataResult<PaginatedList<PermissionResponseDto>>> GetAsPaginatedListAsync()
+    public async Task<IDataResult<PaginatedList<PermissionResponseDto>>> GetAsPaginatedListAsync(int pageIndex, int pageSize)
     {
         var datas = _unitOfWork.PermissionRepository.GetList();
-        var paginationDto = _utilService.GetPagination();
-        var response = await PaginatedList<Permission>.CreateAsync(datas.OrderBy(m => m.Id), paginationDto.PageIndex, paginationDto.PageSize);
+        var response = await PaginatedList<Permission>.CreateAsync(datas.OrderBy(m => m.Id), pageIndex, pageSize);
 
-        var responseDto = new PaginatedList<PermissionResponseDto>(_mapper.Map<List<PermissionResponseDto>>(response.Datas), response.TotalRecordCount, response.PageIndex, response.TotalPageCount);
+        var responseDto = new PaginatedList<PermissionResponseDto>(_mapper.Map<List<PermissionResponseDto>>(response.Datas), response.TotalRecordCount, response.PageIndex, pageSize);
 
         return new SuccessDataResult<PaginatedList<PermissionResponseDto>>(responseDto, EMessages.Success.Translate());
     }

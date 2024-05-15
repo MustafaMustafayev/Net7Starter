@@ -1,6 +1,5 @@
 using AutoMapper;
 using BLL.Abstract;
-using CORE.Abstract;
 using CORE.Localization;
 using DAL.EntityFramework.UnitOfWork;
 using DAL.EntityFramework.Utility;
@@ -14,12 +13,12 @@ public class ErrorLogService : IErrorLogService
 {
     private readonly IMapper _mapper;
     private readonly IUnitOfWork _unitOfWork;
-    private readonly IUtilService _utilService;
-    public ErrorLogService(IMapper mapper, IUnitOfWork unitOfWork, IUtilService utilService)
+
+    public ErrorLogService(IMapper mapper,
+                           IUnitOfWork unitOfWork)
     {
         _mapper = mapper;
         _unitOfWork = unitOfWork;
-        _utilService = utilService;
     }
 
     public async Task<IResult> AddAsync(ErrorLogCreateDto dto)
@@ -32,14 +31,13 @@ public class ErrorLogService : IErrorLogService
         return new SuccessResult(EMessages.Success.Translate());
     }
 
-    public async Task<IDataResult<PaginatedList<ErrorLogResponseDto>>> GetAsPaginatedListAsync()
+    public async Task<IDataResult<PaginatedList<ErrorLogResponseDto>>> GetAsPaginatedListAsync(int pageIndex, int pageSize)
     {
         var datas = _unitOfWork.ErrorLogRepository.GetList();
-        var paginationDto = _utilService.GetPagination();
 
-        var response = await PaginatedList<ErrorLog>.CreateAsync(datas.OrderBy(m => m.Id), paginationDto.PageIndex, paginationDto.PageSize);
+        var response = await PaginatedList<ErrorLog>.CreateAsync(datas.OrderBy(m => m.Id), pageIndex, pageSize);
 
-        var responseDto = new PaginatedList<ErrorLogResponseDto>(_mapper.Map<List<ErrorLogResponseDto>>(response.Datas), response.TotalRecordCount, response.PageIndex, paginationDto.PageSize);
+        var responseDto = new PaginatedList<ErrorLogResponseDto>(_mapper.Map<List<ErrorLogResponseDto>>(response.Datas), response.TotalRecordCount, response.PageIndex, pageSize);
 
         return new SuccessDataResult<PaginatedList<ErrorLogResponseDto>>(responseDto, EMessages.Success.Translate());
     }

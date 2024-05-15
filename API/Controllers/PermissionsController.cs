@@ -1,6 +1,7 @@
 ﻿using API.Attributes;
 using API.Filters;
 using BLL.Abstract;
+using BLL.Concrete;
 using DTO.Permission;
 using DTO.Responses;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -25,10 +26,10 @@ public class PermissionsController : Controller
 
     [SwaggerOperation(Summary = "get permissions as paginated list")]
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IDataResult<List<PermissionResponseDto>>))]
-    [HttpGet("paginate")]
-    public async Task<IActionResult> GetAsPaginated()
+    [HttpGet("{pageIndex}/{pageSize}")]
+    public async Task<IActionResult> GetAsPaginated([FromRoute] int pageIndex, int pageSize)
     {
-        var response = await _permissionService.GetAsPaginatedListAsync();
+        var response = await _permissionService.GetAsPaginatedListAsync(pageIndex, pageSize);
         return Ok(response);
     }
 

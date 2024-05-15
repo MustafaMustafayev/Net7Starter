@@ -6,9 +6,9 @@ namespace BLL.Abstract;
 
 public interface IUserService
 {
-    Task<IDataResult<IEnumerable<UserResponseDto>>> GetAsync();
+    Task<IDataResult<PaginatedList<UserResponseDto>>> GetAsPaginatedListAsync(int pageIndex, int pageSize);
 
-    Task<IDataResult<PaginatedList<UserResponseDto>>> GetAsPaginatedListAsync();
+    Task<IDataResult<IEnumerable<UserResponseDto>>> GetAsync();
 
     Task<IDataResult<UserByIdResponseDto>> GetAsync(Guid id);
 
@@ -17,7 +17,8 @@ public interface IUserService
     Task<IResult> UpdateAsync(Guid id, UserUpdateRequestDto dto);
 
     Task<IResult> SoftDeleteAsync(Guid id);
-    Task<IResult> AddProfileAsync(Guid userId, string? file = null);
-    Task<IDataResult<string>> GetProfileAsync(Guid userId);
 
+    Task<IResult> AddProfileAsync(Guid userId, string? file = null);
+
+    Task<IDataResult<string>> GetProfileAsync(Guid userId);
 }
