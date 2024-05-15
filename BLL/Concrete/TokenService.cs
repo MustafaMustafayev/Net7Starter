@@ -14,7 +14,7 @@ using ENTITIES.Entities;
 namespace BLL.Concrete;
 
 public class TokenService(ConfigSettings configSettings,
-                         IMapper mapper,    
+                         IMapper mapper,
                          IUnitOfWork unitOfWork,
                          IUtilService utilService) : ITokenService
 {
