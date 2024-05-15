@@ -10,20 +10,13 @@ using DTO.User;
 
 namespace BLL.Concrete;
 
-public class AuthService : IAuthService
+public class AuthService(IMapper mapper,
+                         IUnitOfWork unitOfWork,
+                         IUtilService utilService) : IAuthService
 {
-    private readonly IMapper _mapper;
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly IUtilService _utilService;
-
-    public AuthService(IUnitOfWork unitOfWork,
-                       IMapper mapper,
-                       IUtilService utilService)
-    {
-        _unitOfWork = unitOfWork;
-        _mapper = mapper;
-        _utilService = utilService;
-    }
+    private readonly IMapper _mapper = mapper;
+    private readonly IUnitOfWork _unitOfWork = unitOfWork;
+    private readonly IUtilService _utilService = utilService;
 
     public async Task<string?> GetUserSaltAsync(string userEmail)
     {

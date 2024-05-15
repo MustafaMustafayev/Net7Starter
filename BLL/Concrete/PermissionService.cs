@@ -9,17 +9,11 @@ using ENTITIES.Entities;
 
 namespace BLL.Concrete;
 
-public class PermissionService : IPermissionService
+public class PermissionService(IMapper mapper,
+                               IUnitOfWork unitOfWork) : IPermissionService
 {
-    private readonly IMapper _mapper;
-    private readonly IUnitOfWork _unitOfWork;
-
-    public PermissionService(IUnitOfWork unitOfWork,
-                             IMapper mapper)
-    {
-        _unitOfWork = unitOfWork;
-        _mapper = mapper;
-    }
+    private readonly IMapper _mapper = mapper;
+    private readonly IUnitOfWork _unitOfWork = unitOfWork;
 
     public async Task<IResult> AddAsync(PermissionCreateRequestDto dto)
     {

@@ -25,7 +25,6 @@ public class ServiceBuilder : ISourceBuilder
         var text = """
                    using AutoMapper;
                    using BLL.Abstract;
-                   using CORE.Abstract;
                    using CORE.Localization;
                    using DAL.EntityFramework.UnitOfWork;
                    using DAL.EntityFramework.Utility;
@@ -35,11 +34,11 @@ public class ServiceBuilder : ISourceBuilder
 
                    namespace BLL.Concrete;
 
-                   public class {entityName}Service(IMapper mapper, IUnitOfWork unitOfWork, IUtilService utilService) : I{entityName}Service
+                   public class {entityName}Service(IMapper mapper,
+                                                    IUnitOfWork unitOfWork) : I{entityName}Service
                    {
                        private readonly IMapper _mapper = mapper;
                        private readonly IUnitOfWork _unitOfWork = unitOfWork;
-                       private readonly IUtilService _utilService = utilService;
                    
                        public async Task<IResult> AddAsync({entityName}CreateRequestDto dto)
                        {
@@ -64,14 +63,13 @@ public class ServiceBuilder : ISourceBuilder
                            return new SuccessResult(EMessages.Success.Translate());
                        }
                    
-                       public async Task<IDataResult<PaginatedList<{entityName}ResponseDto>>> GetAsPaginatedListAsync()
+                       public async Task<IDataResult<PaginatedList<{entityName}ResponseDto>>> GetAsPaginatedListAsync(int pageIndex, int pageSize)
                        {
                            var datas = _unitOfWork.{entityName}Repository.GetList();
-                           var paginationDto = _utilService.GetPagination();
                    
-                           var response = await PaginatedList<{entityName}>.CreateAsync(datas.OrderBy(m => m.Id), paginationDto.PageIndex, paginationDto.PageSize);
+                           var response = await PaginatedList<{entityName}>.CreateAsync(datas.OrderBy(m => m.Id), pageIndex, pageSize);
                    
-                           var responseDto = new PaginatedList<{entityName}ResponseDto>(_mapper.Map<List<{entityName}ResponseDto>>(response.Datas), response.TotalRecordCount, response.PageIndex, paginationDto.PageSize);
+                           var responseDto = new PaginatedList<{entityName}ResponseDto>(_mapper.Map<List<{entityName}ResponseDto>>(response.Datas), response.TotalRecordCount, response.PageIndex, pageSize);
                    
                            return new SuccessDataResult<PaginatedList<{entityName}ResponseDto>>(responseDto, EMessages.Success.Translate());
                        }

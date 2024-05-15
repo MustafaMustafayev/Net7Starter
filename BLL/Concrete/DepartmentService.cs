@@ -9,17 +9,11 @@ using ENTITIES.Entities.Structures;
 
 namespace BLL.Concrete;
 
-public class DepartmentService : IDepartmentService
+public class DepartmentService(IMapper mapper,
+                               IUnitOfWork unitOfWork) : IDepartmentService
 {
-    private readonly IMapper _mapper;
-    private readonly IUnitOfWork _unitOfWork;
-
-    public DepartmentService(IMapper mapper,
-                             IUnitOfWork unitOfWork)
-    {
-        _mapper = mapper;
-        _unitOfWork = unitOfWork;
-    }
+    private readonly IMapper _mapper = mapper;
+    private readonly IUnitOfWork _unitOfWork = unitOfWork;
 
     public async Task<IResult> AddAsync(DepartmentCreateRequestDto dto)
     {

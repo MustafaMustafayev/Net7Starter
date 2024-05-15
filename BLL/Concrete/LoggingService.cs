@@ -6,17 +6,11 @@ using ENTITIES.Entities;
 
 namespace BLL.Concrete;
 
-public class LoggingService : ILoggingService
+public class LoggingService(IMapper mapper,
+                            IUnitOfWork unitOfWork) : ILoggingService
 {
-    private readonly IMapper _mapper;
-    private readonly IUnitOfWork _unitOfWork;
-
-    public LoggingService(IUnitOfWork unitOfWork,
-                          IMapper mapper)
-    {
-        _unitOfWork = unitOfWork;
-        _mapper = mapper;
-    }
+    private readonly IMapper _mapper = mapper;
+    private readonly IUnitOfWork _unitOfWork = unitOfWork;
 
     public async Task AddLogAsync(RequestLogDto dto)
     {

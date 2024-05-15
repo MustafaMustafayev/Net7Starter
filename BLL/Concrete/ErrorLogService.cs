@@ -9,17 +9,11 @@ using ENTITIES.Entities;
 
 namespace BLL.Concrete;
 
-public class ErrorLogService : IErrorLogService
+public class ErrorLogService(IMapper mapper,
+                             IUnitOfWork unitOfWork) : IErrorLogService
 {
-    private readonly IMapper _mapper;
-    private readonly IUnitOfWork _unitOfWork;
-
-    public ErrorLogService(IMapper mapper,
-                           IUnitOfWork unitOfWork)
-    {
-        _mapper = mapper;
-        _unitOfWork = unitOfWork;
-    }
+    private readonly IMapper _mapper = mapper;
+    private readonly IUnitOfWork _unitOfWork = unitOfWork;
 
     public async Task<IResult> AddAsync(ErrorLogCreateDto dto)
     {

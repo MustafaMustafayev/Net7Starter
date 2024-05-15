@@ -55,10 +55,10 @@ public class ControllerBuilder : ISourceBuilder
                    
                        [SwaggerOperation(Summary = "get paginated list")]
                        [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IDataResult<List<{entityName}ResponseDto>>))]
-                       [HttpGet("paginate")]
-                       public async Task<IActionResult> GetAsPaginated()
+                       [HttpGet("{pageIndex}/{pageSize}")]
+                       public async Task<IActionResult> GetAsPaginated([FromRoute] int pageIndex, int pageSize)
                        {
-                           var response = await _{entityNameLower}Service.GetAsPaginatedListAsync();
+                           var response = await _{entityNameLower}Service.GetAsPaginatedListAsync(pageIndex, pageSize);
                            return Ok(response);
                        }
                    

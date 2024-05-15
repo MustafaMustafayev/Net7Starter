@@ -9,17 +9,11 @@ using ENTITIES.Entities;
 
 namespace BLL.Concrete;
 
-public class RoleService : IRoleService
+public class RoleService(IMapper mapper,
+                         IUnitOfWork unitOfWork) : IRoleService
 {
-    private readonly IMapper _mapper;
-    private readonly IUnitOfWork _unitOfWork;
-
-    public RoleService(IUnitOfWork unitOfWork,
-                       IMapper mapper)
-    {
-        _unitOfWork = unitOfWork;
-        _mapper = mapper;
-    }
+    private readonly IMapper _mapper = mapper;
+    private readonly IUnitOfWork _unitOfWork = unitOfWork;
 
     public async Task<IResult> AddAsync(RoleCreateRequestDto dto)
     {

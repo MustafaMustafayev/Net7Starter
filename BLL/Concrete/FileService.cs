@@ -9,20 +9,13 @@ using File = ENTITIES.Entities.File;
 
 namespace BLL.Concrete;
 
-public class FileService : IFileService
+public class FileService(IMapper mapper,
+                         IUnitOfWork unitOfWork,
+                         IUserService userService) : IFileService
 {
-    private readonly IMapper _mapper;
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly IUserService _userService;
-
-    public FileService(IUnitOfWork unitOfWork,
-                       IMapper mapper,
-                       IUserService userService)
-    {
-        _mapper = mapper;
-        _unitOfWork = unitOfWork;
-        _userService = userService;
-    }
+    private readonly IMapper _mapper = mapper;
+    private readonly IUnitOfWork _unitOfWork = unitOfWork;
+    private readonly IUserService _userService = userService;
 
     public async Task<IResult> AddFileAsync(FileCreateRequestDto dto, FileUploadRequestDto requestDto)
     {

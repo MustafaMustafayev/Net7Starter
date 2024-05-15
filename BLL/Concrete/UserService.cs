@@ -11,17 +11,11 @@ using ENTITIES.Entities;
 
 namespace BLL.Concrete;
 
-public class UserService : IUserService
+public class UserService(IMapper mapper,
+                         IUnitOfWork unitOfWork) : IUserService
 {
-    private readonly IMapper _mapper;
-    private readonly IUnitOfWork _unitOfWork;
-
-    public UserService(IUnitOfWork unitOfWork,
-                       IMapper mapper)
-    {
-        _mapper = mapper;
-        _unitOfWork = unitOfWork;
-    }
+    private readonly IMapper _mapper = mapper;
+    private readonly IUnitOfWork _unitOfWork = unitOfWork;
 
     public async Task<IResult> AddAsync(UserCreateRequestDto dto)
     {

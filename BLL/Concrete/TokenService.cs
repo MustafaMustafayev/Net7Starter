@@ -13,23 +13,15 @@ using ENTITIES.Entities;
 
 namespace BLL.Concrete;
 
-public class TokenService : ITokenService
+public class TokenService(ConfigSettings configSettings,
+                         IMapper mapper,    
+                         IUnitOfWork unitOfWork,
+                         IUtilService utilService) : ITokenService
 {
-    private readonly ConfigSettings _configSettings;
-    private readonly IMapper _mapper;
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly IUtilService _utilService;
-
-    public TokenService(ConfigSettings configSettings,
-                        IUnitOfWork unitOfWork,
-                        IUtilService utilService,
-                        IMapper mapper)
-    {
-        _configSettings = configSettings;
-        _mapper = mapper;
-        _unitOfWork = unitOfWork;
-        _utilService = utilService;
-    }
+    private readonly ConfigSettings _configSettings = configSettings;
+    private readonly IMapper _mapper = mapper;
+    private readonly IUnitOfWork _unitOfWork = unitOfWork;
+    private readonly IUtilService _utilService = utilService;
 
     public async Task<IResult> AddAsync(LoginResponseDto dto)
     {
