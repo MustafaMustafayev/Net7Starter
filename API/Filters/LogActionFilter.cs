@@ -13,7 +13,9 @@ public class LogActionFilter : IAsyncActionFilter
     private readonly ILoggingService _loggingService;
     private readonly IUtilService _utilService;
 
-    public LogActionFilter(IUtilService utilService, ILoggingService loggingService, ConfigSettings configSettings)
+    public LogActionFilter(IUtilService utilService,
+                           ILoggingService loggingService,
+                           ConfigSettings configSettings)
     {
         _utilService = utilService;
         _loggingService = loggingService;
