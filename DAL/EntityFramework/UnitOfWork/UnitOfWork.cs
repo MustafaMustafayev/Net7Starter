@@ -6,7 +6,18 @@ public class UnitOfWork : IUnitOfWork
 {
     private readonly DataContext _dataContext;
     private bool _isDisposed;
-    public UnitOfWork(DataContext dataContext, IDepartmentRepository departmentRepository, IErrorLogRepository errorLogRepository, IFileRepository fileRepository, INlogRepository nlogRepository, IOrganizationRepository organizationRepository, IPermissionRepository permissionRepository, IRequestLogRepository requestLogRepository, IResponseLogRepository responseLogRepository, IRoleRepository roleRepository, ITokenRepository tokenRepository, IUserRepository userRepository)
+    public UnitOfWork(DataContext dataContext,
+                      IDepartmentRepository departmentRepository,
+                      IErrorLogRepository errorLogRepository,
+                      IFileRepository fileRepository,
+                      INlogRepository nlogRepository,
+                      IOrganizationRepository organizationRepository,
+                      IPermissionRepository permissionRepository,
+                      IRequestLogRepository requestLogRepository,
+                      IResponseLogRepository responseLogRepository,
+                      IRoleRepository roleRepository,
+                      ITokenRepository tokenRepository,
+                      IUserRepository userRepository)
     {
         _dataContext = dataContext;
         DepartmentRepository = departmentRepository;
