@@ -204,7 +204,7 @@ public class UtilService : IUtilService
     {
         return type switch
         {
-            EFileType.UserProfile => @"files\images\user_profile",
+            EFileType.UserImages => @"files\images\user_profile",
             EFileType.OrganizationLogo => @"files\images\organization_logo",
             _ => "files/error"
         };

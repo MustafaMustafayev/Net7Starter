@@ -10,8 +10,10 @@ using DTO.Responses;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Nest;
 using Swashbuckle.AspNetCore.Annotations;
 using IResult = DTO.Responses.IResult;
+using Result = DTO.Responses.Result;
 
 namespace API.Controllers;
 
@@ -55,24 +57,14 @@ public class AuthController(
         return Ok(response);
     }
 
-    [SwaggerOperation(Summary = "send email for reset password")]
-    [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
-    [HttpGet("verificationCode")]
-    [AllowAnonymous]
-    public IActionResult SendVerificationCode([FromQuery] string email)
-    {
-        return Ok(_authService.SendVerificationCodeToEmailAsync(email));
-    }
-
     [SwaggerOperation(Summary = "refesh access token")]
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IDataResult<LoginResponseDto>))]
     [ValidateToken]
-    [HttpGet("refresh")]
-    public async Task<IActionResult> Refresh()
+    [HttpGet("refresh/token")]
+    public async Task<IActionResult> RefreshToken()
     {
-        var jwtToken =
-            _utilService.TrimToken(
-                HttpContext.Request.Headers[_configSettings.AuthSettings.HeaderName]!);
+        var jwtToken = _utilService.TrimToken(HttpContext.Request.Headers[_configSettings.AuthSettings.HeaderName]!);
+
         string refreshToken = HttpContext.Request.Headers[_configSettings.AuthSettings.RefreshTokenHeaderName]!;
 
         var tokenResponse = await _tokenService.GetAsync(jwtToken, refreshToken);
@@ -86,12 +78,26 @@ public class AuthController(
         return Unauthorized();
     }
 
+    [SwaggerOperation(Summary = "send email for reset password")]
+    [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
+    [HttpPost("verificationCode")]
+    [AllowAnonymous]
+    public IActionResult SendVerificationCode([FromBody] SendVerificationCodeRequestDto dto)
+    {
+        var response = _authService.SendVerificationCodeToEmailAsync(dto.Email);
+        return Ok(response);
+    }
+
     [SwaggerOperation(Summary = "reset password")]
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
     [HttpPost("resetPassword")]
+    [AllowAnonymous]
     public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequestDto request)
     {
         var response = await _authService.ResetPasswordAsync(request);
+        var userId = _utilService.GetUserIdFromToken();
+        await _authService.LogoutRemovedUserAsync(userId!.Value);
+
         return Ok(response);
     }
 
@@ -119,6 +125,7 @@ public class AuthController(
 
     [SwaggerOperation(Summary = "logout")]
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
+    [ValidateToken]
     [HttpPost("logout")]
     public async Task<IActionResult> Logout()
     {

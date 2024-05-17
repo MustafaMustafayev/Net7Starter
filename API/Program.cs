@@ -149,8 +149,8 @@ app.Use((context, next) =>
     return next();
 });
 
-// this will cause unexpected behaviour on watchdog's site
-/*app.Use(async (context, next) =>
+/* response secutiry headers
+app.Use(async (context, next) =>
 {
     context.Response.Headers.Add("X-Content-Type-Options", "nosniff");
     context.Response.Headers.Add("Content-Security-Policy", "default-src 'self'");

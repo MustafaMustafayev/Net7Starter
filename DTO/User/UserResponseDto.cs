@@ -9,5 +9,5 @@ public record UserResponseDto()
     public required string Email { get; set; }
     public required string ContactNumber { get; set; }
     public RoleToFkDto? Role { get; set; }
-    public string? File { get; set; }
+    public string? Image { get; set; }
 }

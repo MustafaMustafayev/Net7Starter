@@ -24,6 +24,7 @@ public class DataContext : DbContext
     public required DbSet<User> Users { get; set; }
     public required DbSet<File> Files { get; set; }
     public required DbSet<Organization> Organizations { get; set; }
+    public required DbSet<Department> Departments { get; set; }
     public required DbSet<Role> Roles { get; set; }
     public required DbSet<RequestLog> RequestLogs { get; set; }
     public required DbSet<ResponseLog> ResponseLogs { get; set; }
@@ -44,7 +45,7 @@ public class DataContext : DbContext
     }
 
     /* migration commands
-      dotnet ef --startup-project ../API migrations add initial --context DataContext
+      dotnet ef --startup-project ../API migrations add renameuserimage --context DataContext
       dotnet ef --startup-project ../API database update --context DataContext
     */
 

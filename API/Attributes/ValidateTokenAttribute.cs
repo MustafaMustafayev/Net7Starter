@@ -18,23 +18,16 @@ public class ValidateTokenAttribute : Attribute, IAuthorizationFilter
             return;
         }
 
-        var configSettings =
-            (context.HttpContext.RequestServices
-            .GetService(typeof(ConfigSettings)) as ConfigSettings)!;
-        var tokenService = (context.HttpContext.RequestServices
-            .GetService(typeof(ITokenService)) as ITokenService)!;
-        var utilService = (context.HttpContext.RequestServices
-            .GetService(typeof(IUtilService)) as IUtilService)!;
+        var configSettings = (context.HttpContext.RequestServices.GetService(typeof(ConfigSettings)) as ConfigSettings)!;
+        var tokenService = (context.HttpContext.RequestServices.GetService(typeof(ITokenService)) as ITokenService)!;
+        var utilService = (context.HttpContext.RequestServices.GetService(typeof(IUtilService)) as IUtilService)!;
 
-        string? jwtToken = context.HttpContext.Request
-            .Headers[configSettings.AuthSettings.HeaderName];
-        string? refreshToken = context.HttpContext.Request
-            .Headers[configSettings.AuthSettings.RefreshTokenHeaderName];
+        string? jwtToken = context.HttpContext.Request.Headers[configSettings.AuthSettings.HeaderName];
+        string? refreshToken = context.HttpContext.Request.Headers[configSettings.AuthSettings.RefreshTokenHeaderName];
 
         jwtToken = utilService.TrimToken(jwtToken);
 
-        var validationResult = tokenService
-            .CheckValidationAsync(jwtToken, refreshToken!).Result;
+        var validationResult = tokenService.CheckValidationAsync(jwtToken, refreshToken!).Result;
 
         if (!validationResult.Success)
         {

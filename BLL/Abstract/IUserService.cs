@@ -18,7 +18,7 @@ public interface IUserService
 
     Task<IResult> SoftDeleteAsync(Guid id);
 
-    Task<IResult> AddProfileAsync(Guid userId, string? file = null);
+    Task<IResult> SetImageAsync(Guid userId, string? image = null);
 
-    Task<IDataResult<string>> GetProfileAsync(Guid userId);
+    Task<IDataResult<string>> GetImageAsync(Guid userId);
 }

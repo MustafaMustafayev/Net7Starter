@@ -1,7 +1,7 @@
 using DAL.EntityFramework.Abstract;
 using DAL.EntityFramework.Context;
 using DAL.EntityFramework.GenericRepository;
-using ENTITIES.Entities.Structures;
+using ENTITIES.Entities;
 
 namespace DAL.EntityFramework.Concrete;
 

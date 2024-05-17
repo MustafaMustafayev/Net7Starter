@@ -1,5 +1,5 @@
 using DAL.EntityFramework.GenericRepository;
-using ENTITIES.Entities.Structures;
+using ENTITIES.Entities;
 
 namespace DAL.EntityFramework.Abstract;
 

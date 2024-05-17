@@ -1,6 +1,8 @@
 ﻿using API.Attributes;
 using API.Filters;
 using BLL.Abstract;
+using BLL.Concrete;
+using DTO.Permission;
 using DTO.Responses;
 using DTO.Role;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -22,6 +24,15 @@ public class RolesController : Controller
     public RolesController(IRoleService roleService)
     {
         _roleService = roleService;
+    }
+
+    [SwaggerOperation(Summary = "get roles as paginated list")]
+    [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IDataResult<List<PermissionResponseDto>>))]
+    [HttpGet("{pageIndex}/{pageSize}")]
+    public async Task<IActionResult> GetAsPaginated([FromRoute] int pageIndex, int pageSize)
+    {
+        var response = await _roleService.GetAsPaginatedListAsync(pageIndex, pageSize);
+        return Ok(response);
     }
 
     [SwaggerOperation(Summary = "get roles")]

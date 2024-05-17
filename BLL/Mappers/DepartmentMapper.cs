@@ -1,6 +1,6 @@
 using AutoMapper;
 using DTO.Department;
-using ENTITIES.Entities.Structures;
+using ENTITIES.Entities;
 
 namespace BLL.Mappers;
 

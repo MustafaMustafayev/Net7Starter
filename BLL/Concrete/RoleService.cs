@@ -2,6 +2,8 @@
 using BLL.Abstract;
 using CORE.Localization;
 using DAL.EntityFramework.UnitOfWork;
+using DAL.EntityFramework.Utility;
+using DTO.Department;
 using DTO.Permission;
 using DTO.Responses;
 using DTO.Role;
@@ -26,6 +28,17 @@ public class RoleService(IMapper mapper,
         await _unitOfWork.CommitAsync();
 
         return new SuccessResult(EMessages.Success.Translate());
+    }
+
+    public async Task<IDataResult<PaginatedList<RoleResponseDto>>> GetAsPaginatedListAsync(int pageIndex, int pageSize)
+    {
+        var datas = _unitOfWork.RoleRepository.GetList();
+
+        var response = await PaginatedList<Role>.CreateAsync(datas.OrderBy(m => m.Id), pageIndex, pageSize);
+
+        var responseDto = new PaginatedList<RoleResponseDto>(_mapper.Map<List<RoleResponseDto>>(response.Datas), response.TotalRecordCount, response.PageIndex, pageSize);
+
+        return new SuccessDataResult<PaginatedList<RoleResponseDto>>(responseDto, EMessages.Success.Translate());
     }
 
     public async Task<IResult> SoftDeleteAsync(Guid id)
@@ -73,7 +86,7 @@ public class RoleService(IMapper mapper,
 
     public async Task<IDataResult<IEnumerable<PermissionResponseDto>>> GetPermissionsAsync(Guid id)
     {
-        var datas = _mapper.Map<IEnumerable<PermissionResponseDto>>((await _unitOfWork.RoleRepository.GetAsync(m => m.Id == id))!.Permissions);
+        var datas = _mapper.Map<IEnumerable<PermissionResponseDto>>((await _unitOfWork.RoleRepository.GetAsync(m => m.Id == id))?.Permissions);
 
         return new SuccessDataResult<IEnumerable<PermissionResponseDto>>(datas, EMessages.Success.Translate());
     }

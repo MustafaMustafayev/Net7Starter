@@ -81,5 +81,6 @@
     <ItemGroup>
       <Folder Include="wwwroot\files\" />
       <Folder Include="wwwroot\files\images\user_profile\" />
+      <Folder Include="wwwroot\UserImages\" />
     </ItemGroup>
 </Project>

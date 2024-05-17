@@ -2,6 +2,6 @@
 
 public enum EFileType
 {
-    UserProfile,
+    UserImages,
     OrganizationLogo
 }

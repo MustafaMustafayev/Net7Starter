@@ -5,7 +5,7 @@ using DAL.EntityFramework.UnitOfWork;
 using DAL.EntityFramework.Utility;
 using DTO.Department;
 using DTO.Responses;
-using ENTITIES.Entities.Structures;
+using ENTITIES.Entities;
 
 namespace BLL.Concrete;
 

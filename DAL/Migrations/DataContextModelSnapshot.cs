@@ -25,6 +25,46 @@ namespace DAL.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("ENTITIES.Entities.Department", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("CreatedById")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("DeletedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTimeOffset?>("ModifiedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("ModifiedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Departments");
+                });
+
             modelBuilder.Entity("ENTITIES.Entities.ErrorLog", b =>
                 {
                     b.Property<Guid>("Id")
@@ -344,7 +384,7 @@ namespace DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("f7f42853-10c5-4ddc-984d-09d4cbc8af1f"),
+                            Id = new Guid("a603330a-c6f1-4763-998d-e8d3c909032b"),
                             CreatedAt = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             IsDeleted = false,
                             Key = "SuperAdmin",
@@ -352,7 +392,7 @@ namespace DAL.Migrations
                         },
                         new
                         {
-                            Id = new Guid("e012cbd3-bdd0-42a3-9dd9-542ebf9000aa"),
+                            Id = new Guid("33a8ba44-1e5e-4cc2-905c-be8a6c208590"),
                             CreatedAt = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             IsDeleted = false,
                             Key = "Admin",
@@ -360,7 +400,7 @@ namespace DAL.Migrations
                         },
                         new
                         {
-                            Id = new Guid("125e017a-4654-4dde-ae32-2ef9dbc7479a"),
+                            Id = new Guid("3d3b766a-aeec-43d1-9e69-f1c2b3eb9100"),
                             CreatedAt = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             IsDeleted = false,
                             Key = "User",
@@ -368,7 +408,7 @@ namespace DAL.Migrations
                         },
                         new
                         {
-                            Id = new Guid("9986b81b-919d-4eea-8214-32b3419ea6f3"),
+                            Id = new Guid("41b90ae8-5629-4914-8a45-73c48fa03ec5"),
                             CreatedAt = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             IsDeleted = false,
                             Key = "Guest",
@@ -441,7 +481,7 @@ namespace DAL.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("File")
+                    b.Property<string>("Image")
                         .HasColumnType("text");
 
                     b.Property<bool>("IsDeleted")

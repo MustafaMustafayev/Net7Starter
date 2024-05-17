@@ -43,8 +43,8 @@ public class FileService(IMapper mapper,
 
         switch (dto.Type)
         {
-            case EFileType.UserProfile:
-                await _userService.AddProfileAsync(dto.UserId!.Value, null);
+            case EFileType.UserImages:
+                await _userService.SetImageAsync(dto.UserId!.Value, null);
                 break;
             case EFileType.OrganizationLogo:
                 //await _organizationService.AddProfileAsync(userId!.Value, null);

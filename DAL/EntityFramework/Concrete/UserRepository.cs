@@ -33,6 +33,7 @@ public class UserRepository : GenericRepository<User>, IUserRepository
         _dataContext.Entry(user).State = EntityState.Modified;
         _dataContext.Entry(user).Property(m => m.Password).IsModified = false;
         _dataContext.Entry(user).Property(m => m.Salt).IsModified = false;
+        _dataContext.Entry(user).Property(m => m.Image).IsModified = false;
 
         return Task.FromResult(1);
     }

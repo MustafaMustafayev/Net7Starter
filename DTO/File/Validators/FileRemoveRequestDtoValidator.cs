@@ -9,7 +9,7 @@ public class FileRemoveRequestDtoValidator : AbstractValidator<FileDeleteRequest
     {
         RuleFor(p => p.HashName).NotNull().NotEmpty();
         RuleFor(p => p.Type).NotNull().NotEmpty();
-        RuleFor(p => p.UserId).NotNull().When(p => p.Type == EFileType.UserProfile);
+        RuleFor(p => p.UserId).NotNull().When(p => p.Type == EFileType.UserImages);
         RuleFor(p => p.OrganizationId).NotNull().When(p => p.Type == EFileType.OrganizationLogo);
     }
 }

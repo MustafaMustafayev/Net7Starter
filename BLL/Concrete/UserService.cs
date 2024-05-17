@@ -55,12 +55,12 @@ public class UserService(IMapper mapper,
         return new SuccessResult(EMessages.Success.Translate());
     }
 
-    public async Task<IResult> AddProfileAsync(Guid userId, string? file = null)
+    public async Task<IResult> SetImageAsync(Guid userId, string? image = null)
     {
-        var user = await _unitOfWork.UserRepository.GetAsNoTrackingAsync(u => u.Id == userId);
-        user!.File = file;
+        var user = await _unitOfWork.UserRepository.GetAsync(u => u.Id == userId);
+        user!.Image = image;
 
-        await _unitOfWork.UserRepository.UpdateUserAsync(user);
+        _unitOfWork.UserRepository.Update(user);
         await _unitOfWork.CommitAsync();
 
         return new SuccessResult();
@@ -92,16 +92,8 @@ public class UserService(IMapper mapper,
                      : dto.RoleId
         };
 
-        var old = await _unitOfWork.UserRepository.GetAsNoTrackingAsync(u => u.Id == id);
-        if (old is null)
-        {
-            return new ErrorResult(EMessages.UserIsNotExist.Translate());
-        }
-
         var data = _mapper.Map<User>(dto);
-
         data.Id = id;
-        data.File = old.File;
 
         await _unitOfWork.UserRepository.UpdateUserAsync(data);
         await _unitOfWork.CommitAsync();
@@ -120,12 +112,12 @@ public class UserService(IMapper mapper,
         return new SuccessDataResult<PaginatedList<UserResponseDto>>(responseDto, EMessages.Success.Translate());
     }
 
-    public async Task<IDataResult<string>> GetProfileAsync(Guid userId)
+    public async Task<IDataResult<string>> GetImageAsync(Guid userId)
     {
         var user = await _unitOfWork.UserRepository.GetAsNoTrackingAsync(u => u.Id == userId);
-        if (user is { File: not null })
+        if (user is { Image: not null })
         {
-            return new SuccessDataResult<string>(user.File, EMessages.Success.Translate());
+            return new SuccessDataResult<string>(user.Image, EMessages.Success.Translate());
         }
         return new SuccessDataResult<string>(EMessages.FileIsNotFound.Translate());
     }

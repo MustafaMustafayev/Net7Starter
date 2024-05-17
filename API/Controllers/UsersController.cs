@@ -12,6 +12,7 @@ using DTO.User;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Nest;
 using Swashbuckle.AspNetCore.Annotations;
 using IResult = DTO.Responses.IResult;
 
@@ -103,29 +104,20 @@ public class UsersController(IUserService userService, IUtilService utilService,
         return Ok(response);
     }
 
-    [SwaggerOperation(Summary = "upload profile file")]
+    [SwaggerOperation(Summary = "upload own image")]
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
-    [HttpPost("profile")]
-    public async Task<IActionResult> Upload(IFormFile file)
+    [HttpPost("upload/image")]
+    public async Task<IActionResult> UploadImage(IFormFile file)
     {
         Guid userId = _utilService.GetUserIdFromToken().GetValueOrDefault();
-
-        return await Upload(userId, file);
+        return await UploadImage(userId, file);
     }
 
-    [SwaggerOperation(Summary = "upload profile file by user id")]
+    [SwaggerOperation(Summary = "upload image by user id")]
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
-    [HttpPost("{id}/profile")]
-    [Authorize(Roles = "Admin")]
-    public async Task<IActionResult> Upload([FromRoute] Guid id, IFormFile file)
+    [HttpPost("{id}/upload/image")]
+    public async Task<IActionResult> UploadImage([FromRoute] Guid id, IFormFile file)
     {
-        var existFile = await _userService.GetProfileAsync(id);
-
-        if (existFile is null || !existFile.Success)
-        {
-            return BadRequest(new ErrorDataResult<string>(EMessages.UserIsNotExist.Translate()));
-        }
-
         string fileExtension = System.IO.Path.GetExtension(file.FileName);
         Guid fileNewName = Guid.NewGuid();
 
@@ -134,42 +126,32 @@ public class UsersController(IUserService userService, IUtilService utilService,
             return BadRequest(new ErrorDataResult<string>(EMessages.ThisFileTypeIsNotAllowed.Translate()));
         }
 
-        var path = _utilService.GetEnvFolderPath(_utilService.GetFolderName(EFileType.UserProfile));
+        var path = _utilService.GetEnvFolderPath(_utilService.GetFolderName(EFileType.UserImages));
         await FileHelper.WriteFile(file, $"{fileNewName}{fileExtension}", path);
 
-        if (existFile!.Data is not null)
-        {
-            var fullPath = System.IO.Path.Combine(path, existFile!.Data);
-
-            if (System.IO.File.Exists(fullPath))
-            {
-                System.IO.File.Delete(fullPath);
-            }
-        }
-
-        await _userService.AddProfileAsync(id, $"{fileNewName}{fileExtension}");
+        await _userService.SetImageAsync(id, $"{fileNewName}{fileExtension}");
 
         return Ok(new SuccessResult(EMessages.Success.Translate()));
     }
 
-    [SwaggerOperation(Summary = "upload profile file")]
+    [SwaggerOperation(Summary = "delete own image")]
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
     [ServiceFilter(typeof(LogActionFilter))]
-    [HttpDelete("profile")]
-    public async Task<IActionResult> DeleteFile()
+    [HttpDelete("image")]
+    public async Task<IActionResult> DeleteImage()
     {
         Guid userId = _utilService.GetUserIdFromToken().GetValueOrDefault();
-
-        return await DeleteFile(userId);
+        var response = await DeleteImage(userId);
+        return response;
     }
 
-    [SwaggerOperation(Summary = "upload profile file")]
+    [SwaggerOperation(Summary = "delete image by user id")]
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
     [ServiceFilter(typeof(LogActionFilter))]
-    [HttpDelete("profile/{id}")]
-    public async Task<IActionResult> DeleteFile([FromRoute] Guid id)
+    [HttpDelete("{id}/image")]
+    public async Task<IActionResult> DeleteImage([FromRoute] Guid id)
     {
-        var existFile = await _userService.GetProfileAsync(id);
+        var existFile = await _userService.GetImageAsync(id);
 
         if (existFile is null || !existFile.Success)
         {
@@ -181,7 +163,7 @@ public class UsersController(IUserService userService, IUtilService utilService,
             return Ok(new SuccessResult(EMessages.Success.Translate()));
         }
 
-        var path = _utilService.GetEnvFolderPath(_utilService.GetFolderName(EFileType.UserProfile));
+        var path = _utilService.GetEnvFolderPath(_utilService.GetFolderName(EFileType.UserImages));
         var fullPath = System.IO.Path.Combine(path, existFile!.Data);
 
         if (System.IO.File.Exists(fullPath))
@@ -189,7 +171,7 @@ public class UsersController(IUserService userService, IUtilService utilService,
             System.IO.File.Delete(fullPath);
         }
 
-        await _userService.AddProfileAsync(id);
+        await _userService.SetImageAsync(id);
 
         return Ok(new SuccessResult(EMessages.Success.Translate()));
     }
