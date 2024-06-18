@@ -16,11 +16,11 @@ public class RoleRepository : GenericRepository<Role>, IRoleRepository
         _dataContext = dataContext;
     }
 
-    public Role UpdateRole(Role role)
-    {
-        _dataContext.Roles.Update(role);
-        return role;
-    }
+    //public Role UpdateRole(Role role)
+    //{
+    //    _dataContext.Roles.Update(role);
+    //    return role;
+    //}
 
     public async Task ClearRolePermissionsAync(Guid roleId)
     {
@@ -30,8 +30,8 @@ public class RoleRepository : GenericRepository<Role>, IRoleRepository
         await _dataContext.SaveChangesAsync();
     }
 
-    public async Task AddRoleAsync(Role role)
-    {
-        await _dataContext.Roles.AddAsync(role);
-    }
+    //public async Task AddRoleAsync(Role role)
+    //{
+    //    await _dataContext.Roles.AddAsync(role);
+    //}
 }

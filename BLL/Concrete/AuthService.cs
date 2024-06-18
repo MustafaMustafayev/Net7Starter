@@ -3,7 +3,7 @@ using BLL.Abstract;
 using BLL.Helpers;
 using CORE.Abstract;
 using CORE.Localization;
-using DAL.EntityFramework.UnitOfWork;
+using DAL.EntityFramework.Abstract;
 using DTO.Auth;
 using DTO.Responses;
 using DTO.User;
@@ -11,21 +11,23 @@ using DTO.User;
 namespace BLL.Concrete;
 
 public class AuthService(IMapper mapper,
-                         IUnitOfWork unitOfWork,
+                         IUserRepository userRepository,
+                         ITokenRepository tokenRepository,
                          IUtilService utilService) : IAuthService
 {
     private readonly IMapper _mapper = mapper;
-    private readonly IUnitOfWork _unitOfWork = unitOfWork;
+    private readonly IUserRepository _userRepository = userRepository;
+    private readonly ITokenRepository _tokenRepository = tokenRepository;
     private readonly IUtilService _utilService = utilService;
 
     public async Task<string?> GetUserSaltAsync(string userEmail)
     {
-        return await _unitOfWork.UserRepository.GetUserSaltAsync(userEmail);
+        return await _userRepository.GetUserSaltAsync(userEmail);
     }
 
-    public async Task<IDataResult<UserResponseDto>> LoginAsync(LoginRequestDto dtos)
+    public async Task<IDataResult<UserResponseDto>> LoginAsync(LoginRequestDto dto)
     {
-        var data = await _unitOfWork.UserRepository.GetAsync(m => m.Email == dtos.Email && m.Password == dtos.Password);
+        var data = await _userRepository.GetAsync(m => m.Email == dto.Email && m.Password == dto.Password);
         if (data == null)
         {
             return new ErrorDataResult<UserResponseDto>(EMessages.InvalidUserCredentials.Translate());
@@ -37,12 +39,8 @@ public class AuthService(IMapper mapper,
     public async Task<IDataResult<UserResponseDto>> LoginByTokenAsync()
     {
         var userId = _utilService.GetUserIdFromToken();
-        if (userId is null)
-        {
-            return new ErrorDataResult<UserResponseDto>(EMessages.CanNotFoundUserIdInYourAccessToken.Translate());
-        }
 
-        var data = await _unitOfWork.UserRepository.GetAsync(m => m.Id == userId);
+        var data = await _userRepository.GetAsync(m => m.Id == userId);
         if (data == null)
         {
             return new ErrorDataResult<UserResponseDto>(EMessages.InvalidUserCredentials.Translate());
@@ -51,48 +49,20 @@ public class AuthService(IMapper mapper,
         return new SuccessDataResult<UserResponseDto>(_mapper.Map<UserResponseDto>(data), EMessages.Success.Translate());
     }
 
-    public IResult SendVerificationCodeToEmailAsync(string email)
-    {
-        //TODO SEND MAIL TO EMAIL
-        return new SuccessResult(EMessages.VerificationCodeSent.Translate());
-    }
-
-    public async Task<IResult> ResetPasswordAsync(ResetPasswordRequestDto dto)
-    {
-        var data = await _unitOfWork.UserRepository.GetAsync(m => m.Email == dto.Email);
-
-        if (data is null)
-        {
-            return new ErrorResult(EMessages.UserIsNotExist.Translate());
-        }
-
-        if (data.LastVerificationCode is null || !data.LastVerificationCode.Equals(dto.VerificationCode))
-        {
-            return new ErrorResult(EMessages.InvalidVerificationCode.Translate());
-        }
-
-        data.Salt = SecurityHelper.GenerateSalt();
-        data.Password = SecurityHelper.HashPassword(dto.Password, data.Salt);
-        await _unitOfWork.CommitAsync();
-
-        return new SuccessResult(EMessages.PasswordResetted.Translate());
-    }
-
     public async Task<IResult> LogoutAsync(string accessToken)
     {
-        var tokens = await _unitOfWork.TokenRepository.GetActiveTokensAsync(accessToken);
-
+        var tokens = await _tokenRepository.GetActiveTokensAsync(accessToken);
         tokens.ForEach(m => m.IsDeleted = true);
-        await _unitOfWork.CommitAsync();
+        await _tokenRepository.UpdateRangeAsync(tokens);
 
         return new SuccessResult(EMessages.Success.Translate());
     }
 
     public async Task<IResult> LogoutRemovedUserAsync(Guid userId)
     {
-        var tokens = (await _unitOfWork.TokenRepository.GetListAsync(m => m.UserId == userId)).ToList();
+        var tokens = (await _tokenRepository.GetListAsync(m => m.UserId == userId)).ToList();
         tokens.ForEach(m => m.IsDeleted = true);
-        await _unitOfWork.CommitAsync();
+        await _tokenRepository.UpdateRangeAsync(tokens);
 
         return new SuccessResult(EMessages.Success.Translate());
     }

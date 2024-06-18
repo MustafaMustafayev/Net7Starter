@@ -12,6 +12,7 @@ namespace SOURCE.Builders;
 
 // ReSharper disable once InconsistentNaming
 // ReSharper disable once UnusedType.Global
+/*
 public class IUnitOfWorkBuilder : ISourceBuilder
 {
     private readonly string ProjectPath;
@@ -134,3 +135,4 @@ public interface IUnitOfWork : IAsyncDisposable, IDisposable
         return text;
     }
 }
+*/

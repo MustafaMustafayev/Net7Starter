@@ -6,8 +6,7 @@ public interface IUtilService
 {
     public string? GetTokenString();
     public bool IsValidToken();
-    public PaginationDto GetPagination();
-    public Guid? GetUserIdFromToken();
+    public Guid GetUserIdFromToken();
     public Guid? GetCompanyIdFromToken();
     public string GenerateRefreshToken();
     public string? GetRoleFromToken(string jwtToken);

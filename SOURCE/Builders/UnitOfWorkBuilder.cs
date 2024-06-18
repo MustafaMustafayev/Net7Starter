@@ -11,6 +11,7 @@ using System.Text;
 namespace SOURCE.Builders;
 
 // ReSharper disable once UnusedType.Global
+/*
 public class UnitOfWorkBuilder : ISourceBuilder
 {
     private readonly string ProjectPath;
@@ -174,3 +175,4 @@ public class UnitOfWork : IUnitOfWork
         throw new NotImplementedException();
     }
 }
+*/

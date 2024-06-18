@@ -1,21 +1,20 @@
 ﻿using AutoMapper;
 using BLL.Abstract;
-using DAL.EntityFramework.UnitOfWork;
+using DAL.EntityFramework.Abstract;
 using DTO.Logging;
 using ENTITIES.Entities;
 
 namespace BLL.Concrete;
 
 public class LoggingService(IMapper mapper,
-                            IUnitOfWork unitOfWork) : ILoggingService
+                            IRequestLogRepository requestLogRepository) : ILoggingService
 {
     private readonly IMapper _mapper = mapper;
-    private readonly IUnitOfWork _unitOfWork = unitOfWork;
+    private readonly IRequestLogRepository _requestLogRepository = requestLogRepository;
 
     public async Task AddLogAsync(RequestLogDto dto)
     {
         var data = _mapper.Map<RequestLog>(dto);
-        await _unitOfWork.RequestLogRepository.AddRequestLogAsync(data);
-        await _unitOfWork.CommitAsync();
+        await _requestLogRepository.AddAsync(data);
     }
 }

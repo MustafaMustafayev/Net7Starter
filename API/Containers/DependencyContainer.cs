@@ -1,15 +1,8 @@
-﻿using API.Hubs;
-using BLL;
+﻿using BLL;
 using CORE.Abstract;
 using CORE.Concrete;
 using CORE.Config;
-using DAL.ElasticSearch;
 using DAL.EntityFramework;
-using DAL.EntityFramework.UnitOfWork;
-using DAL.MongoDb;
-using DTO.User;
-using MediatR;
-using MEDIATRS;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -17,15 +10,11 @@ using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Redis.OM;
 using Refit;
 using REFITS.Clients;
 using StackExchange.Profiling;
 using StackExchange.Profiling.SqlFormatters;
 using System.Text;
-using System.Threading.RateLimiting;
-using WatchDog;
-using WatchDog.src.Enums;
 
 namespace API.Containers;
 
@@ -138,26 +127,6 @@ public static class DependencyContainer
         });
     }
 
-    public static void RegisterRateLimit(this IServiceCollection services)
-    {
-        services.AddRateLimiter(options =>
-        {
-            options.RejectionStatusCode = 429; //default value is 503
-            options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(httpContext =>
-                RateLimitPartition.GetFixedWindowLimiter(
-                    httpContext.User.Identity?.Name ?? httpContext.Request.Headers.Host.ToString(),
-                    _ => new FixedWindowRateLimiterOptions
-                    {
-                        AutoReplenishment = true,
-                        PermitLimit = 5,
-                        QueueLimit = 2,
-                        Window = TimeSpan.FromSeconds(10)
-                    }));
-
-            options.OnRejected = (_, _) => new ValueTask();
-        });
-    }
-
     public static void RegisterRepositories(this IServiceCollection services)
     {
         services.TryAddScoped<IUtilService, UtilService>();
@@ -175,79 +144,14 @@ public static class DependencyContainer
             .WithScopedLifetime());
     }
 
-    public static void RegisterSignalRHubs(this IServiceCollection services)
-    {
-        services.TryAddSingleton<UserHub>();
-    }
-
-    public static void RegisterUnitOfWork(this IServiceCollection services)
-    {
-        services.TryAddScoped<IUnitOfWork, UnitOfWork>();
-    }
-
-    public static void RegisterOutputCache(this IServiceCollection services)
-    {
-        services.AddOutputCache(options => options.AddBasePolicy(builder => builder.Expire(TimeSpan.FromMinutes(2))));
-    }
-
-    public static void RegisterRedis(this IServiceCollection services, ConfigSettings config)
-    {
-        services.TryAddSingleton(new RedisConnectionProvider(config.RedisSettings.Connection));
-    }
-
-    public static void RegisterMongoDb(this IServiceCollection services)
-    {
-        services.TryAddSingleton<IMongoDbService, MongoDbService>();
-    }
-
-    public static void RegisterElasticSearch(this IServiceCollection services, ConfigSettings config)
-    {
-        services.TryAddScoped<IElasticSearchService<UserResponseDto>>(_ =>
-            new ElasticSearchService<UserResponseDto>(config.ElasticSearchSettings.Connection,
-                config.ElasticSearchSettings.DefaultIndex));
-    }
-
-    public static void RegisterMediatr(this IServiceCollection services)
-    {
-        services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<MediatrAssemblyContainer>());
-
-        services.Scan(scan =>
-            scan.FromAssemblyOf<MediatrAssemblyContainer>()
-                .AddClasses(classes => classes.AssignableTo(typeof(IRequestHandler<,>)))
-                .AsImplementedInterfaces()
-                .WithScopedLifetime()
-        );
-    }
-
     public static void RegisterMiniProfiler(this IServiceCollection services)
     {
         services.AddMiniProfiler(options =>
         {
-            // All of this is optional. You can simply call .AddMiniProfiler() for all defaults
-
-            // (Optional) Path to use for profiler URLs, default is /mini-profiler-resources
             options.RouteBasePath = "/profiler";
-
             options.ColorScheme = ColorScheme.Dark;
-
-            // (Optional) Control storage
-            // (default is 30 minutes in MemoryCacheStorage)
-            // Note: MiniProfiler will not work if a SizeLimit is set on MemoryCache!
-            //   See: https://github.com/MiniProfiler/dotnet/issues/501 for details
-            //(options.Storage as MemoryCacheStorage)!.CacheDuration = TimeSpan.FromMinutes(60);
             options.SqlFormatter = new InlineFormatter();
         }).AddEntityFramework();
-    }
-
-    public static void RegisterWatchDog(this IServiceCollection services)
-    {
-        services.AddWatchDogServices(opt =>
-        {
-            opt.IsAutoClear = true;
-            opt.ClearTimeSchedule = WatchDogAutoClearScheduleEnum.Weekly;
-            //opt.SetExternalDbConnString = "Server=localhost;Database=testDb;User Id=postgres;Password=root;"; 
-            //opt.DbDriverOption = WatchDogSqlDriverEnum.PostgreSql; 
-        });
     }
 
     public static void RegisterRefitClients(this IServiceCollection services, ConfigSettings config)
@@ -255,8 +159,5 @@ public static class DependencyContainer
         services
             .AddRefitClient<IToDoClient>()
             .ConfigureHttpClient(c => c.BaseAddress = new Uri(config.ToDoClientSettings.BaseUrl));
-        //Add additional IHttpClientBuilder chained methods as required here:
-        // .AddHttpMessageHandler<MyHandler>()
-        // .SetHandlerLifetime(TimeSpan.FromMinutes(2));
     }
 }

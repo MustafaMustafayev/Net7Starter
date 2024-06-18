@@ -6,10 +6,7 @@ public record ConfigSettings
     public ConnectionStrings ConnectionStrings { get; set; } = default!;
     public RequestSettings RequestSettings { get; set; } = default!;
     public SwaggerSettings SwaggerSettings { get; set; } = default!;
-    public RedisSettings RedisSettings { get; set; } = default!;
     public ElasticSearchSettings ElasticSearchSettings { get; set; } = default!;
-    public MongoDbSettings MongoDbSettings { get; set; } = default!;
-    public SentrySettings SentrySettings { get; set; } = default!;
     public ToDoClientSettings ToDoClientSettings { get; set; } = default!;
     public CryptographySettings CryptographySettings { get; set; } = default!;
     public MailSettings MailSettings { get; set; } = default!;

@@ -60,8 +60,7 @@ public class PermissionsController : Controller
 
     [SwaggerOperation(Summary = "update permission")]
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update([FromRoute] Guid id,
-        [FromBody] PermissionUpdateRequestDto dto)
+    public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] PermissionUpdateRequestDto dto)
     {
         var response = await _permissionService.UpdateAsync(id, dto);
         return Ok(response);

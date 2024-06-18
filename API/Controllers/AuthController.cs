@@ -10,7 +10,6 @@ using DTO.Responses;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Nest;
 using Swashbuckle.AspNetCore.Annotations;
 using IResult = DTO.Responses.IResult;
 using Result = DTO.Responses.Result;
@@ -20,36 +19,41 @@ namespace API.Controllers;
 [Route("api/[controller]")]
 [ServiceFilter(typeof(LogActionFilter))]
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-public class AuthController(
-    IAuthService authService,
-    ConfigSettings configSettings,
-    IUtilService utilService,
-    ITokenService tokenService) : Controller
+public class AuthController : Controller
 {
-    private readonly IAuthService _authService = authService;
-    private readonly ConfigSettings _configSettings = configSettings;
-    private readonly ITokenService _tokenService = tokenService;
-    private readonly IUtilService _utilService = utilService;
+    private readonly IAuthService _authService;
+    private readonly ConfigSettings _configSettings;
+    private readonly ITokenService _tokenService;
+    private readonly IUtilService _utilService;
+
+    public AuthController(IAuthService authService, ConfigSettings configSettings,
+                          IUtilService utilService, ITokenService tokenService)
+    {
+        _authService = authService;
+        _configSettings = configSettings;
+        _tokenService = tokenService;
+        _utilService = utilService;
+    }
 
     [SwaggerOperation(Summary = "login")]
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IDataResult<LoginResponseDto>))]
     [HttpPost("login")]
     [AllowAnonymous]
-    public async Task<IActionResult> Login([FromBody] LoginRequestDto request)
+    public async Task<IActionResult> Login([FromBody] LoginRequestDto dto)
     {
-        var userSalt = await _authService.GetUserSaltAsync(request.Email);
+        var userSalt = await _authService.GetUserSaltAsync(dto.Email);
 
         if (string.IsNullOrEmpty(userSalt))
         {
             return Ok(new ErrorDataResult<Result>(EMessages.InvalidUserCredentials.Translate()));
         }
 
-        request = request with { Password = SecurityHelper.HashPassword(request.Password, userSalt) };
+        dto = dto with { Password = SecurityHelper.HashPassword(dto.Password, userSalt) };
 
-        var loginResult = await _authService.LoginAsync(request);
+        var loginResult = await _authService.LoginAsync(dto);
         if (!loginResult.Success)
         {
-            return Unauthorized(loginResult);
+            return Ok(loginResult);
         }
 
         var response = await _tokenService.CreateTokenAsync(loginResult.Data!);
@@ -76,29 +80,6 @@ public class AuthController(
         }
 
         return Unauthorized();
-    }
-
-    [SwaggerOperation(Summary = "send email for reset password")]
-    [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
-    [HttpPost("verificationCode")]
-    [AllowAnonymous]
-    public IActionResult SendVerificationCode([FromBody] SendVerificationCodeRequestDto dto)
-    {
-        var response = _authService.SendVerificationCodeToEmailAsync(dto.Email);
-        return Ok(response);
-    }
-
-    [SwaggerOperation(Summary = "reset password")]
-    [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
-    [HttpPost("resetPassword")]
-    [AllowAnonymous]
-    public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequestDto request)
-    {
-        var response = await _authService.ResetPasswordAsync(request);
-        var userId = _utilService.GetUserIdFromToken();
-        await _authService.LogoutRemovedUserAsync(userId!.Value);
-
-        return Ok(response);
     }
 
     [SwaggerOperation(Summary = "login by token")]

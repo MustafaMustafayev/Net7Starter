@@ -57,8 +57,6 @@ public class SecurityHelper
         new(_configSettings.AuthSettings.Role, userDto.Role == null ? string.Empty : userDto.Role!.Name),
         new(ClaimTypes.Expiration, expirationDate.ToString(CultureInfo.InvariantCulture))
     };
-        //claims.Add(new Claim(_configSettings.AuthSettings.TokenCompanyIdKey, userDto.CompanyId.ToString()!));
-        //claims.Add(new Claim(_configSettings.AuthSettings.TokenUserTypeKey, userDto.Type.ToString()));
 
         var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_configSettings.AuthSettings.SecretKey));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);

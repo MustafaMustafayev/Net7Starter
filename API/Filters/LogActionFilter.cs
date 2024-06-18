@@ -34,13 +34,10 @@ public class LogActionFilter : IAsyncActionFilter
         Guid? userId = null;
         var authHeaderName = _configSettings.AuthSettings.HeaderName;
 
-        if (!string.IsNullOrEmpty(httpContext.Request.Headers[authHeaderName]) &&
-            httpContext.Request.Headers[authHeaderName].ToString().Length > 7)
+        if (!string.IsNullOrEmpty(httpContext.Request.Headers[authHeaderName]) && httpContext.Request.Headers[authHeaderName].ToString().Length > 7)
         {
             token = httpContext.Request.Headers[authHeaderName].ToString();
-            userId = !string.IsNullOrEmpty(token)
-                ? _utilService.GetUserIdFromToken()
-                : null;
+            userId = !string.IsNullOrEmpty(token) ? _utilService.GetUserIdFromToken() : null;
         }
 
         context.HttpContext.Request.Body.Position = 0;

@@ -7,12 +7,12 @@ using CORE.Constants;
 using CORE.Enums;
 using CORE.Helpers;
 using CORE.Localization;
+using DTO.Auth;
 using DTO.Responses;
 using DTO.User;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Nest;
 using Swashbuckle.AspNetCore.Annotations;
 using IResult = DTO.Responses.IResult;
 
@@ -21,11 +21,19 @@ namespace API.Controllers;
 [Route("api/[controller]")]
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 [ValidateToken]
-public class UsersController(IUserService userService, IUtilService utilService, IAuthService authService) : Controller
+public class UsersController : Controller
 {
-    private readonly IUserService _userService = userService;
-    private readonly IUtilService _utilService = utilService;
-    private readonly IAuthService _authService = authService;
+    private readonly IUserService _userService;
+    private readonly IUtilService _utilService;
+    private readonly IAuthService _authService;
+    public UsersController(IUserService userService,
+                           IUtilService utilService,
+                           IAuthService authService)
+    {
+        _userService = userService;
+        _utilService = utilService;
+        _authService = authService; 
+    }
 
     [SwaggerOperation(Summary = "get users as paginated list")]
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IDataResult<List<UserResponseDto>>))]
@@ -54,12 +62,7 @@ public class UsersController(IUserService userService, IUtilService utilService,
     public async Task<IActionResult> GetProfileInfo()
     {
         var userId = _utilService.GetUserIdFromToken();
-        if (userId is null)
-        {
-            return Unauthorized(new ErrorResult(EMessages.CanNotFoundUserIdInYourAccessToken.Translate()));
-        }
-
-        var response = await _userService.GetAsync(userId.Value);
+        var response = await _userService.GetAsync(userId);
         return Ok(response);
     }
 
@@ -75,8 +78,8 @@ public class UsersController(IUserService userService, IUtilService utilService,
 
     [SwaggerOperation(Summary = "create user")]
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
-    [ServiceFilter(typeof(LogActionFilter))]
     [HttpPost]
+    [AllowAnonymous]
     public async Task<IActionResult> Add([FromBody] UserCreateRequestDto dto)
     {
         var response = await _userService.AddAsync(dto);
@@ -104,12 +107,12 @@ public class UsersController(IUserService userService, IUtilService utilService,
         return Ok(response);
     }
 
-    [SwaggerOperation(Summary = "upload own image")]
+    [SwaggerOperation(Summary = "upload logged in user image")]
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
     [HttpPost("upload/image")]
     public async Task<IActionResult> UploadImage(IFormFile file)
     {
-        Guid userId = _utilService.GetUserIdFromToken().GetValueOrDefault();
+        Guid userId = _utilService.GetUserIdFromToken();
         return await UploadImage(userId, file);
     }
 
@@ -134,18 +137,18 @@ public class UsersController(IUserService userService, IUtilService utilService,
         return Ok(new SuccessResult(EMessages.Success.Translate()));
     }
 
-    [SwaggerOperation(Summary = "delete own image")]
+    [SwaggerOperation(Summary = "delete logged in user image")]
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
     [ServiceFilter(typeof(LogActionFilter))]
     [HttpDelete("image")]
     public async Task<IActionResult> DeleteImage()
     {
-        Guid userId = _utilService.GetUserIdFromToken().GetValueOrDefault();
+        Guid userId = _utilService.GetUserIdFromToken();
         var response = await DeleteImage(userId);
         return response;
     }
 
-    [SwaggerOperation(Summary = "delete image by user id")]
+    [SwaggerOperation(Summary = "delete image by id")]
     [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
     [ServiceFilter(typeof(LogActionFilter))]
     [HttpDelete("{id}/image")]
@@ -174,5 +177,30 @@ public class UsersController(IUserService userService, IUtilService utilService,
         await _userService.SetImageAsync(id);
 
         return Ok(new SuccessResult(EMessages.Success.Translate()));
+    }
+
+    [SwaggerOperation(Summary = "reset logged in user password")]
+    [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
+    [HttpPost("resetPassword")]
+    [AllowAnonymous]
+    public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequestDto request)
+    {
+        var userId = _utilService.GetUserIdFromToken();
+        var response = await _userService.ResetPasswordAsync(userId, request);
+        await _authService.LogoutRemovedUserAsync(userId);
+
+        return Ok(response);
+    }
+
+    [SwaggerOperation(Summary = "reset user password by id")]
+    [SwaggerResponse(StatusCodes.Status200OK, type: typeof(IResult))]
+    [HttpPost("{id}/resetPassword")]
+    [AllowAnonymous]
+    public async Task<IActionResult> ResetPassword([FromRoute] Guid id, [FromBody] ResetPasswordRequestDto request)
+    {
+        var response = await _userService.ResetPasswordAsync(id, request);
+        await _authService.LogoutRemovedUserAsync(id);
+
+        return Ok(response);
     }
 }

@@ -8,18 +8,10 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Redis.OM" Version="0.5.3" />
-    </ItemGroup>
-
-    <ItemGroup>
         <Compile Remove="Entities\First.cs" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\CORE\CORE.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Entities\Structures\" />
     </ItemGroup>
 </Project>

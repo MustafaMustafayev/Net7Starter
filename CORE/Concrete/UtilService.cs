@@ -25,19 +25,14 @@ public class UtilService : IUtilService
         _environment = environment;
     }
 
-    public string? GetTokenString()
+    public string GetTokenString()
     {
-        return _context.HttpContext?.Request.Headers[_config.AuthSettings.HeaderName].ToString();
+        return _context.HttpContext?.Request.Headers[_config.AuthSettings.HeaderName].ToString()!;
     }
 
-    public Guid? GetUserIdFromToken()
+    public Guid GetUserIdFromToken()
     {
         var token = GetJwtSecurityToken();
-        if (token == null)
-        {
-            return null;
-        }
-
         var userId = Decrypt(token.Claims.First(c => c.Type == _config.AuthSettings.TokenUserIdKey).Value);
         return Guid.Parse(userId);
     }
@@ -163,20 +158,6 @@ public class UtilService : IUtilService
         }
     }
 
-    public PaginationDto GetPagination()
-    {
-        var pageIndex = Convert.ToInt32(_context.HttpContext?.Request.Headers[_config.RequestSettings.PageIndex]);
-        var pageSize = Convert.ToInt32(_context.HttpContext?.Request.Headers[_config.RequestSettings.PageSize]);
-
-        var dto = new PaginationDto
-        {
-            PageIndex = pageIndex,
-            PageSize = pageSize
-        };
-
-        return dto;
-    }
-
     public string CreateGuid()
     {
         return Guid.NewGuid().ToString();
@@ -205,7 +186,6 @@ public class UtilService : IUtilService
         return type switch
         {
             EFileType.UserImages => @"files\images\user_profile",
-            EFileType.OrganizationLogo => @"files\images\organization_logo",
             _ => "files/error"
         };
     }
@@ -215,17 +195,9 @@ public class UtilService : IUtilService
         return Path.Combine(_environment.WebRootPath, folderName);
     }
 
-    private JwtSecurityToken? GetJwtSecurityToken()
+    private JwtSecurityToken GetJwtSecurityToken()
     {
         var tokenString = GetTokenString();
-
-        if (string.IsNullOrEmpty(tokenString))
-        {
-            return null;
-        }
-
-        return !tokenString.Contains($"{_config.AuthSettings.TokenPrefix} ")
-            ? null
-            : new JwtSecurityToken(tokenString[7..]);
+        return new JwtSecurityToken(tokenString[7..]);
     }
 }

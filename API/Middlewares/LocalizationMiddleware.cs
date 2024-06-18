@@ -21,7 +21,6 @@ public class LocalizationMiddleware
             LocalizationConstants.LANG_HEADER_AZ => "az-Latn",
             LocalizationConstants.LANG_HEADER_EN => "en-GB",
             LocalizationConstants.LANG_HEADER_RU => "ru-RU",
-
             _ => "az-Latn"
         };
 

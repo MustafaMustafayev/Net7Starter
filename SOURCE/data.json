@@ -1,1 +1,1 @@
-﻿[  {    "name": "",    "configure": false,    "path": "",    "options": {      "BuildDto": true,      "BuildRepository": true,      "BuildService": true,      "BuildUnitOfWork": true,      "BuildController": true    }  }]
+﻿[  {    "name": "",    "configure": false,    "path": "",    "options": {      "BuildDto": true,      "BuildRepository": true,      "BuildService": true,      "BuildController": true    }  }]

@@ -122,27 +122,6 @@ public class SftpService(ConfigSettings configSettings) : ISftpService
         return imageBytes;
     }
 
-    public byte[] CompressImage(int jpegQuality, byte[] data)
-    {
-        if (!OperatingSystem.IsWindows())
-        {
-            throw new NotSupportedException("CompressImage function only works on windows platform");
-        }
-
-        using var inputStream = new MemoryStream(data);
-        using var image = Image.FromStream(inputStream);
-#pragma warning disable CA1416
-        var jpegEncoder = ImageCodecInfo.GetImageDecoders().First(c => c.FormatID == ImageFormat.Jpeg.Guid);
-#pragma warning restore CA1416
-        var encoderParameters = new EncoderParameters(1);
-        encoderParameters.Param[0] = new EncoderParameter(Encoder.Quality, jpegQuality);
-
-        using var outputStream = new MemoryStream();
-        image.Save(outputStream, jpegEncoder, encoderParameters);
-
-        return outputStream.ToArray();
-    }
-
     private ConnectionInfo GetConnectionInfo()
     {
         return new ConnectionInfo(_configSettings.SftpSettings.Ip, _configSettings.SftpSettings.UserName,

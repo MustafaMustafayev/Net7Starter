@@ -4,7 +4,6 @@ using ENTITIES.Entities;
 using ENTITIES.Entities.Generic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using File = ENTITIES.Entities.File;
 
 namespace DAL.EntityFramework.Context;
 
@@ -22,9 +21,6 @@ public class DataContext : DbContext
     }
 
     public required DbSet<User> Users { get; set; }
-    public required DbSet<File> Files { get; set; }
-    public required DbSet<Organization> Organizations { get; set; }
-    public required DbSet<Department> Departments { get; set; }
     public required DbSet<Role> Roles { get; set; }
     public required DbSet<RequestLog> RequestLogs { get; set; }
     public required DbSet<ResponseLog> ResponseLogs { get; set; }
@@ -45,7 +41,7 @@ public class DataContext : DbContext
     }
 
     /* migration commands
-      dotnet ef --startup-project ../API migrations add renameuserimage --context DataContext
+      dotnet ef --startup-project ../API migrations add initial --context DataContext
       dotnet ef --startup-project ../API database update --context DataContext
     */
 
@@ -69,8 +65,6 @@ public class DataContext : DbContext
             switch (entityEntry.State)
             {
                 case EntityState.Added:
-                    // var originalValues = entityEntry.OriginalValues.ToObject();
-                    // var currentValues = entityEntry.CurrentValues.ToObject();
                     ((Auditable)entityEntry.Entity).CreatedAt = DateTime.Now;
                     ((Auditable)entityEntry.Entity).CreatedById =
                         _utilService.GetUserIdFromToken();

@@ -4,7 +4,7 @@ using BLL.Helpers;
 using CORE.Abstract;
 using CORE.Config;
 using CORE.Localization;
-using DAL.EntityFramework.UnitOfWork;
+using DAL.EntityFramework.Abstract;
 using DTO.Auth;
 using DTO.Responses;
 using DTO.Token;
@@ -15,27 +15,25 @@ namespace BLL.Concrete;
 
 public class TokenService(ConfigSettings configSettings,
                          IMapper mapper,
-                         IUnitOfWork unitOfWork,
+                         ITokenRepository tokenRepository,
                          IUtilService utilService) : ITokenService
 {
     private readonly ConfigSettings _configSettings = configSettings;
     private readonly IMapper _mapper = mapper;
-    private readonly IUnitOfWork _unitOfWork = unitOfWork;
+    private readonly ITokenRepository _tokenRepository = tokenRepository;
     private readonly IUtilService _utilService = utilService;
 
     public async Task<IResult> AddAsync(LoginResponseDto dto)
     {
         var data = _mapper.Map<Token>(dto);
-
-        await _unitOfWork.TokenRepository.AddAsync(data);
-        await _unitOfWork.CommitAsync();
+        await _tokenRepository.AddAsync(data);
 
         return new SuccessResult(EMessages.Success.Translate());
     }
 
     public async Task<IDataResult<TokenToListDto>> GetAsync(string accessToken, string refreshToken)
     {
-        var token = await _unitOfWork.TokenRepository.GetAsync(m => m.AccessToken == accessToken &&
+        var token = await _tokenRepository.GetAsync(m => m.AccessToken == accessToken &&
                                                                     m.RefreshToken == refreshToken &&
                                                                     m.RefreshTokenExpireDate > DateTime.UtcNow);
 
@@ -51,7 +49,7 @@ public class TokenService(ConfigSettings configSettings,
 
     public async Task<IResult> CheckValidationAsync(string accessToken, string refreshToken)
     {
-        return await _unitOfWork.TokenRepository.IsValid(accessToken, refreshToken)
+        return await _tokenRepository.IsValid(accessToken, refreshToken)
                ? new SuccessResult(EMessages.Success.Translate())
                : new ErrorResult(EMessages.PermissionDenied.Translate());
     }
@@ -77,10 +75,8 @@ public class TokenService(ConfigSettings configSettings,
 
     public async Task<IResult> SoftDeleteAsync(Guid id)
     {
-        var data = await _unitOfWork.TokenRepository.GetAsync(m => m.Id == id);
-
-        _unitOfWork.TokenRepository.SoftDelete(data!);
-        await _unitOfWork.CommitAsync();
+        var data = await _tokenRepository.GetAsync(m => m.Id == id);
+        await _tokenRepository.SoftDeleteAsync(data!);
 
         return new SuccessResult(EMessages.Success.Translate());
     }

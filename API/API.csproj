@@ -22,11 +22,6 @@
         <PackageReference Include="AspNetCore.HealthChecks.NpgSql" Version="7.1.0" />
         <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="7.1.0" />
         <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="8.0.0" />
-        <PackageReference Include="GraphQL.Server.Transports.AspNetCore" Version="7.6.0" />
-        <PackageReference Include="GraphQL.Server.Ui.Voyager" Version="7.6.0" />
-        <PackageReference Include="HotChocolate.Abstractions" Version="13.5.1" />
-        <PackageReference Include="HotChocolate.AspNetCore" Version="13.5.1" />
-        <PackageReference Include="HotChocolate.Data.EntityFramework" Version="13.5.1" />
         <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.1.0" />
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp.CodeStyle" Version="4.9.2">
           <PrivateAssets>all</PrivateAssets>
@@ -39,8 +34,6 @@
         <PackageReference Include="Microsoft.Extensions.Primitives" Version="8.0.0" />
         <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.4" />
         <PackageReference Include="MiniProfiler.EntityFrameworkCore" Version="4.3.8" />
-        <PackageReference Include="MongoDB.Driver" Version="2.22.0" />
-        <PackageReference Include="Redis.OM" Version="0.5.3" />
         <PackageReference Include="Refit" Version="7.0.0" />
         <PackageReference Include="Refit.HttpClientFactory" Version="7.0.0" />
         <PackageReference Include="Scrutor" Version="4.2.2" />
@@ -75,12 +68,11 @@
         <ProjectReference Include="..\DTO\DTO.csproj">
             <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
         </ProjectReference>
-        <ProjectReference Include="..\MEDIATRS\MEDIATRS.csproj" />
         <ProjectReference Include="..\REFITS\REFITS.csproj" />
     </ItemGroup>
     <ItemGroup>
+      <Folder Include="Logs\" />
       <Folder Include="wwwroot\files\" />
       <Folder Include="wwwroot\files\images\user_profile\" />
-      <Folder Include="wwwroot\UserImages\" />
     </ItemGroup>
 </Project>

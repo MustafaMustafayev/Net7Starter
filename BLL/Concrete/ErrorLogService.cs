@@ -1,7 +1,7 @@
 using AutoMapper;
 using BLL.Abstract;
 using CORE.Localization;
-using DAL.EntityFramework.UnitOfWork;
+using DAL.EntityFramework.Abstract;
 using DAL.EntityFramework.Utility;
 using DTO.ErrorLog;
 using DTO.Responses;
@@ -10,24 +10,22 @@ using ENTITIES.Entities;
 namespace BLL.Concrete;
 
 public class ErrorLogService(IMapper mapper,
-                             IUnitOfWork unitOfWork) : IErrorLogService
+                             IErrorLogRepository errorLogRepository) : IErrorLogService
 {
     private readonly IMapper _mapper = mapper;
-    private readonly IUnitOfWork _unitOfWork = unitOfWork;
+    private readonly IErrorLogRepository _errorLogRepository = errorLogRepository;
 
     public async Task<IResult> AddAsync(ErrorLogCreateDto dto)
     {
         var data = _mapper.Map<ErrorLog>(dto);
-
-        await _unitOfWork.ErrorLogRepository.AddAsync(data);
-        await _unitOfWork.CommitAsync();
+        await _errorLogRepository.AddAsync(data);
 
         return new SuccessResult(EMessages.Success.Translate());
     }
 
     public async Task<IDataResult<PaginatedList<ErrorLogResponseDto>>> GetAsPaginatedListAsync(int pageIndex, int pageSize)
     {
-        var datas = _unitOfWork.ErrorLogRepository.GetList();
+        var datas = _errorLogRepository.GetList();
 
         var response = await PaginatedList<ErrorLog>.CreateAsync(datas.OrderBy(m => m.Id), pageIndex, pageSize);
 
@@ -38,14 +36,14 @@ public class ErrorLogService(IMapper mapper,
 
     public async Task<IDataResult<IEnumerable<ErrorLogResponseDto>>> GetAsync()
     {
-        var datas = _mapper.Map<IEnumerable<ErrorLogResponseDto>>(await _unitOfWork.ErrorLogRepository.GetListAsync());
+        var datas = _mapper.Map<IEnumerable<ErrorLogResponseDto>>(await _errorLogRepository.GetListAsync());
 
         return new SuccessDataResult<IEnumerable<ErrorLogResponseDto>>(datas, EMessages.Success.Translate());
     }
 
     public async Task<IDataResult<ErrorLogResponseDto>> GetAsync(Guid id)
     {
-        var data = _mapper.Map<ErrorLogResponseDto>(await _unitOfWork.ErrorLogRepository.GetAsync(m => m.Id == id));
+        var data = _mapper.Map<ErrorLogResponseDto>(await _errorLogRepository.GetAsync(m => m.Id == id));
 
         return new SuccessDataResult<ErrorLogResponseDto>(data, EMessages.Success.Translate());
     }

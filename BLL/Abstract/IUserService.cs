@@ -1,4 +1,5 @@
 ﻿using DAL.EntityFramework.Utility;
+using DTO.Auth;
 using DTO.Responses;
 using DTO.User;
 
@@ -18,7 +19,9 @@ public interface IUserService
 
     Task<IResult> SoftDeleteAsync(Guid id);
 
-    Task<IResult> SetImageAsync(Guid userId, string? image = null);
+    Task<IResult> SetImageAsync(Guid id, string? image = null);
 
-    Task<IDataResult<string>> GetImageAsync(Guid userId);
+    Task<IDataResult<string>> GetImageAsync(Guid id);
+
+    Task<IResult> ResetPasswordAsync(Guid id, ResetPasswordRequestDto dto);
 }

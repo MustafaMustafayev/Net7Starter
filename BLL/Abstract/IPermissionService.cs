@@ -14,7 +14,7 @@ public interface IPermissionService
 
     Task<IResult> AddAsync(PermissionCreateRequestDto dto);
 
-    Task<IResult> UpdateAsync(Guid permissionId, PermissionUpdateRequestDto dto);
+    Task<IResult> UpdateAsync(Guid id, PermissionUpdateRequestDto dto);
 
     Task<IResult> SoftDeleteAsync(Guid id);
 }

@@ -8,5 +8,4 @@ public interface ISftpService
     void UploadFile(string filePath, string fileName, IFormFile formFile);
     void DeleteFile(string filePath);
     byte[] ReadImage(string filePath);
-    byte[] CompressImage(int jpegQuality, byte[] data);
 }

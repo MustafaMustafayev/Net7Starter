@@ -31,10 +31,6 @@ public class ExceptionMiddleware(RequestDelegate next,
         {
             _logger.LogError("Something went wrong: {Exception}", ex);
             await LogErrorAsync(httpContext, ex);
-            if (_config.SentrySettings.IsEnabled)
-            {
-                SentrySdk.CaptureException(ex);
-            }
             //  if (_env.IsDevelopment()) throw;
             await HandleExceptionAsync(httpContext);
         }
@@ -59,8 +55,7 @@ public class ExceptionMiddleware(RequestDelegate next,
         {
             token = httpContext.Request.Headers[authHeaderName].ToString();
             userId = !string.IsNullOrEmpty(token)
-                ? utilService.GetUserIdFromToken()
-                : null;
+                ? utilService.GetUserIdFromToken() : null;
         }
 
         ErrorLogCreateDto errorLogToAddDto = new()

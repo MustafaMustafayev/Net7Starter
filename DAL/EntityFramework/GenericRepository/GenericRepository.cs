@@ -5,11 +5,9 @@ using System.Linq.Expressions;
 
 namespace DAL.EntityFramework.GenericRepository;
 
-public class GenericRepository<TEntity> : IGenericRepository<TEntity>
-    where TEntity : class
+public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class
 {
     private readonly DataContext _ctx;
-
     public GenericRepository(DataContext ctx)
     {
         _ctx = ctx;
@@ -17,27 +15,25 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity>
 
     public async Task<TEntity> AddAsync(TEntity entity)
     {
-        var newEntity = _ctx.CreateProxy<TEntity>();
-
-        _ctx.Entry(newEntity).CurrentValues.SetValues(entity);
-        _ctx.Entry(entity).State = EntityState.Detached;
-        await _ctx.AddAsync(newEntity);
-
-        return newEntity;
+        await _ctx.AddAsync(entity);
+        await _ctx.SaveChangesAsync();
+        return entity;
     }
 
     public async Task<List<TEntity>> AddRangeAsync(List<TEntity> entity)
     {
         await _ctx.AddRangeAsync(entity);
+        await _ctx.SaveChangesAsync();
         return entity;
     }
 
-    public void Delete(TEntity entity)
+    public async Task DeleteAsync(TEntity entity)
     {
         _ctx.Remove(entity);
+        await _ctx.SaveChangesAsync();
     }
 
-    public void SoftDelete(TEntity entity)
+    public async Task SoftDeleteAsync(TEntity entity)
     {
         var property = entity.GetType().GetProperty(nameof(Auditable.IsDeleted)) ?? throw new ArgumentException(
                 @$"The property with type: {entity.GetType()} can not be SoftDeleted, 
@@ -49,12 +45,8 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity>
         }
 
         property.SetValue(entity, true);
-
-        var updatedEntity = _ctx.CreateProxy<TEntity>();
-
-        _ctx.Entry(updatedEntity).CurrentValues.SetValues(entity);
-        _ctx.Entry(entity).State = EntityState.Detached;
-        _ctx.Update(updatedEntity);
+        _ctx.Update(entity);
+        await _ctx.SaveChangesAsync();
     }
 
     public async Task<TEntity?> GetAsync(Expression<Func<TEntity, bool>> filter, bool ignoreQueryFilters = false)
@@ -64,8 +56,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity>
             : await _ctx.Set<TEntity>().FirstOrDefaultAsync(filter);
     }
 
-    public async Task<IEnumerable<TEntity>> GetListAsync(Expression<Func<TEntity, bool>>? filter = null,
-        bool ignoreQueryFilters = false)
+    public async Task<IEnumerable<TEntity>> GetListAsync(Expression<Func<TEntity, bool>>? filter = null, bool ignoreQueryFilters = false)
     {
         return filter is null
             ? ignoreQueryFilters
@@ -89,7 +80,12 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity>
 
     public async Task<TEntity?> GetAsNoTrackingAsync(Expression<Func<TEntity, bool>> filter)
     {
-        return await _ctx.Set<TEntity>().AsNoTracking().SingleOrDefaultAsync(filter);
+        return await _ctx.Set<TEntity>().AsNoTracking().FirstOrDefaultAsync(filter);
+    }
+
+    public async Task<TEntity?> GetAsNoTrackingWithIdentityResolutionAsync(Expression<Func<TEntity, bool>> filter)
+    {
+        return await _ctx.Set<TEntity>().AsNoTrackingWithIdentityResolution().FirstOrDefaultAsync(filter);
     }
 
     public IQueryable<TEntity> GetAsNoTrackingList(Expression<Func<TEntity, bool>>? filter = null)
@@ -99,20 +95,24 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity>
             : _ctx.Set<TEntity>().Where(filter)).AsNoTracking();
     }
 
-    public TEntity Update(TEntity entity)
+    public IQueryable<TEntity> GetAsNoTrackingWithIdentityResolutionListAsync(Expression<Func<TEntity, bool>>? filter = null)
     {
-        var updatedEntity = _ctx.CreateProxy<TEntity>();
-
-        _ctx.Entry(updatedEntity).CurrentValues.SetValues(entity);
-        _ctx.Entry(entity).State = EntityState.Detached;
-        _ctx.Update(updatedEntity);
-
-        return updatedEntity;
+        return (filter is null
+            ? _ctx.Set<TEntity>().AsNoTrackingWithIdentityResolution()
+            : _ctx.Set<TEntity>().Where(filter)).AsNoTrackingWithIdentityResolution();
     }
 
-    public List<TEntity> UpdateRange(List<TEntity> entity)
+    public async Task<TEntity> UpdateAsync(TEntity entity)
+    {
+        _ctx.Update(entity);
+        await _ctx.SaveChangesAsync();
+        return entity;
+    }
+
+    public async Task<List<TEntity>> UpdateRangeAsync(List<TEntity> entity)
     {
         _ctx.UpdateRange(entity);
+        await _ctx.SaveChangesAsync();
         return entity;
     }
 
@@ -163,15 +163,4 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity>
             ? await _ctx.Set<TEntity>().IgnoreQueryFilters().FirstAsync(filter)
             : await _ctx.Set<TEntity>().FirstAsync(filter);
     }
-
-    // public async Task<IQueryable> GetListAsync(Expression<Func<TEntity, bool>>? filter = null, bool ignoreQueryFilters = false)
-    // {
-    //     return filter is null
-    //         ? ignoreQueryFilters
-    //             ? await _ctx.Set<TEntity>().IgnoreQueryFilters().ToListAsync()
-    //             : await _ctx.Set<TEntity>().ToListAsync()
-    //         : ignoreQueryFilters
-    //             ? await _ctx.Set<TEntity>().Where(filter).IgnoreQueryFilters().ToListAsync()
-    //             : await _ctx.Set<TEntity>().Where(filter).ToListAsync();
-    // }
 }

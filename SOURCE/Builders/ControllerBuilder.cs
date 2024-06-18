@@ -14,7 +14,7 @@ public class ControllerBuilder : ISourceBuilder
             .Where(w =>
                 w.Options.BuildController
                 && w.Options.BuildService
-                && w.Options.BuildUnitOfWork
+                //&& w.Options.BuildUnitOfWork
                 && w.Options.BuildRepository
                 && w.Options.BuildDto)
             .ToList()

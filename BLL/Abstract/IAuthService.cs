@@ -8,13 +8,9 @@ public interface IAuthService
 {
     Task<string?> GetUserSaltAsync(string userEmail);
 
-    Task<IDataResult<UserResponseDto>> LoginAsync(LoginRequestDto dtos);
+    Task<IDataResult<UserResponseDto>> LoginAsync(LoginRequestDto dto);
 
     Task<IDataResult<UserResponseDto>> LoginByTokenAsync();
-
-    IResult SendVerificationCodeToEmailAsync(string email);
-
-    Task<IResult> ResetPasswordAsync(ResetPasswordRequestDto dto);
 
     Task<IResult> LogoutAsync(string accessToken);
 

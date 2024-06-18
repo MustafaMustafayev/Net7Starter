@@ -20,21 +20,16 @@
         <None Remove="Middlewares\TokenMiddleware\" />
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="LiteDB" Version="5.0.13" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.12" />
         <PackageReference Include="Microsoft.Extensions.Primitives" Version="8.0.0" />
         <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="6.34.0" />
-        <PackageReference Include="MongoDB.Driver" Version="2.22.0" />
-        <PackageReference Include="NEST" Version="7.17.5" />
         <PackageReference Include="Npgsql" Version="8.0.3" />
         <PackageReference Include="SSH.NET" Version="2023.0.0" />
         <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
-        <PackageReference Include="System.Drawing.Common" Version="7.0.0" />
         <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.34.0" />
         <PackageReference Include="System.Net.Http" Version="4.3.4" />
         <PackageReference Include="System.Net.WebSockets.WebSocketProtocol" Version="4.6.0" />
         <PackageReference Include="System.Security.Cryptography.Xml" Version="4.7.1" />
         <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
-        <PackageReference Include="WatchDog.NET" Version="1.4.10" />
     </ItemGroup>
 </Project>
